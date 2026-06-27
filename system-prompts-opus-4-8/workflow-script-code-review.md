@@ -4,7 +4,7 @@ description: >-
   Bundled /code-review workflow — scopes the diff, fans out per-angle finders,
   dedups, verifies, sweeps for gaps (xhigh/max), and synthesizes;
   effort-parameterized via LEVEL_PARAMS
-ccVersion: 2.1.179
+ccVersion: 2.1.195
 variables:
   - JSON
   - WORKFLOW_NAME
@@ -25,17 +25,16 @@ export const meta = {
   phases: ${JSON.stringify(WORKFLOW_PHASES)},
 }
 
-// code-review: Scope → pipeline(per-angle Find → dedup → Verify) → Sweep (xhigh/max) → Synthesize
+// code-review: Scope → Find (barrier) → group-by-location → Verify → Sweep (xhigh/max) → Synthesize
 // Effort parameterization mirrors the inline /code-review cells:
-//   high  → 3 correctness + 4 cleanup angles × 6 → ≤10 findings
-//   xhigh → 5 correctness + 4 cleanup angles × 8 → sweep → ≤15 findings
+//   high  → 3 correctness + 5 cleanup angles × 6 → ≤10 findings
+//   xhigh → 5 correctness + 5 cleanup angles × 8 → sweep → ≤15 findings
 //   max   → same structure as xhigh (the API reasoning effort differs, not the fan-out)
 const LEVEL_PARAMS = {
   high: { correctnessAngles: 3, perAngle: 6, maxFindings: 10, sweep: false },
   xhigh: { correctnessAngles: 5, perAngle: 8, maxFindings: 15, sweep: true },
   max: { correctnessAngles: 5, perAngle: 8, maxFindings: 15, sweep: true },
 }
-const MAX_VERIFY = 25
 const SWEEP_MAX = 8
 
 const RAW_ARGS = (typeof args === "string" ? args : "").trim()
@@ -60,6 +59,7 @@ const SCOPE_SCHEMA = {
   properties: {
     diffCommand: { type: "string" },
     files: { type: "array", items: { type: "string" } },
+    claudeMdFiles: { type: "array", items: { type: "string" } },
     summary: { type: "string" },
     conventions: { type: "string" },
   },
@@ -70,7 +70,7 @@ const CANDIDATES_SCHEMA = {
     candidates: { type: "array", items: {
       type: "object", required: ["file", "summary", "failure_scenario"],
       properties: {
-        file: { type: "string" },
+        file: { type: "string", description: "repo-relative path exactly as listed under Changed files in the review scope" },
         line: { type: "number" },
         summary: { type: "string" },
         failure_scenario: { type: "string" },
@@ -78,11 +78,21 @@ const CANDIDATES_SCHEMA = {
     }},
   },
 }
-const VERDICT_SCHEMA = {
-  type: "object", required: ["verdict", "evidence"],
+// One verifier per distinct (file, line) location, returning a verdict per
+// candidate at that location — instead of one verifier per candidate. Cuts
+// verifier-agent count by the cross-finder location-collision rate (~40% at
+// p50) without dropping any candidate.
+const GROUP_VERDICT_SCHEMA = {
+  type: "object", required: ["verdicts"],
   properties: {
-    verdict: { enum: ["CONFIRMED", "PLAUSIBLE", "REFUTED"] },
-    evidence: { type: "string" },
+    verdicts: { type: "array", items: {
+      type: "object", required: ["index", "verdict", "evidence"],
+      properties: {
+        index: { type: "number", description: "the [i] label of the candidate this verdict is for" },
+        verdict: { enum: ["CONFIRMED", "PLAUSIBLE", "REFUTED"] },
+        evidence: { type: "string" },
+      },
+    }},
   },
 }
 const REPORT_SCHEMA = {
@@ -117,15 +127,18 @@ if (!scope) {
   return { error: "Scope agent returned no result — cannot establish the review scope." }
 }
 if (!scope.files || scope.files.length === 0) {
-  return { level: LEVEL, target: TARGET || undefined, summary: "No changes found to review.", findings: [], stats: { finders: 0, candidates: 0, verified: 0 } }
+  return { level: LEVEL, target: TARGET || undefined, summary: "No changes found to review.", findings: [], stats: { finders: 0, candidates: 0, verifierAgents: 0, verified: 0 } }
 }
 log(LEVEL + " review: " + scope.files.length + " changed files")
 
+const claudeMdFiles = scope.claudeMdFiles || []
 const SCOPE_BLOCK =
   "## Review scope\\n" +
   "Diff command: " + scope.diffCommand + "\\n" +
   "Changed files (" + scope.files.length + "):\\n" +
-  scope.files.map(f => "  - " + f).join("\\n") + "\\n\\n" +
+  scope.files.map(f => "  - " + f).join("\\n") + "\\n" +
+  "Applicable CLAUDE.md files (" + claudeMdFiles.length + "):\\n" +
+  (claudeMdFiles.length > 0 ? claudeMdFiles.map(f => "  - " + f).join("\\n") : "  (none)") + "\\n\\n" +
   "## What changed\\n" + scope.summary + "\\n\\n" +
   "## Conventions\\n" + (scope.conventions || "(none noted)") + "\\n" +
   // The user's verbatim target/instructions ride along to every finder,
@@ -141,73 +154,93 @@ const FINDER_PROMPT = f =>
   "Run the diff command above and review ONLY through the lens of your assigned angle:\\n\\n" +
   f.text + "\\n" +
   (f.kind === "cleanup" ? CLEANUP_PRECEDENCE + "\\n" : "") +
-  "Surface up to " + P.perAngle + " candidate findings, each with file, line, a one-line summary, and a concrete failure_scenario. " +
+  "Surface up to " + P.perAngle + " candidate findings, each with file, line, a one-line summary, and a concrete failure_scenario — the user-visible consequence (error, wrong output, data loss), not an intermediate state (value stale, set grows). " +
   "Pass every candidate with a nameable failure scenario through — do not silently drop half-believed candidates; an independent verifier judges them next. " +
   "If nothing qualifies, return an empty list.\\n\\nStructured output only."
 
-const VERIFIER_PROMPT = c =>
+// Finders may return absolute, repo-relative, or backslash-separated paths
+// for the same file. Normalize once at ingest by suffix-matching against
+// scope.files (which the Scope agent returns repo-relative) so every
+// downstream consumer — group key, verifier prompt header, synthesis block,
+// final report — sees the same path. Longest match wins so that when one
+// changed-file path is itself a suffix of another (util/x.ts vs a/util/x.ts),
+// an absolute path canonicalizes to the more-specific entry.
+const canonFile = raw => {
+  if (!raw) return ""
+  const p = raw.replace(/\\\\/g, "/")
+  let best = ""
+  for (const sf of scope.files) {
+    if ((p === sf || p.endsWith("/" + sf)) && sf.length > best.length) best = sf
+  }
+  return best || p
+}
+const ingest = (cs, cap, kind) => cs.slice(0, cap).map(c => ({ ...c, file: canonFile(c.file), kind }))
+const loc = c => c.file + (c.line != null ? ":" + c.line : "")
+const inBounds = (i, n) => Number.isInteger(i) && i >= 0 && i < n
+
+const GROUP_VERIFIER_PROMPT = group =>
   "## Code-review verifier\\n\\n" + SCOPE_BLOCK + "\\n" +
-  "## Candidate finding\\n" +
-  "File: " + c.file + (c.line != null ? ":" + c.line : "") + "\\n" +
-  "Summary: " + c.summary + "\\n" +
-  "Failure scenario: " + c.failure_scenario + "\\n\\n" +
-  "Run the diff command above, read the relevant file(s), and return exactly one verdict:\\n\\n" +
+  "## Candidate findings at " + loc(group[0]) + "\\n" +
+  group.map((c, i) =>
+    "[" + i + "] Summary: " + c.summary + "\\n" +
+    "    Failure scenario: " + c.failure_scenario
+  ).join("\\n") + "\\n\\n" +
+  "Run the diff command above, read the relevant file(s), and return one verdict per candidate. " +
+  "Judge EACH candidate independently on its own claim — candidates at the same location may describe distinct issues, the same issue, or a mix. " +
+  "Reference each by its [i] index.\\n\\n" +
   VERDICT_LADDER + "\\n\\n" + VERDICT_LADDER_RECALL + "\\n\\n" +
   "Structured output only. Evidence must quote or cite the relevant line(s)."
 
-// ─── Dedup + verify-budget state — accumulates as finders complete (pipeline has no barrier) ───
-const dedupKey = c => c.file + ":" + (c.line != null ? Math.round(c.line / 5) * 5 : "x:" + c.summary.toLowerCase().slice(0, 40))
-const seen = new Map()
-const dupes = []
-const budgetDropped = []
-let verifySlots = MAX_VERIFY
+// ─── Same-location verifier merge — group ingested candidates by loc(c),
+// one verifier agent per location returning N verdicts. Grouping is not
+// dedup: every candidate keeps its own verdict; the synthesis step merges
+// semantic dupes. A candidate the verifier did not render a verdict on
+// (agent died, or it omitted that index) is dropped — same policy as the
+// old per-candidate verifier — so unverified candidates never reach the
+// report as fabricated PLAUSIBLE. Trade-off vs per-candidate: one verifier-
+// agent failure now drops every candidate at that location instead of one.
+let verifierAgents = 0
 
-function verifyCandidate(c) {
-  const short = (c.file || "").split("/").pop()
-  return agent(VERIFIER_PROMPT(c), { label: "verify:" + short, phase: "Verify", schema: VERDICT_SCHEMA })
-    .then(v => (v ? { ...c, verdict: v.verdict, evidence: v.evidence } : null))
+async function verifyGroups(candidates) {
+  const byLoc = Object.create(null)
+  for (const c of candidates) (byLoc[loc(c)] ||= []).push(c)
+  const groups = Object.values(byLoc)
+  verifierAgents += groups.length
+  const out = await parallel(groups.map(g => async () => {
+    const short = g[0].file.split("/").pop()
+    const r = await agent(GROUP_VERIFIER_PROMPT(g), { label: "verify:" + short + "(" + g.length + ")", phase: "Verify", schema: GROUP_VERDICT_SCHEMA })
+    if (!r) return []
+    const byIdx = {}
+    for (const v of r.verdicts) if (inBounds(v.index, g.length)) byIdx[v.index] = v
+    return g.flatMap((c, i) => byIdx[i] ? [{ ...c, verdict: byIdx[i].verdict, evidence: byIdx[i].evidence }] : [])
+  }))
+  return out.filter(Boolean).flat()
 }
 
-// ─── Find → dedup → Verify, no barrier between finders ───
+// ─── Find (barrier) → group → Verify. The barrier is the deliberate trade
+// for cross-finder location merge: grouping needs every finder's output, so
+// wall-clock += max(finder) − median(finder) vs the old per-finder pipeline.
 const FINDERS = CORRECTNESS_ANGLES.slice(0, P.correctnessAngles)
   .map(a => ({ ...a, kind: "correctness" }))
   .concat(CLEANUP_ANGLES.map(a => ({ ...a, kind: "cleanup" })))
 
-const finderResults = await pipeline(
-  FINDERS,
-
-  f => agent(FINDER_PROMPT(f), { label: f.label, phase: "Find", schema: CANDIDATES_SCHEMA }).then(r => {
-    if (!r) return { finder: f, candidates: [] }
+const finderOuts = await parallel(FINDERS.map(f => () =>
+  agent(FINDER_PROMPT(f), { label: f.label, phase: "Find", schema: CANDIDATES_SCHEMA }).then(r => {
+    if (!r) return []
     log(f.label + ": " + r.candidates.length + " candidates")
-    return { finder: f, candidates: r.candidates.slice(0, P.perAngle) }
-  }),
+    return ingest(r.candidates, P.perAngle, f.kind)
+  })
+))
+const allCandidates = finderOuts.filter(Boolean).flat()
+let candidatesSeen = allCandidates.length
 
-  result => {
-    const novel = result.candidates.filter(c => {
-      const key = dedupKey(c)
-      if (seen.has(key)) {
-        dupes.push(c)
-        return false
-      }
-      if (verifySlots <= 0) {
-        budgetDropped.push(c)
-        return false
-      }
-      seen.set(key, true)
-      verifySlots--
-      return true
-    })
-    return parallel(novel.map(c => () => verifyCandidate({ ...c, kind: result.finder.kind })))
-  }
-)
-
-let verified = finderResults.flat().filter(Boolean)
+let verified = await verifyGroups(allCandidates)
 
 // ─── Sweep (xhigh/max): one fresh finder hunting only for gaps ───
 if (P.sweep) {
   phase("Sweep")
   const knownBlock = verified.length > 0
-    ? verified.map(c => "- " + c.file + (c.line != null ? ":" + c.line : "") + " — " + c.summary).join("\\n")
+    ? verified.map(c => "- " + loc(c) + " — " + c.summary).join("\\n")
     : "(none)"
   const sweep = await agent(
     "## Code-review sweep — gaps only\\n\\n" + SCOPE_BLOCK + "\\n" +
@@ -218,10 +251,11 @@ if (P.sweep) {
     { label: "sweep", phase: "Sweep", schema: CANDIDATES_SCHEMA }
   )
   if (sweep && sweep.candidates.length > 0) {
-    const novel = sweep.candidates.slice(0, SWEEP_MAX).filter(c => !seen.has(dedupKey(c)))
-    log("sweep: " + novel.length + " new candidates")
-    const sweepVerified = await parallel(novel.map(c => () => verifyCandidate({ ...c, kind: "correctness" })))
-    verified = verified.concat(sweepVerified.filter(Boolean))
+    const sliced = ingest(sweep.candidates, SWEEP_MAX, "correctness")
+    candidatesSeen += sliced.length
+    log("sweep: " + sliced.length + " candidates")
+    const sweepVerified = await verifyGroups(sliced)
+    verified = verified.concat(sweepVerified)
   }
 }
 
@@ -232,11 +266,10 @@ log("Verify done: " + verified.length + " verified → " + surviving.length + " 
 const stats = {
   level: LEVEL,
   finders: FINDERS.length,
-  candidates: seen.size + dupes.length + budgetDropped.length,
+  candidates: candidatesSeen,
+  verifierAgents,
   verified: verified.length,
   refuted: refuted.length,
-  dupes: dupes.length,
-  budgetDropped: budgetDropped.length,
 }
 
 if (surviving.length === 0) {
@@ -255,7 +288,7 @@ phase("Synthesize")
 const rank = c => (c.kind === "cleanup" ? 2 : 0) + (c.verdict === "PLAUSIBLE" ? 1 : 0)
 const ranked = surviving.slice().sort((a, b) => rank(a) - rank(b))
 const block = ranked.map((c, i) =>
-  "### [" + i + "] " + c.file + (c.line != null ? ":" + c.line : "") + " (" + c.verdict + (c.kind === "cleanup" ? ", cleanup" : "") + ")\\n" +
+  "### [" + i + "] " + loc(c) + " (" + c.verdict + (c.kind === "cleanup" ? ", cleanup" : "") + ")\\n" +
   c.summary + "\\nFailure scenario: " + c.failure_scenario + "\\nVerifier evidence: " + c.evidence + "\\n"
 ).join("\\n")
 
@@ -279,10 +312,8 @@ const report = await agent(
 //      merged member is CONFIRMED.
 //   3. The summary describes the report actually returned.
 const decisions = report && Array.isArray(report.decisions) ? report.decisions : []
-const valid = i => Number.isInteger(i) && i >= 0 && i < ranked.length
-const loc = c => c.file + (c.line != null ? ":" + c.line : "")
-const claimedIdx = new Set()
-const claim = i => (valid(i) && !claimedIdx.has(i) ? (claimedIdx.add(i), true) : false)
+const seen = new Set()
+const claim = i => (inBounds(i, ranked.length) && !seen.has(i) ? (seen.add(i), true) : false)
 const findings = []
 for (const d of decisions) {
   if (findings.length >= P.maxFindings) break
@@ -296,7 +327,7 @@ for (const d of decisions) {
 const usedDecisions = findings.length > 0
 let backfilled = 0
 for (let i = 0; i < ranked.length && findings.length < P.maxFindings; i++) {
-  if (claimedIdx.has(i)) continue
+  if (seen.has(i)) continue
   const c = ranked[i]
   findings.push({ file: c.file, line: c.line, summary: c.summary, failure_scenario: c.failure_scenario, verdict: c.verdict })
   backfilled++
