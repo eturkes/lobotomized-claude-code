@@ -5,7 +5,7 @@ description: >-
   covering language detection, API surface selection (Claude API vs Managed
   Agents), model defaults, thinking/effort configuration, and language-specific
   documentation reading
-ccVersion: 2.1.193
+ccVersion: 2.1.196
 -->
 # Building LLM-Powered Applications with Claude
 
@@ -197,6 +197,19 @@ If a model string looks unfamiliar, it was released after your training cutoff. 
 
 ---
 
+## Authentication (Quick Reference)
+
+An unset `ANTHROPIC_API_KEY` doesn't mean there are no credentials. The SDKs and the `ant` CLI resolve credentials in order (first match wins): `ANTHROPIC_API_KEY` → `ANTHROPIC_AUTH_TOKEN` → the `ANTHROPIC_PROFILE`-selected or active OAuth profile from `ant auth login` → WIF env vars → the default profile on disk. A bare `Anthropic()` works after `ant auth login` with no env var set.
+
+When `ANTHROPIC_API_KEY` is unset, don't ask the user for a key — run `ant auth status` first. If it reports an active profile:
+
+- **SDK code or `ant` CLI:** just run it; the zero-arg client and every `ant …` subcommand pick up the profile automatically.
+- **Raw `curl` / HTTP:** get a short-lived token with `ant auth print-credentials --access-token` and send it as `Authorization: Bearer <token>` plus header `anthropic-beta: oauth-2025-04-20` (OAuth tokens go on `Authorization: Bearer`, not `x-api-key:`; always pass `--access-token` — the no-flag form prints JSON).
+
+Only ask for a key if `ant auth status` reports no active source (or `ant` isn't installed); suggest `ant auth login` first, exported `ANTHROPIC_API_KEY` as the alternative. Full details: `shared/anthropic-cli.md`.
+
+---
+
 ## Thinking & Effort (Quick Reference)
 
 **Fable 5 / Opus 4.8 / 4.7 — adaptive thinking only:** use `thinking: {type: "adaptive"}`. `thinking: {type: "enabled", budget_tokens: N}` returns 400 — adaptive is the only on-mode. On Opus 4.8/4.7, `{type: "disabled"}` and omitting `thinking` both work; on Fable 5, `{type: "disabled"}` 400s — omit the param instead. Sampling parameters (`temperature`, `top_p`, `top_k`) are removed and will 400. Opus 4.8 keeps the same request surface as 4.7 (no new breaking changes) — see `shared/model-migration.md` → Migrating to Opus 4.8 for behavioral re-tuning, and → Migrating to Opus 4.7 for the full breaking-change list from 4.6 or earlier. With `thinking` disabled, Opus 4.8 may write longer reasoning into the visible response — leave adaptive on, or add a final-answer-only instruction (see the migration guide).
@@ -241,7 +254,7 @@ For placement patterns, architectural guidance, and the silent-invalidator audit
 
 ## Fast Mode (Quick Reference)
 
-**Research preview, Opus 4.8 / 4.7 / 4.6.** Both 4.6 and 4.7 fast mode are deprecated — after removal, `speed: "fast"` silently falls back to standard on 4.6 and errors on 4.7. **Opus 4.8 is the durable fast-capable tier** — don't auto-substitute; leave the caller's fast-mode model string in place and flag the deprecation. Fast mode runs the same model at up to 2.5x output tokens/sec at premium pricing. Required on every request: the **beta** messages endpoint (`client.beta.messages.…`), beta flag `fast-mode-2026-02-01`, and `speed: "fast"` as a top-level request parameter (not a header, not `extra_body`).
+**Research preview, Opus 4.8 / 4.7 only.** Opus 4.7 fast mode is deprecated — after removal, `speed: "fast"` on 4.7 returns an error. **Opus 4.8 is the durable fast-capable tier** — don't auto-substitute; leave the caller's fast-mode model string in place and flag the deprecation. Fast mode runs the same model at up to 2.5x output tokens/sec at premium pricing. Required on every request: the **beta** messages endpoint (`client.beta.messages.…`), beta flag `fast-mode-2026-02-01`, and `speed: "fast"` as a top-level request parameter (not a header, not `extra_body`).
 
 ```python
 client.beta.messages.create(
@@ -469,6 +482,7 @@ Use WebFetch for the latest documentation when the user asks for "latest"/"curre
 
 ## Common Pitfalls
 
+- **No `ANTHROPIC_API_KEY` ≠ no credentials.** Don't ask for a key just because the env var is unset — run `ant auth status` first. After `ant auth login`, a bare `Anthropic()` client and `ant …` work with no env var; for raw curl, `Authorization: Bearer $(ant auth print-credentials --access-token)` plus header `anthropic-beta: oauth-2025-04-20`. See the Authentication QR above.
 - Don't truncate inputs when passing files or content. If content exceeds the context window, notify the user and discuss options (chunking, summarization) rather than silently truncating.
 - **Fable 5 / Opus 4.8 / 4.7 thinking:** adaptive only. `thinking: {type: "enabled", budget_tokens: N}` returns 400 — `budget_tokens` is fully removed (with `temperature`, `top_p`, `top_k`). Use `thinking: {type: "adaptive"}`. 4.8 inherits this surface from 4.7 with no new breaking changes; Fable 5 adds one — an explicit `{type: "disabled"}` 400s (accepted on 4.7/4.8), so omit the param instead.
 - **Opus 4.6 / Sonnet 4.6 thinking:** use `thinking: {type: "adaptive"}` — don't use `budget_tokens` for new code (deprecated on both; transitional escape hatch in `shared/model-migration.md` doesn't apply to 4.7/4.8). For older models, `budget_tokens` < `max_tokens` (minimum 1024), or it errors.
@@ -485,7 +499,7 @@ Use WebFetch for the latest documentation when the user asks for "latest"/"curre
 - **Error handling — catch a chain, not one broad class.** A single `except APIStatusError` / `catch (AnthropicServiceException)` / `rescue APIError` loses the retryable (429, ≥500, network) vs non-retryable (400/404) distinction. Write a most-specific-first chain — `NotFoundError` → `RateLimitError` → `APIStatusError` → `APIConnectionError` (Go: `errors.As` into `*anthropic.Error`, then `switch apierr.StatusCode`). Class names per language: `shared/error-codes.md`.
 - **Bash and text-editor tools are Anthropic-defined, schema-less.** Declare `{"type": "bash_20250124", "name": "bash"}` / `{"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"}` — no `input_schema`. A custom tool with your own schema named `"bash"` is a different tool. Handler paths in `shared/tool-use-concepts.md` § Client-Side Tools.
 - **Advisor tool model pairing.** The advisor tool's `model` must be at least as capable as the request's top-level `model` (e.g. executor `claude-sonnet-4-6` → advisor `claude-opus-4-8`/`-4-7`); an invalid pair returns 400. Table in `shared/tool-use-concepts.md` § Advisor.
-- **Use a model the feature supports.** Fast mode is Opus 4.8/4.7/4.6 (4.6/4.7 deprecated; 4.8 is the durable tier — don't auto-substitute, leave the caller's model string and flag the deprecation); task budgets are Fable 5 / Opus 4.8/4.7 only; the advisor tool needs a valid executor↔advisor pair. If the prompt names a model the feature doesn't support, use a supported one and note the substitution.
+- **Use a model the feature supports.** Fast mode is Opus 4.8/4.7 only (4.7 deprecated; 4.8 is the durable tier — don't auto-substitute, leave the caller's model string and flag the deprecation); task budgets are Fable 5 / Opus 4.8/4.7 only; the advisor tool needs a valid executor↔advisor pair. If the prompt names a model the feature doesn't support, use a supported one and note the substitution.
 - **Bedrock / Foundry: use the platform client class.** Bedrock → the `…BedrockMantle…` client with `anthropic.`-prefixed model IDs (`AnthropicBedrock`/`BedrockBackend` without `Mantle` is legacy). Foundry → `AnthropicFoundry`/`FoundryBackend`/`AnthropicFoundryClient` (C#, Java, PHP, Python, TypeScript); Go and Ruby have no Foundry client (Ruby falls back to first-party client + custom `base_url`). Table in the Provider Clients section above.
 - **Agent Skills ≠ Managed Agents.** To generate a `.pptx`/`.xlsx`/etc. via Agent Skills, call `client.beta.messages.create` with `container={"skills": [...]}`, the `code_execution_20260521` tool, and both `code-execution-2025-08-25` + `skills-2025-10-02` betas — not `client.beta.agents`/`sessions`/`environments` (that's Managed Agents).
 - **MCP connector needs both halves.** `mcp_servers=[{type:"url", url, name}]` alone is rejected — also add `tools=[{type:"mcp_toolset", mcp_server_name:<same name>}]` with beta `mcp-client-2025-11-20`.

@@ -3,7 +3,7 @@ name: 'Workflow Script: deep-research'
 description: >-
   Bundled deep-research workflow — a scoped search pipeline with URL dedup,
   fetch/extract, and vote-based verification
-ccVersion: 2.1.146
+ccVersion: 2.1.196
 variables:
   - WORKFLOW_NAME
   - WORKFLOW_DESCRIPTION

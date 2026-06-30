@@ -3,7 +3,7 @@ name: 'System Prompt: Code-review workflow routing instructions'
 description: >-
   Tool_result instructing the model to run the workflow-backed code review (with
   the Workflow invocation) instead of reviewing inline
-ccVersion: 2.1.178
+ccVersion: 2.1.196
 variables:
   - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_0
   - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_1
@@ -15,6 +15,8 @@ variables:
   - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_7
   - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_8
   - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_9
+  - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_10
+  - SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_11
 -->
 ${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_0}Run the workflow-backed code review at ${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_1} effort instead of reviewing inline.
 
@@ -22,4 +24,4 @@ Invoke: ${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_2}({ name:
 
 Everything after the level in the args string is passed to the workflow as the review target/instructions. If the user gave additional instructions for this review elsewhere in the conversation (scope restriction, files to focus on, things to skip), append them to the args string.
 
-The workflow runs in the background; verified findings arrive as a task notification. Present them ranked most-severe first, or note that nothing survived verification.${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_6?SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_7:""}${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_8?SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_9:""}
+The workflow runs in the background; verified findings arrive as a task notification. When they arrive, ${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_6?`call ${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_7} once with {level, findings} from the result payload (most-severe first; empty array if nothing survived). Do not also print the findings as text.`:"present the findings ranked most-severe first (or note that nothing survived verification)."}${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_8?SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_9:""}${SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_10?SYSTEM_PROMPT_CODE_REVIEW_WORKFLOW_ROUTING_INSTRUCTIONS_VAR_11:""}
