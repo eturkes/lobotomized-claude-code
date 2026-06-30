@@ -4,7 +4,7 @@ description: >-
   Step-by-step instructions for migrating existing code to newer Claude models,
   covering breaking changes, deprecated parameters, per-SDK syntax,
   prompt-behavior shifts, and migration checklists
-ccVersion: 2.1.196
+ccVersion: 2.1.197
 -->
 # Model Migration Guide
 
@@ -27,6 +27,8 @@ This file is large. Use the section names below to jump (or \`Grep\` for the hea
 | Opus 4.7 Migration Checklist | Required vs optional items for 4.7, tagged \`[BLOCKS]\` / \`[TUNE]\` |
 | Migrating to Opus 4.8 | Migrating to Opus 4.8 (no new breaking changes; mid-session system prompts; behavioral re-tuning) |
 | Opus 4.8 Migration Checklist | Required vs optional items for 4.8, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Migrating to {{SONNET_NEXT_NAME}} | Migrating Sonnet 4.6 → {{SONNET_NEXT_NAME}} (adaptive thinking on by default; non-default sampling params 400; new tokenizer; \`xhigh\` effort for coding/agentic; high-res vision; behavioral re-tuning) |
+| {{SONNET_NEXT_NAME}} Migration Checklist | Required vs optional items, tagged \`[BLOCKS]\` / \`[TUNE]\` |
 | Migrating to {{FABLE_NAME}} | Migrating to {{FABLE_NAME}} or {{MYTHOS_NAME}} (always-on thinking, raw CoT never returned, refusal handling, data retention, behavioral shifts) |
 | {{FABLE_NAME}} Migration Checklist | Required vs optional items for {{FABLE_NAME}}, tagged \`[BLOCKS]\` / \`[TUNE]\` |
 | Verify the Migration | After edits — runtime spot-check |
@@ -169,7 +171,7 @@ For prompt-tuning edits, quote before/after text, distinguish optional tuning fr
    - \`thinking: {type: "enabled", budget_tokens: N}\` → migrate to adaptive thinking on Opus 4.6 / Sonnet 4.6 (still functional but deprecated)
    - Assistant-turn prefills (\`messages\` ending with \`role: "assistant"\`) → must change on Opus 4.6 / Sonnet 4.6 (returns 400)
    - \`output_format\` parameter on \`messages.create()\` → must change on all models (deprecated API-wide)
-   - \`max_tokens > ~16000\` → must stream on any model. When streaming, Sonnet 4.6 / Haiku 4.5 cap at 64K and Opus 4.6 caps at 128K
+   - \`max_tokens > ~16000\` → must stream on any model. When streaming, every current model reaches 128K except Haiku 4.5, which caps at 64K
    - Beta headers \`effort-2025-11-24\`, \`fine-grained-tool-streaming-2025-05-14\`, \`interleaved-thinking-2025-05-14\` → GA on 4.6, remove them and switch from \`client.beta.messages.create\` to \`client.messages.create\`
    - Moving Sonnet 4.5 → Sonnet 4.6 with no \`effort\` set → 4.6 defaults to \`high\`, changing latency/cost
    - System prompts with \`CRITICAL\`, \`MUST\`, \`If in doubt, use X\` language → likely to overtrigger on 4.6 (see Prompt-Behavior Changes)
@@ -186,7 +188,8 @@ For prompt-tuning edits, quote before/after text, distinguish optional tuning fr
 | Opus 4.7                              | \`claude-opus-4-8\`  | Most capable Opus-tier model; same API surface as 4.7 (no new breaking changes) — mostly prompt re-tuning; see Migrating to Opus 4.8 |
 | Opus 4.6                              | \`claude-opus-4-8\`  | Apply the Opus 4.7 breaking changes, then the 4.8 re-tuning |
 | Opus 4.0 / 4.1 / 4.5 / Opus 3         | \`claude-opus-4-8\`  | Apply 4.6 → 4.7 → 4.8 in order (adaptive thinking, drop sampling params, then re-tune) |
-| Sonnet 4.0 / 4.5 / 3.7 / 3.5          | \`claude-sonnet-4-6\`| Best speed / intelligence balance; adaptive thinking; 64K output |
+| Sonnet 4.6                            | \`{{SONNET_NEXT_ID}}\` | Near-Opus quality on agentic and coding work at Sonnet cost; adaptive thinking on by default; see Migrating to {{SONNET_NEXT_NAME}} |
+| Sonnet 4.0 / 4.5 / 3.7 / 3.5          | \`{{SONNET_NEXT_ID}}\` | Apply the Sonnet 4.6 changes first, then the {{SONNET_NEXT_NAME}} section |
 | Haiku 3 / 3.5                         | \`claude-haiku-4-5\` | Fastest and most cost-effective                   |
 
 Default to the latest Opus for the caller's tier unless they explicitly chose otherwise. The Opus migrations layer: on Opus 4.6 or older, apply each version's section in order up to your target (e.g. 4.5 → 4.8 means the 4.6, 4.7, and 4.8 sections in sequence). A 4.7 → 4.8 move has no new breaking changes — see Migrating to Opus 4.8.
@@ -199,13 +202,13 @@ These models return 404 — update immediately:
 
 | Retired model                 | Retired       | Drop-in replacement  |
 | ----------------------------- | ------------- | -------------------- |
-| \`claude-3-7-sonnet-20250219\`  | Feb 19, 2026  | \`claude-sonnet-4-6\`  |
+| \`claude-3-7-sonnet-20250219\`  | Feb 19, 2026  | \`{{SONNET_NEXT_ID}}\` |
 | \`claude-3-5-haiku-20241022\`   | Feb 19, 2026  | \`claude-haiku-4-5\`   |
 | \`claude-3-opus-20240229\`      | Jan 5, 2026   | \`claude-opus-4-8\`    |
-| \`claude-3-5-sonnet-20241022\`  | Oct 28, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-3-5-sonnet-20240620\`  | Oct 28, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-3-sonnet-20240229\`    | Jul 21, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-2.1\`, \`claude-2.0\`    | Jul 21, 2025  | \`claude-sonnet-4-6\`  |
+| \`claude-3-5-sonnet-20241022\`  | Oct 28, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-3-5-sonnet-20240620\`  | Oct 28, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-3-sonnet-20240229\`    | Jul 21, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-2.1\`, \`claude-2.0\`    | Jul 21, 2025  | \`{{SONNET_NEXT_ID}}\` |
 
 ## Deprecated Models (retiring soon)
 
@@ -213,7 +216,7 @@ These models return 404 — update immediately:
 | ----------------------------- | ------------- | -------------------- |
 | \`claude-3-haiku-20240307\`     | Apr 19, 2026  | \`claude-haiku-4-5\`   |
 | \`claude-opus-4-20250514\`      | June 15, 2026 | \`claude-opus-4-8\`    |
-| \`claude-sonnet-4-20250514\`    | June 15, 2026 | \`claude-sonnet-4-6\`  |
+| \`claude-sonnet-4-20250514\`    | June 15, 2026 | \`{{SONNET_NEXT_ID}}\` |
 
 ---
 
@@ -229,7 +232,7 @@ Sonnet 4.5 had no \`effort\` parameter; Sonnet 4.6 defaults to \`high\`. Just sw
 | ------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- |
 | Chat, classification, content generation          | \`low\`          | With \`thinking: {"type": "disabled"}\` you'll see similar or better performance vs. Sonnet 4.5 no-thinking |
 | Most applications (balanced)                      | \`medium\`       | The default sweet spot for quality vs. cost                                                              |
-| Agentic coding, tool-heavy workflows              | \`medium\`       | Pair with adaptive thinking and a generous \`max_tokens\` (up to 64K with streaming — Sonnet 4.6's ceiling) |
+| Agentic coding, tool-heavy workflows              | \`medium\`       | Pair with adaptive thinking and a generous \`max_tokens\` (up to 128K with streaming — Sonnet 4.6's ceiling) |
 | Autonomous multi-step agents, long-horizon loops  | \`high\`         | Scale down to \`medium\` if latency/tokens become a concern                                                 |
 | Computer-use agents                               | \`high\` + adaptive | Sonnet 4.6's best computer-use accuracy is on adaptive + high                                          |
 
@@ -287,11 +290,11 @@ client.messages.create(
 )
 \`\`\`
 
-If the user asks for a "thinking budget" on 4.6, prefer \`effort\` — \`low\`, \`medium\`, \`high\`, or \`max\` (Opus-tier only — not Sonnet or Haiku) rather than a token count.
+If the user asks for a "thinking budget" on 4.6, prefer \`effort\` — \`low\`, \`medium\`, \`high\`, or \`max\` rather than a token count.
 
 **2. Effort parameter (Opus 4.5, Opus 4.6, Sonnet 4.6 only).**
 
-Controls thinking depth and overall token spend. Goes inside \`output_config\`, not top-level. Default is \`high\`. \`max\` is Opus-tier only (Opus 4.6 and later). Errors on Sonnet 4.5 and Haiku 4.5.
+Controls thinking depth and overall token spend. Goes inside \`output_config\`, not top-level. Default is \`high\`. \`max\` is supported on Fable 5, Opus 4.6 and later, Sonnet 5, and Sonnet 4.6 — it errors on Sonnet 4.5 and Haiku 4.5.
 
 \`\`\`python
 output_config={"effort": "medium"}  # often the best cost / quality balance
@@ -328,9 +331,9 @@ response = client.messages.create(
 )
 \`\`\`
 
-**4. Stream for \`max_tokens > ~16K\` (all models); Opus 4.6 alone reaches 128K.**
+**4. Stream for \`max_tokens > ~16K\` (all models); only Haiku 4.5 caps lower, at 64K.**
 
-Non-streaming requests hit SDK HTTP timeouts at high \`max_tokens\` regardless of model — stream for anything above ~16K output. Streamable ceiling differs: Sonnet 4.6 and Haiku 4.5 cap at 64K, Opus 4.6 goes up to 128K.
+Non-streaming requests hit SDK HTTP timeouts at high \`max_tokens\` regardless of model — stream for anything above ~16K output. Streamable ceiling is 128K for every current model except Haiku 4.5, which caps at 64K.
 
 \`\`\`python
 with client.messages.stream(model="claude-opus-4-6", max_tokens=64000, ...) as stream:
@@ -486,10 +489,11 @@ If the model now overtriggers a tool or skill, the fix is almost always to dial 
 | \`claude-opus-4-5\`              | \`claude-opus-4-8\`  |
 | \`claude-opus-4-1\`              | \`claude-opus-4-8\`  |
 | \`claude-opus-4-0\`              | \`claude-opus-4-8\`  |
-| \`claude-sonnet-4-5\`            | \`claude-sonnet-4-6\`|
-| \`claude-sonnet-4-0\`            | \`claude-sonnet-4-6\`|
+| \`claude-sonnet-4-6\`            | \`{{SONNET_NEXT_ID}}\`|
+| \`claude-sonnet-4-5\`            | \`{{SONNET_NEXT_ID}}\`|
+| \`claude-sonnet-4-0\`            | \`{{SONNET_NEXT_ID}}\`|
 
-Older aliases (\`claude-opus-4-7\`, \`claude-opus-4-6\`, \`claude-opus-4-5\`, \`claude-sonnet-4-5\`, etc.) are still active and can be pinned if you need time before upgrading — see \`shared/models.md\` for the full legacy list.
+Older aliases (\`claude-opus-4-7\`, \`claude-opus-4-6\`, \`claude-opus-4-5\`, \`claude-sonnet-4-6\`, \`claude-sonnet-4-5\`, etc.) are still active and can be pinned if you need time before upgrading — see \`shared/models.md\` for the full legacy list.
 
 ### Amazon Bedrock model IDs
 
@@ -500,6 +504,7 @@ If the code uses the \`AnthropicBedrockMantle\` client (Python \`anthropic[bedro
 | \`claude-opus-4-8\` | \`anthropic.claude-opus-4-8\` |
 | \`claude-opus-4-7\` | \`anthropic.claude-opus-4-7\` |
 | \`claude-haiku-4-5\` | \`anthropic.claude-haiku-4-5\` |
+| \`{{SONNET_NEXT_ID}}\` | \`anthropic.{{SONNET_NEXT_ID}}\` |
 
 When migrating a Bedrock file, apply the same rename-table row as first-party, then keep/add the \`anthropic.\` prefix. Don't generate a first-party \`claude-*\` ID for a Bedrock client — it will 400.
 
@@ -889,6 +894,137 @@ For a caller **already on Opus 4.7**, only the first item is required; everythin
 
 ---
 
+## Migrating to {{SONNET_NEXT_NAME}}
+
+> **Model ID \`{{SONNET_NEXT_ID}}\` is authoritative as written here.** When the user asks to migrate to {{SONNET_NEXT_NAME}}, write \`model="{{SONNET_NEXT_ID}}"\` exactly. Do not WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
+
+{{SONNET_NEXT_NAME}} substantially improves on Sonnet 4.6 for coding and agentic work, reaching previously Opus-tier quality on many tasks. Its API surface aligns with Opus 4.7/4.8: manual extended thinking is removed (adaptive or disabled only; adaptive is the default), and non-default sampling parameters are rejected. Layered on top of the Sonnet 4.6 migration above — from Sonnet 4.5 or older, apply the 4.6 changes first, then this one.
+
+**TL;DR for someone already on Sonnet 4.6:** swap the model ID to \`{{SONNET_NEXT_ID}}\`. Replace any remaining \`thinking: {type: "enabled", budget_tokens: N}\` with \`thinking: {type: "adaptive"}\` (the transitional escape hatch is gone — it now 400s); note that omitting \`thinking\` now runs adaptive (4.6 ran thinking-off). Strip non-default \`temperature\`/\`top_p\`/\`top_k\`. Re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` — the new tokenizer produces ~30% more tokens for the same text, so token-budgeted limits and cost baselines shift even though per-token pricing is unchanged. \`effort\` defaults to \`high\` (same as Sonnet 4.6) — raise to \`xhigh\` for the hardest coding and agentic tasks ({{SONNET_NEXT_NAME}} supports the full \`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\` range), and give \`max_tokens\` headroom at \`xhigh\`/\`max\`. Then re-tune prompts: it interprets instructions more literally than 4.6 (holdover style/tone directives now apply at face value); it's more agentic by default, reaching for tools and self-verification more readily (with thinking disabled it's less tool-eager — add an explicit nudge); it gives better in-progress updates (drop forced "summarize every N tool calls" scaffolding); and code-review harnesses with conservative-reporting instructions may see lower recall (tell it to report everything and filter downstream).
+
+### Breaking changes (will 400 on {{SONNET_NEXT_NAME}})
+
+These bring the Sonnet line onto the same request surface as Opus 4.7/4.8. See the **Per-SDK Syntax Reference** above for the language-specific spelling of each.
+
+**1. Extended thinking removed — adaptive only.** \`thinking: {type: "enabled", budget_tokens: N}\` returns a 400; the transitional escape hatch that still worked on Sonnet 4.6 is gone. Use adaptive thinking with an effort hint:
+
+\`\`\`python
+# Before — deprecated on Sonnet 4.6, now errors on {{SONNET_NEXT_NAME}}
+thinking={"type": "enabled", "budget_tokens": 10000}
+
+# After
+thinking={"type": "adaptive"},
+output_config={"effort": "high"},  # or "xhigh" for the hardest coding/agentic tasks
+\`\`\`
+
+To turn thinking off entirely, set \`thinking: {type: "disabled"}\` — but see *Adaptive vs. disabled* below first.
+
+**2. Sampling parameters rejected.** Setting \`temperature\`, \`top_p\`, or \`top_k\` to a non-default value returns a 400; omitting it, or passing its default, is still accepted. Safest migration: omit them and steer with prompting. If the caller relied on \`temperature=0\` for determinism, note it never guaranteed identical outputs.
+
+\`\`\`python
+# Before
+client.messages.create(model="claude-sonnet-4-6", temperature=0.2, ...)
+
+# After — omit entirely
+client.messages.create(model="{{SONNET_NEXT_ID}}", ...)
+\`\`\`
+
+**3. Bedrock only: forced \`tool_choice\` requires \`thinking: {type: "disabled"}\`.** On Amazon Bedrock, pass \`thinking: {type: "disabled"}\` alongside \`tool_choice: {type: "tool", name: ...}\` or \`tool_choice: {type: "any"}\`. The Claude API and Vertex AI don't require this.
+
+**Not a request-shape error, but handle it: cybersecurity safeguards.** {{SONNET_NEXT_NAME}} is substantially more cyber-capable than Sonnet 4.6, so — like Opus 4.7/4.8 — requests touching prohibited or high-risk topics may be refused. Handle it as a content outcome (see the \`refusal\` stop-reason guidance in the {{FABLE_NAME}} section for a fallback path).
+
+**Unchanged from Sonnet 4.6:** assistant-turn prefills still 400 (use \`output_config.format\` or a system-prompt instruction); the 1M-token context window, 128k max-output ceiling, prompt caching, batch processing, Files API, PDF support, vision, and the full server- and client-side tool set all carry over.
+
+### Silent default change: adaptive thinking on when \`thinking\` is omitted
+
+On Sonnet 4.6, a request with no \`thinking\` field runs **without** thinking. On {{SONNET_NEXT_NAME}}, the same request runs with **adaptive thinking** — callers who never set \`thinking\` now see thinking output (and spend thinking tokens) where they didn't before. Since \`max_tokens\` is a hard limit on total output (thinking + response text), a workload that ran thinking-off on 4.6 by omission may now truncate. Either set \`thinking: {type: "disabled"}\` explicitly to keep the old behavior, or raise \`max_tokens\` to leave room for thinking.
+
+### Silent default change: \`thinking.display\` defaults to \`"omitted"\`
+
+\`thinking.display\` defaults to \`"omitted"\` on {{SONNET_NEXT_NAME}} (matching Opus 4.7/4.8 and {{FABLE_NAME}}); on Sonnet 4.6 it defaulted to \`"summarized"\`. With the default, \`thinking\` blocks stream with empty text — to a streaming UI this looks like a long pause before output. Combined with adaptive-on-by-default, a 4.6 caller who omits \`thinking\` now gets adaptive thinking *and* empty-text thinking blocks. If you stream reasoning to users, set \`thinking: {type: "adaptive", display: "summarized"}\` explicitly. \`display\` controls visibility only — thinking happens and is billed the same under every setting.
+
+### New tokenizer (~30% more tokens)
+
+{{SONNET_NEXT_NAME}} uses the same new tokenizer as Opus 4.7/4.8 — the same input text produces ~30% more tokens than on Sonnet 4.6. No request/response shape changes and no code edits, but **everything measured or budgeted in tokens shifts**: \`usage\` fields and \`count_tokens()\` results are higher, the 1M context window holds less text, and a \`max_tokens\` limit tuned for 4.6 may truncate equivalent output. Per-token pricing is unchanged at the $3/$15 sticker (introductory $2/$10 per MTok through 2026-08-31), so an equivalent request's cost can differ. Re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` rather than reusing counts from earlier models, and re-baseline cost dashboards before reacting.
+
+### Choosing an effort level on {{SONNET_NEXT_NAME}}
+
+\`effort\` defaults to \`high\` when unset (same as Sonnet 4.6 and Opus 4.8). {{SONNET_NEXT_NAME}} supports the full \`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\` range — the first Sonnet-tier model with \`xhigh\`. Keep \`high\` for most work, raise to \`xhigh\` for the hardest coding and agentic tasks:
+
+| Level    | When to use on {{SONNET_NEXT_NAME}} |
+| -------- | ----- |
+| \`max\`    | Highest capability with no token constraint. Can deliver gains but may show diminishing returns and sometimes overthinks — test before committing |
+| \`xhigh\`  | The hardest coding and agentic use cases — the recommended setting for those |
+| \`high\`   | The default; balances token usage and intelligence for most use cases |
+| \`medium\` | Cost-saving step-down from the default — comparable to Sonnet 4.6 at \`high\` |
+| \`low\`    | Short, scoped tasks and latency-sensitive workloads that aren't intelligence-sensitive |
+
+Rough cross-model mapping: {{SONNET_NEXT_NAME}} at \`medium\` ≈ Sonnet 4.6 at \`high\`, and at \`high\` ≈ Sonnet 4.6 at \`max\`. When benchmarking, match by observed thinking length, not effort name.
+
+{{SONNET_NEXT_NAME}} respects effort levels strictly, especially at the low end. At \`low\`/\`medium\` it scopes work to what was asked — good for latency and cost, but on moderately complex tasks at \`low\` there's some risk of under-thinking. If shallow reasoning shows up on complex problems, raise effort to \`high\`/\`xhigh\` rather than prompting around it. If \`effort\` must stay \`low\` for latency: *"This task involves multi-step reasoning. Think carefully through the problem before responding."*
+
+**Leave \`max_tokens\` headroom at \`xhigh\`/\`max\`.** Set a large output budget (up to the 128k cap, unchanged from Sonnet 4.6) so the model has room for thinking and tool calls. On long tasks adaptive thinking can take a large share of the budget; if it's tight you may see a response that's almost all thinking, a truncated answer, and \`stop_reason: "max_tokens"\` — raise \`max_tokens\` or drop to \`medium\`. The new tokenizer (~30% more tokens) means 4.6-tuned \`max_tokens\` limits may truncate equivalent output.
+
+### Adaptive vs. disabled thinking
+
+Leave adaptive thinking on — {{SONNET_NEXT_NAME}} calibrates thinking spend to task complexity, and the small added latency is usually worth the quality gain. If the caller ran Sonnet 4.6 with thinking off, try adaptive + \`effort: "low"\` first rather than \`thinking: {type: "disabled"}\`.
+
+Triggering is steerable. If it emits thinking blocks more often than wanted (can happen with large/complex system prompts), prompt it directly and measure the effect on quality: *"Thinking adds latency and should only be used when it will meaningfully improve answer quality, typically for problems that require multi-step reasoning. When in doubt, respond directly."* Conversely, if hard workloads at \`medium\` under-think, raise effort first.
+
+### Capability improvements
+
+**Coding and agentic tasks.** The largest gains over Sonnet 4.6. {{SONNET_NEXT_NAME}} performs well out of the box on existing 4.6 prompts.
+
+**High-resolution vision.** First Sonnet-tier model with high-resolution image support: max **2576 pixels on the long edge** (up from 1568px on Sonnet 4.6). High-res images can use up to ~3× more image tokens (4784 vs 1568 per image at the limit) — downsample before sending if the fidelity isn't needed. No beta header or opt-in.
+
+**Computer use.** Supports \`computer_20251124\` (beta header \`computer-use-2025-11-24\`). Works across resolutions up to the 2576px / 3.75MP maximum; **1080p** screenshots balance performance and cost, **720p** or **1366×768** are lower-cost options. Test for ideal settings; experimenting with \`effort\` can help.
+
+### Behavioral shifts (prompt-tunable)
+
+None break code, but prompts tuned for Sonnet 4.6 may land differently. {{SONNET_NEXT_NAME}} follows instructions closely, so small explicit directives close the gap.
+
+**Response length and verbosity.** Calibrates length to task complexity rather than a fixed verbosity — shorter on simple lookups, longer on open-ended analysis. To decrease verbosity: *"Provide concise, focused responses. Skip non-essential context, and keep examples minimal."* For specific verbosity (e.g. over-explaining), add targeted instructions; positive examples of the desired concision work better than telling it what not to do.
+
+**Tool use triggering.** More agentic than Sonnet 4.6 by default — reaches for tools and runs self-verification loops more readily. **With thinking disabled**, it's less likely to reach for tools or search; if the harness relies on tool calls with thinking off, add an explicit nudge. \`effort\` is also a lever (\`high\`/\`xhigh\` show substantially more tool usage in agentic search and coding). For under-used tools, instruct when and how to use them.
+
+**User-facing progress updates.** Provides regular, higher-quality updates throughout long agentic traces by default. Drop forced interim-status scaffolding ("After every 3 tool calls, summarize progress"); if the updates aren't well-calibrated, describe what they should look like with an example.
+
+**More literal instruction following.** Interprets prompts literally and explicitly, especially at lower effort. It won't silently generalize an instruction from one item to another or infer requests you didn't make — better for tuned prompts, structured extraction, and predictable pipelines. State the scope explicitly when an instruction should apply broadly ("Apply this formatting to every section, not just the first"). The same literalism means holdover style/tone directives from 4.6 may over-apply — re-baseline lines like "be concise" before keeping them.
+
+**Tone and writing style.** Prose style on long-form writing may shift; re-evaluate style prompts against the new baseline. For a warmer voice: *"Use a warm, collaborative tone. Acknowledge the user's framing before answering."* Because \`temperature\`/\`top_p\`/\`top_k\` are rejected, callers who relied on \`temperature\` for stylistic variety must use system-prompt instructions instead.
+
+**Code review harnesses.** Same caveat as Opus 4.7/4.8: with "only report high-severity" / "be conservative" filters, {{SONNET_NEXT_NAME}} follows them more faithfully — precision rises but measured recall can fall even though bug-finding improved. Tell it to report everything with confidence + severity and filter downstream — see the **Code review** guidance in the 4.7 section for the recommended prompt.
+
+**Design and frontend defaults.** May settle into a consistent default visual style on open-ended briefs. Generic instructions ("don't use that color," "make it clean and minimal") shift it to a different fixed palette rather than producing variety. Two reliable approaches: specify a concrete alternative (palette, typography, layout, spacing), or have the model propose 4 distinct visual directions (bg hex / accent hex / typeface + one-line rationale) and pick one. With \`temperature\` rejected, propose-then-pick is the way to get meaningfully different directions across runs. The anti-slop nudge from the 4.7 **Design and frontend coding** section applies here too.
+
+**Interactive coding products.** Token usage and behavior differ between autonomous single-turn agents and interactive multi-turn ones. To maximize performance and efficiency, use \`effort: "xhigh"\`/\`"high"\`, add autonomous features (e.g. auto mode), and reduce required human interactions. Specify task, intent, and constraints upfront in the first turn — well-specified initial prompts maximize autonomy and intelligence while minimizing extra token usage; ambiguous, progressively-revealed prompts reduce efficiency and sometimes performance.
+
+### {{SONNET_NEXT_NAME}} Migration Checklist
+
+\`[BLOCKS]\` items cause a 400 or truncated output if missed — apply as code edits. \`[TUNE]\` items are quality/cost adjustments — surface as recommendations.
+
+- [ ] **[BLOCKS]** Update the \`model=\` string to \`{{SONNET_NEXT_ID}}\`
+- [ ] **[BLOCKS]** Replace \`thinking: {type: "enabled", budget_tokens: N}\` with \`thinking: {type: "adaptive"}\` + \`output_config.effort\` — the Sonnet 4.6 transitional escape hatch is gone
+- [ ] **[BLOCKS]** Strip \`temperature\`, \`top_p\`, \`top_k\` from request construction (use system-prompt instructions for tone/variety instead)
+- [ ] **[BLOCKS]** Bedrock only: pass \`thinking: {type: "disabled"}\` alongside forced \`tool_choice\` (\`{type: "tool"}\` / \`{type: "any"}\`) — not required on the Claude API or Vertex AI
+- [ ] **[BLOCKS]** At \`effort: "xhigh"\` or \`"max"\`: set a large \`max_tokens\` (up to 128k, unchanged from Sonnet 4.6) so the model has room for thinking and tool calls — 4.6-tuned limits may truncate under the new tokenizer (symptom: \`stop_reason: "max_tokens"\`)
+- [ ] **[TUNE]** Thinking-field omitted: adaptive is now the default (4.6 ran thinking-off) — set \`thinking: {type: "disabled"}\` to preserve the old behavior, or revisit \`max_tokens\` for the added thinking spend
+- [ ] **[TUNE]** \`thinking.display\` defaults to \`"omitted"\` (4.6 defaulted to \`"summarized"\`): if you stream reasoning to users, set \`thinking: {type: "adaptive", display: "summarized"}\` explicitly — the default streams empty-text thinking blocks (long pause before output)
+- [ ] **[TUNE]** New tokenizer: re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` (~30% more tokens for the same text); revisit \`max_tokens\` and compaction triggers; re-baseline cost dashboards before reacting (per-token pricing unchanged)
+- [ ] **[TUNE]** Effort: keep the \`high\` default; raise to \`xhigh\` for the hardest coding/agentic tasks; \`medium\` is a cost-saving step-down (≈ Sonnet 4.6 at \`high\`); reserve \`low\` for short, latency-sensitive, non-intelligence-sensitive tasks. If shallow reasoning shows up at \`low\`/\`medium\`, raise effort rather than prompting around it
+- [ ] **[TUNE]** Thinking-off callers: try \`thinking: {type: "adaptive"}\` + \`effort: "low"\` instead of \`disabled\`; if \`disabled\` must stay, add an explicit tool-triggering nudge (less tool-eager with thinking off)
+- [ ] **[TUNE]** Tool usage: more agentic than 4.6 by default — \`effort\` is a lever (\`high\`/\`xhigh\` for more tool use); add explicit when/how triggering instructions for under-used tools
+- [ ] **[TUNE]** Drop forced progress-update scaffolding ("after every N tool calls, summarize") — default updates are higher quality; describe the desired shape if it still needs tuning
+- [ ] **[TUNE]** Re-baseline holdover style/tone/scope directives — instructions are followed literally; state the scope explicitly when one should apply broadly
+- [ ] **[TUNE]** Verbosity-sensitive routes: tune response length via prompt (positive examples > "don't" instructions)
+- [ ] **[TUNE]** Code-review harnesses with conservative-reporting instructions: switch to a coverage-first prompt (report everything with confidence + severity) and filter downstream — measured recall can otherwise fall even though bug-finding improved
+- [ ] **[TUNE]** Open-ended frontend/design briefs: specify a concrete spec, or have the model propose 3–4 visual directions and pick one (the substitute for \`temperature\`-driven variety)
+- [ ] **[TUNE]** Interactive coding products: use \`effort: "xhigh"\`/\`"high"\`, add autonomous features (e.g. auto mode), and put task/intent/constraints in the first turn
+- [ ] **[TUNE]** Vision-heavy / computer-use pipelines: leave images at native resolution up to 2576px long edge (downsample to control image-token cost if fidelity isn't needed); for computer use, 1080p screenshots balance performance/cost with \`computer_20251124\`
+- [ ] **[TUNE]** Security workloads: add handling for safeguard refusals (cyber-capable topics may now be declined where Sonnet 4.6 answered)
+
+---
+
 ## Migrating to {{FABLE_NAME}}
 
 > **Model IDs \`{{FABLE_ID}}\` and \`{{MYTHOS_ID}}\` are authoritative as written here.** Migrating to {{FABLE_NAME}}: write \`model="{{FABLE_ID}}"\`. A Mythos Preview migrator in Project Glasswing writes \`model="{{MYTHOS_ID}}"\` (everyone else: \`{{FABLE_ID}}\`). Don't WebFetch to verify — this guide is the source of truth for migration target IDs.
@@ -1010,10 +1146,10 @@ The 4.8 behavioral shifts above apply; {{FABLE_NAME}}-specific deltas:
 
 ## Verify the Migration
 
-After updating, spot-check that the new model is actually being used. Replace \`YOUR_TARGET_MODEL\` with the model string you migrated to (e.g. \`{{FABLE_ID}}\`, \`claude-opus-4-8\`, \`claude-opus-4-7\`, \`claude-sonnet-4-6\`, \`claude-haiku-4-5\`) and keep the assertion prefix in sync:
+After updating, spot-check that the new model is actually being used. Replace \`YOUR_TARGET_MODEL\` with the model string you migrated to (e.g. \`{{FABLE_ID}}\`, \`claude-opus-4-8\`, \`claude-opus-4-7\`, \`{{SONNET_NEXT_ID}}\`, \`claude-sonnet-4-6\`, \`claude-haiku-4-5\`) and keep the assertion prefix in sync:
 
 \`\`\`python
-YOUR_TARGET_MODEL = "{{OPUS_ID}}"  # or "claude-opus-4-7", "claude-sonnet-4-6", "claude-haiku-4-5"
+YOUR_TARGET_MODEL = "{{OPUS_ID}}"  # or "claude-opus-4-7", "{{SONNET_NEXT_ID}}", "claude-sonnet-4-6", "claude-haiku-4-5"
 response = client.messages.create(model=YOUR_TARGET_MODEL, max_tokens=64, messages=[...])
 assert response.model.startswith(YOUR_TARGET_MODEL), response.model
 \`\`\`

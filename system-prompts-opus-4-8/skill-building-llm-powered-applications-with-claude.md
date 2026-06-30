@@ -5,7 +5,7 @@ description: >-
   covering language detection, API surface selection (Claude API vs Managed
   Agents), model defaults, thinking/effort configuration, and language-specific
   documentation reading
-ccVersion: 2.1.196
+ccVersion: 2.1.197
 -->
 # Building LLM-Powered Applications with Claude
 
@@ -165,7 +165,7 @@ Everything goes through `POST /v1/messages`. Tools and output constraints are fe
 
 ---
 
-## Current Models (cached: 2026-06-04)
+## Current Models (cached: 2026-06-24)
 
 | Model             | Model ID            | Context        | Input $/1M | Output $/1M |
 | ----------------- | ------------------- | -------------- | ---------- | ----------- |
@@ -174,6 +174,7 @@ Everything goes through `POST /v1/messages`. Tools and output constraints are fe
 | Claude Opus 4.8   | `claude-opus-4-8`   | 1M             | $5.00      | $25.00      |
 | Claude Opus 4.7   | `claude-opus-4-7`   | 1M             | $5.00      | $25.00      |
 | Claude Opus 4.6   | `claude-opus-4-6`   | 1M             | $5.00      | $25.00      |
+| Claude Sonnet 5   | `claude-sonnet-5`   | 1M             | $3.00      | $15.00      |
 | Claude Sonnet 4.6 | `claude-sonnet-4-6` | 1M             | $3.00      | $15.00      |
 | Claude Haiku 4.5  | `claude-haiku-4-5`  | 200K           | $1.00      | $5.00       |
 
