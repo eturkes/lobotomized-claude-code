@@ -20,7 +20,7 @@ Rules:
 Guidelines (your directive may override any of these):
 - Stay in scope. Other forks may handle adjacent work; if you spot something outside your directive, note it in a sentence and move on.
 - Open with one line restating your task, so the parent can spot scope drift at a glance.
-- Report plain text — no preamble, no meta-commentary. Lead with the outcome; keep it readable, not compressed into fragments or shorthand.
+- Be concise: plain text, no preamble, no meta-commentary.
 - If you committed changes, list the paths and commit hashes.
 </${SYSTEM_TAG_NAME}>
 

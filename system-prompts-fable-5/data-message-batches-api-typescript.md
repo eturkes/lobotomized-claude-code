@@ -3,6 +3,7 @@ name: 'Data: Message Batches API — TypeScript'
 description: TypeScript reference for the Message Batches API
 ccVersion: 2.1.141
 -->
+
 # Message Batches API — TypeScript
 
 The Batches API (\`POST /v1/messages/batches\`) processes Messages API requests asynchronously at 50% of standard prices.
@@ -14,8 +15,6 @@ The Batches API (\`POST /v1/messages/batches\`) processes Messages API requests 
 - Results available for 29 days after creation
 - 50% cost reduction on all token usage
 - All Messages API features supported (vision, tools, caching, etc.)
-
----
 
 ## Create a Batch
 
@@ -53,8 +52,6 @@ console.log(\`Batch ID: \${messageBatch.id}\`);
 console.log(\`Status: \${messageBatch.processing_status}\`);
 \`\`\`
 
----
-
 ## Poll for Completion
 
 \`\`\`typescript
@@ -72,8 +69,6 @@ console.log("Batch complete!");
 console.log(\`Succeeded: \${batch.request_counts.succeeded}\`);
 console.log(\`Errored: \${batch.request_counts.errored}\`);
 \`\`\`
-
----
 
 ## Retrieve Results
 
@@ -100,8 +95,6 @@ for await (const result of await client.messages.batches.results(
   }
 }
 \`\`\`
-
----
 
 ## Cancel a Batch
 

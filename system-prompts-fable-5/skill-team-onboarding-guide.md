@@ -3,7 +3,6 @@ name: 'Skill: Team onboarding guide'
 description: >-
   Template for onboarding a new teammate to a team's Claude Code setup, walking
   them through usage stats, setup checklists, MCP servers, skills, and team tips
-  in a warm conversational style
 ccVersion: 2.1.94
 -->
 # Welcome to [Team Name]
@@ -56,4 +55,4 @@ Check Setup Checklist items (including skills) with `[x]` / `[ ]` checkboxes —
 
 Offer to start with the first unchecked item, get go-ahead, then work through the rest one by one. After setup, walk through the remaining sections.
 
-Use only the sections in the guide; don't add summaries it doesn't contain. The stats are personal usage data — present them as-is, not as a team-workflow narrative. -->
+Don't invent sections or summaries not in the guide. The stats are personal usage data — don't extrapolate them into a "team workflow" narrative. -->

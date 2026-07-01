@@ -71,3 +71,4 @@ Here's an example of how your output should be structured:
 </example>
 
 Summarize the RECENT messages only (after the retained earlier context), following this structure.
+

@@ -18,8 +18,8 @@ Parse the input below into \`[interval] <prompt…>\` and schedule it.
 ## Parsing (in priority order)
 
 1. **Leading token**: if the first whitespace-delimited token matches \`^\\d+[smhd]$\` (e.g. \`5m\`, \`2h\`), that's the interval; the rest is the prompt.
-2. **Trailing "every" clause**: otherwise, if the input ends with \`every <N><unit>\` or \`every <N> <unit-word>\` (e.g. \`every 20m\`, \`every 5 minutes\`, \`every 2 hours\`), extract that as the interval and strip it from the prompt. Only match when what follows "every" is a time expression — \`check every PR\` has no interval.
-3. **No interval**: otherwise, the entire input is the prompt and you'll self-pace dynamically (see "Dynamic mode" below).
+2. **Trailing "every" clause**: otherwise, if the input ends with \`every <N><unit>\` or \`every <N> <unit-word>\` (e.g. \`every 20m\`, \`every 5 minutes\`, \`every 2 hours\`), extract that as the interval and strip it from the prompt. Match only when what follows "every" is a time expression — \`check every PR\` has no interval.
+3. **No interval**: otherwise, the entire input is the prompt and you self-pace dynamically (see "Dynamic mode" below).
 
 If the resulting prompt is empty, show usage \`/loop [interval] <prompt>\` and stop.
 

@@ -5,7 +5,6 @@ ccVersion: 2.1.120
 variables:
   - CURRENT_MONTH_YEAR
 -->
-
 Searches the web for up-to-date information beyond Claude's knowledge cutoff. Returns results as markdown-linked blocks; searches run automatically within a single API call.
 
 After answering, end your response with a \`Sources:\` section listing the relevant URLs you used as markdown hyperlinks (\`[Title](URL)\`).

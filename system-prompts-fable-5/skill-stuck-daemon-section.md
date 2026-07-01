@@ -1,6 +1,11 @@
 <!--
 name: 'Skill: /stuck daemon section'
-description: Daemon section of the /stuck slash command
+description: >-
+  Daemon-state diagnostics section of /stuck — renders daemon.lock,
+  daemon.status.json, the daemon log, and on-disk roster/job-state paths for
+  debugging stuck background sessions. Functional live data display (kept; not
+  bloat). Portably overridable after the extractor fix populated its
+  identifierMap.
 ccVersion: 2.1.141
 variables:
   - SKILL_STUCK_DAEMON_SECTION_VAR_0

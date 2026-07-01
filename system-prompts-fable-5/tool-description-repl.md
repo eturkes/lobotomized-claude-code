@@ -9,7 +9,6 @@ variables:
   - IS_BASH_ENV_FN
   - TEMP_FILE_HEREDOC_COMMAND_EXAMPLE
 -->
-
 REPL is your programming interface to Claude Code's tools. Use it to loop, branch, and compose tool calls in JavaScript when that's clearer than repeated individual calls. Batch the work into ONE REPL call — write one complete async script, not several separate calls.
 
 Tools are async functions: \`Read\`, \`Write\`, \`Edit\`, \`Glob\`, \`Grep\`, \`${SHELL_TOOL_NAME}\`, etc. MCP tools are callable by full name (e.g. \`await mcp__slack__slack_send_message({...})\`).

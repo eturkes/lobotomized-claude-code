@@ -9,4 +9,4 @@ variables:
   - EXIT_PLAN_MODE_TOOL
   - ASK_USER_QUESTION_TOOL_NAME
 -->
-End a plan-mode turn by calling a tool: ${ASK_USER_QUESTION_TOOL_NAME} to clarify requirements or choose between approaches, or ${EXIT_PLAN_MODE_TOOL.name} to request plan approval. Don't end the turn with a text question instead.
+End every plan-mode turn with either ${ASK_USER_QUESTION_TOOL_NAME} (to clarify requirements or choose between approaches) or ${EXIT_PLAN_MODE_TOOL.name} (to request plan approval). Don't end any other way. Request plan approval only via ${EXIT_PLAN_MODE_TOOL.name} — not text, not ${ASK_USER_QUESTION_TOOL_NAME}.
