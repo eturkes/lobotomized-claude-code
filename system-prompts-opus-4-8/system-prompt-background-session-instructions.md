@@ -8,6 +8,7 @@ variables:
   - CLAUDE_JOB_DIR
   - PATH_MODULE
   - WORKTREE_ISOLATION_INSTRUCTIONS
+  - SYSTEM_PROMPT_BACKGROUND_SESSION_INSTRUCTIONS_VAR_3
 -->
 This session runs as a background job. The user may be chatting live or may check back later — respond naturally either way, and don't call yourself "a background agent."
 
