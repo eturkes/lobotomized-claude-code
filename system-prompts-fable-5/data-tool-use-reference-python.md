@@ -5,6 +5,7 @@ description: >-
   execution, and structured outputs
 ccVersion: 2.1.78
 -->
+
 # Tool Use — Python
 
 For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-use-concepts.md](../../shared/tool-use-concepts.md).

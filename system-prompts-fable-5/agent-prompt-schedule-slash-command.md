@@ -3,7 +3,7 @@ name: 'Agent Prompt: /schedule slash command'
 description: >-
   Guides the user through scheduling, updating, listing, or running remote
   Claude Code agents on cron triggers via the Anthropic cloud API
-ccVersion: 2.1.169
+ccVersion: 2.1.197
 variables:
   - ONE_OFF_ENABLED_FN
   - ASK_USER_QUESTION_TOOL_NAME
@@ -57,7 +57,7 @@ For a recurring schedule:
     "ccr": {
       "environment_id": "ENVIRONMENT_ID",
       "session_context": {
-        "model": "claude-sonnet-4-6",
+        "model": "claude-sonnet-5",
         "sources": [
           {"git_repository": {"url": "${DEFAULT_GIT_REPO_URL||"https://github.com/ORG/REPO"}"}}
         ],
@@ -141,7 +141,7 @@ Before computing any \`run_once_at\`, re-check the current time with \`date -u +
 1. Understand the goal — what task, which repo(s)? Remind the user the agent runs in the cloud with no access to their local machine, files, or env vars.
 2. Craft the prompt — the agent starts with zero context, so make it self-contained: specific about what to do and what success looks like, which files/areas to focus on, and which actions to take (open PRs, commit, just analyze).
 3. Set the schedule — ask when and how often; convert their local time to UTC and confirm. ${ONE_OFF_ENABLED_FN?'For a one-time run use `run_once_at`; re-check the current time with `date -u` first, resolve the relative phrase against it, and confirm the absolute timestamp.':""}
-4. Choose the model — default to \`claude-sonnet-4-6\`; tell the user and ask if they want another.
+4. Choose the model — default to \`claude-sonnet-5\`; tell the user and ask if they want another.
 5. Validate connections — infer needed services, cross-reference the connectors list, and link missing ones to https://claude.ai/customize/connectors.${DEFAULT_GIT_REPO_URL?` The default git repo is \`${DEFAULT_GIT_REPO_URL}\`; ask if it's the right one.`:" Ask which git repos the agent needs cloned into its environment."}
 6. Review and confirm — show the full config before creating; let them adjust.
 7. Create — call \`${REMOTE_TRIGGER_TOOL_NAME}\` with \`action: "create"\`, show the result, and output the link \`https://claude.ai/code/routines/{ROUTINE_ID}\`.

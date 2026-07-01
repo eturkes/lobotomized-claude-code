@@ -1,8 +1,8 @@
 <!--
 name: 'System Prompt: Doing tasks (software engineering focus)'
 description: >-
-  Users primarily request software engineering tasks; interpret instructions in
-  that context
+  Interpret unclear instructions as software engineering tasks in the working
+  directory
 ccVersion: 2.1.53
 -->
 

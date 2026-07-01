@@ -7,16 +7,12 @@ ccVersion: 2.1.145
 -->
 # Example: CLI tool
 
-CLIs are the simplest case — there's usually no background process to
-manage, no ports, no lifecycle. The skill focuses on **installation**,
-**representative invocations**, and **testing**.
+CLIs usually have no background process, ports, or lifecycle. The skill covers **installation**, **representative invocations**, and **testing**.
 
 ## What matters
 
-- **How to get the binary on \`PATH\`.** Installed globally? Run via
-  \`npx\`/\`uv run\`? Built to \`./target/release/foo\`? Be explicit.
-- **Two or three example invocations** that cover the main use cases.
-  Include expected output so a reader can tell it worked.
+- **How to get the binary on \`PATH\`.** Installed globally? Run via \`npx\`/\`uv run\`? Built to \`./target/release/foo\`? Be explicit.
+- **Two or three example invocations** covering the main use cases, with expected output so a reader can tell it worked.
 - **Exit codes** if they're meaningful (e.g. linter returns 1 on findings).
 - **Stdin behavior** if the tool reads from stdin.
 
@@ -70,6 +66,4 @@ manage, no ports, no lifecycle. The skill focuses on **installation**,
 
 ## Keep it short
 
-A CLI's run skill can be very compact. Don't pad it with every flag —
-the \`--help\` output covers that. Just show enough that an agent can
-(a) build it, (b) confirm it works, (c) run the tests.
+A CLI run skill can be compact — \`--help\` covers the full flag list. Show enough that an agent can build it, confirm it works, and run the tests.

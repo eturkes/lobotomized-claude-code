@@ -27,6 +27,15 @@ ${PREAMBLE_BLOCK}## Context
 - \`git diff ${DEFAULT_BRANCH}...HEAD\`: !\`git diff ${DEFAULT_BRANCH}...HEAD\`
 - \`gh pr view --json number\`: !\`${IS_BASH_ENV_FN()?"gh pr view --json number 2>/dev/null || true":'gh pr view --json number 2>$null; if (-not $?) { "" }'}\`
 
+## Git safety
+
+- Don't update the git config.
+- Don't run destructive/irreversible git commands (push --force, hard reset, etc.) unless the user explicitly asks.
+- Don't skip hooks (--no-verify, --no-gpg-sign, etc.) unless the user explicitly asks.
+- Don't force push to main/master; warn the user if they request it.
+- Don't commit files likely to contain secrets (.env, credentials.json, etc.).
+- Don't use git \`-i\` flags (rebase -i, add -i) — they require interactive input, which isn't supported.
+
 ## Your task
 
 Analyze every commit that will be in the PR — the full \`git diff ${DEFAULT_BRANCH}...HEAD\` above, not just the latest commit.

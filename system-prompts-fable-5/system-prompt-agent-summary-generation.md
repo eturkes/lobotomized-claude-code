@@ -10,8 +10,6 @@ ${PREVIOUS_AGENT_SUMMARY?`
 Previous: "${PREVIOUS_AGENT_SUMMARY}" — say something NEW.
 `:""}
 Good: "Reading runAgent.ts"
-Good: "Fixing null check in validate.ts"
-Good: "Running auth module tests"
 Good: "Adding retry logic to fetchUser"
 
 Bad (past tense): "Analyzed the branch diff"

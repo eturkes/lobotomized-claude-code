@@ -20,10 +20,10 @@ Parse the input below into \`[interval] <prompt…>\` and schedule it with ${CRO
 ## Parsing (in priority order)
 
 1. **Leading token**: if the first whitespace-delimited token matches \`^\\d+[smhd]$\` (e.g. \`5m\`, \`2h\`), that's the interval; the rest is the prompt.
-2. **Trailing "every" clause**: otherwise, if the input ends with \`every <N><unit>\` or \`every <N> <unit-word>\` (e.g. \`every 20m\`, \`every 5 minutes\`, \`every 2 hours\`), extract that as the interval and strip it from the prompt. Only match when what follows "every" is a time expression — \`check every PR\` has no interval.
+2. **Trailing "every" clause**: otherwise, if the input ends with \`every <N><unit>\` or \`every <N> <unit-word>\` (e.g. \`every 20m\`, \`every 5 minutes\`, \`every 2 hours\`), extract that as the interval and strip it from the prompt. Match only when what follows "every" is a time expression — \`check every PR\` has no interval.
 3. **Default**: otherwise, interval is \`${DEFAULT_INTERVAL}\` and the entire input is the prompt.
 
-If the resulting prompt is empty, show usage \`/loop [interval] <prompt>\` and stop — do not call ${CRON_CREATE_TOOL_NAME}.
+If the resulting prompt is empty, show usage \`/loop [interval] <prompt>\` and stop — don't call ${CRON_CREATE_TOOL_NAME}.
 
 Examples:
 - \`5m /babysit-prs\` → interval \`5m\`, prompt \`/babysit-prs\` (rule 1)
@@ -35,7 +35,7 @@ Examples:
 ${ADDITIONAL_PARSING_NOTES_FN()}
 ## Interval → cron
 
-Supported suffixes: \`s\` (seconds, rounded up to nearest minute, min 1), \`m\` (minutes), \`h\` (hours), \`d\` (days). Convert:
+Suffixes: \`s\` (seconds, rounded up to nearest minute, min 1), \`m\` (minutes), \`h\` (hours), \`d\` (days). Convert:
 
 | Interval pattern      | Cron expression     | Notes                                    |
 |-----------------------|---------------------|------------------------------------------|
@@ -45,16 +45,16 @@ Supported suffixes: \`s\` (seconds, rounded up to nearest minute, min 1), \`m\` 
 | \`Nd\`                | \`0 0 */N * *\`     | every N days at midnight local           |
 | \`Ns\`                | treat as \`ceil(N/60)m\` | cron minimum granularity is 1 minute  |
 
-**If the interval doesn't cleanly divide its unit** (e.g. \`7m\` → \`*/7 * * * *\` gives uneven gaps at :56→:00; \`90m\` → 1.5h which cron can't express), pick the nearest clean interval and tell the user what you rounded to before scheduling.
+If the interval doesn't cleanly divide its unit (e.g. \`7m\` → \`*/7 * * * *\` gives uneven gaps at :56→:00; \`90m\` → 1.5h which cron can't express), pick the nearest clean interval and tell the user what you rounded to before scheduling.
 
 ## Action
 
 1. Call ${CRON_CREATE_TOOL_NAME} with:
    - \`cron\`: the expression from the table above
-   - \`prompt\`: the parsed prompt from above, verbatim (slash commands are passed through unchanged)
+   - \`prompt\`: the parsed prompt above, verbatim (slash commands pass through unchanged)
    - \`recurring\`: \`true\`
 2. Briefly confirm: what's scheduled, the cron expression, the human-readable cadence, that recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days, and that they can cancel sooner with ${CRON_DELETE_TOOL_NAME} (include the job ID).${ADDITIONAL_INFO_FN()}
-3. **Then immediately execute the parsed prompt now** — don't wait for the first cron fire. If it's a slash command, invoke it via the Skill tool; otherwise act on it directly.
+3. **Then execute the parsed prompt now** — don't wait for the first cron fire. If it's a slash command, invoke it via the Skill tool; otherwise act on it directly.
 
 ## Input
 

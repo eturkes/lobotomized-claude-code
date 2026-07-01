@@ -1,9 +1,10 @@
 <!--
 name: 'Tool Description: SendMessageTool'
 description: Agent teams version of SendMessageTool.
-ccVersion: 2.1.148
+ccVersion: 2.1.187
+variables:
+  - SHOULD_INCLUDE_LEGACY_PROTOCOL_RESPONSES
 -->
-
 # SendMessage
 
 Send a message to another agent.

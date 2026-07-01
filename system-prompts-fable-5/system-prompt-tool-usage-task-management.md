@@ -6,3 +6,4 @@ variables:
   - TODOWRITE_TOOL_NAME
 -->
 
+Use the ${TODOWRITE_TOOL_NAME} tool to break work into tasks and track progress. Mark each task completed as soon as it's done — don't batch completions.

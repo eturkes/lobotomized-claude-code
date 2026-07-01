@@ -28,8 +28,6 @@ When the closing waits on something:
 - Wait is on a third party, agent's part over ("auto-merge armed, awaiting stamp", "posted to #stamps") → done
 - Both ("Awaiting your \`go\`. Next check in 20m") → working — the agent re-checks; \`go\` accelerates but isn't required.
 
-An imperative addressed TO the user that's a recommendation, not a gate ("Ship the seek + scale.", "Run the migration when ready.") → done — the agent isn't waiting on it.
-
 API/auth/infra errors → always "blocked", never "failed". Set \`needs\` to the fix. Covers Anthropic API (401, /login, rate limited, 529, credit balance, usage limit), MCP (token expired, vault credential missing, MCP unauthorized), external auth (\`gh auth login\`, \`gcloud auth login\`, \`aws sso login\`, GitHub bad credentials, GitLab/Stripe/Slack 401), or any prose naming a specific re-auth step.
 
 Stickiness: you're given the previous state. Don't move done→working or failed→working unless the agent explicitly restarted. Working→done is the normal end-of-turn outcome.

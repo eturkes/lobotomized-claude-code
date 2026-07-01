@@ -7,7 +7,12 @@ ccVersion: 2.1.160
 -->
 ### Angle D — language-pitfall specialist
 
-Scan for the classic pitfalls of the diff's language/framework — for example:
-JS falsy-zero, \`==\` coercion, closure-captured loop var; Python mutable default
-args, late-binding closures; Go nil-map write, range-var capture; SQL injection;
-timezone/DST drift; float equality. Flag any instance the diff introduces.
+Identify the diff's language/framework, then scan for its classic idiom traps —
+the ones a generic line-scan misses because the code looks correct. JS:
+falsy-zero, \`==\` coercion, closure-captured loop var, \`async\` map without
+\`await\`. Python: mutable default args, late-binding closures, integer/float
+division. Go: nil-map write, range-var capture, unchecked error shadowing. Plus
+cross-language: SQL/shell injection on interpolated input, timezone/DST drift,
+float equality, off-by-one on inclusive vs exclusive bounds. For each instance
+the diff introduces, name the input or state that triggers it — that's a
+candidate.

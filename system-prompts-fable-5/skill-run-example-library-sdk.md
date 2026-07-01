@@ -8,21 +8,17 @@ ccVersion: 2.1.145
 -->
 # Example: Library / SDK
 
-Libraries don't have a "run" step in the process sense — there's no
-server to start, no CLI to invoke. For libraries, the run skill is about:
+Libraries have no server to start or CLI to invoke. The run skill covers:
 
-1. **Building** the library from source
-2. **Running the test suite**
-3. **A minimal working example** that exercises the library and proves
-   it's installed correctly
+1. **Building** the library from source.
+2. **Running the test suite.**
+3. **A minimal working example** that imports the library and does one real thing — how an agent confirms it's usable.
 
 Keep it brief. The template's Build and Test sections do most of the work.
 
 ## The smoke-test example
 
-The main library-specific addition is a tiny program (or REPL snippet)
-that imports the library and does one real thing. This is how an agent
-confirms "yes, the library is usable":
+A tiny program (or REPL snippet) that imports the library and exercises it:
 
 > ## Verify
 >
@@ -88,9 +84,6 @@ Or for a compiled language:
 
 ## Things to consider documenting
 
-- **Development mode vs installed mode.** \`pip install -e .\` vs
-  \`pip install .\` — if behavior differs, say which to use for what.
-- **Optional dependencies.** \`[dev]\`, \`[test]\`, \`[docs]\` extras and when
-  each is needed.
-- **Generated code.** If there's a codegen step (protobuf, OpenAPI clients),
-  document it — it's almost always missing from READMEs.
+- **Development mode vs installed mode.** \`pip install -e .\` vs \`pip install .\` — if behavior differs, say which to use for what.
+- **Optional dependencies.** \`[dev]\`, \`[test]\`, \`[docs]\` extras and when each is needed.
+- **Generated code.** If there's a codegen step (protobuf, OpenAPI clients), document it — it's almost always missing from READMEs.

@@ -5,6 +5,7 @@ description: >-
   mentions
 ccVersion: 2.1.108
 -->
+
 name: Claude Code
 
 on:
@@ -54,4 +55,3 @@ jobs:
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
           # claude_args: '--allowed-tools Bash(gh pr *)'
-

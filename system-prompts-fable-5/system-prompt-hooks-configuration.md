@@ -5,6 +5,7 @@ description: >-
   skill.
 ccVersion: 2.1.77
 -->
+
 ## Hooks Configuration
 
 Hooks run commands at specific points in Claude Code's lifecycle.

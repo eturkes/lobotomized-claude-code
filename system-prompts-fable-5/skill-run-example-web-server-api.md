@@ -8,24 +8,16 @@ ccVersion: 2.1.145
 -->
 # Example: Web server / API
 
-The distinguishing concern for servers is **lifecycle**: an agent needs to
-start the server in the background, verify it's up, interact with it, then
-cleanly shut it down. A foreground \`npm start\` that blocks the shell is
-useless to an agent.
+The concern for servers is **lifecycle**: start the server in the background, verify it's up, interact with it, then shut it down cleanly. A foreground \`npm start\` that blocks the shell is useless to an agent.
 
 ## Structure to follow
 
-A good server run skill has:
-
 1. **Prerequisites & setup** — same as any project.
 2. **Run** — the background-launch pattern (below), not a blocking command.
-3. **Verify** — a \`curl\` or similar that confirms the server is actually up.
+3. **Verify** — a \`curl\` (or similar) confirming the server is up.
 4. **Stop** — how to cleanly terminate the background process.
 
-If the background-launch + readiness-poll + smoke-curl sequence is more
-than a couple of lines, put it in a \`smoke.sh\` inside the skill directory
-and have \`SKILL.md\` say "run the smoke script." One command, exit code
-tells you if the server is healthy.
+If background-launch + readiness-poll + smoke-curl runs more than a couple of lines, put it in a \`smoke.sh\` in the skill directory and have \`SKILL.md\` say "run the smoke script." One command; exit code tells you if the server is healthy.
 
 ## Background-launch pattern
 
@@ -35,8 +27,7 @@ Don't write:
 > npm start
 > \`\`\`
 
-That blocks. Instead, show how to launch in the background, wait for
-readiness, and find the PID later:
+That blocks. Launch in the background, wait for readiness, and capture the PID:
 
 > \`\`\`bash
 > npm start &> /tmp/server.log &
@@ -49,14 +40,14 @@ readiness, and find the PID later:
 > done
 > \`\`\`
 
-Then the verification step:
+Then verify:
 
 > \`\`\`bash
 > curl http://localhost:3000/health
 > # → {"status":"ok"}
 > \`\`\`
 
-And stopping:
+And stop:
 
 > \`\`\`bash
 > kill $SERVER_PID
@@ -68,17 +59,13 @@ And stopping:
 
 - **Which port.** Make it explicit and say how to override it (\`PORT=4000 npm start\`).
 - **What "ready" looks like.** A specific log line or a health endpoint to hit.
-- **Required env vars.** Database URL, API keys, etc. — with a template \`.env\`
-  if the list is long.
-- **Hot reload vs production mode.** If they differ meaningfully, say which
-  to use and when.
-- **Dependent services.** If the server needs Redis/Postgres/etc., either
-  point at a docker-compose that brings them up, or include the \`docker run\`
-  command directly.
+- **Required env vars.** Database URL, API keys, etc. — with a template \`.env\` if the list is long.
+- **Hot reload vs production mode.** If they differ meaningfully, say which to use when.
+- **Dependent services.** If the server needs Redis/Postgres/etc., point at a docker-compose that brings them up, or include the \`docker run\` command.
 
 ## Example snippet
 
-Here's what a Run section for a typical Node API might look like:
+A Run section for a typical Node API:
 
 > ## Run
 >
