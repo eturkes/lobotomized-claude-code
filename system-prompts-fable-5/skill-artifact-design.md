@@ -8,9 +8,8 @@ description: >-
   build, copy, UI-vs-document), then run the editorial process only when the
   read says so — so output is intentional, polished, and never reads as a
   template.
-ccVersion: 2.1.193
+ccVersion: 2.1.199
 -->
-
 ---
 name: artifact-design
 description: Design guidance and fundamentals for Artifacts.
@@ -35,6 +34,8 @@ The fundamentals apply to everything. The editorial process runs only when the r
 **Pair typefaces.** Typography carries the page even when the page isn't about typography. The Artifact CSP blocks font CDNs — don't link a webfont URL and risk a silent fallback; inline the face as an `@font-face` data URI. Keep running text near 65 characters wide, set a type scale and stay on it, give headings `text-wrap: balance` and uppercase labels a touch of letter-spacing.
 
 **Choose neutrals, don't default to them.** A pure mid-grey reads as unconsidered; a grey biased slightly toward the accent reads as chosen. Pure white and near-black are fine grounds when they suit the subject — the point is the neutral was picked, not inherited.
+
+**Design both themes.** The page renders in the viewer's theme — `prefers-color-scheme` carries the OS preference, and the viewer's toggle stamps `data-theme="dark"`/`data-theme="light"` on the root, which must override the media query both ways. Token-level pattern: define the palette as custom properties on `:root`, redefine only the tokens under `@media (prefers-color-scheme: dark)` (style components through the tokens, never inside the media query), then again under `:root[data-theme="dark"]` and `:root[data-theme="light"]`. Give the second theme the same care — don't naively invert; keep contrast legible and the accent working on both grounds. A design deliberately committed to one visual world may stay single-theme — a choice, not an omission.
 
 **Let layout do the spacing.** Lay out sibling groups with flex or grid and `gap`, not per-element margins that collapse or double. Wide content — tables, code, diagrams — gets `overflow-x: auto` on its own container so the page never scrolls sideways. Use `font-variant-numeric: tabular-nums` wherever digits line up in columns.
 

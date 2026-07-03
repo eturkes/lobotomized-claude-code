@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Verify skill'
 description: Skill for opinionated verification workflow for validating code changes.
-ccVersion: 2.1.198
+ccVersion: 2.1.199
 -->
 ---
 name: verify

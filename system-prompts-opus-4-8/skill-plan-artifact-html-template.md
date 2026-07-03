@@ -5,6 +5,7 @@ description: >-
   (registered as SKILL_FILES + PLAN_TEMPLATE) - the title/eyebrow/summary +
   section-run HTML/CSS scaffold the SKILL.md tells the model to copy and fill by
   hand, and that the auto-publish path fills mechanically.
+ccVersion: null
 fill contract: >-
   the automatic publish path (src/frame/planArtifactHtml.ts) fills this
   mechanically — {{TITLE}}, {{EYEBROW}}, and {{SUMMARY}} are replaced by a fixed
@@ -20,7 +21,6 @@ style: >-
   background is white rather than the CDS cream surface-0; those are the
   deliberate deviations from CDS values. Dark mode keys off prefers-color-scheme
   (the standalone equivalent of CDS data-mode).
-ccVersion: null
 -->
 <title>{{TITLE}}</title>
 <style>

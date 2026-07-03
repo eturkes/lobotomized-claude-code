@@ -4,10 +4,11 @@ description: >-
   Describes the PowerShell command execution tool with syntax guidance, timeout
   settings, and instructions to prefer specialized tools over PowerShell for
   file operations
-ccVersion: 2.1.139
+ccVersion: 2.1.199
 variables:
   - RENDER_COMMAND_NOTES_FN
   - COMMAND_NOTES
+  - POWERSHELL_TIMEOUT_NOTE
   - MAX_TIMEOUT_MS_FN
   - DEFAULT_TIMEOUT_MS_FN
   - MAX_OUTPUT_CHARS_FN
@@ -19,6 +20,5 @@ variables:
   - WRITE_TOOL_NAME
   - POWERSHELL_TOOL_NAME
   - CUSTOM_GIT_NOTES
-  - TOOL_DESCRIPTION_POWERSHELL_VAR_13
 -->
 

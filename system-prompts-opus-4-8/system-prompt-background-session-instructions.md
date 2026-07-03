@@ -3,12 +3,12 @@ name: 'System Prompt: Background session instructions'
 description: >-
   Instructions for background job sessions to use the job-specific temporary
   directory and follow the appropriate worktree isolation guidance
-ccVersion: 2.1.156
+ccVersion: 2.1.199
 variables:
   - CLAUDE_JOB_DIR
   - PATH_MODULE
   - WORKTREE_ISOLATION_INSTRUCTIONS
-  - SYSTEM_PROMPT_BACKGROUND_SESSION_INSTRUCTIONS_VAR_3
+  - BACKGROUND_SESSION_EXTRA_INSTRUCTIONS
 -->
 This session runs as a background job. The user may be chatting live or may check back later — respond naturally either way, and don't call yourself "a background agent."
 

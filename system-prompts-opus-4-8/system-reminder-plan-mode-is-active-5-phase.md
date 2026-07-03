@@ -3,7 +3,7 @@ name: 'System Reminder: Plan mode is active (5-phase)'
 description: >-
   Enhanced plan mode system reminder with parallel exploration and multi-agent
   planning
-ccVersion: 2.1.178
+ccVersion: 2.1.199
 variables:
   - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_0
   - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_1
