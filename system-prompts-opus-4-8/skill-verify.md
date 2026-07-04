@@ -1,11 +1,11 @@
 <!--
 name: 'Skill: Verify skill'
 description: Skill for opinionated verification workflow for validating code changes.
-ccVersion: 2.1.199
+ccVersion: 2.1.201
 -->
 ---
 name: verify
-description: Verify that a code change actually does what it's supposed to by exercising it end-to-end and observing behavior — drive the affected flow, not just tests or typecheck. Run before committing nontrivial changes. Don't invoke it on a diff that only touches tests, docs, or other code with no runtime surface to drive (a change to product source always has one) — there's nothing to observe.
+description: Verify that a code change actually does what it's supposed to by exercising it end-to-end and observing behavior — drive the affected flow, not just tests or typecheck. Run before committing nontrivial changes; bootstraps this repo's project verify skill if none exists yet. Don't invoke it on a diff that only touches tests, docs, or other code with no runtime surface to drive (a change to product source always has one) — there's nothing to observe.
 ---
 
 **Verification is runtime observation.** Build the app, run it, drive it to where the changed code executes, and capture what you see. That capture is your evidence. Nothing else is.
@@ -62,7 +62,7 @@ ls <touched-dir>/.claude/skills/      # each dir level the diff names
 
 - **\`verifier-*\` matching your surface** → invoke it with the Skill tool, follow its setup. Mismatched surface → try the next. Stale verifier (fails on mechanics unrelated to the change) → ask the user whether to patch it; don't FAIL the change for verifier rot.
 - **\`run-*\` but no matching verifier** → use its build/launch primitives as your handle.
-- **Neither** → cold start from README/package.json/Makefile. Timebox ~15min. Stuck → BLOCKED with exactly where, plus a filled-in \`/run-skill-generator\` prompt. Got through → note the working build/launch recipe so it can become a \`verifier-*\` skill.
+- **Neither** → cold start from README/package.json/Makefile. Timebox ~15min. Stuck → BLOCKED with exactly where, plus a filled-in \`/run-skill-generator\` prompt. Got through → persist the working build/launch/drive recipe to \`.claude/skills/verify/SKILL.md\` at the level you probed (repo root for a single package; the touched package/app dir in a monorepo) so the next session skips the cold start; one already there → fold into it, don't duplicate.
 
 ## Drive it
 
