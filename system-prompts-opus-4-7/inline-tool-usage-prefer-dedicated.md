@@ -9,3 +9,4 @@ injectionGate: always on (Bash tool loaded)
 ccVersion: 2.1.141
 -->
 
+Prefer dedicated tools over ${O} when one fits (${T}) — reserve ${O} for shell-only operations.
