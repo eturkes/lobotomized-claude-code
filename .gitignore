@@ -1,3 +1,6 @@
 *.diff.html
 .DS_Store
 .claude/
+
+# Removed-override archive lives OUTSIDE the repo (~/.tweakcc/orphans-removed/); git history is the recovery path. Never commit it.
+orphans-removed*
