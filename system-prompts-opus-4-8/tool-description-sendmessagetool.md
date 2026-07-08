@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: SendMessageTool'
 description: Agent teams version of SendMessageTool.
-ccVersion: 2.1.199
+ccVersion: 2.1.204
 variables:
   - SHOULD_INCLUDE_LEGACY_PROTOCOL_RESPONSES
 -->
@@ -13,7 +13,7 @@ Send a message to another agent.
 {"to": "researcher", "summary": "assign task 1", "message": "start on task #1"}
 \`\`\`
 
-Your plain text output is not visible to other agents — to communicate, call this tool. Messages from teammates are delivered automatically; you don't check an inbox. Refer to active teammates by name; to address a background agent that has no name (or whose name a teammate holds) — or to resume a completed one — use its \`agentId\` (format \`a...-...\`) from its spawn result. When relaying, don't quote the original — it's already rendered to the user.
+Your plain text output is not visible to other agents — to communicate, call this tool. Messages from teammates are delivered automatically; you don't check an inbox. Refer to agents by name — names keep working after an agent completes (a send resumes it from its transcript). Use the raw \`agentId\` (format \`a...-...\`) from its spawn result only when the agent has no name, or a newer agent took the name (latest wins). When relaying, don't quote the original — it's already rendered to the user.
 
 ## Protocol responses (legacy)
 

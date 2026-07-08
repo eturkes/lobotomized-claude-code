@@ -3,7 +3,7 @@ name: 'Tool Description: ArtifactTool'
 description: >-
   Tool description for ArtifactTool — renders an HTML or Markdown file to a
   default-private hosted web page on claude.ai
-ccVersion: 2.1.199
+ccVersion: 2.1.204
 variables:
   - TOOL_DESCRIPTION_ARTIFACTTOOL_2_VAR_0
 -->
@@ -15,9 +15,11 @@ Before writing the page, load the `artifact-design` skill to calibrate how much 
 
 **To update**: Edit the file, then call Artifact again with the same file path — it redeploys to the same URL. A different file path claims a new URL, so only use a different path to create a separate Artifact.
 
-**To update an artifact the user gives you a URL for** (an artifact link not published in this session): pass the URL as `url`. Without it, a fresh session always mints a new URL — there is no other way to target an existing one.
+**To update an artifact from an earlier conversation**: pass its URL as `url` (find it with `action: "list"` if you don't have it). Without `url`, a conversation that didn't publish it mints a new URL — there is no other way to target an existing one.
 
 **To read an existing artifact's content**: call WebFetch with its URL.
+
+**To find artifacts from earlier sessions**: pass `action: "list"` (optionally with `limit`) to enumerate the user's published artifacts — title, URL, last-updated, newest first. Then follow the update flow with the URL you found.
 
 **Self-contained only**: A strict CSP blocks requests to any external host — CDN scripts, external stylesheets, fonts, remote images, fetch/XHR/WebSockets. Inline all CSS/JS and embed assets as data: URIs.
 

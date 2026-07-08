@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: EnterWorktree'
 description: Tool description for the EnterWorktree tool.
-ccVersion: 2.1.158
+ccVersion: 2.1.204
 -->
 Create an isolated git worktree and switch the session into it. Use only when explicitly instructed to work in a worktree — either the user says "worktree" (start/create/use a worktree) or CLAUDE.md / memory directs it. For branch switching or normal feature/bugfix work, use git commands instead.
 
@@ -16,4 +16,4 @@ Requirements: be in a git repository, or have WorktreeCreate/WorktreeRemove hook
 ## Parameters
 
 - \`name\` (optional): name for a new worktree; random if neither \`name\` nor \`path\` is given.
-- \`path\` (optional): path to an existing worktree of this repository to enter instead of creating one — must appear in \`git worktree list\` for this repo. Mutually exclusive with \`name\`. ExitWorktree won't remove a worktree entered this way; use \`action: "keep"\` to return to the original directory.
+- \`path\` (optional): path to an existing worktree to enter instead of creating one — must be a registered worktree (appears in \`git worktree list\`). Mutually exclusive with \`name\`. ExitWorktree won't remove a worktree entered this way; use \`action: "keep"\` to return to the original directory.

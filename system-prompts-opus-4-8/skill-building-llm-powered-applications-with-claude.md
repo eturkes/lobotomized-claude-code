@@ -5,7 +5,7 @@ description: >-
   covering language detection, API surface selection (Claude API vs Managed
   Agents), model defaults, thinking/effort configuration, and language-specific
   documentation reading
-ccVersion: 2.1.197
+ccVersion: 2.1.204
 -->
 # Building LLM-Powered Applications with Claude
 
@@ -110,33 +110,22 @@ Before reading code examples, determine the language:
 | Persisted, versioned agent configs              | Agent           | **Managed Agents**        | Agents are stored objects; sessions pin to a version         |
 | Long-running multi-turn agent with file mounts  | Agent           | **Managed Agents**        | Per-session containers, SSE event stream, Skills + MCP       |
 
-> Use Managed Agents when you want Anthropic to run the agent loop *and* host the container where tools execute (file ops, bash, code execution all run in the per-session workspace). Use Claude API + tool use when you host the compute or run a custom tool runtime — tool runner for automatic looping, or the manual loop for fine-grained control (approval gates, custom logging, conditional execution).
+> Use Managed Agents when you want Anthropic to run the agent loop *and* host the container where tools execute (file ops, bash, code execution all run in the per-session workspace). Use Claude API + tool use when you host the compute or run a custom tool runtime — the tool runner drives the loop (its per-turn hooks give approval gates, logging, error interception, conditional execution), or write the manual loop to own it entirely.
 
 > **Cloud-provider access.** **Claude Platform on AWS** is Anthropic-operated with same-day API parity — Managed Agents and every feature here work there **except self-hosted sandboxes** (see `shared/claude-platform-on-aws.md`). **Amazon Bedrock**, **Google Vertex AI**, and **Microsoft Foundry** do **not** support Managed Agents or Anthropic server-side tools; use **Claude API + tool use** there.
 
-### Decision Tree
+### Building an Agent: Four Approaches
 
-```
-What does your application need?
+Once you actually need an agent (open-ended, model-driven tool use), four builds differ by **who supplies the harness** (agent loop + context management) and **who supplies the deployment** (infra it runs on):
 
-0. Which provider?
-   ├── First-party API or Claude Platform on AWS → continue (full surface available).
-   └── Amazon Bedrock, Google Vertex AI, or Microsoft Foundry → Claude API (+ tool use for agents); Managed Agents not available there.
+| # | Approach | Harness / deployment | Use when |
+|---|----------|----------------------|----------|
+| 1 | **Claude API — manual loop** (`while stop_reason == "tool_use"`) | you build the harness; you host | you want to own the entire loop |
+| 2 | **Claude API — Tool Runner** (`client.beta.messages.tool_runner` + `@beta_tool` / `betaZodTool`) | SDK supplies the loop (**harness only**); you host | a custom-tool agent without hand-writing the loop (most cases); per-turn hooks give approval gates, error interception, retries |
+| 3 | **Managed Agents** (REST, beta) | Anthropic supplies the harness **and** hosts a per-session sandbox | Anthropic runs the loop + hosts the workspace; persisted configs; long sessions |
+| 4 | **Claude Agent SDK** — *separate product* (`claude-agent-sdk` / `@anthropic-ai/claude-agent-sdk`) | SDK supplies the Claude Code harness + built-in tools (**harness only**); you host | a batteries-included coding/filesystem agent on your own infra |
 
-1. Single LLM call (classification, summarization, extraction, Q&A)
-   └── Claude API — one request, one response
-
-2. Want Anthropic to run the agent loop and host a per-session
-   container where Claude executes tools (bash, file ops, code)?
-   └── Yes → Managed Agents — server-managed sessions, persisted agent configs,
-       SSE event stream, Skills + MCP, file mounts.
-
-3. Workflow (multi-step, code-orchestrated, with your own tools)
-   └── Claude API with tool use — you control the loop
-
-4. Open-ended agent (model decides its trajectory, your own tools, you host the compute)
-   └── Claude API agentic loop (maximum flexibility)
-```
+Options 1, 2, and 4 leave deployment to you; only Managed Agents adds it. **This skill generates options 1–3, not Claude Agent SDK code.** Tool Runner and the Agent SDK sound alike but differ: Tool Runner is part of the regular API SDK (`anthropic` / `@anthropic-ai/sdk`), reached via `client.beta.messages.tool_runner`, and loops over tools *you* define (no built-in tools, no sandbox); the Agent SDK is Claude Code as a library (built-in file/bash/grep/web tools, full loop, hooks, subagents, sessions) driven by `query(prompt, options)`. If the user actually wants the Agent SDK, point them to `code.claude.com/docs/en/agent-sdk` — don't substitute one for the other.
 
 ### Should I Build an Agent?
 
@@ -378,7 +367,7 @@ Available on the first-party API and Claude Platform on AWS. **Not** available o
 
 **When the user wants to set up a Managed Agent from scratch** ("how do I get started", "walk me through creating one", "set up a new agent"): read `shared/managed-agents-onboarding.md` and run its interview — same flow as `managed-agents-onboard`.
 
-**When the user asks "how do I write the client code for X":** read `shared/managed-agents-client-patterns.md` — lossless stream reconnect, `processed_at` queued/processed gate, interrupt, `tool_confirmation` round-trip, the idle/terminated break gate, post-idle status race, stream-first ordering, file-mount gotchas, keeping credentials host-side via custom tools, etc.
+**When the user asks "how do I write the client code for X":** read `shared/managed-agents-client-patterns.md` — lossless stream reconnect, `processed_at` queued/processed gate, interrupt, `tool_confirmation` round-trip, the idle/terminated break gate, post-idle status race, stream-first ordering, file-mount gotchas, credentials (vault `environment_variable` first, host-side custom tools as fallback), etc.
 
 **When the user wants the agent to run on a schedule** (cron, "every night", "weekly report"): read `shared/managed-agents-scheduled-deployments.md` — deployments fire sessions autonomously on a cron cadence, with per-firing run records and lifecycle controls (pause/unpause/archive).
 
