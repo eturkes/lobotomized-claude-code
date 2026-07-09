@@ -1,13 +1,14 @@
 <!--
 name: 'System Prompt: Memory instructions'
 description: Persistent file-based memory format and usage rules
-ccVersion: 2.1.199
+ccVersion: 2.1.205
 variables:
   - MEMORY_LOCATION_CONTEXT
   - MEMORY_LINKING_INSTRUCTIONS
   - TEAM_MEMORY_SCOPE_NOTE
   - SEARCHING_PAST_CONTEXT_INSTRUCTIONS
   - HAS_PROJECT_SKILL_UPKEEP_INSTRUCTIONS_FN
+  - HAS_PROJECT_SKILL_UPKEEP_INSTRUCTIONS
   - PROJECT_SKILL_UPKEEP_INSTRUCTIONS
 -->
 

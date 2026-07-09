@@ -4,6 +4,8 @@ description: >-
   System-prompt fragment instructing an agent isolated in a worktree to commit,
   push, and open a draft PR without asking, with the guardrails around it.
 ccVersion: null
+variables:
+  - SYSTEM_PROMPT_WORKTREE_SHIPPING_COMMIT_PUSH_PR_VAR_0
 -->
 
 

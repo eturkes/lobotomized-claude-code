@@ -3,7 +3,9 @@ name: 'Tool Description: ExitPlanMode'
 description: >-
   Description for the ExitPlanMode tool, which presents a plan dialog for the
   user to approve
-ccVersion: 2.1.14
+ccVersion: 2.1.205
+variables:
+  - ASK_USER_QUESTION_TOOL_NAME
 -->
 Use when you're in plan mode, have finished writing your plan to the plan file (named in the plan-mode system message), and are ready for user approval. It reads the plan from that file — it does not take plan content as a parameter — and signals you're done planning so the user can review and approve.
 

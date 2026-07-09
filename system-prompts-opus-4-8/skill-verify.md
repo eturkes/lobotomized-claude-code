@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Verify skill'
 description: Skill for opinionated verification workflow for validating code changes.
-ccVersion: 2.1.201
+ccVersion: 2.1.205
 -->
 ---
 name: verify
@@ -62,7 +62,7 @@ ls <touched-dir>/.claude/skills/      # each dir level the diff names
 
 - **\`verifier-*\` matching your surface** → invoke it with the Skill tool, follow its setup. Mismatched surface → try the next. Stale verifier (fails on mechanics unrelated to the change) → ask the user whether to patch it; don't FAIL the change for verifier rot.
 - **\`run-*\` but no matching verifier** → use its build/launch primitives as your handle.
-- **Neither** → cold start from README/package.json/Makefile. Timebox ~15min. Stuck → BLOCKED with exactly where, plus a filled-in \`/run-skill-generator\` prompt. Got through → persist the working build/launch/drive recipe to \`.claude/skills/verify/SKILL.md\` at the level you probed (repo root for a single package; the touched package/app dir in a monorepo) so the next session skips the cold start; one already there → fold into it, don't duplicate.
+- **Neither** → cold start from README/package.json/Makefile. Timebox ~15min. Stuck → BLOCKED with exactly where, plus a filled-in \`/run-skill-generator\` prompt. Got through → persist the working build/launch/drive recipe to \`.claude/skills/verify/SKILL.md\` at the level you probed (repo root for a single package; the touched package/app dir in a monorepo) so the next session skips the cold start; one already there → edit it only if it steered you wrong, not for routine learnings or style.
 
 ## Drive it
 

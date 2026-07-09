@@ -3,19 +3,23 @@ name: 'Agent Prompt: Quick PR creation'
 description: >-
   Streamlined prompt for creating a commit and pull request with pre-populated
   context
-ccVersion: 2.1.118
+ccVersion: 2.1.205
 variables:
   - PREAMBLE_BLOCK
   - SAFE_USER_VALUE
   - WHOAMI_VALUE
   - DEFAULT_BRANCH
   - IS_BASH_ENV_FN
-  - HAS_PR_ATTRIBUTION_TEXT_FN
+  - REPO_PR_TEMPLATE_CONTEXT_BLOCK
+  - COMMIT_ATTRIBUTION_TEXT
   - PR_EDIT_OPTIONS_NOTE
   - PR_CREATE_OPTIONS_NOTE
+  - PR_WRITING_GUIDANCE_FN
+  - PR_SUMMARY_TEMPLATE_FN
+  - PR_TEST_PLAN_TEMPLATE_FN
   - PR_BODY_EXTRA_SECTIONS
   - PR_ATTRIBUTION_TEXT
-  - ADDITIONAL_INSTRUCTIONS_NOTE
+  - PR_SLACK_SHARING_FOLLOWUP_NOTE
 -->
 ${PREAMBLE_BLOCK}## Context
 
@@ -25,7 +29,7 @@ ${PREAMBLE_BLOCK}## Context
 - \`git diff HEAD\`: !\`git diff HEAD\`
 - \`git branch --show-current\`: !\`git branch --show-current\`
 - \`git diff ${DEFAULT_BRANCH}...HEAD\`: !\`git diff ${DEFAULT_BRANCH}...HEAD\`
-- \`gh pr view --json number\`: !\`${IS_BASH_ENV_FN()?"gh pr view --json number 2>/dev/null || true":'gh pr view --json number 2>$null; if (-not $?) { "" }'}\`
+- \`gh pr view --json number\`: !\`${IS_BASH_ENV_FN()?"gh pr view --json number 2>/dev/null || true":'gh pr view --json number 2>$null; if (-not $?) { "" }'}\`${REPO_PR_TEMPLATE_CONTEXT_BLOCK}
 
 ## Git safety
 
@@ -42,19 +46,19 @@ Analyze every commit that will be in the PR — the full \`git diff ${DEFAULT_BR
 
 Then:
 1. Create a new branch if on ${DEFAULT_BRANCH} (use SAFEUSER from context above for the branch-name prefix, falling back to whoami if SAFEUSER is empty, e.g., \`username/feature-name\`)
-2. Create a single commit with an appropriate message${HAS_PR_ATTRIBUTION_TEXT_FN?", ending with the attribution text shown in the example below":""}:
+2. Create a single commit with an appropriate message${COMMIT_ATTRIBUTION_TEXT?", ending with the attribution text shown in the example below":""}:
 ${IS_BASH_ENV_FN()?`\`\`\`
 git commit -m "$(cat <<'EOF'
-Commit message here.${HAS_PR_ATTRIBUTION_TEXT_FN?`
+Commit message here.${COMMIT_ATTRIBUTION_TEXT?`
 
-${HAS_PR_ATTRIBUTION_TEXT_FN}`:""}
+${COMMIT_ATTRIBUTION_TEXT}`:""}
 EOF
 )"
 \`\`\``:`\`\`\`
 git commit -m @'
-Commit message here.${HAS_PR_ATTRIBUTION_TEXT_FN?`
+Commit message here.${COMMIT_ATTRIBUTION_TEXT?`
 
-${HAS_PR_ATTRIBUTION_TEXT_FN}`:""}
+${COMMIT_ATTRIBUTION_TEXT}`:""}
 '@
 \`\`\`
 The closing \`'@\` must be at column 0 with no leading whitespace.`}
@@ -84,6 +88,6 @@ ${PR_ATTRIBUTION_TEXT}`:""}
 '@
 \`\`\``}
 
-Do all of the above in a single message with parallel tool calls.${ADDITIONAL_INSTRUCTIONS_NOTE}
+Do all of the above in a single message with parallel tool calls.${PR_SLACK_SHARING_FOLLOWUP_NOTE}
 
 Return the PR URL when done.

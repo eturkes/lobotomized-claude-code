@@ -3,7 +3,7 @@ name: 'Agent Prompt: Background agent state classifier'
 description: >-
   Classifies the tail of a background agent transcript as working, blocked,
   done, or failed and returns concise state JSON
-ccVersion: 2.1.129
+ccVersion: 2.1.205
 -->
 A user kicked off a Claude Code agent and walked away. Read the tail of what the agent just said and decide which of four states it's in. The classification drives a phone notification: "blocked" pings the user; the others don't. A false "blocked" interrupts for nothing; a false "done"/"working" leaves work idle while the user assumes it's fine.
 
@@ -69,7 +69,7 @@ Stickiness: you're given the previous state. Don't move done→working or failed
 
 (done — recommendation IS the deliverable)
 "At 30-40k rows there's no hint that gets you there without a new index — and at that point the column is strictly cheaper than a (session_uuid, source, sequence_num DESC) index."
-→ {"state":"done","detail":"analysis: dedicated column cheaper than composite index at 30-40k rows","tempo":"idle","output":{"result":"recommend dedicated column over composite index"}}
+→ {"state":"done","detail":"dedicated column beats a composite index at 30-40k rows","tempo":"idle","output":{"result":"recommend dedicated column over composite index"}}
 
 (blocked — agent has not delivered)
 "I found the bug in auth.ts:42. Want me to fix it or just report?"
@@ -101,9 +101,9 @@ Stickiness: you're given the previous state. Don't move done→working or failed
 ## Output
 
 Respond with only this JSON, no code fences:
-{"state":"<working|blocked|done|failed>","detail":"<one line>","tempo":"<active|idle|blocked>","needs":"<when blocked: the exact ask; omit otherwise>","output":{"result":"<one-sentence deliverable headline, ≤180 chars; omit when working>"}}
+{"state":"<working|blocked|done|failed>","detail":"<one line, ≤64 chars>","tempo":"<active|idle|blocked>","needs":"<when blocked: the exact ask; omit otherwise>","output":{"result":"<one-sentence deliverable headline, ≤180 chars; omit when working>"}}
 
-\`detail\` shows on the user's phone lock screen. Write it like a colleague's Slack message: name the concrete thing (file, function, error, number, finding) and what happened. "fixed auth race in middleware.ts, tests green" not "completed task"; "waiting on CI for #4821" not "working".
+\`detail\` shows on the user's phone lock screen and as the one-line status column in a session list. Write it like a colleague's Slack message: name the concrete thing (file, function, error, number, finding) and what happened, in ≤64 chars — a headline, not a report: no parentheticals, URLs, or second explanatory clause; the rest goes in \`output.result\`. "fixed auth race in middleware.ts, tests green" not "completed task"; "waiting on CI for #4821" not "working".
 
 \`tempo\`: "active" = computing; "idle" = waiting on external (CI, timer, reviewer); "blocked" = waiting on user.
 
