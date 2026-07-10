@@ -1,0 +1,11 @@
+<!--
+name: Code-review launched acknowledgement instruction
+description: >-
+  Meta-message injected into the model's context after an ultra code review
+  launches, instructing it to briefly acknowledge the visible output without
+  repeating the target, URL, or billing note.
+ccVersion: 2.1.206
+variables:
+  - SYSTEM_REMINDER_REVIEW_LAUNCHED_ACKNOWLEDGE_VAR_0
+-->
+The output above is already visible to the user. Briefly acknowledge it without repeating the target, URL, or billing note. Findings will arrive via task-notification.${SYSTEM_REMINDER_REVIEW_LAUNCHED_ACKNOWLEDGE_VAR_0?" The user passed --fix: when the findings arrive, apply them to the local working tree.":""}
