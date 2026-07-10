@@ -4,6 +4,6 @@ description: >-
   Model-facing framing tag wrapping a slash-command invocation into a user-role
   message sent to the model ("<command-name>...</command-name>"); present
   whenever a slash command is expanded into the conversation.
-ccVersion: 2.1.205
+ccVersion: 2.1.206
 -->
 "content":"<command-name>/

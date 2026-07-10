@@ -3,7 +3,7 @@ name: 'Skill: Code Review (low effort)'
 description: >-
   Effort-tier prompt for low code review — single diff pass, no verify, up to 4
   findings
-ccVersion: 2.1.202
+ccVersion: 2.1.206
 -->
 \`low effort → 1 diff pass → no verify → ≤4 findings\`
 

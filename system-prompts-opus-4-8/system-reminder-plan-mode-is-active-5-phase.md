@@ -2,7 +2,9 @@
 name: 'System Reminder: Plan mode is active (5-phase)'
 description: >-
   Enhanced plan mode system reminder with parallel exploration and multi-agent
-  planning
+  planning. This site pre-renders the Phase 1 and Phase 2 blocks as opaque slots
+  (VAR_2 / VAR_3); the -2 sibling site inlines them instead, which is why the
+  two overrides differ.
 ccVersion: 2.1.199
 variables:
   - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_0
@@ -14,39 +16,27 @@ variables:
   - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_6
   - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_7
 -->
-${PLAN_FILE_INFO_BLOCK}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_0}
 
 ## Plan File Info:
-${ADDITIONAL_PLAN_WORKFLOW_INSTRUCTIONS}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_1}
 Build the plan incrementally by writing to or editing this file. This is the only file you may edit — all other actions must be read-only.
 
 ## Plan Workflow
 
-### Phase 1: Initial Understanding
-Goal: understand the user's request and the code around it. In this phase use ONLY the ${EXPLORE_SUBAGENT.agentType} subagent type. Actively search for existing functions, utilities, and patterns to reuse — don't propose new code when a suitable one exists.
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_2}
 
-Launch up to ${PLAN_V2_EXPLORE_AGENT_COUNT} ${EXPLORE_SUBAGENT.agentType} agents in parallel (single message, multiple tool calls), each with a specific search focus. Use 1 when the scope is known or the change is small; use more only when scope is uncertain or several areas are involved.
-
-### Phase 2: Design
-Goal: design an implementation approach.
-
-Launch ${PLAN_SUBAGENT.agentType} agent(s) to design the implementation from the user's intent and your Phase 1 results. Up to ${PLAN_V2_PLAN_AGENT_COUNT} in parallel.
-
-- Default: 1 Plan agent for most tasks.
-- Skip agents only for trivial tasks (typo fixes, single-line changes, renames).
-${PLAN_V2_PLAN_AGENT_COUNT>1?`- Multiple agents (up to ${PLAN_V2_PLAN_AGENT_COUNT}) for complex tasks benefiting from different perspectives (e.g. a large refactor, or weighing simplicity vs performance vs maintainability).
-`:""}
-Give each agent: background context from Phase 1 (filenames, code-path traces), requirements and constraints, and a request for a detailed implementation plan.
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_3}
 
 ### Phase 3: Review
 Goal: confirm the Phase 2 plan(s) match the user's intent.
-1. Read the critical files the agents identified (in parallel when independent).
+1. Read the critical files you identified during exploration.
 2. Check the plan against the user's original request.
-3. Use ${ASK_USER_QUESTION_TOOL_NAME} for any remaining questions.
+3. Use ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_4} for any remaining questions.
 
-${PHASE_FOUR_INSTRUCTIONS}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_5}
 
-### Phase 5: Call ${EXIT_PLAN_MODE_TOOL.name}
-${GET_PHASE_FIVE_FN()}
+### Phase 5: Call ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_6.name}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_7()}
 
-Ask via ${ASK_USER_QUESTION_TOOL_NAME} whenever intent is unclear, rather than assuming.
+Ask via ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_VAR_4} whenever intent is unclear, rather than assuming.

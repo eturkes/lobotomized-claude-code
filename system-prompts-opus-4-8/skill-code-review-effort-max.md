@@ -3,7 +3,7 @@ name: 'Skill: Code Review (max / xhigh effort)'
 description: >-
   Effort-tier prompt for max and xhigh code review — 5+5 angles, up to 8
   candidates, recall-biased, sweep + 3-state verify, up to 15 findings
-ccVersion: 2.1.178
+ccVersion: 2.1.206
 variables:
   - EFFORT_LEVEL
   - PHASE_0_GATHER_DIFF

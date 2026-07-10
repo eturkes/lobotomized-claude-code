@@ -1,11 +1,12 @@
 <!--
-name: Loop Stopped — No Further Wakeups
+name: 'Tool Result: Loop Stopped'
 description: >-
-  Model-facing tool_result telling the model the dynamic loop has stopped with
-  no further wakeups scheduled, and to trigger any armed wakeup/timer it set.
-ccVersion: 2.1.202
+  Model-facing tool_result telling the model the dynamic loop stopped, with the
+  wakeup-cancellation reason interpolated and the shared re-arm suffix appended.
+  2.1.206 reduced this to an envelope (fuzzy-miss restore).
+ccVersion: 2.1.206
 variables:
-  - TOOL_RESULT_LOOP_STOPPED_VAR_0
-  - TOOL_RESULT_LOOP_STOPPED_VAR_1
+  - TOOL_RESULT_LOOP_STOPPED_REASON
+  - TOOL_RESULT_LOOP_STOPPED_REARM_SUFFIX
 -->
-Loop stopped — no further wakeups scheduled. If you armed a ${TOOL_RESULT_LOOP_STOPPED_VAR_0} for this loop, ${TOOL_RESULT_LOOP_STOPPED_VAR_1} it now; otherwise nothing more to do this turn.
+Loop stopped — ${TOOL_RESULT_LOOP_STOPPED_REASON}. ${TOOL_RESULT_LOOP_STOPPED_REARM_SUFFIX}

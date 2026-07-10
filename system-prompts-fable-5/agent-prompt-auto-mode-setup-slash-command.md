@@ -177,7 +177,7 @@ and
 Also skim \`.gitignore\` for patterns that look sensitive — paths
 deliberately excluded from commits are often the sensitive ones.
 
-**3. Dispatch Explore subagents now** — via the **${AGENT_PROMPT_AUTO_MODE_SETUP_SLASH_COMMAND_VAR_1}** tool with
+**3. Dispatch Explore subagents now** — via the **Agent** tool with
 \`subagent_type: 'Explore'\`. These run in the background while you
 do steps 4–6. Pass what you've filled so far so they fill gaps rather
 than re-finding the same things. If EVERY in-scope repo (the cwd, plus
@@ -554,7 +554,7 @@ or left empty, write that slot's shipped default verbatim from this list
 the **Sensitive data locations & audiences** slot — never write that
 slot's default alongside them):
 
-${AGENT_PROMPT_AUTO_MODE_SETUP_SLASH_COMMAND_VAR_2()}
+${AGENT_PROMPT_AUTO_MODE_SETUP_SLASH_COMMAND_VAR_1()}
 
 After the structured slots, append any freeform bullets from Phase 3 — the
 environment section is read as prose by the classifier, so anything that
