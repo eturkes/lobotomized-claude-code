@@ -1,10 +1,9 @@
 <!--
 name: 'Skill: Artifact dashboard HTML template'
 description: >-
-  Model-facing SKILL_FILES template.html for the artifact-dashboard skill — the
-  KPI/chart dashboard body fragment (incl. the fallback SVG chart renderer) the
-  model reads and fills the SLOTs of.
-ccVersion: 2.1.206
+  KPI/chart/breakdown dashboard artifact HTML body fragment served as a
+  reference template by the Artifact skill.
+ccVersion: 2.1.210
 -->
 <!-- Artifact-tool body fragment — no <!DOCTYPE>/<html>/<head>/<body> wrapper. See SKILL.md for slot guidance. -->
 <title><!-- SLOT: TITLE — plain text, e.g. "Q2 Revenue Dashboard" -->Dashboard</title>
@@ -22,8 +21,10 @@ ccVersion: 2.1.206
        --row-hover is deliberately NOT a named token (derived hover wash).
        Hardcoded copies drift if tokens.css regenerates — acceptable for a
        template default; restyling on top makes a refresh a trivial :root swap.
-       Tune --accent toward the subject — prefer another CDS color token so the
-       page stays on-system. */
+       Tune --accent toward the subject — prefer another token from the shipped
+       palette so the page stays on-system, and change it in every scope that
+       declares it (this block and both dark scopes below) or it snaps back in
+       dark mode. */
     color-scheme: light;
     --bg: #f9f9f7;            /* cds-surface-0 */
     --surface: #fcfcfb;       /* cds-surface-1 */
@@ -332,4 +333,3 @@ ccVersion: 2.1.206
   el.appendChild(svg);
 })();
 </script>
-

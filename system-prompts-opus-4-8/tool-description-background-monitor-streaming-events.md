@@ -4,7 +4,9 @@ description: >-
   Describes the background monitor tool that streams stdout events from
   long-running scripts as chat notifications, with guidelines on script quality,
   output volume, and selective filtering
-ccVersion: 2.1.161
+ccVersion: 2.1.210
+variables:
+  - BACKGROUND_TASKS_DISABLED
 -->
 Start a background monitor that streams stdout events from a long-running script. Each stdout line is an event that arrives as a chat notification while you keep working; events arrive on their own schedule and are not user replies, even if one lands while you await an answer. Exit ends the watch.
 

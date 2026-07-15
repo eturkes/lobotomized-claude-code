@@ -1,30 +1,79 @@
 <!--
 name: 'Skill: Artifact data-table HTML template'
 description: >-
-  Model-facing SKILL_FILES template.html for the artifact-data-table skill — the
-  sortable/filterable HTML table body fragment the model reads and fills the
-  SLOTs of.
-ccVersion: 2.1.206
+  Sortable/filterable data-table artifact HTML body fragment served as a
+  reference template by the Artifact skill.
+ccVersion: 2.1.210
 -->
 <!-- Artifact-tool body fragment — no <!DOCTYPE>/<html>/<head>/<body> wrapper. See SKILL.md for slot guidance. -->
 <title><!-- SLOT: TITLE — plain text, e.g. "Product catalog" -->Data table</title>
 <style>
   /* Look & feel — safe to restyle (see SKILL.md "Restyle on top").
-     Values are Claude Design System (CDS) light-mode token literals,
-     hardcoded because artifacts render outside the CDS scope where
-     --cds-* variables are defined. Source token named per line. */
+     Every paint token has a dark counterpart, declared under both theme
+     axes: the OS scheme (prefers-color-scheme) and the viewer toggle's
+     data-theme root stamp, the stamp winning in both directions. */
   :root {
-    --bg: #f9f9f7;                    /* --cds-surface-0 */
-    --card: #fcfcfb;                  /* --cds-surface-1 */
-    --ink: #0b0b0b;                   /* --cds-text-primary */
-    --ink-muted: #52514e;             /* --cds-text-secondary */
-    --line: rgba(11, 11, 11, 0.1);    /* --cds-border (alpha-2) */
-    --line-strong: rgba(11, 11, 11, 0.2); /* --cds-border-strong (alpha-3) */
+    color-scheme: light dark;
+    --bg: #f9f9f7;
+    --card: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-muted: #52514e;
+    --line: rgba(11, 11, 11, 0.1);
+    --line-strong: rgba(11, 11, 11, 0.2);
     --stripe: rgba(11, 11, 11, 0.03); /* zebra rows; lighter than hover */
-    --row-hover: rgba(11, 11, 11, 0.05); /* --cds-alpha-1 */
-    --accent: #184f95;                /* --cds-text-accent (blue-600) */
-    --radius: 8px;                    /* --cds-radius */
+    --row-hover: rgba(11, 11, 11, 0.05);
+    --accent: #184f95;
+    --radius: 8px;
     font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  /* Dark palette for the tokens above. The :where() guard keeps the
+     media block at zero specificity so the data-theme scopes below
+     always beat it. */
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      --bg: #0d0d0d;
+      --card: #1a1a19;
+      --ink: #ffffff;
+      --ink-muted: #c3c2b7;
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.2);
+      --stripe: rgba(255, 255, 255, 0.03);
+      --row-hover: rgba(255, 255, 255, 0.05);
+      --accent: #6da7ec;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0d0d0d;
+    --card: #1a1a19;
+    --ink: #ffffff;
+    --ink-muted: #c3c2b7;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.2);
+    --stripe: rgba(255, 255, 255, 0.03);
+    --row-hover: rgba(255, 255, 255, 0.05);
+    --accent: #6da7ec;
+  }
+  /* Light values are the :root defaults and the media guard excludes the
+     explicit-light stamp — only color-scheme needs forcing. */
+  :root[data-theme="light"] { color-scheme: light; }
+  /* Print is always light, regardless of the OS scheme or the toggle stamp
+     (browsers don't print backgrounds by default, so dark pages would print
+     white text on unpainted paper). The selector list ties the dark scopes'
+     specificity and wins by source order. */
+  @media print {
+    :root, :root[data-theme="dark"] {
+      color-scheme: light;
+      --bg: #f9f9f7;
+      --card: #fcfcfb;
+      --ink: #0b0b0b;
+      --ink-muted: #52514e;
+      --line: rgba(11, 11, 11, 0.1);
+      --line-strong: rgba(11, 11, 11, 0.2);
+      --stripe: rgba(11, 11, 11, 0.03);
+      --row-hover: rgba(11, 11, 11, 0.05);
+      --accent: #184f95;
+    }
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5; }
@@ -35,7 +84,9 @@ ccVersion: 2.1.206
   .meta { color: var(--ink-muted); font-size: 13px; }
 
   .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .filter { flex: 1; max-width: 360px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); font: inherit; }
+  /* Explicit background/color: without them the UA paints its default
+     control surface, which sits off the card tokens in dark mode. */
+  .filter { flex: 1; max-width: 360px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); font: inherit; background: var(--card); color: var(--ink); }
   .filter:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
   .count { color: var(--ink-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 
@@ -201,4 +252,3 @@ ccVersion: 2.1.206
   render();
 })();
 </script>
-

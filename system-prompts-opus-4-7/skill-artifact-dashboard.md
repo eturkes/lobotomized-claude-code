@@ -6,7 +6,7 @@ description: >-
   dashboard, metrics view, KPI summary, monitoring page, analytics overview, or
   wants to visualize quantitative data at a glance. Only for CREATING a new
   artifact; edits to an existing artifact modify its HTML directly.
-ccVersion: 2.1.206
+ccVersion: 2.1.210
 -->
 ---
 name: artifact-dashboard

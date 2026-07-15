@@ -7,7 +7,7 @@ description: >-
   query results, a catalog) rather than see it summarized. Keywords — table,
   list, browse, sort, filter, catalog, records, CSV viewer. Only for CREATING a
   new artifact; edits to an existing artifact modify its HTML directly.
-ccVersion: 2.1.206
+ccVersion: 2.1.210
 -->
 ---
 name: artifact-data-table
@@ -48,10 +48,10 @@ The template also has a minor inline slot for header scope text — labelled in 
 
 ## Restyle on top
 
-The shipped styling is a clean default (Claude Design System light-palette values), not a final look — restyle on top when the request or subject matter suggests a different feel.
+The shipped styling is a clean default (every paint token has a dark counterpart), not a final look — restyle on top when the request or subject matter suggests a different feel.
 
-- Safe to restyle: the entire \`<style>\` block — colors, the \`:root\` palette variables, typography, spacing, striping, radii. Tune \`--accent\` toward the subject.
-- Keep intact: the table markup structure, the \`<script>\` blocks, and the ids and classes the script reads — \`dt\`, \`dt-filter\`, \`dt-count\`, \`arrow\`, \`sorted\`, \`num\`, \`empty\`. Renaming or removing these breaks sorting and filtering.
+- Safe to restyle: the entire \`<style>\` block — colors, typography, spacing, striping, radii. When changing a palette token, change it in all four scopes it is declared in — the light \`:root\` block, the \`@media (prefers-color-scheme: dark)\` block, the \`:root[data-theme="dark"]\` block, and the \`@media print\` block (print is always light; a token missed there reverts to the shipped palette on paper) — so the restyled table follows the OS dark setting, the viewer's theme toggle, and printing. Tune \`--accent\` toward the subject.
+- Keep intact: the theming structure itself (all four scopes, including the \`:where()\` guard on the media block, the \`color-scheme\` pins, and the \`@media print\` re-pin block), the table markup structure, the \`<script>\` blocks, and the ids and classes the script reads — \`dt\`, \`dt-filter\`, \`dt-count\`, \`arrow\`, \`sorted\`, \`num\`, \`empty\`. Renaming or removing these breaks sorting, filtering, or theming.
 
 ## Notes
 
