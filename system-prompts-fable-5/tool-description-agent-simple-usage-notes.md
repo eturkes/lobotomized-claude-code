@@ -4,11 +4,12 @@ description: >-
   Simplified usage notes for the Agent tool, including when to delegate, fork
   behavior, resumption, worktree isolation, background execution, parallel
   launches, and context restrictions
-ccVersion: 2.1.199
+ccVersion: 2.1.211
 variables:
   - TOOL_BASE_DESCRIPTION
   - HAS_PRO_RESTRICTION_NOTE
   - CAN_FORK_CONTEXT
+  - CAN_RUN_BACKGROUND_AGENTS
   - SEND_MESSAGE_TOOL_NAME
   - AGENT_TOOL_NAME
   - RUN_IN_BACKGROUND_NOTE

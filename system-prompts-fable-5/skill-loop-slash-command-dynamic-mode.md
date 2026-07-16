@@ -3,11 +3,14 @@ name: 'Skill: /loop slash command (dynamic mode)'
 description: >-
   Parses user input into an interval and prompt for scheduling recurring or
   dynamically self-paced loop executions
-ccVersion: 2.1.101
+ccVersion: 2.1.211
 variables:
   - ADDITIONAL_PARSING_NOTES_FN
   - CRON_CONVERSION_RULES
-  - SCHEDULE_FIXED_INTERVAL_FN
+  - CRON_CREATE_TOOL_NAME
+  - CANCEL_TIMEFRAME_DAYS
+  - CRON_DELETE_TOOL_NAME
+  - LOOP_CONFIRMATION_SUFFIX_FN
   - DYNAMIC_MODE_INSTRUCTIONS
   - USER_INPUT
 -->
@@ -26,8 +29,6 @@ If the resulting prompt is empty, show usage \`/loop [interval] <prompt>\` and s
 Examples:
 - \`5m /babysit-prs\` → interval \`5m\`, prompt \`/babysit-prs\` (rule 1)
 - \`check the deploy every 20m\` → interval \`20m\`, prompt \`check the deploy\` (rule 2)
-- \`run tests every 5 minutes\` → interval \`5m\`, prompt \`run tests\` (rule 2)
-- \`check the deploy\` → no interval → dynamic mode, prompt \`check the deploy\` (rule 3)
 - \`check every PR\` → no interval → dynamic mode, prompt \`check every PR\` (rule 3 — "every" not followed by time)
 - \`5m\` → empty prompt → show usage
 ${ADDITIONAL_PARSING_NOTES_FN()}
@@ -38,7 +39,9 @@ Convert the interval to a cron expression:
 ${CRON_CONVERSION_RULES}
 
 Then:
-${SCHEDULE_FIXED_INTERVAL_FN()}
+1. Call ${CRON_CREATE_TOOL_NAME} with: \`cron\` (the expression above), \`prompt\` (the parsed prompt verbatim), \`recurring: true\`.
+2. Briefly confirm: what's scheduled, the cron expression and its human-readable cadence, that recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days, and that ${CRON_DELETE_TOOL_NAME} cancels sooner (include the job ID).${LOOP_CONFIRMATION_SUFFIX_FN()}
+3. Then execute the parsed prompt now rather than waiting for the first cron fire — via the Skill tool if it's a slash command, directly otherwise.
 
 ## Dynamic mode (rule 3 — no interval)
 
