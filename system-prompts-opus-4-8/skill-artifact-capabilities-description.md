@@ -1,9 +1,9 @@
 <!--
-name: 'Skill: Artifact runtime capabilities description'
+name: 'Skill: Artifact Runtime Capabilities description'
 description: >-
-  Description of the Artifact runtime-capabilities skill (shown to the model in
-  available skills) instructing it to load the skill before declaring
-  capabilities or writing window.claude.mcp code.
-ccVersion: 2.1.210
+  Second half of the concatenated `description` on the Hu({name:Pne})
+  artifact-capabilities skill registration — the blurb shown to the model in the
+  available-skills listing so it knows when to load the skill.
+ccVersion: 2.1.214
 -->
-Runtime capabilities a published Artifact can declare — calling the 
+behavior static HTML cannot provide on its own, such as the page reading live or connected data, keeping state shared across viewers, or updating and republishing itself. Serves this user's live capability roster and the typed call definitions. Load it whenever the user asks for an artifact needing any such runtime behavior.

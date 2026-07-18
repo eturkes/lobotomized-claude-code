@@ -4,7 +4,7 @@ description: >-
   Bundled example doc (examples/server.md) for the run skill:
   background-launching a web server or API, polling for readiness, smoke-testing
   with curl, and shutting it down cleanly
-ccVersion: 2.1.145
+ccVersion: 2.1.214
 -->
 # Example: Web server / API
 
@@ -51,9 +51,12 @@ And stop:
 
 > \`\`\`bash
 > kill $SERVER_PID
-> # or, if you've lost the PID:
-> pkill -f "node.*server.js"
+> # npm doesn't forward SIGTERM to the server it spawned, so if the port
+> # stays bound, kill its listener:
+> lsof -ti:3000 -sTCP:LISTEN | xargs -r kill
 > \`\`\`
+
+Prefer the captured PID or the port over \`pkill -f "<pattern>"\`. Broad patterns like \`pkill -f "next|vite|node"\` match the agent's own command line and kill the session that ran them.
 
 ## Details worth documenting
 
@@ -86,10 +89,10 @@ A Run section for a typical Node API:
 > # → {"status":"ok","version":"1.2.3"}
 > \`\`\`
 >
-> Logs are at \`/tmp/api.log\`. Stop with:
+> Logs are at \`/tmp/api.log\`. Stop by killing the port's listener:
 >
 > \`\`\`bash
-> pkill -f "tsx watch src/index.ts"
+> lsof -ti:3000 -sTCP:LISTEN | xargs -r kill
 > \`\`\`
 >
 > ### Environment

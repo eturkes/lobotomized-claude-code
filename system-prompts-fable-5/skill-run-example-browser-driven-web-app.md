@@ -3,31 +3,30 @@ name: 'Skill: run example — Browser-driven web app'
 description: >-
   Bundled example doc (examples/playwright.md) for the run skill: driving a
   browser-based web app via a background dev server plus headless chromium-cli
-ccVersion: 2.1.145
+ccVersion: 2.1.214
 -->
 # Example: Browser-driven web app
 
 A dev server serves HTML to a browser. A headless agent can't open a browser window — so "run the app" means launching the dev server, driving a headless Chromium against it, and producing a screenshot that proves the page rendered.
 
-Don't write a browser driver. Use \`chromium-cli\`.
+Don't write a browser driver. Use `chromium-cli`.
 
 ## Dev server
 
-Find the dev command (\`package.json\` \`scripts.dev\`, \`Makefile\`, README), start it in the background, and wait for it to serve:
+Find the dev command (`package.json` `scripts.dev`, `Makefile`, README), start it in the background, and wait for it to serve:
 
-\`\`\`bash
+```bash
 npm run dev &   # or yarn dev, pnpm dev, make serve, ./dev.sh
-echo $! > /tmp/dev.pid
 timeout 30 bash -c 'until curl -sf http://localhost:3000 >/dev/null; do sleep 1; done'
-\`\`\`
+```
 
-Poll the port, don't \`sleep 5\`. Stop with \`kill $(cat /tmp/dev.pid)\` (or \`pkill -f 'npm run dev'\`) before relaunching, or the next run hits \`EADDRINUSE\`.
+Poll the port, don't `sleep 5`. Stop by killing the port's listener — `lsof -ti:3000 -sTCP:LISTEN | xargs -r kill` — before relaunching, or the next run hits `EADDRINUSE`. `$!` after `npm run dev &` is only the npm wrapper, and npm doesn't forward SIGTERM to the server it spawned, so the port kill is what frees it. A broad `pkill -f` pattern matches the agent's own command line and kills the session.
 
 ## Drive
 
-\`chromium-cli\` is a headless-Chromium REPL. Pipe a script to stdin:
+`chromium-cli` is a headless-Chromium REPL. Pipe a script to stdin:
 
-\`\`\`bash
+```bash
 chromium-cli --session app <<'EOF'
 nav http://localhost:3000
 wait-for text=Dashboard
@@ -39,27 +38,27 @@ wait-for text=Smoke test
 screenshot
 console --errors
 EOF
-\`\`\`
+```
 
-Screenshots land in \`chromium_cli/sessions/app/screenshots/\` (latest symlinked as \`screenshot.png\`). The loop: \`nav\` → \`wait-for\` the element you need → act (\`click\` / \`fill\` / \`type\` / \`press\`) → \`screenshot\` → \`console --errors\` to check nothing threw. Full command reference: \`chromium-cli\` skill, or \`help\` at the prompt.
+Screenshots land in `chromium_cli/sessions/app/screenshots/` (latest symlinked as `screenshot.png`). The loop: `nav` → `wait-for` the element you need → act (`click` / `fill` / `type` / `press`) → `screenshot` → `console --errors` to check nothing threw. Full command reference: `chromium-cli` skill, or `help` at the prompt.
 
-For iterative debugging, run it under tmux and \`send-keys\` one command at a time — same commands, same session.
+For iterative debugging, run it under tmux and `send-keys` one command at a time — same commands, same session.
 
-**If \`chromium-cli\` isn't available:** adapt [electron.md](electron.md)'s REPL driver — the structure and commands transfer, but it's \`_electron\`-specific. Import \`{ chromium }\` instead, launch with \`chromium.launch({ args: ['--no-sandbox'] })\`, acquire the page via \`(await app.newContext()).newPage()\` then \`goto()\` your dev URL, and drop the Electron-only window introspection (\`.windows()\`/\`.firstWindow()\`/the \`windows\` command).
+**If `chromium-cli` isn't available:** adapt [electron.md](electron.md)'s REPL driver — the structure and commands transfer, but it's `_electron`-specific. Import `{ chromium }` instead, launch with `chromium.launch({ args: ['--no-sandbox'] })`, acquire the page via `(await app.newContext()).newPage()` then `goto()` your dev URL, and drop the Electron-only window introspection (`.windows()`/`.firstWindow()`/the `windows` command).
 
 ## What to put in the skill
 
-The project-specific bits only — \`chromium-cli\` handles the mechanics.
+The project-specific bits only — `chromium-cli` handles the mechanics.
 
-- **Dev command + port + stop.** The exact start line, env vars it needs, and the \`kill\`/\`pkill\` to stop it.
-- **Auth.** Whatever gets a logged-in session — a \`set-cookie\` line, a \`fill\`/\`click\` login sequence, or a helper script that does the API dance and emits the cookie.
+- **Dev command + port + stop.** The exact start line, env vars it needs, and the port kill to stop it.
+- **Auth.** Whatever gets a logged-in session — a `set-cookie` line, a `fill`/`click` login sequence, or a helper script that does the API dance and emits the cookie.
 - **One representative interaction.** One path that proves it's running, ending in a screenshot — not the whole app.
 - **App-specific gotchas.** Only the ones you actually hit.
 
 ## Gotchas that recur
 
-- **React controlled inputs.** \`eval el.value = '…'\` doesn't fire React's onChange. Use \`fill\` / \`type\` — they go through Playwright's input pipeline.
-- **Websockets / long-poll.** \`wait-idle\` never settles. \`wait-for\` the element you actually need.
-- **Slow first paint.** Vite/Next compile routes on demand; the first \`nav\` can take 10s+. \`wait-for\` handles it; raw \`sleep\` doesn't.
-- **\`screenshot-element <sel>\`** crops to one element — use it when the diff is in a specific component, not the whole page.
-- **Check \`console --errors\` before declaring success.** A page can render its shell while every data fetch 500s.
+- **React controlled inputs.** `eval el.value = '…'` doesn't fire React's onChange. Use `fill` / `type` — they go through Playwright's input pipeline.
+- **Websockets / long-poll.** `wait-idle` never settles. `wait-for` the element you actually need.
+- **Slow first paint.** Vite/Next compile routes on demand; the first `nav` can take 10s+. `wait-for` handles it; raw `sleep` doesn't.
+- **`screenshot-element <sel>`** crops to one element — use it when the diff is in a specific component, not the whole page.
+- **Check `console --errors` before declaring success.** A page can render its shell while every data fetch 500s.

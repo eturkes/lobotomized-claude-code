@@ -2,8 +2,9 @@
 name: 'Skill: Code Review (medium effort)'
 description: >-
   Effort-tier prompt for medium code review — 3+5 angles, up to 6 candidates,
-  precision-biased 3-state verify, up to 8 findings
-ccVersion: 2.1.178
+  precision-biased, up to 8 findings. Verify phase and output format moved to
+  sibling ids in 2.1.214.
+ccVersion: 2.1.214
 variables:
   - PHASE_0_GATHER_DIFF
   - AGENT_TOOL_NAME
@@ -11,11 +12,6 @@ variables:
   - ANGLE_REUSE
   - ANGLE_SIMPLIFICATION
   - ANGLE_EFFICIENCY
-  - ANGLE_ALTITUDE
-  - ANGLE_CONVENTIONS
-  - CLEANUP_CANDIDATES_NOTE
-  - PHASE_2_VERIFY_3_STATE
-  - OUTPUT_FORMAT_FN
 -->
 \`medium effort → 3+5 angles × 6 candidates → 1-vote verify → ≤8 findings\`
 
@@ -31,14 +27,8 @@ surfaces **up to 6 candidate findings** with \`file\`, \`line\`, a one-line
 
 ${ANGLES_LINE_BY_LINE}
 ${ANGLE_REUSE}
-${ANGLE_SIMPLIFICATION}
-${ANGLE_EFFICIENCY}
-${ANGLE_ALTITUDE}
-${ANGLE_CONVENTIONS}
-${CLEANUP_CANDIDATES_NOTE}
-Pass every candidate with a nameable failure scenario through — finders that
-silently drop half-believed candidates bypass the verify step and are the
-dominant cause of misses.
+Pass every candidate with a nameable failure scenario through — dropping
+half-believed candidates bypasses the verify step.
 
-${PHASE_2_VERIFY_3_STATE}
-${OUTPUT_FORMAT_FN(8)}
+${ANGLE_SIMPLIFICATION}
+${ANGLE_EFFICIENCY(8)}

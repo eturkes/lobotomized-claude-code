@@ -4,7 +4,7 @@ description: >-
   Describes the PowerShell command execution tool with syntax guidance, timeout
   settings, and instructions to prefer specialized tools over PowerShell for
   file operations
-ccVersion: 2.1.199
+ccVersion: 2.1.214
 variables:
   - RENDER_COMMAND_NOTES_FN
   - COMMAND_NOTES
