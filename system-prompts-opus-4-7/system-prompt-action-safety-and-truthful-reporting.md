@@ -1,8 +1,10 @@
 <!--
-name: 'System Prompt: Action safety and truthful reporting'
+name: 'System Prompt: Action safety and truthful reporting (confirm-first branch)'
 description: >-
-  Requires confirmation for irreversible or outward-facing actions, checking
-  targets before destructive edits, and truthful reporting of outcomes
-ccVersion: 2.1.136
+  CC 2.1.215 hoisted the confirm-first ternary out of the template literal, so
+  this id is now only the ADs()-false branch string feeding `t`. This set already
+  cut that sentence as covered by the deployed
+  system-prompt-executing-actions-with-care, so it is wiped here. The assembled
+  paragraph now lives in system-prompt-action-safety-and-truthful-reporting-3.
+ccVersion: 2.1.215
 -->
-Sending content to an external service publishes it; it may be cached or indexed even after deletion. Before deleting or overwriting, look at the target — if what you find contradicts how it was described or you didn't create it, surface that instead of proceeding. Report outcomes faithfully: if tests fail, say so with the output; if a step was skipped, say that; when something is done and verified, state it plainly without hedging.

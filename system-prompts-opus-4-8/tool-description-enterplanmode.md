@@ -3,10 +3,11 @@ name: 'Tool Description: EnterPlanMode'
 description: >-
   Tool description for entering plan mode to explore and design implementation
   approaches
-ccVersion: 2.1.199
+ccVersion: 2.1.215
 variables:
   - ASK_USER_QUESTION_TOOL_NAME
-  - CONDITIONAL_WHAT_HAPPENS_NOTE_FN
+  - CONDITIONAL_USE_AGENT_TOOL_INSTEAD_NOTE
+  - WHAT_HAPPENS_IN_PLAN_MODE_FN
 -->
 Transition into plan mode to explore the codebase and design an implementation approach for user approval before writing code. Requires user approval to enter.
 
@@ -22,6 +23,6 @@ Skip for:
 - Single- or few-line fixes (typos, obvious bugs, small tweaks)
 - A single function with clear requirements
 - Tasks where the user gave specific, detailed instructions
-- Pure research/exploration (use the Agent tool with the explore agent)
+- Pure research/exploration${CONDITIONAL_USE_AGENT_TOOL_INSTEAD_NOTE}
 
-${CONDITIONAL_WHAT_HAPPENS_NOTE_FN()}
+${WHAT_HAPPENS_IN_PLAN_MODE_FN()}
