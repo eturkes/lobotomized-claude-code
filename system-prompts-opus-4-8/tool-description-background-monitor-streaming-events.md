@@ -25,7 +25,7 @@ Pick by how many notifications you need:
   last=$(date -u +%Y-%m-%dT%H:%M:%SZ)
   while true; do
     now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-    gh api "repos/owner/repo/issues/123/comments?since=$last" --jq '.[] | "\(.user.login): \(.body)"'
+    gh api "repos/owner/repo/issues/123/comments?since=$last" --jq '.[] | "\\(.user.login): \\(.body)"'
     last=$now; sleep 30
   done
 
@@ -33,7 +33,7 @@ Pick by how many notifications you need:
   prev=""
   while true; do
     s=$(gh pr checks 123 --json name,bucket)
-    cur=$(jq -r '.[] | select(.bucket!="pending") | "\(.name): \(.bucket)"' <<<"$s" | sort)
+    cur=$(jq -r '.[] | select(.bucket!="pending") | "\\(.name): \\(.bucket)"' <<<"$s" | sort)
     comm -13 <(echo "$prev") <(echo "$cur")
     prev=$cur
     jq -e 'all(.bucket!="pending")' <<<"$s" >/dev/null && break
