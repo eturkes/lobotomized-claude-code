@@ -5,6 +5,8 @@ description: >-
   updating an artifact from an earlier conversation via url, reading artifacts
   with WebFetch, and the list/shared-scope rules
 ccVersion: 2.1.214
+variables:
+  - TOOL_DESCRIPTION_ARTIFACT_UPDATE_AND_LIST_GUIDANCE_VAR_0
 -->
 **To update**: Edit the file, then call Artifact again with the same file path — it redeploys to the same URL. A different file path claims a new URL, so only use a different path to create a separate Artifact.
 

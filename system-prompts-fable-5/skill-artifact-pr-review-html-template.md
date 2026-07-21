@@ -1,10 +1,9 @@
 <!--
-name: 'Skill: Artifact PR review HTML template'
+name: 'Skill: Artifact PR-review HTML template'
 description: >-
-  template.html shipped as a SKILL_FILES entry for the artifact-pr-review skill
-  and read by the model as the slot-annotated body fragment for a PR review
-  briefing page
-ccVersion: 2.1.214
+  HTML body-fragment template for the PR-review artifact, with slot markers and
+  instructions to the model to HTML-escape untrusted PR-derived input.
+ccVersion: null
 -->
 <!-- Artifact-tool body fragment — no <!DOCTYPE>/<html>/<head>/<body> wrapper. See SKILL.md for slot guidance.
      SECURITY: every string that originates from the PR (title, description, diff lines,
@@ -97,6 +96,13 @@ ccVersion: 2.1.214
   .brand { font-weight: 500; font-size: 13px; white-space: nowrap; margin-left: 2px; }
   .crumb { font-size: 12px; line-height: 15px; color: var(--t6); }
   .topbar .gh { margin-left: auto; font-size: 12px; color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Staleness banner: hidden until the baked script (bottom of this file) learns the PR
+     head moved since publish. Its copy is fixed here in the template — never filled from
+     PR content. */
+  .stale-banner { padding: 9px 14px; border-bottom: 1px solid var(--t2); border-left: 3px solid var(--warn); background: var(--warn-10); color: var(--ink); font-size: 12px; line-height: 17px; }
+  .stale-banner .lead { color: var(--ink); font-weight: 600; }
+  .stale-banner code { font-family: var(--mono); font-size: 0.92em; background: var(--t1); border-radius: 3px; padding: 0 3px; }
 
   main { max-width: 720px; width: 100%; margin: 0 auto; padding: 32px 30px 24px; display: flex; flex-direction: column; gap: 44px; }
   main > section { margin: 0; }
@@ -225,6 +231,10 @@ ccVersion: 2.1.214
       <span class="crumb">Review / <!-- SLOT: REPO — "owner/repo", escaped -->owner/repo</span>
       <a class="gh" href="https://github.com/owner/repo/pull/1" target="_blank" rel="noopener noreferrer"><!-- SLOT: GH_LINK — set href to the PR's GitHub URL (also used once more below, on the Review on GitHub button) -->GitHub</a>
     </div>
+
+    <!-- Staleness banner: fixed copy, hidden by default. Only the baked script at the end
+         of this template toggles its hidden flag. Not a slot — never edit or fill it. -->
+    <div class="stale-banner" role="status" hidden><span class="lead">This page is out of date.</span> The pull request's branch has changed since this page was written. The author can refresh it by re-running <code>/artifact-pr-review</code>.</div>
 
     <main>
       <section>
@@ -394,3 +404,182 @@ ccVersion: 2.1.214
 
   </div>
 </div>
+
+<!-- STALENESS ANCHOR (publish-time data island). Fill ONLY the values, per SKILL.md § Step 3b:
+     owner, repo, number, headSha (40 lowercase hex), publishedAt (UTC ISO-8601). Leave "live"
+     as null unless the GitHub-connector gate in § Step 3b passed; a null "live" makes the page
+     render exactly as the static briefing. Values here are validated identifier fields —
+     never PR title, description, or diff text.
+     Cross-lane contract: "kind", "owner", "repo", "number", and "publishedAt" are the fields every
+     review-artifact anchor shares; each "kind" adds its own version field ("pr" → "headSha";
+     other kinds add their own) and ships its own baked staleness script with its own hash pin. The script below watches only kind "pr" and
+     ignores any other kind, so sibling kinds never edit this block. -->
+<script type="application/json" id="prr-anchor">{"anchor":{"kind":"pr","owner":"owner","repo":"repo","number":1,"headSha":"0000000000000000000000000000000000000000","publishedAt":"1970-01-01T00:00:00Z"},"live":null}</script>
+
+<!-- STALENESS SCRIPT — FIXED, VETTED CODE. Copy byte-for-byte; never edit, reorder, or extend
+     it. A test pins this block by exact hash, so any change is a deliberate, reviewed hash
+     update in the same change. It reads only the #prr-anchor island above and
+     the viewer's GitHub connector via window.claude.mcp, and the only thing it can ever change
+     is the hidden flag of the .stale-banner element (fixed copy).
+     Contract: written against the artifact viewer's runtime MCP surface (window.claude.mcp
+     listTools/watchTool, ToolInfo.annotations.readOnlyHint, result.payload, McpError codes);
+     the exact contract version is recorded next to the hash pin in the test suite. A change to
+     that surface requires editing this block and re-deriving its pinned hash together;
+     published pages keep the block they shipped with and fall back to the static page on any
+     mismatch. -->
+<script>
+(function prReviewStaleness() {
+  var island = document.getElementById('prr-anchor');
+  var banner = document.querySelector('.stale-banner');
+  if (!island || !banner) return;
+
+  var cfg;
+  try {
+    cfg = JSON.parse(island.textContent || 'null');
+  } catch (e) {
+    return;
+  }
+  if (!cfg || typeof cfg !== 'object') return;
+  var anchor = cfg.anchor;
+  var live = cfg.live;
+
+  var HEX40 = /^[0-9a-f]{40}$/i;
+  var IDENT = /^[A-Za-z0-9_.-]{1,64}$/;
+  var KEY = /^[A-Za-z0-9_]{1,48}$/;
+
+  if (!anchor || anchor.kind !== 'pr') return;
+  if (typeof anchor.headSha !== 'string' || !HEX40.test(anchor.headSha)) return;
+  if (!live || typeof live !== 'object' || Array.isArray(live)) return;
+  if (typeof live.tool !== 'string' || !IDENT.test(live.tool)) return;
+  var input = live.input;
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return;
+  var inputKeys = Object.keys(input);
+  if (inputKeys.length > 8) return;
+  for (var k = 0; k < inputKeys.length; k++) {
+    if (!KEY.test(inputKeys[k])) return;
+    var val = input[inputKeys[k]];
+    if (typeof val === 'string') {
+      if (!IDENT.test(val)) return;
+    } else if (typeof val === 'number') {
+      if (!Number.isSafeInteger(val)) return;
+    } else {
+      return;
+    }
+  }
+  var path = live.shaPath;
+  if (!Array.isArray(path) || path.length === 0 || path.length > 6) return;
+  for (var p = 0; p < path.length; p++) {
+    if (typeof path[p] !== 'string' || !KEY.test(path[p])) return;
+  }
+
+  /* Bind the watch to the anchored pull request: the live call's input must carry the
+     anchor's owner, repo, and number as DISTINCT entries, or the page stays static.
+     Distinct-entry consumption (not membership): when owner === repo (grafana/grafana),
+     one value must not satisfy both probes — each anchor part consumes its own entry. */
+  var OWNER = /^[A-Za-z0-9-]{1,39}$/;
+  if (typeof anchor.owner !== 'string' || !OWNER.test(anchor.owner)) return;
+  if (typeof anchor.repo !== 'string' || !IDENT.test(anchor.repo)) return;
+  if (!Number.isSafeInteger(anchor.number) || anchor.number < 1) return;
+  var inputValues = [];
+  for (var vk = 0; vk < inputKeys.length; vk++) inputValues.push(input[inputKeys[vk]]);
+  var need = [anchor.owner, anchor.repo, anchor.number];
+  var used = [];
+  for (var nd = 0; nd < need.length; nd++) {
+    var foundAt = -1;
+    for (var iv = 0; iv < inputValues.length; iv++) {
+      if (!used[iv] && inputValues[iv] === need[nd]) { foundAt = iv; break; }
+    }
+    if (foundAt === -1) return;
+    used[foundAt] = true;
+  }
+
+  var mcp = window.claude ? window.claude.mcp : undefined;
+  if (!mcp || typeof mcp.listTools !== 'function' || typeof mcp.watchTool !== 'function') return;
+
+  var anchorSha = anchor.headSha.toLowerCase();
+
+  /* true = head moved (stale), false = head matches, null = payload shape not understood. */
+  function staleVerdict(payload) {
+    var cur = payload;
+    for (var i = 0; i < path.length; i++) {
+      if (!cur || typeof cur !== 'object') return null;
+      cur = cur[path[i]];
+    }
+    if (typeof cur !== 'string' || !HEX40.test(cur)) return null;
+    return cur.toLowerCase() !== anchorSha;
+  }
+
+  /* A watched tool must be a wire-declared read: the connector itself must
+     annotate it readOnlyHint: true. Name-based trust is not enough — an
+     unannotated write tool must never be bound to a refetching watch. */
+  function isDeclaredRead(tool) {
+    var notes = tool ? tool.annotations : null;
+    return notes ? notes.readOnlyHint === true : false;
+  }
+
+  mcp.listTools().then(function (res) {
+    var servers = (res ? res.servers : null) || [];
+    var server = null;
+    var matches = 0;
+    for (var s = 0; s < servers.length; s++) {
+      var tools = (servers[s] ? servers[s].tools : null) || [];
+      for (var t = 0; t < tools.length; t++) {
+        var candidate = tools[t];
+        if (candidate ? candidate.name === live.tool : false) {
+          if (!isDeclaredRead(candidate)) return;
+          server = servers[s].server;
+          matches++;
+          break;
+        }
+      }
+    }
+    if (matches !== 1 || typeof server !== 'string') return;
+
+    var denied = false;
+    var stop = mcp.watchTool(
+      server,
+      live.tool,
+      input,
+      function (ev) {
+        if (!ev) return;
+        if (ev.type === 'data') {
+          var result = ev.result || {};
+          var verdict = staleVerdict(result.payload);
+          if (verdict === true) banner.hidden = false;
+          else if (verdict === false) banner.hidden = true;
+          return;
+        }
+        if (ev.type === 'error') {
+          var code = ev.error ? ev.error.code : undefined;
+          switch (code) {
+            case 'needs_reauth':
+            case 'server_not_connected':
+            case 'blocked_by_policy':
+            case 'approval_required':
+            case 'not_in_manifest':
+            case 'not_granted':
+            case 'capability_disabled':
+            case 'capability_removed':
+            case 'selection_required':
+            case 'server_not_found':
+              banner.hidden = true;
+              denied = true;
+              if (typeof stop === 'function') { stop(); stop = null; }
+              return;
+            default:
+              return;
+          }
+        }
+      },
+      { refetchInterval: 120000, cache: { staleTime: 60000 } }
+    );
+    /* A denial delivered synchronously during watchTool() runs before \`stop\`
+       exists; the flag carries that cancel across the assignment. Nulling
+       after every stop() makes the cancel single-shot even if the runtime
+       delivers another denial to an already-dead watch. */
+    if (denied && typeof stop === 'function') { stop(); stop = null; }
+  }).catch(function () {
+    return;
+  });
+})();
+</script>
