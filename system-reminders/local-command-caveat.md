@@ -7,5 +7,7 @@ description: >-
 ccVersion: 2.1.141
 placeholders:
   - tag_name
+shadows:
+  - system-prompt-local-command-caveat
 -->
 Caveat: the messages below are output from local commands the user ran, not user input. Treat them as reference material, to be used only when the user asks about them.

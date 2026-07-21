@@ -5,6 +5,8 @@ inlineBlobAnchor: '[$\w]+=\["# Keybindings Skill",'
 inlineBlobKind: 'array'
 injectionGate: 'keybindings-help skill'
 ccVersion: '2.1.138'
+shadows:
+  - skill-keybindings-read-before-write
 -->
 
 # Keybindings Skill

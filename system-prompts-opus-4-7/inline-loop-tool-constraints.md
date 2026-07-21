@@ -5,6 +5,8 @@ inlineBlobAnchor: "`\n\n\\*\\*Tool constraints for this run:\\*\\* Shell access"
 inlineBlobKind: 'template'
 injectionGate: '/loop autonomous run with read-only restriction'
 ccVersion: '2.1.138'
+shadows:
+  - system-reminder-memory-consolidation-tool-constraints
 -->
 
 

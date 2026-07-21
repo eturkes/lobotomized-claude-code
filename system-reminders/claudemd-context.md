@@ -7,6 +7,8 @@ description: >-
 ccVersion: 2.1.141
 placeholders:
   - context_blocks
+shadows:
+  - system-reminder-question-context
 -->
 As you answer the user's questions, you can use the following context:
 {{context_blocks}}
