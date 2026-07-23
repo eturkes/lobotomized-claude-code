@@ -3,7 +3,7 @@ name: 'Code Review: ReportFindings Output Instructions'
 description: >-
   Code-review output section telling the model to call the ReportFindings tool
   once with {level, findings}.
-ccVersion: 2.1.214
+ccVersion: 2.1.218
 variables:
   - SKILL_CODE_REVIEW_OUTPUT_REPORT_FINDINGS_VAR_0
   - SKILL_CODE_REVIEW_OUTPUT_REPORT_FINDINGS_VAR_1
@@ -20,4 +20,5 @@ that produced it (\`correctness\`, \`simplification\`, \`efficiency\`,
 \`test-coverage\` when one fits better) — plus \`verdict\` when a verify pass
 produced one. If more than ${SKILL_CODE_REVIEW_OUTPUT_REPORT_FINDINGS_VAR_1} survive, keep the ${SKILL_CODE_REVIEW_OUTPUT_REPORT_FINDINGS_VAR_1} most severe. If
 nothing survives verification, call it with an empty array. Do not also print
-the findings as text.
+the findings as text, and do not create or publish an artifact of the review -
+the tool call is the report.

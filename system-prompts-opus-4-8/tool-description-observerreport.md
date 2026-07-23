@@ -1,8 +1,9 @@
 <!--
-name: ObserverReport Tool Description
+name: 'Tool Description: ObserverReport'
 description: >-
-  Model-facing tool description for the ObserverReport tool used by an observer
-  agent to report to the observed agent.
-ccVersion: 2.1.201
+  Description (and identical prompt) of the ObserverReport tool, telling an
+  observer agent when to send a report to its resolved report target; injected
+  as the tool's description in the model's tool list.
+ccVersion: 2.1.218
 -->
-Send a report to the agent you are observing. The target is resolved from your observer pairing — there is no recipient to name. Use this only when you have something genuinely useful: a mistake about to compound, a missed constraint, prior art the observed agent should see. The expected steady state is silence — if nothing warrants action, end your turn without calling this.
+Send a report to your report target — the agent you observe, or the coordinating agent that spawned the worker you observe. The target is resolved from your observer pairing — there is no recipient to name. Use this only when you have something genuinely useful: a mistake about to compound, a missed constraint, prior art the observed agent should see. The expected steady state is silence — if nothing warrants action, end your turn without calling this.

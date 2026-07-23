@@ -4,20 +4,18 @@ description: >-
   Instructs an agent to perform a multi-phase memory consolidation pass —
   orienting on existing memories, gathering recent signal from logs and
   transcripts, merging updates into topic files, and pruning the index
-ccVersion: 2.1.214
+ccVersion: 2.1.218
 variables:
+  - ADDITIONAL_CONTEXT
+  - CLAUDE_MD_RECONCILIATION_BLOCK
+  - HAS_TEAM_MEMORY
+  - INDEX_FILE
+  - INDEX_MAX_LINES
+  - IS_STONE_SHELL_MEMORY_VARIANT
   - MEMORY_DIR
   - MEMORY_DIR_CONTEXT
+  - TEAM_MEMORY_GUIDANCE_BLOCK
   - TRANSCRIPTS_DIR
-  - HAS_TRANSCRIPT_SOURCE_NOTE
-  - TRANSCRIPT_SOURCE_NOTE
-  - INDEX_FILE
-  - POST_GATHER_FN
-  - IS_STONE_SHELL_MEMORY_VARIANT
-  - INDEX_MAX_LINES
-  - CLAUDE_MD_RECONCILIATION_BLOCK
-  - ADDITIONAL_DREAM_GUIDANCE_FN
-  - ADDITIONAL_CONTEXT
 -->
 # Dream: Memory Consolidation
 
@@ -27,8 +25,8 @@ Memory directory: \`${MEMORY_DIR}\`
 ${MEMORY_DIR_CONTEXT}
 
 Session transcripts: \`${TRANSCRIPTS_DIR}\` (large JSONL files — grep narrowly, don't read whole files)
-${HAS_TRANSCRIPT_SOURCE_NOTE?`
-${TRANSCRIPT_SOURCE_NOTE}
+${HAS_TEAM_MEMORY?`
+${TEAM_MEMORY_GUIDANCE_BLOCK}
 `:""}
 ---
 
@@ -49,7 +47,6 @@ Look for new information worth persisting. Sources in rough priority order:
    \`grep -rn "<narrow term>" ${TRANSCRIPTS_DIR}/ --include="*.jsonl" | tail -50\`
 
 Don't exhaustively read transcripts. Look only for things you already suspect matter.
-${POST_GATHER_FN(IS_STONE_SHELL_MEMORY_VARIANT)}
 ## Phase 3 — Consolidate
 
 For each thing worth remembering, write or update a memory file at the top level of the memory directory. Use the memory file format${IS_STONE_SHELL_MEMORY_VARIANT?"":" and type conventions"} from your system prompt's auto-memory section — it's the source of truth for what to save, how to structure it, and what NOT to save.
@@ -69,7 +66,6 @@ Update \`${INDEX_FILE}\` so it stays under ${INDEX_MAX_LINES} lines AND under ~2
 - Resolve contradictions — if two files disagree, fix the wrong one
 
 ${CLAUDE_MD_RECONCILIATION_BLOCK}
-${ADDITIONAL_DREAM_GUIDANCE_FN()}
 ---
 
 Return a brief summary of what you consolidated, updated, or pruned. If nothing changed (memories are already tight), say so.${ADDITIONAL_CONTEXT?`

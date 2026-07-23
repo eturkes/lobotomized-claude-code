@@ -4,7 +4,7 @@ description: >-
   Artifact tool description fragment covering redeploying to the same URL,
   updating an artifact from an earlier conversation via url, reading artifacts
   with WebFetch, and the list/shared-scope rules
-ccVersion: 2.1.214
+ccVersion: 2.1.218
 -->
 **To update**: Edit the file, then call Artifact again with the same file path — it redeploys to the same URL. A different file path claims a new URL, so only use a different path to create a separate Artifact.
 

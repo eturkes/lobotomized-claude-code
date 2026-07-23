@@ -3,7 +3,7 @@ name: 'Skill: dataviz validate_palette.js script'
 description: >-
   The full validate_palette.js six-checks palette validator served as a file of
   the dataviz skill for the model to run.
-ccVersion: 2.1.211
+ccVersion: 2.1.218
 -->
 /**
  * Validate a categorical chart palette against the computable data-viz checks.
@@ -26,12 +26,12 @@ ccVersion: 2.1.211
  * structural rules the skill enforces, not measurable from hexes alone.
  *
  * Usage (node):
- *   node validate_palette.js "#2a78d6,#008300,#e87ba4,#eda100,#1baf7a,#eb6834,#4a3aa7,#e34948" --mode light
+ *   node validate_palette.js "#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#4a3aa7,#e34948" --mode light
  *   node validate_palette.js "#256abf,#199e70,..." --mode dark --surface "#1a1a19"
  *   node validate_palette.js "#86b6ef,#5598e7,#256abf,#104281" --ordinal
  *
  * Usage (browser — as a module script):
- *   <body data-palette="#2a78d6,#008300,..." data-mode="light">
+ *   <body data-palette="#2a78d6,#eb6834,..." data-mode="light">
  *   <script type="module" src="validate_palette.js"></script>
  *   → logs a console.table of the report and console.warn on any FAIL.
  *
@@ -166,7 +166,7 @@ export function validate(palette, { mode = "light", surface, pairs = "adjacent" 
   //     protects everyone else — neighbors must stay easy to tell apart under
   //     unsimulated vision too. A hard gate: secondary encoding does not
   //     excuse it, and weak pairs are not masked to keep an existing palette
-  //     validating (this floor is what forced the July 2026 re-order
+  //     validating (this floor forced the first of the July 2026 re-orders
   //     of the shipped set: same steps, re-ordered, clears 19.6/19.3).
   let nworst = null;
   for (const [i, j] of pairlist) {

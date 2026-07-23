@@ -1,10 +1,10 @@
 <!--
-name: ObserverReport target not running
+name: 'ObserverReport: Report Target Not Running'
 description: >-
-  ObserverReport tool result returned to the model when the observed agent is
-  not running.
-ccVersion: 2.1.206
+  ObserverReport tool_result message telling the model its report was not
+  delivered because the report-target agent is no longer running.
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_OBSERVER_REPORT_TARGET_NOT_RUNNING_VAR_0
 -->
-The observed agent (${TOOL_RESULT_OBSERVER_REPORT_TARGET_NOT_RUNNING_VAR_0}) is not running. The report was not delivered.
+The report target (${TOOL_RESULT_OBSERVER_REPORT_TARGET_NOT_RUNNING_VAR_0}) is not running. The report was not delivered.

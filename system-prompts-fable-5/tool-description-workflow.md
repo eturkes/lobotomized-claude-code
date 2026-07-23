@@ -3,10 +3,12 @@ name: 'Tool Description: Workflow'
 description: >-
   Describes the Workflow tool (alias RunWorkflow) — runs a deterministic
   JavaScript workflow script that orchestrates subagents via
-  agent()/parallel()/pipeline()/phase(); env-gated behind CLAUDE_CODE_WORKFLOWS
-ccVersion: 2.1.199
+  agent()/parallel()/pipeline()/phase(); env-gated behind
+  CLAUDE_CODE_WORKFLOWS
+ccVersion: 2.1.218
 variables:
-  - WORKFLOW_TOOL_NAME
+  - AGENT_TOOL_NAME
+  - WORKFLOW_INVOCATION_QUALIFIER
   - WORKFLOW_SCRIPT_PATH_NOTE
   - WORKFLOW_AGENT_ISOLATION_OPTION
   - WORKFLOW_AGENT_ISOLATION_NOTE
@@ -23,7 +25,7 @@ ONLY call this tool when the user has explicitly opted into multi-agent orchestr
 - The user invoked a skill or slash command whose instructions tell you to call Workflow.
 - The user asked you to run a specific named or saved workflow.
 
-For any other task — even one that would clearly benefit from parallelism — do NOT call this tool. Use the Agent tool for individual subagents, or briefly describe what a multi-agent workflow could do and its rough cost, and ask whether to run it. Mention they can ask for one with "use a workflow" in a future message to skip the ask.
+For any other task — even one that would clearly benefit from parallelism — do NOT call this tool. Use the ${AGENT_TOOL_NAME} tool (if available) for individual subagents, or briefly describe what a multi-agent workflow could do and its rough cost, and ask whether to run it. Mention they can ask for one with "use a workflow" in a future message to skip the ask.
 
 Often the right move is **hybrid**: scout inline first (list the files, find the channels, scope the diff) to discover the work-list, then call Workflow to pipeline over it. You only need the shape before the orchestration step, not before the task.
 
@@ -38,7 +40,7 @@ For larger work, run several in sequence — read each result before deciding th
 
 **Ultracode.** When a system-reminder confirms ultracode is on, that opt-in is standing: author and run a workflow for every substantive task by default, aiming for the most exhaustive correct answer. Multi-phase work (understand → design → implement → review) usually means several workflows in sequence, one per phase, so you stay in the loop between them. Lean toward orchestrating with workflows and adversarially verifying findings unless the work is trivial or already verified; go solo only on conversational turns or trivial mechanical edits. When a reminder says ultracode is off, revert to the opt-in rule above.
 
-Pass the script inline via \`script\` — don't Write it to a file first. Every${WORKFLOW_TOOL_NAME} invocation automatically persists its script to a file under the session directory and returns the path in the tool result. To iterate, edit that file with Write/Edit and re-invoke Workflow with \`{scriptPath: "<path>"}\` instead of resending the full script.${WORKFLOW_SCRIPT_PATH_NOTE}
+Pass the script inline via \`script\` — don't Write it to a file first. Every${WORKFLOW_INVOCATION_QUALIFIER} invocation automatically persists its script to a file under the session directory and returns the path in the tool result. To iterate, edit that file with Write/Edit and re-invoke Workflow with \`{scriptPath: "<path>"}\` instead of resending the full script.${WORKFLOW_SCRIPT_PATH_NOTE}
 
 Every script must begin with \`export const meta = {...}\`:
   export const meta = {

@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Grep'
 description: Tool description for content search using ripgrep
-ccVersion: 2.1.215
+ccVersion: 2.1.218
 variables:
   - GREP_TOOL_NAME
   - BASH_TOOL_NAME
