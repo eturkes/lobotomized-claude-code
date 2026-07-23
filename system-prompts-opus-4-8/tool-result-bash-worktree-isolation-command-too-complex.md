@@ -4,6 +4,6 @@ description: >-
   Refusal-reason clause returned to the model as the Bash tool's stderr when a
   worktree-isolated agent's command is too complex to verify it stays inside the
   worktree.
-ccVersion: null
+ccVersion: 2.1.218
 -->
 is too complex to verify that it stays inside the worktree; break it into plain, separate commands

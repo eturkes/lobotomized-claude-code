@@ -3,7 +3,7 @@ name: 'System Prompt: Saving skills (propose via tool)'
 description: >-
   Saving-skills system-prompt notice; skills on disk are a read-only cache, so
   propose a create/change via the propose-skill tool (${nGe}).
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SYSTEM_PROMPT_SAVING_SKILLS_PROPOSE_VIA_TOOL_VAR_0
 -->

@@ -3,7 +3,7 @@ name: 'Tool Result: Worktree git guard — env chdir to shared checkout'
 description: >-
   Refusal clause: env changes directory into the shared checkout before running
   git.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_BASH_WORKTREE_GIT_ENV_CHDIR_SHARED_CHECKOUT_VAR_0
 -->

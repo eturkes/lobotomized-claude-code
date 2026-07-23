@@ -3,7 +3,7 @@ name: 'Tool Result: Artifact watch/status action requires url'
 description: >-
   Input-validation error returned to the model when a watch/unwatch/status
   action call is missing the required artifact url.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_ACTION_REQUIRES_URL_VAR_0
 -->

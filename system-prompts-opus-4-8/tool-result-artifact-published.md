@@ -3,7 +3,7 @@ name: 'Tool Result: Artifact published'
 description: >-
   Tool result confirming an artifact was published, reporting its path and URL
   plus optional share/live/update fragments.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PUBLISHED_VAR_0
   - TOOL_RESULT_ARTIFACT_PUBLISHED_VAR_1

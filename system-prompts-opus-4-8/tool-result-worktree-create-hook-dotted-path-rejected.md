@@ -3,7 +3,7 @@ name: 'Tool Result: Worktree create — hook emitted a dotted path'
 description: >-
   EnterWorktree error (head) when the WorktreeCreate hook returns a worktree
   path containing dot segments the symlink screen cannot verify.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_WORKTREE_CREATE_HOOK_DOTTED_PATH_REJECTED_VAR_0
 -->

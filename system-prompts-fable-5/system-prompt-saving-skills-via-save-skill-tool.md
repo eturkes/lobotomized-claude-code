@@ -3,7 +3,7 @@ name: 'System Prompt: Saving skills via save_skill tool'
 description: >-
   In-session skill-editing guidance: on-disk skill files are a read-only cache,
   so create/update skills through the save_skill tool.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SYSTEM_PROMPT_SAVING_SKILLS_VIA_SAVE_SKILL_TOOL_VAR_0
 -->

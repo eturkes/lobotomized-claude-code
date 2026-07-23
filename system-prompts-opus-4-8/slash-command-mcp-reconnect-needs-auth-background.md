@@ -4,7 +4,7 @@ description: >-
   /mcp reconnect result when a server needs authentication in a
   detached/background session, telling the model to open this session and run
   /mcp.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SLASH_COMMAND_MCP_RECONNECT_NEEDS_AUTH_BACKGROUND_VAR_0
 -->

@@ -3,7 +3,7 @@ name: 'System Prompt: Saving skills via file delivery'
 description: >-
   Saving-skills notice; deliver a `.skill`/`SKILL.md` file to the user via the
   send tool (${t_e}); report as delivered, never as saved.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SEND_USER_FILE_TOOL_NAME
 -->

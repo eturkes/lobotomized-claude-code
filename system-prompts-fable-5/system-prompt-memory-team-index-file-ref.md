@@ -4,7 +4,7 @@ description: >-
   Reference to the index file in the team memory directory, used in the
   write-a-memory instructions to point at where the per-memory pointer line
   goes.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SYSTEM_PROMPT_MEMORY_TEAM_INDEX_FILE_REF_VAR_0
   - SYSTEM_PROMPT_MEMORY_TEAM_INDEX_FILE_REF_VAR_1

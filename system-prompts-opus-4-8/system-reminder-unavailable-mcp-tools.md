@@ -3,7 +3,7 @@ name: 'System Reminder: Unavailable MCP tools'
 description: >-
   Meta context block listing MCP tools excluded because their input schemas
   would be rejected by the Anthropic API, told to explain exclusions if asked.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SYSTEM_REMINDER_UNAVAILABLE_MCP_TOOLS_VAR_0
   - SYSTEM_REMINDER_UNAVAILABLE_MCP_TOOLS_VAR_1

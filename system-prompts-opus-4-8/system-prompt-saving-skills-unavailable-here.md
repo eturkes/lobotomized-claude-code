@@ -3,7 +3,7 @@ name: 'System Prompt: Saving skills unavailable here'
 description: >-
   Saving-skills notice; the model can't create/change skills in this session and
   should point the user to their claude.ai settings.
-ccVersion: null
+ccVersion: 2.1.218
 -->
 # Saving skills
 

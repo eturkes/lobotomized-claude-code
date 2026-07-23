@@ -3,7 +3,7 @@ name: 'System Reminder: Model changed this session'
 description: >-
   Injected when the session model is switched mid-conversation, telling the
   model its new identity
-ccVersion: null
+ccVersion: 2.1.187
 variables:
   - MODEL_NAME
 -->

@@ -3,7 +3,7 @@ name: 'Tool Result: Artifact Files Total Size Exceeded'
 description: >-
   Artifact multi-file publish error returned to the model when the combined size
   of all files in a version exceeds the per-version limit.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_FILES_TOTAL_SIZE_EXCEEDED_VAR_0
   - TOOL_RESULT_ARTIFACT_FILES_TOTAL_SIZE_EXCEEDED_VAR_1

@@ -3,7 +3,7 @@ name: Agent Proxy Environment Note
 description: >-
   Concise agent-proxy/TLS guidance stored via rDt and injected into the <env>
   'useful information about the environment' context block the model reads.
-ccVersion: null
+ccVersion: 2.1.187
 variables:
   - SYSTEM_PROMPT_AGENT_PROXY_ENV_NOTE_VAR_0
   - SYSTEM_PROMPT_AGENT_PROXY_ENV_NOTE_VAR_1

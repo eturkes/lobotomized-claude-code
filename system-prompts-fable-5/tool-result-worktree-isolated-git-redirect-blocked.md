@@ -3,7 +3,7 @@ name: 'Tool Result: Worktree-isolated git redirect blocked'
 description: >-
   Bash-tool refusal returned to the model when a worktree-isolated agent's
   command would redirect git into the shared checkout.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_WORKTREE_ISOLATED_GIT_REDIRECT_BLOCKED_VAR_0
   - TOOL_RESULT_WORKTREE_ISOLATED_GIT_REDIRECT_BLOCKED_VAR_1

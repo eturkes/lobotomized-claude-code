@@ -4,7 +4,7 @@ description: >-
   EnterWorktree error when the existing worktree directory is registered under a
   different repository than expected; tells the user to remove it or pick
   another name.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_WORKTREE_RESUME_FOREIGN_REPO_VAR_0
   - TOOL_RESULT_WORKTREE_RESUME_FOREIGN_REPO_VAR_1

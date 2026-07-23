@@ -4,7 +4,7 @@ description: >-
   Core interactive-agent identity and harness instructions for the lean
   system-prompt arm: terminal Markdown output, permission modes, hook feedback,
   parallel tools, clickable file refs.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - OUTPUT_STYLE_CONFIG
   - SECURITY_NOTE

@@ -3,7 +3,7 @@ name: 'Slash Command: Ultrareview local diff too large'
 description: >-
   Ultrareview precondition error shown when the local diff exceeds the file/line
   limits, suggesting a closer base branch or splitting the change.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - SLASH_COMMAND_ULTRAREVIEW_DIFF_TOO_LARGE_VAR_0
   - SLASH_COMMAND_ULTRAREVIEW_DIFF_TOO_LARGE_VAR_1

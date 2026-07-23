@@ -3,7 +3,7 @@ name: 'Tool Result: Worktree git guard — cd into shared checkout before git'
 description: >-
   Refusal clause: the command changes directory into the shared checkout before
   running git.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_BASH_WORKTREE_GIT_CHDIR_SHARED_CHECKOUT_VAR_0
 -->

@@ -4,6 +4,6 @@ description: >-
   Parenthetical in the Artifact tool description (multi-file publish variant)
   noting that relative supporting-file sources are read from under the given
   root directory.
-ccVersion: null
+ccVersion: 2.1.218
 -->
  (relative sources read from under the given root directory)

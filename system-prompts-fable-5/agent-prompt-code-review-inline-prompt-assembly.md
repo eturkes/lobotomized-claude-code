@@ -3,7 +3,7 @@ name: 'Agent Prompt: Code-review inline prompt assembly'
 description: >-
   Shell template that concatenates the review target, findings text, and
   verification-phase fragments into the inline code-review prompt.
-ccVersion: null
+ccVersion: 2.1.218
 variables:
   - AGENT_PROMPT_CODE_REVIEW_INLINE_PROMPT_ASSEMBLY_VAR_0
   - AGENT_PROMPT_CODE_REVIEW_INLINE_PROMPT_ASSEMBLY_VAR_1
