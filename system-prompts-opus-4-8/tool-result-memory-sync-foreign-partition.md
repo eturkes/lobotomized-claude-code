@@ -1,9 +1,10 @@
 <!--
-name: 'Tool result: Memory sync disabled (foreign partition)'
+name: 'Tool Result: Memory sync foreign partition'
 description: >-
-  Model-facing memory-sync warning returned by iSo() as PostToolUse
-  additionalContext after a memory write, telling the model the write was saved
-  locally but not synced due to a foreign-partition mount.
-ccVersion: 2.1.199
+  Tool-result note that a directory already holds another memory store's synced
+  content, so writes here are saved locally but not synced.
+ccVersion: 2.1.219
+variables:
+  - TOOL_RESULT_MEMORY_SYNC_FOREIGN_PARTITION_VAR_0
 -->
-Memory sync is disabled for this file's directory: it contains sync state from a different memory store (mount_dir_foreign_partition). This write was saved locally but is NOT being synced to shared/server memory. Remove or relocate the conflicting directory to re-enable sync.
+Memory sync is disabled for this file's directory: it already holds the synced memory of a different memory store (mount_dir_foreign_partition), so writes here are saved locally but are NOT synced to shared/server memory. To resolve it, rename or relocate the conflicting directory team/${TOOL_RESULT_MEMORY_SYNC_FOREIGN_PARTITION_VAR_0.mountName}/ — sync re-enables automatically on the next sync cycle once it is out of the way (within the hour at most, sooner on the next write or restart); deleting it instead discards any unsynced files inside it, and writing new files into it first keeps sync disabled — 

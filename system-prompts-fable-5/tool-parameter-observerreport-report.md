@@ -1,8 +1,8 @@
 <!--
-name: ObserverReport Report Param
+name: 'Tool Parameter: ObserverReport report'
 description: >-
-  Model-facing input-schema description for the ObserverReport tool's report
-  parameter.
-ccVersion: 2.1.201
+  Description of the ObserverReport tool's required `report` string input,
+  injected into the tool's JSON input schema the model reads.
+ccVersion: 2.1.218
 -->
-The report to deliver to the observed agent. Be concise and specific.
+The report to deliver to your report target. Be concise and specific.

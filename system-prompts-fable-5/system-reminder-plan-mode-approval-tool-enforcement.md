@@ -4,9 +4,11 @@ description: >-
   Requires plan mode turns to end with either AskUserQuestion for clarification
   or ExitPlanMode for plan approval, and forbids asking for approval any other
   way
-ccVersion: 2.1.118
+ccVersion: 2.1.219
 variables:
   - EXIT_PLAN_MODE_TOOL
   - ASK_USER_QUESTION_TOOL_NAME
+  - WORKSHOP_END_TURN_OPTION
+  - PLAN_MODE_END_TURN_CONFIG
 -->
-End every plan-mode turn with either ${ASK_USER_QUESTION_TOOL_NAME} (to clarify requirements or choose between approaches) or ${EXIT_PLAN_MODE_TOOL.name} (to request plan approval). Don't end any other way. Request plan approval only via ${EXIT_PLAN_MODE_TOOL.name} — not text, not ${ASK_USER_QUESTION_TOOL_NAME}.
+End every plan-mode turn with either ${ASK_USER_QUESTION_TOOL_NAME} (to clarify requirements or choose between approaches) or ${EXIT_PLAN_MODE_TOOL.name} (to request plan approval)${WORKSHOP_END_TURN_OPTION}. Don't stop for any other reason — those are the ${PLAN_MODE_END_TURN_CONFIG.workshopActive?"3":"2"} valid endings. Never request plan approval via text or ${ASK_USER_QUESTION_TOOL_NAME} — ${EXIT_PLAN_MODE_TOOL.name} is the only valid path.

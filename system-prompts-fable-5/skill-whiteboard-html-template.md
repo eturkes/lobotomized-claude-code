@@ -4,35 +4,50 @@ description: >-
   The whiteboard canvas template.html bundled with the whiteboard skill,
   extracted to the skill base directory for Claude to publish and edit as the
   whiteboard artifact.
-ccVersion: 2.1.218
+ccVersion: 2.1.219
 -->
 <title>Whiteboard — sketch architecture at wireframe fidelity</title>
 <script>
 "use strict";
 const CSS = \`
+  /* Claude Design System (CDS) token literals, inlined because artifacts render self-contained
+     (no network, no injected --cds-* vars); the board's own tokens resolve through them. */
   :root{
-    --ground:#fbfaf6; --grid:#dcd8cc; --ink:#20272b; --muted:#7a8388;
-    --accent:#2c6fb3; --claude:#d97706; --sticky:#f4e187; --sticky-ink:#3b3320; --panel:#fffefa;
-    --shadow:0 1px 0 rgba(20,25,30,.06), 0 8px 24px rgba(20,25,30,.10);
+    --cds-surface-0:#f9f9f7; --cds-surface-2:#ffffff;
+    --cds-text-primary:#0b0b0b; --cds-text-secondary:#52514e;
+    --cds-border:rgba(11,11,11,.1); --cds-text-accent:#184f95; --cds-fill-accent:#2a78d6; --cds-on-accent:#ffffff;
+    --cds-shadow-md:0 2px 4px 0 rgba(11,11,11,.07), 0 6px 16px 0 rgba(11,11,11,.08);
+    --ground:var(--cds-surface-0); --grid:var(--cds-border); --ink:var(--cds-text-primary); --muted:var(--cds-text-secondary);
+    --accent:var(--cds-text-accent); --panel:var(--cds-surface-2); --shadow:var(--cds-shadow-md);
+    --claude:#d97706; --sticky:#f4e187; --sticky-ink:#3b3320;
     --ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     --hand:"Segoe Print","Bradley Hand","Marker Felt","Comic Sans MS","Chalkboard SE",cursive;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --ground:#1c2226; --grid:#2b3439; --ink:#e4e7e2; --muted:#8b9599;
-      --accent:#78aee8; --claude:#f0a24a; --sticky:#c9b25a; --sticky-ink:#231d0d; --panel:#242b30;
-      --shadow:0 1px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+      --cds-surface-0:#0d0d0d; --cds-surface-1:#1a1a19; --cds-surface-2:#2c2c2a;
+      --cds-text-primary:#ffffff; --cds-text-secondary:#c3c2b7;
+      --cds-border:rgba(255,255,255,.1); --cds-text-accent:#6da7ec;
+      --cds-shadow-md:0 2px 4px 0 rgba(11,11,11,.07), 0 6px 16px 0 rgba(0,0,0,.24);
+      --ground:var(--cds-surface-1); /* dark: the board is the lower surface, chrome floats above it */
+      --claude:#f0a24a; --sticky:#c9b25a; --sticky-ink:#231d0d;
     }
   }
   :root[data-theme="dark"]{
-    --ground:#1c2226; --grid:#2b3439; --ink:#e4e7e2; --muted:#8b9599;
-    --accent:#78aee8; --claude:#f0a24a; --sticky:#c9b25a; --sticky-ink:#231d0d; --panel:#242b30;
-    --shadow:0 1px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+    --cds-surface-0:#0d0d0d; --cds-surface-1:#1a1a19; --cds-surface-2:#2c2c2a;
+    --cds-text-primary:#ffffff; --cds-text-secondary:#c3c2b7;
+    --cds-border:rgba(255,255,255,.1); --cds-text-accent:#6da7ec;
+    --cds-shadow-md:0 2px 4px 0 rgba(11,11,11,.07), 0 6px 16px 0 rgba(0,0,0,.24);
+    --ground:var(--cds-surface-1); /* dark: the board is the lower surface, chrome floats above it */
+    --claude:#f0a24a; --sticky:#c9b25a; --sticky-ink:#231d0d;
   }
   :root[data-theme="light"]{
-    --ground:#fbfaf6; --grid:#dcd8cc; --ink:#20272b; --muted:#7a8388;
-    --accent:#2c6fb3; --claude:#d97706; --sticky:#f4e187; --sticky-ink:#3b3320; --panel:#fffefa;
-    --shadow:0 1px 0 rgba(20,25,30,.06), 0 8px 24px rgba(20,25,30,.10);
+    --cds-surface-0:#f9f9f7; --cds-surface-2:#ffffff;
+    --cds-text-primary:#0b0b0b; --cds-text-secondary:#52514e;
+    --cds-border:rgba(11,11,11,.1); --cds-text-accent:#184f95;
+    --cds-shadow-md:0 2px 4px 0 rgba(11,11,11,.07), 0 6px 16px 0 rgba(11,11,11,.08);
+    --ground:var(--cds-surface-0); /* a light stamp over a dark OS must undo the dark board mapping */
+    --claude:#d97706; --sticky:#f4e187; --sticky-ink:#3b3320;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0}
@@ -65,7 +80,7 @@ const CSS = \`
   .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .btn[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
-  .btn.primary{background:var(--accent);color:var(--ground);border-color:var(--accent)}
+  .btn.primary{background:var(--cds-fill-accent);color:var(--cds-on-accent);border-color:var(--cds-fill-accent)}
   .btn:disabled{opacity:.4;cursor:default}
 
   .zoombar{position:fixed;right:14px;bottom:12px;display:flex;gap:2px;align-items:center;background:var(--panel);border:1.5px solid var(--ink);border-radius:10px 7px 11px 8px;padding:3px;box-shadow:var(--shadow)}
@@ -89,7 +104,7 @@ const CSS = \`
   .toast{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:7px 12px;border-radius:8px;font-size:12px;opacity:0;transition:opacity .18s ease;pointer-events:none}
   .toast.show{opacity:1}
 
-  .modal{position:fixed;inset:0;background:rgba(10,14,18,.55);display:none;place-items:center;padding:24px;z-index:10}
+  .modal{position:fixed;inset:0;background:rgba(11,11,11,.55);display:none;place-items:center;padding:24px;z-index:10}
   .modal.open{display:grid}
   .modal .card{background:var(--panel);color:var(--ink);border:1.5px solid var(--ink);border-radius:12px 8px 13px 9px;padding:14px;max-width:min(920px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
   .modal .card header{display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -105,7 +120,7 @@ const MARKUP = \`
 <canvas id="board" class="crosshair" aria-label="Whiteboard canvas"></canvas>
 <div class="brand">
   <h1>whiteboard</h1>
-  <p><span class="lede">Sketch your idea here — Claude reads this board.</span> Draw boxes, arrows, and notes, then hit <b>Send to Claude</b> to hand it over.</p>
+  <p><span class="lede">Sketch your idea here — Claude reads this board.</span> Draw boxes, arrows, and notes, then hit <b>Send to Claude</b> to hand it over. Orange marks are Claude's — rework them as you like.</p>
 </div>
 <div class="toolbar" role="toolbar" aria-label="Drawing tools">
   <button class="tb" data-tool="select" aria-pressed="false" title="Select and move (V)"><svg viewBox="0 0 24 24"><path d="M6 3l12 9-5.5 1.5L11 20 6 3z"/></svg><span class="key">V</span></button>
@@ -212,7 +227,8 @@ function main(){
   // sessionStorage. Multiplayer merging waits for CRDTs.
   const KEY = 'wb-v0', SESSION = 'wb-session';
   const selfCap = () => (window.claude && window.claude.self) || null;
-  let readOnly = false, inflight = false, unsent = false;
+  let readOnly = false, inflight = false, unsent = false, blockedChip = '';
+  const pingBtn = document.getElementById('pingBtn');
   const sync = document.getElementById('sync'), syncText = document.getElementById('syncText');
   function setSync(s, txt){ sync.dataset.s = s; syncText.textContent = txt; }
 
@@ -289,52 +305,94 @@ function main(){
   }
   // escape every "<" so nothing a viewer types can close the JSON block or open a tag
   function esc(s){ return JSON.stringify(s).replace(/</g, '\\\\u003c'); }
+  // the board keeps the name it was published with; re-escape the decoded title for the head
+  function escHtml(s){ return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function buildPage(ping){
     // rebuild the full document from the same three sources this page was authored from;
     // the JSON block comes first so a reading session finds the board state without running JS
     const state = {v: 1, els: els, savedAt: Date.now(), pingCount: ping ? ping.n : pingCount, ping: ping || null};
     return '<!doctype html><html><head><meta charset="utf-8">'
-      + '<title>Whiteboard — sketch architecture at wireframe fidelity</title></head><body>'
+      + '<title>' + escHtml(document.title || 'Whiteboard — sketch architecture at wireframe fidelity') + '</title></head><body>'
       + '<!-- whiteboard state (boxes, labels, arrows, ping marker) is the JSON block below -->'
       + '<script type="application/json" id="wb-state">' + esc(state) + '<\\/script>'
       + '<script>const CSS=' + esc(CSS) + ';const MARKUP=' + esc(MARKUP) + ';'
       + main.toString() + ';' + boot.toString() + ';boot();'
       + '<\\/script></body></html>';
   }
-  function goLocal(msg){
-    readOnly = true; saveLocal(); syncStatus();
-    if(msg) toast(msg);
-  }
+  function goLocal(){ readOnly = true; saveLocal(); syncStatus(); }
   function syncStatus(){
     if(inflight){ setSync('saving', 'sending to Claude…'); return; }
-    if(unsent) setSync('local', selfCap() && !readOnly ? 'saved here · not sent yet' : 'saved on this device');
+    if(blockedChip){ setSync('local', blockedChip); return; } // the reason stays visible while Send is off
+    if(unsent) setSync('local', readOnly ? 'saved on this device' : 'saved here · not sent yet');
     else setSync('idle', 'saved · in sync with what Claude last saw');
   }
+  // the runtime can attach window.claude a beat after this script (script-order skew), so give
+  // it a few seconds before concluding the permissions module is absent
+  async function runtimeReady(){
+    for(let i = 0; i < 20 && !(window.claude && window.claude.permissions); i++)
+      await new Promise(r => setTimeout(r, 250));
+  }
+  // state() resolves a state or rejects with a capability code; a rejection, 'unavailable', or a
+  // runtime with no permissions module all mean this view cannot send, and a reload changes none.
+  async function sendAccess(){
+    await runtimeReady();
+    if(!(window.claude && window.claude.permissions)) return window.claude ? 'capability_disabled' : 'no_runtime';
+    try{ return await window.claude.permissions.state('self'); }
+    catch(err){ return (err && err.code) || 'unavailable'; }
+  }
+  // states that never change for this view; anything else (upstream_error, rate_limited, an
+  // unknown code) is transient and leaves Send live for the next attempt
+  const PERMANENT = ['no_runtime', 'denied', 'consent_required', 'not_writer', 'not_granted', 'not_declared',
+                     'capability_disabled', 'capability_removed', 'unavailable'];
+  // 'denied' / 'consent_required' are the viewer's own choice; not_granted / not_declared mean the
+  // board itself lacks send access; the rest can't be fixed from here, so copy stays ownership-neutral.
+  function blockedMessage(state){
+    if(state === 'no_runtime') return 'This view only saves on this device. Send to Claude needs the shared artifact runtime.';
+    if(state === 'denied' || state === 'consent_required') return 'Sending is off for this visit. Your sketch saves on this device.';
+    if(state === 'not_writer') return 'You can view this board but not send it. It belongs to someone else.';
+    if(state === 'not_granted' || state === 'not_declared')
+      return 'Send to Claude isn\\'t available on this board. Your sketch still saves on this device. Ask Claude to republish the board to reconnect it.';
+    return 'Send to Claude isn\\'t available in this view. Your sketch still saves on this device.';
+  }
+  function disableSend(state){
+    pingBtn.disabled = true;
+    pingBtn.title = blockedMessage(state);
+    blockedChip = (state === 'denied' || state === 'consent_required')
+      ? 'Sending is off this visit · saved on this device'
+      : 'Send to Claude is unavailable here · saved on this device';
+    if(window.console && console.warn) console.warn('whiteboard send blocked', state);
+    goLocal();
+    toast(pingBtn.title, 7000);
+  }
   async function ensureGrant(){
-    // resolve the viewer's consent up front rather than letting publish reject blind
-    const perms = window.claude && window.claude.permissions;
-    if(!perms) return 'granted'; // older runtime: let publish() decide
-    try{
-      let s = await perms.state('self');
-      if(s === 'prompt'){ const r = await perms.request(['self']); s = r.self || 'unavailable'; }
-      return s;
-    }catch(_){ return 'granted'; }
+    let s = await sendAccess();
+    if(s === 'prompt'){
+      try{ const r = await window.claude.permissions.request(['self']); s = (r && r.self) || 'unavailable'; }
+      catch(err){ s = (err && err.code) || 'unavailable'; }
+    }
+    return s;
+  }
+  // settle the button once at load: a board that can never reach Claude says so up front
+  // instead of letting the first click discover it
+  async function primeSend(){
+    const s = await sendAccess();
+    if(s === 'granted' || s === 'prompt') return; // the viewer's OK is asked inside the click gesture
+    if(PERMANENT.indexOf(s) !== -1) disableSend(s); // a transient answer leaves Send live for the next try
   }
   // every edit lands on this device; nothing leaves the browser until Send to Claude
   function persist(){ unsent = true; saveLocal(); saveSession(); syncStatus(); }
   async function sendToClaude(){
     if(inflight) return;
-    if(!selfCap()){ toast('Sending needs the shared artifact — this view can only save on this device.'); return; }
-    if(readOnly){ toast('This view can\\'t write to the shared artifact, so it can\\'t send.'); return; }
+    if(readOnly){ toast(pingBtn.title || 'This view can\\'t write to the shared artifact, so it can\\'t send.', 7000); return; }
     if(!els.length){ toast('The board is empty — sketch something first.'); return; }
     if(editing) commitEdit();
     inflight = true; syncStatus(); saveSession();
     const grant = await ensureGrant();
     if(grant !== 'granted'){
       inflight = false;
-      goLocal(grant === 'denied'
-        ? 'Sending is off for this visit — the board keeps saving on this device.'
-        : 'This view can\\'t send to Claude (no permission to republish). Saving on this device meanwhile.');
+      if(PERMANENT.indexOf(grant) !== -1){ disableSend(grant); return; }
+      if(window.console && console.warn) console.warn('whiteboard send blocked', grant);
+      syncStatus(); toast('Couldn\\'t send to Claude. The board is still saved here. Try again in a moment. (error: ' + grant + ')');
       return;
     }
     const ping = {n: pingCount + 1, at: new Date().toISOString()};
@@ -349,14 +407,13 @@ function main(){
       const code = (err && err.code) || 'upstream_error';
       if(window.console && console.warn) console.warn('whiteboard send rejected', code, err && err.message);
       if(code === 'conflict'){ return; } // a newer version won and this view reloads to it
-      if(code === 'not_writer'){ goLocal('You can look at this board but not send it — this artifact belongs to someone else.'); return; }
-      if(code === 'consent_required' || code === 'not_granted' || code === 'not_declared' ||
-         code === 'capability_disabled' || code === 'capability_removed'){
-        goLocal('This view can\\'t send to Claude (' + code + ') — a fresh reload usually fixes it. Saving on this device meanwhile.');
+      if(code === 'not_writer' || code === 'consent_required' || code === 'not_granted' ||
+         code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed'){
+        disableSend(code);
         return;
       }
       if(code === 'rate_limited'){ syncStatus(); toast('Sending too fast — give it a few seconds and hit Send again.'); return; }
-      syncStatus(); toast('Couldn\\'t send to Claude (' + code + '); the board is still saved here — try again.');
+      syncStatus(); toast('Couldn\\'t send to Claude. The board is still saved here. Try again in a moment. (error: ' + code + ')');
     });
   }
 
@@ -1102,10 +1159,10 @@ function main(){
 
   // ---------- toast ----------
   let toastTimer = null;
-  function toast(msg){
+  function toast(msg, ms){
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), ms || 2600);
   }
 
   // ---------- export ----------
@@ -1159,7 +1216,7 @@ function main(){
   syncStatus();
   drawClawd(0);
   checkWaiting();
-  if(!selfCap()) toast('This view can only save on this device — Send to Claude needs the shared artifact runtime.');
+  primeSend();
   resize();
 }
 

@@ -4,36 +4,44 @@ description: >-
   Step-by-step instructions for migrating existing code to newer Claude models,
   covering breaking changes, deprecated parameters, per-SDK syntax,
   prompt-behavior shifts, and migration checklists
-ccVersion: 2.1.142
+ccVersion: 2.1.219
 -->
 # Model Migration Guide
 
-> **If you arrived via \`/claude-api migrate\`:** this is the right file. Execute the steps below in order — do not summarize them back to the user. Start with Step 0 (confirm scope) before touching any file.
+> If you arrived via \`/claude-api migrate\`: this is the right file. Execute the steps below in order. Start with Step 0 (confirm scope) before touching any file.
 
 How to move existing code to newer Claude models. Covers breaking changes, deprecated parameters, and drop-in replacements for retired models.
 
-For the latest, authoritative version (with code samples in every supported language), WebFetch the **Migration Guide** URL from \`shared/live-sources.md\`. Use this file for the consolidated, skill-resident reference; fall back to the live docs whenever a model launch or breaking change may have shifted the picture.
+For the latest authoritative version (with code samples in every supported language), WebFetch the **Migration Guide** URL from \`shared/live-sources.md\`. Use this file as the consolidated, skill-resident reference; fall back to the live docs when a model launch or breaking change may have shifted the picture.
 
-**This file is large.** Use the section names below to jump (or \`Grep\` this file for the heading text). Read Step 0 and Step 1 first — they apply to every migration. Then read only the per-target section for the model you are migrating to.
+This file is large. Use the section names below to jump (or \`Grep\` for the heading text). Read Step 0 and Step 1 first — they apply to every migration. Then read only the per-target section for the model you are migrating to.
 
 | Section | When you need it |
 |---|---|
 | Step 0: Confirm the migration scope | Always — before any edits |
 | Step 1: Classify each file | Always — decides whether to swap, add-alongside, or skip |
-| Per-SDK Syntax Reference | Translate the Python examples in this guide to TypeScript / Go / Ruby / Java / C# / PHP |
+| Per-SDK Syntax Reference | Translate the Python examples to TypeScript / Go / Ruby / Java / C# / PHP |
 | Destination Models / Retired Model Replacements | Picking a target model |
 | Breaking Changes by Source Model | Migrating to Opus 4.6 / Sonnet 4.6 |
 | Migrating to Opus 4.7 | Migrating to Opus 4.7 (breaking changes, silent defaults, behavioral shifts) |
-| Opus 4.7 Migration Checklist | The required vs optional items for 4.7, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Opus 4.7 Migration Checklist | Required vs optional items for 4.7, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Migrating to Opus 4.8 | Migrating to Opus 4.8 (no new breaking changes; mid-session system prompts; behavioral re-tuning) |
+| Opus 4.8 Migration Checklist | Required vs optional items for 4.8, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Migrating to {{OPUS_NAME}} | Migrating Opus 4.8 → {{OPUS_NAME}} (thinking-disabled effort-gated; mid-conversation tool changes; verbosity, over-verification, and scope re-tuning) |
+| {{OPUS_NAME}} Migration Checklist | Required vs optional items for {{OPUS_NAME}}, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Migrating to {{SONNET_NEXT_NAME}} | Migrating Sonnet 4.6 → {{SONNET_NEXT_NAME}} (adaptive thinking on by default; non-default sampling params 400; new tokenizer; \`xhigh\` effort for coding/agentic; high-res vision; behavioral re-tuning) |
+| {{SONNET_NEXT_NAME}} Migration Checklist | Required vs optional items, tagged \`[BLOCKS]\` / \`[TUNE]\` |
+| Migrating to {{FABLE_NAME}} | Migrating to {{FABLE_NAME}} or {{MYTHOS_NAME}} (always-on thinking, raw CoT never returned, refusal handling, data retention, behavioral shifts) |
+| {{FABLE_NAME}} Migration Checklist | Required vs optional items for {{FABLE_NAME}}, tagged \`[BLOCKS]\` / \`[TUNE]\` |
 | Verify the Migration | After edits — runtime spot-check |
 
-**TL;DR:** Change the model ID string. If you were using \`budget_tokens\`, switch to \`thinking: {type: "adaptive"}\`. If you were using assistant prefills, they 400 on both Opus 4.6 and Sonnet 4.6 — switch to one of the prefill replacements (most often \`output_config.format\`; see the table in Breaking Changes by Source Model). If you're moving from Sonnet 4.5 to Sonnet 4.6, set \`effort\` explicitly — 4.6 defaults to \`high\`. Remove the \`effort-2025-11-24\` and \`fine-grained-tool-streaming-2025-05-14\` beta headers (GA on 4.6); remove \`interleaved-thinking-2025-05-14\` once you're on adaptive thinking (keep it only while using the transitional \`budget_tokens\` escape hatch). Then drop back from \`client.beta.messages.create\` to \`client.messages.create\`. Dial back any aggressive "critical: YOU must" tool instructions; 4.6 follows the system prompt much more closely.
+**TL;DR:** Change the model ID string. If you used \`budget_tokens\`, switch to \`thinking: {type: "adaptive"}\`. Assistant prefills 400 on both Opus 4.6 and Sonnet 4.6 — switch to a prefill replacement (most often \`output_config.format\`; see Breaking Changes by Source Model). Moving Sonnet 4.5 → Sonnet 4.6: set \`effort\` explicitly — 4.6 defaults to \`high\`. Remove the \`effort-2025-11-24\` and \`fine-grained-tool-streaming-2025-05-14\` beta headers (GA on 4.6); remove \`interleaved-thinking-2025-05-14\` once on adaptive thinking (keep it only while using the transitional \`budget_tokens\` escape hatch). Then drop from \`client.beta.messages.create\` back to \`client.messages.create\`. Dial back aggressive "CRITICAL: YOU MUST" tool instructions; 4.6 follows the system prompt much more closely.
 
 ---
 
 ## Step 0: Confirm the migration scope
 
-**Before any Write, Edit, or MultiEdit call, confirm the scope.** If the user's request does not explicitly name a single file, a specific directory, or an explicit file list, **ask first — do not start editing**. This is non-negotiable: even imperative-sounding requests like "migrate my codebase", "move my project to X", "upgrade to Sonnet 4.6", or bare "migrate to Opus 4.7" leave the scope ambiguous and require a clarifying question. Phrases like "my project", "my code", "my codebase", "the whole thing", "everywhere", or "across the repo" are **ambiguous, not directive** — they tell you *what* to do but not *where*. Ask before doing.
+Before any Write, Edit, or MultiEdit call, confirm the scope. If the request does not name a single file, a specific directory, or an explicit file list, ask first — do not start editing. Even imperative-sounding requests like "migrate my codebase", "move my project to X", "upgrade to Sonnet 4.6", or bare "migrate to Opus 4.7" leave the scope ambiguous. Phrases like "my project", "my code", "the whole thing", "everywhere", or "across the repo" tell you *what* to do, not *where* — they are not directive about scope.
 
 Offer the common scopes explicitly and wait for the answer before touching any file:
 
@@ -41,9 +49,9 @@ Offer the common scopes explicitly and wait for the answer before touching any f
 2. A specific subdirectory (e.g. \`src/\`, \`app/\`, \`services/billing/\`)
 3. A specific file or a list of files
 
-Surface this as a single clarifying question so the user can answer in one turn. **Proceed without asking only when the scope is already unambiguous** — the user named an exact file ("migrate \`extract.py\` to Sonnet 4.6"), pointed at a specific directory ("migrate everything under \`services/billing/\` to Opus 4.6"), listed specific files ("update \`a.py\` and \`b.py\`"), or already answered the scope question in an earlier turn. If you can answer the question "which files is this change going to touch?" with a precise list from the prompt alone, proceed. If not, ask.
+Surface this as a single clarifying question. Proceed without asking only when the scope is already unambiguous — the user named an exact file ("migrate \`extract.py\` to Sonnet 4.6"), pointed at a directory ("migrate everything under \`services/billing/\` to Opus 4.6"), listed files ("update \`a.py\` and \`b.py\`"), or already answered the scope question earlier. If you can answer "which files will this change touch?" with a precise list from the prompt alone, proceed. If not, ask.
 
-**Worked example.** If the user says *"Move my project to Opus 4.6. I want adaptive thinking everywhere it makes sense."* you do not know whether "my project" means the whole working directory, just \`src/\`, just the production code, or something else — the \`everywhere\` makes the intent clear (update every call site *within scope*) but the scope itself is still not defined. Do not start editing. Respond with:
+**Worked example.** *"Move my project to Opus 4.6. I want adaptive thinking everywhere it makes sense."* — \`everywhere\` makes the intent clear (every call site *within scope*) but the scope itself is undefined. Do not start editing. Respond:
 
 > Before I start editing, can you confirm the scope? I can migrate:
 > 1. Every \`.py\` file in the working directory
@@ -52,7 +60,7 @@ Surface this as a single clarifying question so the user can answer in one turn.
 >
 > Which one?
 
-Then wait for the answer. The same applies to *"Migrate to Opus 4.7"* and bare *"Help me upgrade to Sonnet 4.6"* — ask before editing.
+Then wait. Same for *"Migrate to Opus 4.7"* and bare *"Help me upgrade to Sonnet 4.6"*.
 
 **Sizing the scope question (large repos).** Before asking, get a per-directory count so the user can pick concretely:
 
@@ -60,39 +68,39 @@ Then wait for the answer. The same applies to *"Migrate to Opus 4.7"* and bare *
 rg -l "<old-model-id>" --type-not md | cut -d/ -f1 | sort | uniq -c | sort -rn
 \`\`\`
 
-Present the breakdown in your scope question (e.g. *"Found 217 references across 3 directories: api/ (130), api-go/ (62), routing/ (25). Which to migrate?"*). Also confirm \`git status\` is clean before surveying — unexpected modifications mean a concurrent process; stop and investigate before proceeding.
+Present the breakdown (e.g. *"Found 217 references across 3 directories: api/ (130), api-go/ (62), routing/ (25). Which to migrate?"*). Confirm \`git status\` is clean before surveying — unexpected modifications mean a concurrent process; stop and investigate.
 
 ---
 
 ## Step 1: Classify each file
 
-Not every file that contains the old model ID is a **caller** of the API. Before editing, classify each file into one of these buckets — the right action differs:
+Not every file containing the old model ID is a **caller** of the API. Classify each file before editing — the right action differs:
 
 | # | Bucket | What it looks like | Action |
 |---|---|---|---|
-| 1 | **Calls the API/SDK** | \`client.messages.create(model=…)\`, \`anthropic.Anthropic()\`, request payloads | Swap the model ID **and** apply the breaking-change checklist for the target version (below). |
-| 2 | **Defines or serves the model** | Model registries, OpenAPI specs, routing/queue configs, model-policy enums, generated catalogs | The old entry **stays** (the model is still served). Ask whether to (a) add the new model alongside, (b) leave alone, or (c) retire the old model — never blind-replace. **If you can't ask, default to (a): add the new model alongside and flag it** — replacing would de-register a model that's still in production. |
+| 1 | **Calls the API/SDK** | \`client.messages.create(model=…)\`, \`anthropic.Anthropic()\`, request payloads | Swap the model ID **and** apply the breaking-change checklist for the target version. |
+| 2 | **Defines or serves the model** | Model registries, OpenAPI specs, routing/queue configs, model-policy enums, generated catalogs | The old entry stays (the model is still served). Ask whether to (a) add the new model alongside, (b) leave alone, or (c) retire the old model — don't blind-replace. If you can't ask, default to (a) and flag it — replacing would de-register a model still in production. |
 | 3 | **References the ID as an opaque string** | UI fallback constants, capability-gate substring checks, generic test fixtures, label parsers, env defaults | Usually swap the string and verify any parser/regex/substring match handles the new ID — but check the sub-cases below first. |
-| 4 | **Suffixed variant ID** | \`claude-<model>-<suffix>\` like \`-fast\`, \`-1024k\`, \`-200k\`, \`[1m]\`, dated snapshots | These are deployment/routing identifiers, not the public model ID. **Do not assume a new-model equivalent exists.** Verify in the registry first; if absent, leave the string alone and flag it. |
+| 4 | **Suffixed variant ID** | \`claude-<model>-<suffix>\` like \`-fast\`, \`-1024k\`, \`-200k\`, \`[1m]\`, dated snapshots | Deployment/routing identifiers, not the public model ID. Don't assume a new-model equivalent exists. Verify in the registry first; if absent, leave the string and flag it. Exception: \`-fast\` strings (e.g. \`claude-opus-4-6-fast\`) are handled by the Fast Mode section below, which rewrites them to Opus 4.8 plus \`speed="fast"\` and the \`fast-mode-2026-02-01\` beta rather than leaving them in place. |
 
 **Bucket 3 sub-cases — before swapping a string reference, check:**
 
-- **Capability gate** (e.g. \`if 'opus-4-6' in model_id:\` enables a feature) → **add the new ID alongside**, don't replace. The old model is still served and still has the capability, so replacing would silently disable the feature for any old-model traffic that still flows through. If you know no old-model traffic will hit this gate (single-caller codebase fully migrating), replacing is fine; if unsure, add alongside.
-- **Registry-assert test** (e.g. \`assert "claude-X" in supported_models\`, \`test_X_has_N_clusters\`) → **add an assertion for the new model alongside; keep the old one.** The old model is still served, so its assertion stays valid — but the registry should also include the new model, so assert that too. Heuristic: if the test references multiple model versions in a list, it's a registry test; if one model in a struct compared only to itself, it's a generic fixture.
-- **Frozen / generated snapshot** → **regenerate**, don't hand-edit.
-- **Coupled to a definer** (e.g. an integration test that passes model authorization via a shared \`conftest\` seed list, or asserts on a billing-tier / rate-limit-group enum or a generated SKU/pricing catalog) → **verify the definer has a new-model entry first.** If not, add a seed entry (reusing the nearest existing tier as a placeholder); if you can't confidently do that, ask the user how to populate the definer. **Do not skip the test.** Swapping without populating the definer will make the test fail at runtime.
+- **Capability gate** (e.g. \`if 'opus-4-6' in model_id:\` enables a feature) → add the new ID alongside, don't replace. The old model is still served and still has the capability, so replacing would silently disable the feature for old-model traffic. If no old-model traffic hits this gate (single-caller codebase fully migrating), replacing is fine; if unsure, add alongside.
+- **Registry-assert test** (e.g. \`assert "claude-X" in supported_models\`, \`test_X_has_N_clusters\`) → add an assertion for the new model alongside; keep the old one. Heuristic: multiple model versions in a list → registry test; one model in a struct compared only to itself → generic fixture.
+- **Frozen / generated snapshot** → regenerate, don't hand-edit.
+- **Coupled to a definer** (e.g. an integration test passing model authorization via a shared \`conftest\` seed list, or asserting on a billing-tier / rate-limit-group enum or a generated SKU/pricing catalog) → verify the definer has a new-model entry first. If not, add a seed entry (reusing the nearest existing tier as a placeholder); if you can't do that confidently, ask. Don't skip the test — swapping without populating the definer fails at runtime.
 
-When migrating tests specifically: breaking parameters (\`temperature\`, \`top_p\`, \`budget_tokens\`) are usually absent — test fixtures rarely set sampling params on placeholder models. The breaking-change scan is still required, but expect mostly clean results.
+When migrating tests specifically: breaking parameters (\`temperature\`, \`top_p\`, \`budget_tokens\`) are usually absent — fixtures rarely set sampling params on placeholder models. The breaking-change scan is still required, but expect mostly clean results.
 
-**Find intentionally-flagged sync points first.** Many codebases tag spots that must change at every model launch with comment markers like \`MODEL LAUNCH\`, \`KEEP IN SYNC\`, \`@model-update\`, or similar. Grep for whatever convention the repo uses *before* the broad model-ID grep — those markers point at the load-bearing changes.
+**Find intentionally-flagged sync points first.** Many codebases tag spots that must change at every model launch with markers like \`MODEL LAUNCH\`, \`KEEP IN SYNC\`, \`@model-update\`. Grep for the repo's convention *before* the broad model-ID grep — those markers point at the load-bearing changes.
 
 ---
 
 ## Per-SDK Syntax Reference
 
-Code examples in this guide are Python. **The same fields exist in every official Anthropic SDK** — Stainless generates all 7 from the same OpenAPI spec, so JSON field names map 1:1 with only case-convention differences. Use the rows below to translate the Python examples to the SDK you are migrating.
+Code examples here are Python. The same fields exist in every official Anthropic SDK — Stainless generates all 7 from the same OpenAPI spec, so JSON field names map 1:1 with only case-convention differences. Use the rows below to translate.
 
-> **Verify type and method names against the SDK source before writing them into customer code.** WebFetch the relevant repository from the SDK source-code table in \`shared/live-sources.md\` (one row per SDK) and confirm the exact symbol — particularly for typed SDKs (Go, Java, C#) where union/builder names can differ from the JSON shape. Do not guess type names that aren't in the table below or in \`<lang>/claude-api/README.md\`.
+> Verify type and method names against the SDK source before writing them into customer code. WebFetch the relevant repository from the SDK source-code table in \`shared/live-sources.md\` (one row per SDK) and confirm the exact symbol — especially for typed SDKs (Go, Java, C#) where union/builder names can differ from the JSON shape. Don't guess type names not in the table below or in \`<lang>/claude-api/README.md\`.
 
 <!-- The rows below were verified against each SDK's \`synced/model-launch-april\` branch. -->
 
@@ -152,28 +160,22 @@ For any field not in these tables, the JSON key in the Python example translates
 
 ## Explain every change you make
 
-Migration edits often look arbitrary to a user who hasn't read the release notes — a removed \`temperature\`, a deleted prefill, a rewritten system-prompt sentence. **For each edit, tell the user what you changed and why**, tied to the specific API or behavioral change that motivates it. Do this in your summary as you work, not just at the end.
+For each edit, tell the user what changed and why, and state the behavioral shift that motivates it. For example: "4.6 follows instructions more literally than 4.5, so \`CRITICAL: YOU MUST use this tool\` will overtrigger — dialing it back to \`Use this tool when…\` stops the overtriggering without losing the intent." The behavioral-shift rationale calibrates the user's judgment about *why* a change is needed, which is different from just quoting before/after text.
 
-Be especially explicit about **system-prompt edits**. Users are rightly protective of their prompts, and prompt-tuning changes are judgment calls (not hard API requirements). For any prompt edit:
-
-- Quote the before and after text.
-- State the behavioral shift that motivates it (e.g. *"Opus 4.7 calibrates response length to task complexity, so I added an explicit length instruction"*, or *"4.6 follows instructions more literally, so 'critical: YOU must use the search tool' will now overtrigger — softened to 'Use the search tool when…'"*).
-- Make clear which prompt edits are **optional tuning** (tone, length, subagent guidance) versus which code edits are **required to avoid a 400** (sampling params, \`budget_tokens\`, prefills). Never present an optional prompt change as mandatory.
-
-If you're applying several prompt-tuning edits at once, offer them as a short list the user can accept or decline item-by-item rather than silently rewriting their system prompt.
+For prompt-tuning edits, quote before/after text, distinguish optional tuning from code edits required to avoid a 400, and offer a list the user can accept item-by-item. Don't present an optional prompt change as mandatory — if skipping it won't cause an error, say so.
 
 ---
 
 ## Before You Migrate
 
-1. **Confirm the target model ID.** Use only the exact strings from \`shared/models.md\` — do not append date suffixes to aliases (\`claude-opus-4-6\`, not \`claude-opus-4-6-20251101\`). Guessing an ID will 404.
-2. **Check which features your code uses** with this checklist:
+1. **Confirm the target model ID.** Use only the exact strings from \`shared/models.md\` — don't append date suffixes to aliases (\`claude-opus-4-6\`, not \`claude-opus-4-6-20251101\`). Guessing an ID will 404.
+2. **Check which features your code uses:**
    - \`thinking: {type: "enabled", budget_tokens: N}\` → migrate to adaptive thinking on Opus 4.6 / Sonnet 4.6 (still functional but deprecated)
    - Assistant-turn prefills (\`messages\` ending with \`role: "assistant"\`) → must change on Opus 4.6 / Sonnet 4.6 (returns 400)
    - \`output_format\` parameter on \`messages.create()\` → must change on all models (deprecated API-wide)
-   - \`max_tokens > ~16000\` → must stream on any model (above ~16K risks SDK HTTP timeouts). When streaming, Sonnet 4.6 / Haiku 4.5 cap at 64K and Opus 4.6 caps at 128K
+   - \`max_tokens > ~16000\` → must stream on any model. When streaming, every current model reaches 128K except Haiku 4.5, which caps at 64K
    - Beta headers \`effort-2025-11-24\`, \`fine-grained-tool-streaming-2025-05-14\`, \`interleaved-thinking-2025-05-14\` → GA on 4.6, remove them and switch from \`client.beta.messages.create\` to \`client.messages.create\`
-   - Moving Sonnet 4.5 → Sonnet 4.6 with no \`effort\` set → 4.6 defaults to \`high\`, which may change your latency/cost profile
+   - Moving Sonnet 4.5 → Sonnet 4.6 with no \`effort\` set → 4.6 defaults to \`high\`, changing latency/cost
    - System prompts with \`CRITICAL\`, \`MUST\`, \`If in doubt, use X\` language → likely to overtrigger on 4.6 (see Prompt-Behavior Changes)
    - Coming from 3.x / 4.0 / 4.1: also check sampling params (\`temperature\` + \`top_p\`), tool versions (\`text_editor_20250728\`), \`refusal\` + \`model_context_window_exceeded\` stop reasons, trailing-newline tool-param handling
 3. **Test on a single request first.** Run one call against the new model, inspect the response, then roll out.
@@ -184,12 +186,16 @@ If you're applying several prompt-tuning edits at once, offer them as a short li
 
 | If you're on…                         | Migrate to         | Why                                               |
 | ------------------------------------- | ------------------ | ------------------------------------------------- |
-| Opus 4.6                              | \`claude-opus-4-7\`  | Most capable model; adaptive thinking only; high-res vision; see Migrating to Opus 4.7 |
-| Opus 4.0 / 4.1 / 4.5 / Opus 3         | \`claude-opus-4-6\`  | Most intelligent 4.x before 4.7; adaptive thinking; 128K output |
-| Sonnet 4.0 / 4.5 / 3.7 / 3.5          | \`claude-sonnet-4-6\`| Best speed / intelligence balance; adaptive thinking; 64K output |
+| Claude Mythos Preview (\`claude-mythos-preview\`) | \`{{MYTHOS_ID}}\` (Project Glasswing successor) or \`{{FABLE_ID}}\` (GA) | Same tokenizer family — mostly a model-ID swap; remove \`thinking\` config and prefill; see Migrating to {{FABLE_NAME}} |
+| Opus 4.8                              | \`{{OPUS_ID}}\` | The current Opus. Two breaking changes (thinking on by default; disabling thinking capped at \`high\` effort) plus prompt re-tuning — see Migrating to {{OPUS_NAME}} |
+| Opus 4.7                              | \`{{OPUS_ID}}\` | Apply the Opus 4.8 section (prompt re-tuning, no new breaking changes), then the {{OPUS_NAME}} section |
+| Opus 4.6                              | \`{{OPUS_ID}}\` | Apply the Opus 4.7 breaking changes, then 4.8 re-tuning, then the {{OPUS_NAME}} section |
+| Opus 4.0 / 4.1 / 4.5 / Opus 3         | \`{{OPUS_ID}}\` | Apply 4.6 → 4.7 → 4.8 → {{OPUS_NAME}} in order (adaptive thinking, drop sampling params, then re-tune) |
+| Sonnet 4.6                            | \`{{SONNET_NEXT_ID}}\` | Near-Opus quality on agentic and coding work at Sonnet cost; adaptive thinking on by default; see Migrating to {{SONNET_NEXT_NAME}} |
+| Sonnet 4.0 / 4.5 / 3.7 / 3.5          | \`{{SONNET_NEXT_ID}}\` | Apply the Sonnet 4.6 changes first, then the {{SONNET_NEXT_NAME}} section |
 | Haiku 3 / 3.5                         | \`claude-haiku-4-5\` | Fastest and most cost-effective                   |
 
-Default to the latest Opus for the caller's tier unless they explicitly chose otherwise. If you're moving from Opus 4.5 or older directly to Opus 4.7, apply the 4.6 migration first, then layer the Opus 4.7 changes on top (see Migrating to Opus 4.7 below).
+Default to the latest Opus for the caller's tier unless they explicitly chose otherwise. The Opus migrations layer: on Opus 4.6 or older, apply each version's section in order up to your target (e.g. 4.5 → 4.8 means the 4.6, 4.7, and 4.8 sections in sequence). A 4.7 → 4.8 move has no new breaking changes — see Migrating to Opus 4.8.
 
 ---
 
@@ -199,21 +205,21 @@ These models return 404 — update immediately:
 
 | Retired model                 | Retired       | Drop-in replacement  |
 | ----------------------------- | ------------- | -------------------- |
-| \`claude-3-7-sonnet-20250219\`  | Feb 19, 2026  | \`claude-sonnet-4-6\`  |
+| \`claude-3-7-sonnet-20250219\`  | Feb 19, 2026  | \`{{SONNET_NEXT_ID}}\` |
 | \`claude-3-5-haiku-20241022\`   | Feb 19, 2026  | \`claude-haiku-4-5\`   |
-| \`claude-3-opus-20240229\`      | Jan 5, 2026   | \`claude-opus-4-7\`    |
-| \`claude-3-5-sonnet-20241022\`  | Oct 28, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-3-5-sonnet-20240620\`  | Oct 28, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-3-sonnet-20240229\`    | Jul 21, 2025  | \`claude-sonnet-4-6\`  |
-| \`claude-2.1\`, \`claude-2.0\`    | Jul 21, 2025  | \`claude-sonnet-4-6\`  |
+| \`claude-3-opus-20240229\`      | Jan 5, 2026   | \`claude-opus-4-8\`    |
+| \`claude-3-5-sonnet-20241022\`  | Oct 28, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-3-5-sonnet-20240620\`  | Oct 28, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-3-sonnet-20240229\`    | Jul 21, 2025  | \`{{SONNET_NEXT_ID}}\` |
+| \`claude-2.1\`, \`claude-2.0\`    | Jul 21, 2025  | \`{{SONNET_NEXT_ID}}\` |
 
 ## Deprecated Models (retiring soon)
 
 | Model                         | Retires       | Replacement          |
 | ----------------------------- | ------------- | -------------------- |
 | \`claude-3-haiku-20240307\`     | Apr 19, 2026  | \`claude-haiku-4-5\`   |
-| \`claude-opus-4-20250514\`      | June 15, 2026 | \`claude-opus-4-7\`    |
-| \`claude-sonnet-4-20250514\`    | June 15, 2026 | \`claude-sonnet-4-6\`  |
+| \`claude-opus-4-20250514\`      | June 15, 2026 | \`claude-opus-4-8\`    |
+| \`claude-sonnet-4-20250514\`    | June 15, 2026 | \`{{SONNET_NEXT_ID}}\` |
 
 ---
 
@@ -221,7 +227,7 @@ These models return 404 — update immediately:
 
 ### Migrating from Sonnet 4.5 to Sonnet 4.6 (effort default change)
 
-Sonnet 4.5 had no \`effort\` parameter; Sonnet 4.6 defaults to \`high\`. If you just switch the model string and do nothing else, you may see noticeably higher latency and token usage. Set \`effort\` explicitly.
+Sonnet 4.5 had no \`effort\` parameter; Sonnet 4.6 defaults to \`high\`. Just switching the model string can give noticeably higher latency and token usage. Set \`effort\` explicitly.
 
 **Recommended starting points:**
 
@@ -229,7 +235,7 @@ Sonnet 4.5 had no \`effort\` parameter; Sonnet 4.6 defaults to \`high\`. If you 
 | ------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- |
 | Chat, classification, content generation          | \`low\`          | With \`thinking: {"type": "disabled"}\` you'll see similar or better performance vs. Sonnet 4.5 no-thinking |
 | Most applications (balanced)                      | \`medium\`       | The default sweet spot for quality vs. cost                                                              |
-| Agentic coding, tool-heavy workflows              | \`medium\`       | Pair with adaptive thinking and a generous \`max_tokens\` (up to 64K with streaming — Sonnet 4.6's ceiling) |
+| Agentic coding, tool-heavy workflows              | \`medium\`       | Pair with adaptive thinking and a generous \`max_tokens\` (up to 128K with streaming — Sonnet 4.6's ceiling) |
 | Autonomous multi-step agents, long-horizon loops  | \`high\`         | Scale down to \`medium\` if latency/tokens become a concern                                                 |
 | Computer-use agents                               | \`high\` + adaptive | Sonnet 4.6's best computer-use accuracy is on adaptive + high                                          |
 
@@ -245,13 +251,13 @@ client.messages.create(
 )
 \`\`\`
 
-**When to use Opus 4.6 instead:** hardest and longest-horizon problems — large code migrations, deep research, extended autonomous work. Sonnet 4.6 wins on fast turnaround and cost efficiency.
+**When to use Opus 4.6 instead:** hardest and longest-horizon problems — large code migrations, deep research, extended autonomous work. Sonnet 4.6 wins on fast turnaround and cost.
 
 ### Migrating to Opus 4.6 / Sonnet 4.6 (from any older model)
 
 **1. Manual extended thinking is deprecated — use adaptive thinking.**
 
-\`thinking: {type: "enabled", budget_tokens: N}\` (manual extended thinking with a fixed token budget) is deprecated on Opus 4.6 and Sonnet 4.6. Replace it with \`thinking: {type: "adaptive"}\`, which lets Claude decide when and how much to think. Adaptive thinking also enables interleaved thinking automatically (no beta header needed).
+\`thinking: {type: "enabled", budget_tokens: N}\` is deprecated on Opus 4.6 and Sonnet 4.6. Replace with \`thinking: {type: "adaptive"}\`, which lets Claude decide when and how much to think (and enables interleaved thinking automatically — no beta header).
 
 \`\`\`python
 # Old (still works on older models, deprecated on 4.6)
@@ -264,7 +270,7 @@ response = client.messages.create(
 
 # New (Opus 4.6 / Sonnet 4.6)
 response = client.messages.create(
-    model="claude-opus-4-6", # or "claude-sonnet-4-6"
+    model="claude-opus-4-6",  # or "claude-sonnet-4-6"
     max_tokens=16000,
     thinking={"type": "adaptive"},
     output_config={"effort": "high"},  # optional: low | medium | high | max
@@ -272,36 +278,36 @@ response = client.messages.create(
 )
 \`\`\`
 
-Adaptive thinking is the long-term target, and on internal evaluations it outperforms manual extended thinking. Move when you can.
+Adaptive thinking is the long-term target and outperforms manual extended thinking on internal evaluations. Move when you can.
 
-**Transitional escape hatch:** manual extended thinking is still *functional* on Opus 4.6 and Sonnet 4.6 (deprecated, will be removed in a future release). If you need a hard ceiling while migrating — for example, to bound token spend on a runaway workload before you've tuned \`effort\` — you can keep \`budget_tokens\` around alongside an explicit \`effort\` value, then remove it in a follow-up. \`budget_tokens\` must be strictly less than \`max_tokens\`:
+**Transitional escape hatch:** manual extended thinking is still *functional* on Opus 4.6 and Sonnet 4.6 (deprecated, removed in a future release). To bound token spend on a runaway workload before you've tuned \`effort\`, keep \`budget_tokens\` alongside an explicit \`effort\` value, then remove it in a follow-up. \`budget_tokens\` must be strictly less than \`max_tokens\`:
 
 \`\`\`python
 # Transitional only — deprecated, plan to remove
 client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=16384,
-    thinking={"type": "enabled", "budget_tokens": 8192}, # must be < max_tokens
+    thinking={"type": "enabled", "budget_tokens": 8192},  # must be < max_tokens
     output_config={"effort": "medium"},
     messages=[...],
 )
 \`\`\`
 
-If the user asks for a "thinking budget" on 4.6, the preferred answer is \`effort\` — use \`low\`, \`medium\`, \`high\`, or \`max\` (Opus-tier only — not Sonnet or Haiku) rather than a token count.
+If the user asks for a "thinking budget" on 4.6, prefer \`effort\` — \`low\`, \`medium\`, \`high\`, or \`max\` rather than a token count.
 
 **2. Effort parameter (Opus 4.5, Opus 4.6, Sonnet 4.6 only).**
 
-Controls thinking depth and overall token spend. Goes inside \`output_config\`, not top-level. Default is \`high\`. \`max\` is Opus-tier only (Opus 4.6 and later — not Sonnet or Haiku). Errors on Sonnet 4.5 and Haiku 4.5.
+Controls thinking depth and overall token spend. Goes inside \`output_config\`, not top-level. Default is \`high\`. \`max\` is supported on Fable 5, Opus 4.6 and later, Sonnet 5, and Sonnet 4.6 — it errors on Sonnet 4.5 and Haiku 4.5.
 
 \`\`\`python
-output_config={"effort": "medium"} # often the best cost / quality balance
+output_config={"effort": "medium"}  # often the best cost / quality balance
 \`\`\`
 
 ### Migrating to the 4.6 family (Opus 4.6 and Sonnet 4.6)
 
 **3. Assistant-turn prefills return 400 (Opus 4.6 and Sonnet 4.6).**
 
-Prefilled responses on the final assistant turn are no longer supported on either Opus 4.6 or Sonnet 4.6 — both return a 400. Adding assistant messages *elsewhere* in the conversation (e.g., for few-shot examples) still works. Pick the replacement that matches what the prefill was doing:
+Prefilled responses on the final assistant turn are unsupported on both Opus 4.6 and Sonnet 4.6 — both return 400. Adding assistant messages *elsewhere* (e.g. few-shot examples) still works. Pick the replacement matching what the prefill did:
 
 | Prefill was used for                               | Replacement                                                                                                                               |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -328,9 +334,9 @@ response = client.messages.create(
 )
 \`\`\`
 
-**4. Stream for \`max_tokens > ~16K\` (all models); Opus 4.6 alone reaches 128K.**
+**4. Stream for \`max_tokens > ~16K\` (all models); only Haiku 4.5 caps lower, at 64K.**
 
-Non-streaming requests hit SDK HTTP timeouts at high \`max_tokens\`, regardless of model — stream for anything above ~16K output. The streamable ceiling differs by model: Sonnet 4.6 and Haiku 4.5 cap at 64K, and Opus 4.6 alone goes up to 128K.
+Non-streaming requests hit SDK HTTP timeouts at high \`max_tokens\` regardless of model — stream for anything above ~16K output. Streamable ceiling is 128K for every current model except Haiku 4.5, which caps at 64K.
 
 \`\`\`python
 with client.messages.stream(model="claude-opus-4-6", max_tokens=64000, ...) as stream:
@@ -339,19 +345,19 @@ with client.messages.stream(model="claude-opus-4-6", max_tokens=64000, ...) as s
 
 **5. Tool-call JSON escaping may differ (Opus 4.6 and Sonnet 4.6).**
 
-Both 4.6 models can produce tool call \`input\` fields with Unicode or forward-slash escaping. Always parse with \`json.loads()\` / \`JSON.parse()\` — never raw-string-match the serialized input.
+Both 4.6 models can produce tool call \`input\` fields with Unicode or forward-slash escaping. Parse with \`json.loads()\` / \`JSON.parse()\` — don't raw-string-match the serialized input.
 
 ### All models
 
 **6. \`output_format\` → \`output_config.format\` (API-wide).**
 
-The old top-level \`output_format\` parameter on \`messages.create()\` is deprecated. Use \`output_config.format\` instead. This is not 4.6-specific — applies to every model.
+The top-level \`output_format\` parameter on \`messages.create()\` is deprecated. Use \`output_config.format\`. Applies to every model.
 
 ---
 
 ## Beta Headers to Remove on 4.6
 
-Several beta headers that were required on 4.5 are now GA on 4.6 and should be removed. Leaving them in is harmless but misleading; removing them also lets you move from \`client.beta.messages.create(...)\` back to \`client.messages.create(...)\`.
+Several beta headers required on 4.5 are now GA on 4.6 and should be removed. Leaving them is harmless but misleading; removing them lets you move from \`client.beta.messages.create(...)\` back to \`client.messages.create(...)\`.
 
 | Header                                    | Status on 4.6                                              | Action                                                  |
 | ----------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
@@ -361,7 +367,7 @@ Several beta headers that were required on 4.5 are now GA on 4.6 and should be r
 | \`token-efficient-tools-2025-02-19\`        | Built in to all Claude 4+ models                           | Remove (no effect)                                      |
 | \`output-128k-2025-02-19\`                  | Built in to Claude 4+ models                               | Remove (no effect)                                      |
 
-Once you remove all of these and finish moving to adaptive thinking, you can switch the SDK call site from the beta namespace back to the regular one:
+Once all are removed and you've moved to adaptive thinking, switch the call site from the beta namespace back to the regular one:
 
 \`\`\`python
 # Before
@@ -384,23 +390,23 @@ response = client.messages.create(
 
 ## Additional Changes When Coming from 3.x / 4.0 / 4.1 → 4.6
 
-If you're jumping from Opus 4.1, Sonnet 4, Sonnet 3.7, or an older Claude 3.x model directly to 4.6, apply everything above *plus* the items in this section. Users already on Opus 4.5 / Sonnet 4.5 can skip this.
+Jumping from Opus 4.1, Sonnet 4, Sonnet 3.7, or an older Claude 3.x model directly to 4.6: apply everything above *plus* this section. Users already on Opus 4.5 / Sonnet 4.5 can skip this.
 
 **1. Sampling parameters: \`temperature\` OR \`top_p\`, not both.**
 
-Passing both will error on every Claude 4+ model:
+Passing both errors on every Claude 4+ model:
 
 \`\`\`python
 # Old (3.x only — errors on 4+)
 client.messages.create(temperature=0.7, top_p=0.9, ...)
 
 # New
-client.messages.create(temperature=0.7, ...) # or top_p, not both
+client.messages.create(temperature=0.7, ...)  # or top_p, not both
 \`\`\`
 
 **2. Update tool versions.**
 
-Legacy tool versions are not supported on 4+. **Both the \`type\` and the \`name\` field change** — \`text_editor_20250728\` and \`str_replace_based_edit_tool\` are a pair; updating one without the other 400s. Also remove the \`undo_edit\` command from your text-editor integration:
+Legacy tool versions are unsupported on 4+. Both the \`type\` and the \`name\` field change — \`text_editor_20250728\` and \`str_replace_based_edit_tool\` are a pair; updating one without the other 400s. Also remove the \`undo_edit\` command:
 
 | Old                                               | New                                                     |
 | ------------------------------------------------- | ------------------------------------------------------- |
@@ -418,7 +424,7 @@ tools = [{"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"}
 
 **3. Handle the \`refusal\` stop reason.**
 
-Claude 4+ can return \`stop_reason: "refusal"\` on the response. If your code only handles \`end_turn\` / \`tool_use\` / \`max_tokens\`, add a branch:
+Claude 4+ can return \`stop_reason: "refusal"\`. If your code only handles \`end_turn\` / \`tool_use\` / \`max_tokens\`, add a branch:
 
 \`\`\`python
 if response.stop_reason == "refusal":
@@ -428,7 +434,7 @@ if response.stop_reason == "refusal":
 
 **4. Handle the \`model_context_window_exceeded\` stop reason (4.5+).**
 
-Distinct from \`max_tokens\`: it means the model hit the *context window* limit, not the requested output cap. Handle both:
+Distinct from \`max_tokens\`: it means the *context window* limit, not the requested output cap. Handle both:
 
 \`\`\`python
 if response.stop_reason == "model_context_window_exceeded":
@@ -441,19 +447,19 @@ elif response.stop_reason == "max_tokens":
 
 **5. Trailing newlines preserved in tool call string parameters (4.5+).**
 
-4.5 and 4.6 preserve trailing newlines that older models stripped. If your tool implementations do exact string matching against tool-call \`input\` values (e.g., \`if name == "foo"\`), verify they still match when the model sends \`"foo\\n"\`. Normalizing with \`.rstrip()\` on the receiving side is usually the simplest fix.
+4.5 and 4.6 preserve trailing newlines older models stripped. If tool implementations exact-match against tool-call \`input\` values (e.g. \`if name == "foo"\`), verify they still match when the model sends \`"foo\\n"\`. Normalizing with \`.rstrip()\` on the receiving side is usually the simplest fix.
 
 **6. Haiku: rate limits reset between generations.**
 
-Haiku 4.5 has its own rate-limit pool separate from Haiku 3 / 3.5. If you're ramping traffic as you migrate, check your tier's Haiku 4.5 limits at [API rate limits](https://platform.claude.com/docs/en/api/rate-limits) — a quota that comfortably served Haiku 3.5 traffic may need a tier bump for the same volume on 4.5.
+Haiku 4.5 has its own rate-limit pool separate from Haiku 3 / 3.5. If ramping traffic, check your tier's Haiku 4.5 limits at [API rate limits](https://platform.claude.com/docs/en/api/rate-limits) — a quota that served Haiku 3.5 may need a tier bump for the same volume on 4.5.
 
 ---
 
 ## Prompt-Behavior Changes (Opus 4.5 / 4.6, Sonnet 4.6)
 
-These don't break your code, but prompts that worked on 4.5-and-earlier may over- or under-trigger on 4.6. Tune as needed.
+These don't break code, but prompts that worked on 4.5-and-earlier may over- or under-trigger on 4.6. Tune as needed.
 
-**1. Aggressive instructions cause overtriggering.** Opus 4.5 and 4.6 follow the system prompt much more closely than earlier models. Prompts written to *overcome* the old reluctance are now too aggressive:
+**1. Aggressive instructions cause overtriggering.** Opus 4.5 and 4.6 follow the system prompt much more closely. Prompts written to *overcome* the old reluctance are now too aggressive:
 
 | Before (worked on 4.0 / 4.5)                | After (use on 4.6)                        |
 | ------------------------------------------- | ----------------------------------------- |
@@ -461,19 +467,19 @@ These don't break your code, but prompts that worked on 4.5-and-earlier may over
 | \`Default to using [tool]\`                   | \`Use [tool] when it would improve X\`      |
 | \`If in doubt, use [tool]\`                   | *(delete — no longer needed)*             |
 
-If the model is now overtriggering a tool or skill, the fix is almost always to dial back the language, not to add more guardrails.
+If the model now overtriggers a tool or skill, the fix is almost always to dial back the language, not add more guardrails.
 
-**2. Overthinking and excessive exploration (Opus 4.6).** At higher \`effort\` settings, Opus 4.6 explores more before answering. If that burns too many thinking tokens, lower \`effort\` first (\`medium\` is often the sweet spot) before adding prose instructions to constrain reasoning.
+**2. Overthinking and excessive exploration (Opus 4.6).** At higher \`effort\`, Opus 4.6 explores more before answering. If that burns too many thinking tokens, lower \`effort\` first (\`medium\` is often the sweet spot) before adding prose to constrain reasoning.
 
-**3. Overeager subagent spawning (Opus 4.6).** Opus 4.6 has a strong preference for delegating to subagents. If you see it spawning a subagent for something a direct \`grep\` or \`read\` would solve, add guidance: *"Use subagents only for parallel or independent workstreams. For single-file reads or sequential operations, work directly."*
+**3. Overeager subagent spawning (Opus 4.6).** Opus 4.6 strongly prefers delegating to subagents. If it spawns one for something a direct \`grep\` or \`read\` would solve, add: *"Use subagents only for parallel or independent workstreams. For single-file reads or sequential operations, work directly."*
 
-**4. Overengineering (Opus 4.5 / 4.6).** Both models may add extra files, abstractions, or defensive error handling beyond what was asked. If you want minimal changes, prompt for it explicitly: *"Only make changes directly requested. Don't add helpers, abstractions, or error handling for scenarios that can't happen."*
+**4. Overengineering (Opus 4.5 / 4.6).** Both may add extra files, abstractions, or defensive error handling beyond what was asked. For minimal changes: *"Only make changes directly requested. Don't add helpers, abstractions, or error handling for scenarios that can't happen."*
 
-**5. LaTeX math output (Opus 4.6).** Opus 4.6 defaults to LaTeX (\`\\frac{}{}\`, \`$...$\`) for math and technical content. If you need plain text, instruct it explicitly: *"Format all math as plain text — no LaTeX, no \`$\`, no \`\\frac{}{}\`. Use \`/\` for division and \`^\` for exponents."*
+**5. LaTeX math output (Opus 4.6).** Opus 4.6 defaults to LaTeX (\`\\frac{}{}\`, \`$...$\`) for math and technical content. For plain text: *"Format all math as plain text — no LaTeX, no \`$\`, no \`\\frac{}{}\`. Use \`/\` for division and \`^\` for exponents."*
 
-**6. Skipped verbal summaries (4.6 family).** The 4.6 models are more concise and may skip the summary paragraph after a tool call, jumping straight to the next action. If you rely on those summaries for visibility, add: *"After completing a task that involves tool use, provide a brief summary of what you did."*
+**6. Skipped verbal summaries (4.6 family).** The 4.6 models are more concise and may skip the summary paragraph after a tool call. If you rely on those summaries: *"After completing a task that involves tool use, provide a brief summary of what you did."*
 
-**7. "Think" as a trigger word (Opus 4.5 with thinking disabled).** When \`thinking\` is off, Opus 4.5 is particularly sensitive to the word *think* and may reason more than you want. Use \`consider\`, \`evaluate\`, or \`reason through\` instead.
+**7. "Think" as a trigger word (Opus 4.5 with thinking disabled).** When \`thinking\` is off, Opus 4.5 is sensitive to the word *think* and may reason more than wanted. Use \`consider\`, \`evaluate\`, or \`reason through\` instead.
 
 ---
 
@@ -481,20 +487,45 @@ If the model is now overtriggering a tool or skill, the fix is almost always to 
 
 | Old string (migration source)  | New string         |
 | ------------------------------ | ------------------ |
-| \`claude-opus-4-6\`              | \`claude-opus-4-7\`  |
-| \`claude-opus-4-5\`              | \`claude-opus-4-7\`  |
-| \`claude-opus-4-1\`              | \`claude-opus-4-7\`  |
-| \`claude-opus-4-0\`              | \`claude-opus-4-7\`  |
-| \`claude-sonnet-4-5\`            | \`claude-sonnet-4-6\`|
-| \`claude-sonnet-4-0\`            | \`claude-sonnet-4-6\`|
+| \`claude-opus-4-8\`              | \`{{OPUS_ID}}\`     |
+| \`claude-opus-4-7\`              | \`{{OPUS_ID}}\`     |
+| \`claude-opus-4-6\`              | \`{{OPUS_ID}}\`     |
+| \`claude-opus-4-5\`              | \`{{OPUS_ID}}\`     |
+| \`claude-opus-4-1\`              | \`{{OPUS_ID}}\`     |
+| \`claude-opus-4-0\`              | \`{{OPUS_ID}}\`     |
+| \`claude-sonnet-4-6\`            | \`{{SONNET_NEXT_ID}}\`|
+| \`claude-sonnet-4-5\`            | \`{{SONNET_NEXT_ID}}\`|
+| \`claude-sonnet-4-0\`            | \`{{SONNET_NEXT_ID}}\`|
 
-Older aliases (\`claude-opus-4-5\`, \`claude-sonnet-4-5\`, \`claude-opus-4-1\`, etc.) are still active and can be pinned if you need time before upgrading — see \`shared/models.md\` for the full legacy list.
+Older aliases (\`claude-opus-4-7\`, \`claude-opus-4-6\`, \`claude-opus-4-5\`, \`claude-sonnet-4-6\`, \`claude-sonnet-4-5\`, etc.) are still active and can be pinned if you need time before upgrading — see \`shared/models.md\` for the full legacy list.
+
+### Amazon Bedrock model IDs
+
+If the code uses the \`AnthropicBedrockMantle\` client (Python \`anthropic[bedrock]\`, TypeScript \`@anthropic-ai/bedrock-sdk\`, Java \`BedrockMantleBackend\`, Go \`bedrock.NewMantleClient\`, etc.) or targets \`https://bedrock-mantle.{region}.api.aws/anthropic\`, it runs on **Claude in Amazon Bedrock**. All breaking changes in this guide apply unchanged — same Messages API shape — but model IDs carry an \`anthropic.\` provider prefix:
+
+| First-party ID | Bedrock ID |
+|---|---|
+| \`claude-opus-4-8\` | \`anthropic.claude-opus-4-8\` |
+| \`{{OPUS_ID}}\` | \`anthropic.{{OPUS_ID}}\` |
+| \`claude-opus-4-7\` | \`anthropic.claude-opus-4-7\` |
+| \`claude-haiku-4-5\` | \`anthropic.claude-haiku-4-5\` |
+| \`{{SONNET_NEXT_ID}}\` | \`anthropic.{{SONNET_NEXT_ID}}\` |
+
+When migrating a Bedrock file, apply the same rename-table row as first-party, then keep/add the \`anthropic.\` prefix. Don't generate a first-party \`claude-*\` ID for a Bedrock client — it will 400.
+
+**Skip for Bedrock:** the \`code_execution_*\` tool-version item and the **Task Budgets** section — both are first-party-only (Bedrock doesn't support server-side Anthropic tools or the \`task-budgets-2026-03-13\` beta). Everything else — \`effort\`, adaptive/extended thinking, \`output_config.format\`, \`thinking.display\`, fine-grained tool streaming, token counting — is available on Bedrock.
+
+> **Out of scope:** the legacy Amazon Bedrock integration (\`InvokeModel\` / \`Converse\` APIs with ARN-versioned IDs like \`anthropic.claude-3-5-sonnet-20241022-v2:0\`) uses a different request shape and model-ID format. This guide doesn't cover it; WebFetch the Bedrock page in \`shared/live-sources.md\` if migrating between the two Bedrock integrations.
+
+### Claude Platform on AWS
+
+If the code uses \`AnthropicAWS\` / \`AnthropicAws\` / \`anthropicaws.NewClient\` / \`AnthropicAwsClient\` (or targets \`https://aws-external-anthropic.{region}.api.aws\`), it runs on **Claude Platform on AWS** — Anthropic-operated, same-day API parity. Model IDs are bare first-party strings; apply the rename table above verbatim and every breaking-change section unchanged. Nothing to skip. Don't add an \`anthropic.\` prefix (that's Amazon Bedrock, a separate offering). See \`shared/claude-platform-on-aws.md\` for client/auth details.
 
 ---
 
 ## Migration Checklist
 
-Every item is tagged: **\`[BLOCKS]\`** items cause a 400 error, infinite loop, silent timeout, or wrong tool selection if missed — apply these as code edits, not as suggestions. **\`[TUNE]\`** items are quality/cost adjustments.
+\`[BLOCKS]\` items cause a 400 error, infinite loop, silent timeout, or wrong tool selection if missed — apply these as code edits, not suggestions. \`[TUNE]\` items are quality/cost adjustments.
 
 For each file that calls \`messages.create()\` / equivalent SDK method:
 
@@ -503,8 +534,8 @@ For each file that calls \`messages.create()\` / equivalent SDK method:
 - [ ] **[BLOCKS]** Move \`format\` from top-level \`output_format\` into \`output_config.format\`
 - [ ] **[BLOCKS]** Remove any assistant-turn prefills if targeting Opus 4.6 or Sonnet 4.6 (see the prefill replacement table)
 - [ ] **[BLOCKS]** Switch to streaming if \`max_tokens > ~16000\` (otherwise SDK HTTP timeout)
-- [ ] **[TUNE]** Verify tool-input handling parses JSON rather than raw-string-matching the serialized input (4.6 may escape Unicode / forward slashes differently; most SDKs already expose \`block.input\` as a parsed object)
-- [ ] **[TUNE]** Set \`output_config={"effort": "..."}\` explicitly — especially when moving Sonnet 4.5 → Sonnet 4.6 (4.6 defaults to \`high\`)
+- [ ] **[TUNE]** Verify tool-input handling parses JSON rather than raw-string-matching the serialized input (4.6 may escape Unicode / forward slashes differently)
+- [ ] **[TUNE]** Set \`output_config={"effort": "..."}\` explicitly — especially moving Sonnet 4.5 → Sonnet 4.6 (4.6 defaults to \`high\`)
 - [ ] **[TUNE]** Remove GA beta headers: \`effort-2025-11-24\`, \`fine-grained-tool-streaming-2025-05-14\`, \`token-efficient-tools-2025-02-19\`, \`output-128k-2025-02-19\`; remove \`interleaved-thinking-2025-05-14\` once on adaptive thinking
 - [ ] **[TUNE]** Switch \`client.beta.messages.create(...)\` → \`client.messages.create(...)\` once all betas are removed
 - [ ] **[TUNE]** Review system prompt for aggressive tool language (\`CRITICAL:\`, \`MUST\`, \`If in doubt\`) and dial it back
@@ -512,7 +543,7 @@ For each file that calls \`messages.create()\` / equivalent SDK method:
 **Extra items when coming from 3.x / 4.0 / 4.1:**
 - [ ] **[BLOCKS]** Remove either \`temperature\` or \`top_p\` (passing both 400s on Claude 4+)
 - [ ] **[BLOCKS]** Update text-editor tool \`type\` to \`text_editor_20250728\`
-- [ ] **[BLOCKS]** Update text-editor tool \`name\` to \`str_replace_based_edit_tool\` — **changing only the \`type\` and keeping \`name: "str_replace_editor"\` returns a 400**
+- [ ] **[BLOCKS]** Update text-editor tool \`name\` to \`str_replace_based_edit_tool\` — changing only the \`type\` and keeping \`name: "str_replace_editor"\` returns a 400
 - [ ] **[BLOCKS]** Update code-execution tool to \`code_execution_20250825\`
 - [ ] **[BLOCKS]** Delete any \`undo_edit\` command call sites
 - [ ] **[TUNE]** Add handling for \`stop_reason == "refusal"\`
@@ -523,23 +554,23 @@ For each file that calls \`messages.create()\` / equivalent SDK method:
 **Verification:**
 - [ ] Run one test request and inspect \`response.stop_reason\`, \`response.usage\`, and whether tool-use / thinking behavior matches expectations
 
-For cached prompts: the render order and hash inputs did not change, so existing \`cache_control\` breakpoints keep working. However, **changing the model string invalidates the existing cache** — the first request on the new model will write the cache fresh.
+For cached prompts: render order and hash inputs didn't change, so existing \`cache_control\` breakpoints keep working. Changing the model string invalidates the existing cache — the first request on the new model writes the cache fresh.
 
 ---
 
 ## Migrating to Opus 4.7
 
-> **Model ID \`claude-opus-4-7\` is authoritative as written here.** When the user asks to migrate to Opus 4.7, write \`model="claude-opus-4-7"\` exactly. Do **not** WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
+> **Model ID \`claude-opus-4-7\` is authoritative as written here.** When the user asks to migrate to Opus 4.7, write \`model="claude-opus-4-7"\` exactly. Do not WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
 
-Claude Opus 4.7 is our most capable generally available model to date. It is highly autonomous and performs exceptionally well on long-horizon agentic work, knowledge work, vision tasks, and memory tasks. This section summarizes everything new at launch. It is layered on top of the 4.6 migration above — if the caller is jumping from Opus 4.5 or older, apply the 4.6 changes first, then apply this section.
+Claude Opus 4.7 was Anthropic's most capable model at its launch and is now the previous-generation Opus (Opus 4.8 is current — see Migrating to Opus 4.8). Highly autonomous; strong on long-horizon agentic work, knowledge work, vision, and memory. This section is the layered breaking-change path for callers coming from Opus 4.6 or older — layered on top of the 4.6 migration above. From Opus 4.5 or older: apply 4.6 first, then this section, then the 4.8 section.
 
-**TL;DR for someone already on Opus 4.6:** update the model ID to \`claude-opus-4-7\`, strip any remaining \`budget_tokens\` and sampling parameters (both 400 on Opus 4.7), give \`max_tokens\` extra headroom and re-baseline with \`count_tokens()\` against the new model, opt back into \`thinking.display: "summarized"\` if reasoning is surfaced to users, and re-tune \`effort\` — it matters more on 4.7 than on any prior Opus.
+**TL;DR for someone already on Opus 4.6:** update the model ID to \`claude-opus-4-7\`, strip any remaining \`budget_tokens\` and sampling parameters (both 400 on Opus 4.7), give \`max_tokens\` extra headroom and re-baseline with \`count_tokens()\`, opt back into \`thinking.display: "summarized"\` if reasoning is surfaced to users, and re-tune \`effort\`.
 
 ### Breaking changes (will 400 on Opus 4.7)
 
 **Extended thinking removed.**
 
-\`thinking: {type: "enabled", budget_tokens: N}\` is no longer supported on Claude Opus 4.7 or later models and returns a 400 error. Switch to adaptive thinking (\`thinking: {type: "adaptive"}\`) and use the effort parameter to control thinking depth. Adaptive thinking is **off by default** on Claude Opus 4.7: requests with no \`thinking\` field run without thinking, matching Opus 4.6 behavior. Set \`thinking: {type: "adaptive"}\` explicitly to enable it.
+\`thinking: {type: "enabled", budget_tokens: N}\` is unsupported on Claude Opus 4.7 or later and returns 400. Switch to adaptive thinking (\`thinking: {type: "adaptive"}\`) and use the effort parameter to control depth. Adaptive thinking is off by default on Opus 4.7: requests with no \`thinking\` field run without thinking. Set \`thinking: {type: "adaptive"}\` explicitly to enable it.
 
 \`\`\`python
 # Before (Opus 4.6)
@@ -555,73 +586,73 @@ client.messages.create(
     model="claude-opus-4-7",
     max_tokens=64000,
     thinking={"type": "adaptive"},
-    output_config={"effort": "high"}, # or "max", "xhigh", "medium", "low"
+    output_config={"effort": "high"},  # or "max", "xhigh", "medium", "low"
     messages=[{"role": "user", "content": "..."}],
 )
 \`\`\`
 
-If the caller wasn't using extended thinking, no change is required — thinking is off by default, or can be set explicitly with \`thinking={"type": "disabled"}\`.
+If the caller wasn't using extended thinking, no change is required — thinking is off by default, or set explicitly with \`thinking={"type": "disabled"}\`.
 
-Delete \`budget_tokens\` plumbing entirely. For the replacement \`effort\` value, see **Choosing an effort level on Opus 4.7** below — there is no exact 1:1 mapping from \`budget_tokens\`.
+Delete \`budget_tokens\` plumbing entirely. For the replacement \`effort\` value, see **Choosing an effort level on Opus 4.7** — there's no exact 1:1 mapping from \`budget_tokens\`.
 
 **Sampling parameters removed.**
 
-The \`temperature\`, \`top_p\`, and \`top_k\` parameters are no longer accepted on Claude Opus 4.7. Requests that include them return a 400 error. Remove these fields from your request payloads. Prompting is the recommended way to guide model behavior on Claude Opus 4.7. If you were using \`temperature = 0\` for determinism, note that it never guaranteed identical outputs on prior models.
+\`temperature\`, \`top_p\`, and \`top_k\` are no longer accepted on Claude Opus 4.7; requests with them return 400. Remove them. Steer behavior with prompting. If you used \`temperature = 0\` for determinism, note it never guaranteed identical outputs on prior models.
 
 \`\`\`python
 # Before — errors on Opus 4.7
 client.messages.create(temperature=0.7, top_p=0.9, ...)
 
 # After
-client.messages.create(...) # no sampling params
+client.messages.create(...)  # no sampling params
 \`\`\`
 
 - **If the intent was determinism** — use \`effort: "low"\` with a tighter prompt.
-- **If the intent was creative variance** — the prompt replacement depends on the use case; **ask the user** how they want variance elicited. If you can't ask, add a use-case-appropriate instruction along the lines of *"choose something off-distribution and interesting"* — e.g. for text generation, *"Vary your phrasing and structure across responses"*; for frontend/design, use the propose-4-directions approach under **Design and frontend coding** below.
+- **If the intent was creative variance** — the replacement depends on the use case; ask the user how they want variance elicited. If you can't ask, add a use-case-appropriate instruction like *"choose something off-distribution and interesting"* — e.g. for text, *"Vary your phrasing and structure across responses"*; for frontend/design, use the propose-4-directions approach under **Design and frontend coding**.
 
 ### Choosing an effort level on Opus 4.7
 
-\`budget_tokens\` controlled how much to *think*; \`effort\` controls how much to think *and* act, so there is no exact 1:1 mapping. **Use \`xhigh\` for best results in coding and agentic use cases, and a minimum of \`high\` for most intelligence-sensitive use cases.** Experiment with other levels to further tune token usage and intelligence:
+\`budget_tokens\` controlled how much to *think*; \`effort\` controls how much to think *and* act, so there's no exact 1:1 mapping. Use \`xhigh\` for best results in coding and agentic use cases, and a minimum of \`high\` for most intelligence-sensitive use cases. Experiment with other levels to tune token usage and intelligence:
 
 | Level | Use when | Notes |
 | --- | --- | --- |
-| \`max\` | Intelligence-demanding tasks worth testing at the ceiling | Can deliver gains in some use cases but may show diminishing returns from increased token usage; can be prone to overthinking |
-| \`xhigh\` | **Most coding and agentic use cases** | The best setting for these; used as the default in Claude Code |
-| \`high\` | Intelligence-sensitive use cases generally | Balances token usage and intelligence; recommended minimum for most intelligence-sensitive work |
-| \`medium\` | Cost-sensitive use cases that need to reduce token usage while trading off intelligence | |
-| \`low\` | Short, scoped tasks and latency-sensitive workloads that are not intelligence-sensitive | |
+| \`max\` | Intelligence-demanding tasks worth testing at the ceiling | Can deliver gains but may show diminishing returns from increased token usage; can be prone to overthinking |
+| \`xhigh\` | **Most coding and agentic use cases** | The best setting for these; the default in Claude Code |
+| \`high\` | Intelligence-sensitive use cases generally | Balances token usage and intelligence; recommended minimum for intelligence-sensitive work |
+| \`medium\` | Cost-sensitive use cases that reduce token usage while trading off intelligence | |
+| \`low\` | Short, scoped tasks and latency-sensitive workloads that aren't intelligence-sensitive | |
 
 ### Silent default changes (no error, but behavior differs)
 
 **Thinking content omitted by default.**
 
-Thinking blocks still appear in the response stream on Claude Opus 4.7, but their \`thinking\` field is empty unless you explicitly opt in. This is a silent change from Claude Opus 4.6, where the default was to return summarized thinking text. To restore summarized thinking content on Claude Opus 4.7, set \`thinking.display\` to \`"summarized"\`. **The block-field name is unchanged** — it is still \`block.thinking\` on a \`thinking\`-type block; do not rename it.
+Thinking blocks still appear in the response stream on Opus 4.7, but the \`thinking\` field is empty unless you opt in. This is a silent change from Opus 4.6 (which defaulted to summarized thinking text). To restore summarized thinking, set \`thinking.display\` to \`"summarized"\`. The block-field name is unchanged — still \`block.thinking\` on a \`thinking\`-type block.
 
-**Detect this:** any code that reads \`block.thinking\` (or equivalent) from a \`thinking\`-type block and renders it in a UI, log, or trace. **The fix is the request parameter, not the response handling** — add \`display: "summarized"\` to the \`thinking\` parameter:
+**Detect this:** any code reading \`block.thinking\` from a \`thinking\`-type block and rendering it in a UI, log, or trace. The fix is the request parameter, not the response handling — add \`display: "summarized"\`:
 
 \`\`\`python
-thinking={"type": "adaptive", "display": "summarized"}  # "display" is new on Opus 4.7; values: "omitted" (default) | "summarized"
+thinking={"type": "adaptive", "display": "summarized"}  # values: "omitted" (default) | "summarized"
 \`\`\`
 
-The default is \`"omitted"\` on Claude Opus 4.7. If thinking content was never surfaced anywhere, no change needed. If your product streams reasoning to users, the new default appears as a long pause before output begins; set \`display: "summarized"\` to restore visible progress during thinking.
+The default is \`"omitted"\` on Opus 4.7. If thinking content was never surfaced, no change needed. If your product streams reasoning to users, the new default appears as a long pause before output; set \`display: "summarized"\` to restore visible progress.
 
 **Updated token counting.**
 
-Claude Opus 4.7 and Claude Opus 4.6 count tokens differently. The same input text produces a higher token count on Claude Opus 4.7 than on Claude Opus 4.6, and \`/v1/messages/count_tokens\` will return a different number of tokens for Claude Opus 4.7 than it did for Claude Opus 4.6. The token efficiency of Claude Opus 4.7 can vary by workload shape. Prompting interventions, \`task_budget\`, and \`effort\` can help control costs and ensure appropriate token usage. Keep in mind that these controls may trade off model intelligence. **Update your \`max_tokens\` parameters to give additional headroom, including compaction triggers.** Claude Opus 4.7 provides a 1M context window at standard API pricing with no long-context premium.
+Opus 4.7 and Opus 4.6 count tokens differently — the same input text produces a higher token count on 4.7, and \`/v1/messages/count_tokens\` returns different numbers. Token efficiency varies by workload shape. Prompting interventions, \`task_budget\`, and \`effort\` can control costs (they may trade off intelligence). Update your \`max_tokens\` parameters to give additional headroom, including compaction triggers. Opus 4.7 provides a 1M context window at standard API pricing with no long-context premium.
 
 What else to check:
 
-- Client-side token estimators (tiktoken-style approximations) calibrated against 4.6
-- Cost calculators that multiply tokens by a fixed per-token rate
+- Client-side token estimators (tiktoken-style) calibrated against 4.6
+- Cost calculators multiplying tokens by a fixed per-token rate
 - Rate-limit retry thresholds keyed to measured token counts
 
-Re-baseline by re-running \`client.messages.count_tokens()\` against \`claude-opus-4-7\` on a representative sample of the caller's prompts. Do not apply a blanket multiplier. For cost-sensitive workloads, consider reducing \`effort\` by one level (e.g. \`high\` → \`medium\`). For agentic loops, consider adopting Task Budgets (below).
+Re-baseline by re-running \`client.messages.count_tokens()\` against \`claude-opus-4-7\` on a representative sample. Don't apply a blanket multiplier. For cost-sensitive workloads, consider reducing \`effort\` by one level. For agentic loops, consider Task Budgets (below).
 
 ### New feature: Task Budgets (beta)
 
-Opus 4.7 introduces **task budgets** — tell Claude how many tokens it has for a full agentic loop (thinking + tool calls + final output). The model sees a running countdown and uses it to prioritize work and wrap up gracefully as the budget is consumed.
+Opus 4.7 introduces **task budgets** — tell Claude how many tokens it has for a full agentic loop (thinking + tool calls + final output). The model sees a running countdown and uses it to prioritize and wrap up gracefully.
 
-This is a **suggestion the model is aware of**, not a hard cap. It is distinct from \`max_tokens\`, which remains the enforced per-response limit and is *not* surfaced to the model. Use \`task_budget\` when you want the model to self-moderate; use \`max_tokens\` as a hard ceiling to cap usage.
+This is a suggestion the model is aware of, not a hard cap. Distinct from \`max_tokens\`, which remains the enforced per-response limit and is *not* surfaced to the model. Use \`task_budget\` to have the model self-moderate; use \`max_tokens\` as a hard ceiling.
 
 Requires beta header \`task-budgets-2026-03-13\`:
 
@@ -639,143 +670,729 @@ client.beta.messages.create(
 )
 \`\`\`
 
-Set a generous budget for open-ended agentic tasks and tighten it for latency-sensitive ones. **Minimum \`task_budget.total\` is 20,000 tokens.** If the budget is too restrictive for the task, the model may complete it less thoroughly, referencing its budget as the constraint. **Do not add \`task_budget\` during a migration unless you are sure the budget value is right** — if you can run the workload and measure, do so; otherwise ask the user for the value rather than guessing. This is the primary lever for offsetting the token-counting shift on agentic workloads.
+Set a generous budget for open-ended agentic tasks, tighter for latency-sensitive ones. Minimum \`task_budget.total\` is 20,000 tokens. If too restrictive, the model may complete less thoroughly, referencing its budget. Don't add \`task_budget\` during a migration unless you're sure the value is right — measure if you can run the workload; otherwise ask. This is the primary lever for offsetting the token-counting shift on agentic workloads.
 
 ### Capability improvements
 
-**High-resolution vision.** Opus 4.7 is the first Claude model with high-resolution image support. Maximum image resolution is **2576 pixels on the long edge** (up from 1568px on Opus 4.6 and prior). This unlocks gains on vision-heavy workloads, especially computer use and screenshot/artifact/document understanding. Coordinates returned by the model now map 1:1 to actual image pixels, so no scale-factor math is needed.
+**High-resolution vision.** Opus 4.7 is the first Claude with high-resolution image support — max **2576 pixels on the long edge** (up from 1568px on Opus 4.6 and prior). Gains on vision-heavy workloads, especially computer use and screenshot/artifact/document understanding. Coordinates returned now map 1:1 to actual image pixels — no scale-factor math. High-res is automatic on Opus 4.7 — no beta header, no client-side opt-in.
 
-High-res support is **automatic on Opus 4.7** — no beta header, no client-side opt-in required. The model accepts larger inputs and returns pixel-accurate coordinates out of the box.
+**Token cost.** Full-resolution images on Opus 4.7 can use up to ~3× more image tokens than prior models (up to ~4784 tokens/image vs the previous ~1,600-token cap). If the extra fidelity isn't needed, downsample client-side before sending — but don't add downsampling by default during a migration. If unsure whether the pipeline needs the fidelity, ask. Use \`count_tokens()\` on representative images to re-baseline before reacting to a cost shift.
 
-**Token cost.** Full-resolution images on Opus 4.7 can use up to ~3× more image tokens than on prior models (up to ~4784 tokens per image, vs. the previous ~1,600-token cap). If the extra fidelity isn't needed, downsample client-side before sending to control cost — but **do not add downsampling by default during a migration**. If you're not sure whether the pipeline needs the fidelity, ask the user rather than guessing. Use \`count_tokens()\` on representative images on Opus 4.7 to re-baseline before reacting to any measured cost shift.
+Beyond resolution, Opus 4.7 also improves low-level perception (pointing, measuring, counting) and natural-image bounding-box localization.
 
-Beyond resolution, Opus 4.7 also improves on low-level perception (pointing, measuring, counting) and natural-image bounding-box localization and detection.
+**Knowledge work.** Gains where the model visually verifies its own output — \`.docx\` redlining, \`.pptx\` editing, programmatic chart/figure analysis. If prompts have scaffolding like *"double-check the slide layout before returning"*, try removing it and re-baselining.
 
-**Knowledge work.** Meaningful gains on tasks where the model visually verifies its own output — \`.docx\` redlining, \`.pptx\` editing, and programmatic chart/figure analysis (e.g. pixel-level data transcription via image-processing libraries). If prompts have scaffolding like *"double-check the slide layout before returning"*, try removing it and re-baselining.
+**Memory.** Opus 4.7 is better at writing and using file-system-based memory. Agents maintaining a scratchpad, notes file, or structured memory store should improve.
 
-**Memory.** Opus 4.7 is better at writing and using file-system-based memory. If an agent maintains a scratchpad, notes file, or structured memory store across turns, that agent should improve at jotting down notes to itself and leveraging its notes in future tasks.
-
-**User-facing progress updates.** Opus 4.7 provides more regular, higher-quality interim updates during long agentic traces. If the system prompt has scaffolding like *"After every 3 tool calls, summarize progress"*, try removing it to avoid excessive user-facing text. If the length or contents of Opus 4.7's updates are not well-calibrated to your use case, explicitly describe what these updates should look like in the prompt and provide examples.
+**User-facing progress updates.** Opus 4.7 provides more regular, higher-quality interim updates during long agentic traces. If the prompt has scaffolding like *"After every 3 tool calls, summarize progress"*, try removing it. If updates aren't well-calibrated to your use case, describe what they should look like in the prompt with examples.
 
 ### Real-time cybersecurity safeguards
 
-Requests that involve prohibited or high-risk topics may lead to refusals.
+Requests involving prohibited or high-risk topics may lead to refusals.
 
-### Fast Mode: not available on Opus 4.7
+### Fast Mode: {{OPUS_NAME}} / Opus 4.8 only
 
-Opus 4.7 does not have a Fast Mode variant. **Opus 4.6 Fast remains supported**. Only surface this if the caller's code actually uses a Fast Mode model string (e.g. \`claude-opus-4-6-fast\`); if the word "fast" does not appear in the code, say nothing about Fast Mode.
+Fast mode runs on {{OPUS_NAME}} and Opus 4.8. Only surface this if the caller's code uses fast mode (e.g. \`model="claude-opus-4-6-fast"\`, or \`speed="fast"\` on an unsupported model); if "fast" doesn't appear in the code, say nothing about Fast Mode.
 
-When you see \`model="claude-opus-4-6-fast"\` (or similar), **the migration edit is**:
+When you see \`model="claude-opus-4-6-fast"\` (or any retired \`-fast\` model string), the migration edit is to move the fast-mode traffic onto {{OPUS_NAME}}, the current fast-capable default (Opus 4.8 also works if the caller is staying on that tier):
 
 \`\`\`python
-# Opus 4.7 has no Fast Mode — keeping on 4.6 Fast (caller's choice to switch to standard Opus 4.7).
-model="claude-opus-4-6-fast",
+# Request fast mode on {{OPUS_NAME}}.
+client.beta.messages.create(
+    model="{{OPUS_ID}}", max_tokens=4096,
+    speed="fast", betas=["fast-mode-2026-02-01"],
+    messages=[...],
+)
 \`\`\`
 
-That is: leave the model string **unchanged**, add the comment above it, and tell the user their two options — (a) stay on Opus 4.6 Fast, which remains supported, or (b) move latency-tolerant traffic to standard Opus 4.7 for the intelligence gain. Do **not** rewrite the model string to \`claude-opus-4-7\` yourself; that silently trades latency for intelligence, which is the caller's decision.
+That is: switch the model to {{OPUS_NAME}} (or Opus 4.8) and request fast mode the supported way — the beta \`client.beta.messages.…\` endpoint, the \`fast-mode-2026-02-01\` beta flag, and \`speed="fast"\` as a top-level request parameter (per-language form in SKILL.md § Fast Mode). Opus 4.7 fast mode has also been removed, so don't land on Opus 4.7 either. Don't leave the code on a retired \`-fast\` model string — the failure mode differs by version: \`claude-opus-4-6-fast\` is retired and the API silently falls back to standard Opus 4.6 (no error — the caller loses fast-mode speed without noticing); \`claude-opus-4-7-fast\` and \`speed="fast"\` on Opus 4.7 instead return an API error (hard failure). Either way, migrate to Opus 4.8 fast mode now.
 
 ### Behavioral shifts (prompt-tunable)
 
-These don't break anything, but prompts tuned for Opus 4.6 may land differently. Opus 4.7 is more steerable than 4.6, so small prompt nudges usually close the gap.
+These don't break anything, but prompts tuned for Opus 4.6 may land differently. Opus 4.7 is more steerable than 4.6, so small nudges usually close the gap.
 
-**More literal instruction following.** Claude Opus 4.7 interprets prompts more literally and explicitly than Claude Opus 4.6, particularly at lower effort levels. It will not silently generalize an instruction from one item to another, and it will not infer requests you didn't make. The upside of this literalism is precision and less thrash. It generally performs better for API use cases with carefully tuned prompts, structured extraction, and pipelines where you want predictable behavior. A prompt and harness review may be especially helpful for migration to Claude Opus 4.7.
+**More literal instruction following.** Opus 4.7 interprets prompts more literally and explicitly than 4.6, especially at lower effort. It won't silently generalize an instruction from one item to another, and won't infer requests you didn't make. The upside is precision and less thrash — better for API use cases with carefully tuned prompts, structured extraction, and predictable pipelines. A prompt and harness review is especially helpful for this migration.
 
-**Verbosity calibrates to task complexity.** Opus 4.7 scales response length to how complex it judges the task to be, rather than defaulting to a fixed verbosity — shorter answers on simple lookups, much longer on open-ended analysis. If the product depends on a particular length or style, tune the prompt explicitly. To reduce verbosity:
+**Verbosity calibrates to task complexity.** Opus 4.7 scales response length to judged task complexity — shorter on simple lookups, longer on open-ended analysis. If the product depends on a particular length, tune the prompt explicitly. To reduce verbosity:
 
 > *"Provide concise, focused responses. Skip non-essential context, and keep examples minimal."*
 
-If you see specific kinds of over-verbosity (e.g. over-explaining), add instructions targeting those. Positive examples showing the desired level of concision tend to be more effective than negative examples or instructions telling the model what not to do. Do **not** assume existing "be concise" instructions should be removed — test first.
+For specific over-verbosity (e.g. over-explaining), add targeted instructions. Positive examples of desired concision tend to work better than negative instructions. Don't assume existing "be concise" instructions should be removed — test first.
 
-**Tone and writing style.** Opus 4.7 is more direct and opinionated, with less validation-forward phrasing and fewer emoji than Opus 4.6's warmer style. As with any new model, prose style on long-form writing may shift. If the product relies on a specific voice, re-evaluate style prompts against the new baseline. If a warmer or more conversational voice is wanted, specify it:
+**Tone and writing style.** Opus 4.7 is more direct and opinionated, with less validation-forward phrasing and fewer emoji than 4.6's warmer style. Prose style on long-form writing may shift. If the product relies on a specific voice, re-evaluate style prompts. For a warmer voice:
 
 > *"Use a warm, collaborative tone. Acknowledge the user's framing before answering."*
 
-**\`effort\` matters more than on any prior Opus.** Opus 4.7 respects \`effort\` levels more strictly, especially at the low end. At \`low\` and \`medium\` it scopes work to what was asked rather than going above and beyond — good for latency and cost, but on moderate tasks at \`low\` there is some risk of under-thinking.
+**\`effort\` matters more than on any prior Opus.** Opus 4.7 respects \`effort\` levels more strictly, especially at the low end. At \`low\`/\`medium\` it scopes work to what was asked — good for latency and cost, but on moderate tasks at \`low\` there's some risk of under-thinking.
 
-- If shallow reasoning shows up on complex problems, raise \`effort\` to \`high\` or \`xhigh\` rather than prompting around it.
-- If \`effort\` must stay \`low\` for latency, add targeted guidance: *"This task involves multi-step reasoning. Think carefully through the problem before responding."*
-- **At \`xhigh\` or \`max\`, set a large \`max_tokens\`** so the model has room to think and act across tool calls and subagents. Start at 64K and tune from there. (\`xhigh\` is a new effort level on Opus 4.7, between \`high\` and \`max\`.)
+- If shallow reasoning shows up on complex problems, raise \`effort\` to \`high\`/\`xhigh\` rather than prompting around it.
+- If \`effort\` must stay \`low\` for latency: *"This task involves multi-step reasoning. Think carefully through the problem before responding."*
+- At \`xhigh\`/\`max\`, set a large \`max_tokens\` so the model has room to think and act across tool calls and subagents. Start at 64K and tune. (\`xhigh\` is a new effort level on Opus 4.7, between \`high\` and \`max\`.)
 
-Adaptive-thinking triggering is also steerable. If the model thinks more often than wanted — which can happen with large or complex system prompts — add: *"Thinking adds latency and should only be used when it will meaningfully improve answer quality — typically for problems that require multi-step reasoning. When in doubt, respond directly."*
+Adaptive-thinking triggering is steerable. If it thinks more often than wanted (can happen with large/complex system prompts): *"Thinking adds latency and should only be used when it will meaningfully improve answer quality — typically for problems that require multi-step reasoning. When in doubt, respond directly."*
 
-**Uses tools less often by default.** Opus 4.7 tends to use tools less often than 4.6 and to use reasoning more. This produces better results in most cases, but for products that rely on tools (search/retrieval, function-calling, computer-use steps), it can drop tool-use rate. Two levers:
+**Uses tools less often by default.** Opus 4.7 uses tools less and reasoning more. Better in most cases, but for products relying on tools (search/retrieval, function-calling, computer-use) it can drop tool-use rate. Two levers:
 
-- **Raise \`effort\`** — \`high\` or \`xhigh\` show substantially more tool usage in agentic search and coding, and are especially useful for knowledge work.
-- **Prompt for it** — be explicit in tool descriptions or the system prompt about when and how to use the tool, and encourage the model to err on the side of using it more often:
+- **Raise \`effort\`** — \`high\`/\`xhigh\` show substantially more tool usage in agentic search and coding.
+- **Prompt for it** — be explicit in tool descriptions or the system prompt about when and how to use the tool:
 
-> *"When the answer depends on information not present in the conversation, you must call the \`search\` tool before answering — do not answer from prior knowledge."*
+> *"When the answer depends on information not present in the conversation, call the \`search\` tool before answering — do not answer from prior knowledge."*
 
-**Fewer subagents by default.** Opus 4.7 tends to spawn fewer subagents than 4.6. This is steerable — give explicit guidance on when delegation is desirable. For a coding agent, for example:
+**Fewer subagents by default.** Opus 4.7 spawns fewer subagents than 4.6. Steerable — give explicit guidance on when delegation is desirable. For a coding agent:
 
-> *"Do NOT spawn a subagent for work you can complete directly in a single response (e.g. refactoring a function you can already see). Spawn multiple subagents in the same turn when fanning out across items or reading multiple files."*
+> *"Do not spawn a subagent for work you can complete directly in a single response (e.g. refactoring a function you can already see). Spawn multiple subagents in the same turn when fanning out across items or reading multiple files."*
 
-**Design and frontend coding.** Opus 4.7 has stronger design instincts than 4.6, with a consistent default house style: warm cream/off-white backgrounds (around \`#F4F1EA\`), serif display type (Georgia, Fraunces, Playfair), italic word-accents, and a terracotta/amber accent. This reads well for editorial, hospitality, and portfolio briefs, but will feel off for dashboards, dev tools, fintech, healthcare, or enterprise apps — and it appears in slide decks as well as web UIs.
+**Design and frontend coding.** Opus 4.7 has stronger design instincts than 4.6, with a consistent default house style: warm cream/off-white backgrounds (around \`#F4F1EA\`), serif display type (Georgia, Fraunces, Playfair), italic word-accents, and a terracotta/amber accent. Reads well for editorial/hospitality/portfolio briefs, but feels off for dashboards, dev tools, fintech, healthcare, or enterprise apps — and appears in slide decks as well as web UIs.
 
-The default is persistent. Generic instructions ("don't use cream," "make it clean and minimal") tend to shift the model to a different fixed palette rather than producing variety. Two approaches work reliably:
+The default is persistent. Generic instructions ("don't use cream," "make it clean and minimal") tend to shift to a different fixed palette rather than producing variety. Two approaches work reliably:
 
 1. **Specify a concrete alternative.** The model follows explicit specs precisely — give exact hex values, typefaces, and layout constraints.
-2. **Have the model propose options before building.** This breaks the default and gives the user control:
+2. **Have the model propose options before building:**
 
    > *"Before building, propose 4 distinct visual directions tailored to this brief (each as: bg hex / accent hex / typeface — one-line rationale). Ask the user to pick one, then implement only that direction."*
 
 If the caller previously relied on \`temperature\` for design variety, use approach (2) — it produces meaningfully different directions across runs.
 
-Opus 4.7 also requires less frontend-design prompting than previous models to avoid generic "AI slop" aesthetics. Where earlier models needed a lengthy anti-slop snippet, Opus 4.7 generates distinctive, creative frontends with a much shorter nudge. This snippet works well alongside the variety approaches above:
+Opus 4.7 also needs less anti-slop prompting than previous models. A short nudge works alongside the variety approaches above:
 
-> *"never use generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial, system fonts), cliched color schemes (particularly purple gradients on white or dark backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character. Use unique fonts, cohesive colors and themes, and animations for effects and micro-interactions."*
+> *"Never use generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial, system fonts), cliched color schemes (particularly purple gradients on white or dark backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character. Use unique fonts, cohesive colors and themes, and animations for effects and micro-interactions."*
 
-**Interactive coding products.** Opus 4.7's token usage and behavior can differ between autonomous, asynchronous coding agents with a single user turn and interactive, synchronous coding agents with multiple user turns. Specifically, it tends to use more tokens in interactive settings, primarily because it reasons more after user turns. This can improve long-horizon coherence, instruction following, and coding capabilities in long interactive coding sessions, but also comes with more token usage. To maximize both performance and token efficiency in coding products, use \`effort: "xhigh"\` or \`"high"\`, add autonomous features (like an auto mode), and reduce the number of human interactions required from users.
+**Interactive coding products.** Opus 4.7's token usage differs between autonomous single-turn coding agents and interactive multi-turn ones — it uses more tokens in interactive settings because it reasons more after user turns. This can improve long-horizon coherence and instruction following in long interactive sessions, with more token usage. To maximize both performance and efficiency, use \`effort: "xhigh"\` or \`"high"\`, add autonomous features (like an auto mode), and reduce required human interactions.
 
-When limiting required user interactions, specify the task, intent, and relevant constraints upfront in the first human turn. Well-specified, clear, and accurate task descriptions upfront help maximize autonomy and intelligence while minimizing extra token usage after user turns — because Opus 4.7 is more autonomous than prior models, this usage pattern helps to maximize performance. In contrast, ambiguous or underspecified prompts conveyed progressively over multiple user turns tend to reduce token efficiency and sometimes performance.
+When limiting required interactions, specify the task, intent, and relevant constraints upfront in the first human turn. Well-specified descriptions upfront maximize autonomy and intelligence while minimizing extra token usage after user turns. Ambiguous prompts conveyed progressively over multiple turns reduce efficiency and sometimes performance.
 
-**Code review.** Opus 4.7 is meaningfully better at finding bugs than prior models, with both higher recall and precision. However, if a code-review harness was tuned for an earlier model, it may initially show *lower* recall — this is likely a harness effect, not a capability regression. When a review prompt says "only report high-severity issues," "be conservative," or "don't nitpick," Opus 4.7 follows that instruction more faithfully than earlier models did: it investigates just as thoroughly, identifies the bugs, and then declines to report findings it judges to be below the stated bar. Precision rises, but measured recall can fall even though underlying bug-finding has improved.
+**Code review.** Opus 4.7 is meaningfully better at finding bugs, with higher recall and precision. But a harness tuned for an earlier model may initially show *lower* recall — a harness effect, not a regression. When a review prompt says "only report high-severity issues," "be conservative," or "don't nitpick," Opus 4.7 follows that more faithfully: it investigates just as thoroughly, finds the bugs, then declines to report findings below the stated bar. Precision rises, measured recall can fall even though bug-finding improved.
 
 Recommended prompt language:
 
 > *"Report every issue you find, including ones you are uncertain about or consider low-severity. Do not filter for importance or confidence at this stage — a separate verification step will do that. Your goal here is coverage: it is better to surface a finding that later gets filtered out than to silently drop a bug. For each finding, include your confidence level and an estimated severity so a downstream filter can rank them."*
 
-This can be used without an actual second step, but moving confidence filtering out of the finding step often helps. If the harness has a separate verification/dedup/ranking stage, tell the model explicitly that its job at the finding stage is coverage, not filtering. If single-pass self-filtering is wanted, be concrete about the bar rather than using qualitative terms like "important" — e.g. *"report any bugs that could cause incorrect behavior, a test failure, or a misleading result; only omit nits like pure style or naming preferences."* Iterate on prompts against a subset of evals to validate recall or F1 gains.
+This works without an actual second step, but moving confidence filtering out of the finding step often helps. If the harness has a separate verification/dedup/ranking stage, tell the model its job at the finding stage is coverage, not filtering. For single-pass self-filtering, be concrete about the bar rather than qualitative terms like "important" — e.g. *"report any bugs that could cause incorrect behavior, a test failure, or a misleading result; only omit nits like pure style or naming preferences."* Iterate on prompts against a subset of evals.
 
-**Computer use.** Computer use works across resolutions up to the new 2576px / 3.75MP maximum. Sending images at **1080p** provides a good balance of performance and cost. For particularly cost-sensitive workloads, **720p** or **1366×768** are lower-cost options with strong performance. Test to find the ideal settings for the use case; experimenting with \`effort\` can also help tune behavior.
+**Computer use.** Works across resolutions up to the new 2576px / 3.75MP maximum. Sending images at **1080p** balances performance and cost; **720p** or **1366×768** are lower-cost options with strong performance. Test for the ideal settings; experimenting with \`effort\` can help.
 
 ---
 
 ## Opus 4.7 Migration Checklist
 
-Every item is tagged: **\`[BLOCKS]\`** items cause a 400 error, infinite loop, silent truncation, or empty output if missed — apply these as code edits, not as suggestions. **\`[TUNE]\`** items are quality/cost adjustments — surface them to the user as recommendations.
+\`[BLOCKS]\` items cause a 400, infinite loop, silent truncation, or empty output if missed — apply as code edits. \`[TUNE]\` items are quality/cost adjustments — surface as recommendations.
 
-\`[BLOCKS]\` items prefixed with **"If…"** or **"At…"** are conditional. Before working through the list, **scan the file** for the conditions: does it surface thinking text to a UI/log? Does it set \`output_config.effort\` to \`"x-high"\` or \`"max"\`? Is it a security workload? Is it a multi-turn agentic loop? Apply only the items whose condition matches.
+\`[BLOCKS]\` items prefixed with "If…" or "At…" are conditional. Before working through the list, scan the file: does it surface thinking text to a UI/log? Does it set \`output_config.effort\` to \`"xhigh"\` or \`"max"\`? Is it a multi-turn agentic loop? Apply only the items whose condition matches.
 
 - [ ] **[BLOCKS]** Replace \`thinking: {type: "enabled", budget_tokens: N}\` with \`thinking: {type: "adaptive"}\` + \`output_config.effort\`; delete \`budget_tokens\` plumbing entirely
 - [ ] **[BLOCKS]** Strip \`temperature\`, \`top_p\`, \`top_k\` from request construction
 - [ ] **[BLOCKS]** If thinking content is surfaced to users or stored in logs: add \`thinking.display: "summarized"\` (otherwise the rendered text is empty)
 - [ ] **[BLOCKS]** At \`output_config.effort\` of \`xhigh\` or \`max\`: set \`max_tokens\` ≥ 64000 (otherwise output truncates mid-thought)
-- [ ] **[TUNE]** Give \`max_tokens\` and compaction triggers extra headroom; re-run \`count_tokens()\` against \`claude-opus-4-7\` on representative prompts to re-baseline (no blanket multiplier)
+- [ ] **[TUNE]** Give \`max_tokens\` and compaction triggers extra headroom; re-run \`count_tokens()\` against \`claude-opus-4-7\` on representative prompts (no blanket multiplier)
 - [ ] **[TUNE]** Re-baseline cost and rate-limit dashboards *before* reacting to measured shifts
-- [ ] **[TUNE]** Re-evaluate \`effort\` per route — use \`xhigh\` for coding/agentic and a minimum of \`high\` for most intelligence-sensitive work; it matters more on 4.7 than any prior Opus
-- [ ] **[TUNE]** Multi-turn agentic loops: adopt the API-native Task Budgets (\`output_config.task_budget\`, beta \`task-budgets-2026-03-13\`, minimum 20k tokens) — this is for capping *cumulative* spend across a loop; per-turn depth is \`effort\`
-- [ ] **[TUNE]** Check for ambiguous or underspecified instructions that relied on 4.6 generalizing intent, and update them to be clearer or more precise — 4.7 follows them literally
+- [ ] **[TUNE]** Re-evaluate \`effort\` per route — \`xhigh\` for coding/agentic, minimum \`high\` for most intelligence-sensitive work
+- [ ] **[TUNE]** Multi-turn agentic loops: adopt Task Budgets (\`output_config.task_budget\`, beta \`task-budgets-2026-03-13\`, minimum 20k tokens) for capping *cumulative* spend across a loop; per-turn depth is \`effort\`
+- [ ] **[TUNE]** Check for ambiguous instructions that relied on 4.6 generalizing intent; make them clearer — 4.7 follows them literally
 - [ ] **[TUNE]** Tool-use workloads: add explicit when/how-to-use guidance to tool descriptions (4.7 reaches for tools less often)
-- [ ] **[TUNE]** Verbosity: test existing length instructions before changing them — 4.7 calibrates length to task complexity, so tune for the desired output rather than assuming a direction
+- [ ] **[TUNE]** Verbosity: test existing length instructions before changing them — 4.7 calibrates length to task complexity
 - [ ] **[TUNE]** Remove forced-progress-update scaffolding (*"after every N tool calls…"*)
 - [ ] **[TUNE]** Remove knowledge-work verification scaffolding (*"double-check the slide layout…"*) and re-baseline
-- [ ] **[TUNE]** Add tone instruction if a warmer / more conversational voice is needed; re-evaluate style prompts on writing-heavy routes
+- [ ] **[TUNE]** Add a tone instruction if a warmer voice is needed; re-evaluate style prompts on writing-heavy routes
 - [ ] **[TUNE]** Subagent tool present: add explicit spawn / don't-spawn guidance
 - [ ] **[TUNE]** Frontend/design output: specify a concrete palette/typeface, or have the model propose 4 visual directions before building (the default cream/serif house style is persistent)
-- [ ] **[TUNE]** Interactive coding products: use \`effort: "xhigh"\` or \`"high"\`, add autonomous features (e.g. an auto mode) to reduce human interactions, and specify task/intent/constraints upfront in the first turn
-- [ ] **[TUNE]** Code-review harnesses: remove or loosen "only report high-severity" / "be conservative" filters and have the model report every finding with confidence + severity; move filtering to a downstream step (4.7 follows severity filters more literally, which can depress measured recall)
-- [ ] **[TUNE]** Vision-heavy pipelines (screenshots, charts, document understanding): leave images at native resolution up to 2576px long edge for the accuracy gain; remove any scale-factor math from coordinate handling (coords are now 1:1 with pixels). No beta header / opt-in needed — high-res is automatic on Opus 4.7.
-- [ ] **[TUNE]** Computer-use pipelines: send screenshots at 1080p for a good performance/cost balance (720p or 1366×768 for cost-sensitive workloads); experiment with \`effort\` to tune behavior
-- [ ] **[TUNE]** Cost-sensitive image pipelines: full-res images on 4.7 use up to ~4784 tokens vs ~1,600 on prior models (~3×). Downsampling client-side before upload avoids the increase, but **do not downsample by default** — if you're unsure whether fidelity is needed, ask the user. Re-baseline with \`count_tokens()\` on representative images before reacting to cost shifts.
+- [ ] **[TUNE]** Interactive coding products: use \`effort: "xhigh"\` or \`"high"\`, add autonomous features (e.g. an auto mode), and specify task/intent/constraints upfront in the first turn
+- [ ] **[TUNE]** Code-review harnesses: remove or loosen "only report high-severity" / "be conservative" filters; have the model report every finding with confidence + severity; move filtering downstream
+- [ ] **[TUNE]** Vision-heavy pipelines: leave images at native resolution up to 2576px long edge; remove scale-factor math from coordinate handling (coords are 1:1 with pixels). No beta header / opt-in needed — high-res is automatic on Opus 4.7.
+- [ ] **[TUNE]** Computer-use pipelines: send screenshots at 1080p for a good performance/cost balance (720p or 1366×768 for cost-sensitive); experiment with \`effort\`
+- [ ] **[TUNE]** Cost-sensitive image pipelines: full-res images on 4.7 use up to ~4784 tokens vs ~1,600 on prior models. Downsampling client-side avoids the increase, but don't downsample by default — if unsure whether fidelity is needed, ask. Re-baseline with \`count_tokens()\` first.
+
+---
+
+## Migrating to Opus 4.8
+
+> **Model ID \`claude-opus-4-8\` is authoritative as written here.** When the user asks to migrate to Opus 4.8, write \`model="claude-opus-4-8"\` exactly. Do not WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
+
+Claude Opus 4.8 is the most capable Opus-tier model — highly autonomous, with state-of-the-art long-horizon agentic execution, knowledge work, and memory. Layered on top of the Opus 4.7 migration above. From Opus 4.6 or older: apply the 4.6 and 4.7 sections first, then this one. ({{FABLE_NAME}} is a higher tier above Opus — see its section below — but \`claude-opus-4-8\` remains the default "upgrade to the latest" target.)
+
+**No new breaking changes.** Opus 4.8 keeps the same request surface as Opus 4.7 — adaptive thinking only (\`budget_tokens\` still 400s; use \`{type: "adaptive"}\`), sampling parameters still rejected, last-assistant-turn prefills still 400, \`thinking.display\` still defaults to \`"omitted"\`, and the \`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\` effort levels, Task Budgets (beta), and high-resolution vision all behave as on 4.7. A 4.7 → 4.8 migration is the model-ID swap plus prompt re-tuning — no required code edit beyond the model string.
+
+**TL;DR for someone already on Opus 4.7:** swap the model ID to \`claude-opus-4-8\`. Nothing else is required to avoid an error. Then re-tune prompts for the behavioral shifts: 4.8 narrates *more* than 4.7 (add a silence-default for 4.7-like terseness), writes in a warmer, less hedged voice, is more deliberate and asks more often (add autonomy guidance to claw back ask-rate), and is more conservative about reaching for search, subagents, file-based memory, and custom tools (add explicit "when to use this" triggering). For long-horizon agentic work, give the full task spec up front in one well-specified turn and run at high effort.
+
+### No new API breaking changes (inherited from 4.7)
+
+These carry over from Opus 4.7 unchanged — apply only if coming from Opus 4.6 or earlier (see **Migrating to Opus 4.7** for before/after and SDK-specific syntax):
+
+- \`thinking: {type: "enabled", budget_tokens: N}\` → 400. Use \`thinking: {type: "adaptive"}\` + \`output_config.effort\`.
+- \`temperature\`, \`top_p\`, \`top_k\` → 400. Remove them; steer with prompting.
+- Last-assistant-turn prefills → 400. Use \`output_config.format\` (structured outputs) or a system-prompt instruction.
+- \`thinking.display\` defaults to \`"omitted"\`; set \`"summarized"\` if you surface reasoning to users.
+
+If already on Opus 4.7 and these are clean, there's nothing to change here.
+
+### New API feature: mid-session system prompts
+
+You can deliver trusted instructions partway through a session by placing \`{"role": "system", ...}\` entries directly in the \`messages\` array — without editing the top-level system prompt and invalidating your prompt cache. Use it for things the application learns mid-session: async context arrived, a mode toggled (auto-approve enabled), files changed on disk, the remaining token budget dropped.
+
+\`\`\`python
+messages=[
+    {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "...", "content": "..."}]},
+    {"role": "system", "content": "This project's codebase is Go. Write code in Go."},
+]
+\`\`\`
+
+Phrase these as **context, not commands**. State the fact and let Claude act on it; avoid override-style language ("ignore what the user said", "regardless of the user's request", "disregard the previous instruction"). Claude is trained to protect users from instructions that appear to work against them, and that protection applies to the system role too. No beta header; available on {{PREV_OPUS_NAME}}. For cache-placement details and the older-model \`<system-reminder>\` fallback, see \`shared/prompt-caching.md\` and \`shared/agent-design.md\`.
+
+### Capability improvements
+
+**Long-horizon agentic execution.** Opus 4.8 is state-of-the-art at long, autonomous agentic work — complex refactors and overnight coding runs that complete without human correction. To get the most out of it, give the full task spec up front in a single well-specified initial turn and run at high effort (\`effort: "high"\` or \`"xhigh"\`). Its long-horizon coherence comes partly from reasoning more at each step; combined with a clear up-front goal, that planning often produces more efficient *and* more accurate output than prior frontier models. The "clear goal up front" principle maps to two product surfaces: in Claude Code, \`/goal\` sets direction for the run; with **Managed Agents (CMA)**, state what "done" looks like via an **Outcome** (\`user.define_outcome\` with a gradeable rubric — the harness runs an iterate → grade → revise loop), see \`shared/managed-agents-outcomes.md\`.
+
+**Effort is a dimension to test, not a fixed setting.** On prior models many reached for \`xhigh\` reflexively to maximize intelligence. Opus 4.8 has a higher intelligence ceiling, so start at \`high\` as the default and iterate rather than defaulting to \`xhigh\`. Sweep \`medium\`, \`high\`, and \`xhigh\` on your own eval set and weigh the intelligence ↔ latency ↔ cost tradeoff per route — the relationship isn't monotonic: higher effort up front often *reduces* turn count and total cost on agentic work, while for some tasks \`medium\` delivers equally good results faster. Reserve \`max\` for extremely hard, latency-insensitive cases. The per-level effort table in **Migrating to Opus 4.7** applies unchanged on 4.8.
+
+**Writing voice and clarity.** Testers consistently describe 4.8's prose as clearer, warmer, and less hedged than prior models, with fewer measurable AI vocal tics — especially at higher effort, where it approaches expert-level prose and structure. This is roughly the opposite direction from the 4.7 shift (4.7 was more clipped, direct, less validation-forward). If you added style prompts to counter 4.7's terseness or inject warmth, re-evaluate them against the new baseline before keeping them — they may now overcorrect. 4.8 is also a stronger thought partner: more thoughtful, more willing to push back, more likely to infer the right answer from context.
+
+**Code review and debugging.** Stronger real-bug finding and clearer explanations than 4.7 — one-shot fixes where 4.7 needed more, and correctly identifying intermittent flakes rather than declaring "fixed" after one clean run. The 4.7 caveat still applies: if a review harness says "only report high-severity issues" or "be conservative", 4.8 follows it literally and measured recall can drop even though bug-finding improved. Tell the model to report everything and filter downstream (or review a second time) — see the **Code review** guidance in the 4.7 section.
+
+### Behavioral shifts (prompt-tunable)
+
+None break code, but prompts tuned for Opus 4.7 may land differently. 4.8 follows instructions well, so small explicit nudges close the gap.
+
+**Tool triggering is surface-dependent (search & knowledge).** With a system prompt present, 4.8 is high-precision / low-recall — web search triggers slightly more often but runs fewer rounds per trigger, while knowledge-retrieval tools (Drive, project knowledge, connected files) trigger *less* often. It searches when confident search is needed and otherwise answers from context, which can lower research depth on tasks that need it. Recover should-search rate with an explicit search-first instruction:
+
+> \`\`\`
+> <search_first>
+> For questions where current information would change the answer (recent events, current roles or prices, version-specific behavior, or anything the user flags as time-sensitive) search before answering rather than answering from memory. For open-ended research requests, begin searching immediately; do not ask a scoping question first unless the request is genuinely ambiguous about what to research.
+> </search_first>
+> \`\`\`
+
+**Under-utilization of subagents, memory, and custom tools.** Separately from search, 4.8 is conservative about capabilities that need an explicit "decide to use this" step — file-based memory, subagent delegation, custom tools. It won't reach for complex or expensive capabilities unless reasonably sure they're needed. Steerable since 4.8 follows instructions well — say *when* each capability applies, not just that it exists:
+
+> *"Before any task longer than a few turns, check your memory file for relevant prior context and write new findings to it as you go. When a task fans out across independent items (many files to read, many tests to run, many candidates to check), delegate to subagents rather than iterating serially."*
+
+The same lever works at the tool-description level, not just the system prompt: a prescriptive description that states *when* to call a tool (e.g. "Call this when the user asks about current prices or recent events") gives meaningful lift on 4.8 over one that only states what the tool does. Make the trigger condition part of each tool's own \`description\`.
+
+**More user-facing narration.** 4.8 narrates more than 4.7 — more text between tool calls in long tool-calling sessions, and longer, more detailed end-of-task wrap-ups by default. If you previously added scaffolding to force interim status ("after every 3 tool calls, summarize progress"), remove it — 4.8 does this on its own. If the narration is too verbose for a coding agent, an explicit silence-default makes it behave like 4.7 with no loss of quality:
+
+> *"Default to silence between tool calls. Only write text when you find something, change direction, or hit a blocker — one sentence each. Do not narrate routine actions ('Now I'll...', 'Let me check...', 'Looking at...'). When done: one or two sentences on the outcome. Do not recap every file or test — the user has been following along."*
+
+For knowledge-work deliverables (reports, analysis readouts), verbosity responds well to instructions in user preferences or the user turn — expose a verbosity preference rather than hard-coding a length.
+
+**More deliberate — asks more often.** 4.8 is more deliberate than prior Opus models. On minor decisions it would previously just make (a variable name, a default value, which of two equivalent approaches), it tends to pause and ask, and often closes a completed task with "Want me to also…?" rather than doing the obvious next step or stopping cleanly. Preferred for high-stakes or unfamiliar codebases, but bugs users when uncalibrated. Grant autonomy on the small stuff while keeping caution where it matters (in Claude Code testing this cut ask-rate by ~12 percentage points with no increase in over-reach):
+
+> *"For minor choices (naming, formatting, default values, which approach among equivalents), pick a reasonable option and note it rather than asking. For scope changes or destructive actions, still ask first."*
+
+**Verbose reasoning when thinking is disabled.** With \`thinking: {type: "disabled"}\`, 4.8 occasionally writes longer explanations of its reasoning into the visible response, reading as verbose when the user wants a fast answer. The simplest fix is to leave adaptive thinking on — \`thinking: {type: "adaptive"}\` (the recommended setting; it adjusts how much to think per task). Adaptive is *not* on when the field is omitted — like Opus 4.7, a request with no \`thinking\` field runs without thinking, so set it explicitly. If you need thinking off for latency/cost, scope it in the system prompt:
+
+> *"Respond only with your final answer. Do not include exploratory reasoning, intermediate drafts, diffs you considered but rejected, or meta-commentary about your process."*
+
+### Opus 4.8 Migration Checklist
+
+\`[BLOCKS]\` items cause a 400 if missed; \`[TUNE]\` items are quality/cost adjustments — surface as recommendations.
+
+For a caller **already on Opus 4.7**, only the first item is required; everything else is \`[TUNE]\`. The conditional \`[BLOCKS]\` item applies only when coming from Opus 4.6 or earlier.
+
+- [ ] **[BLOCKS]** Update the \`model=\` string to \`claude-opus-4-8\`
+- [ ] **[BLOCKS]** *(only if coming from Opus 4.6 or earlier)* Apply the **Migrating to Opus 4.7** breaking changes first — \`budget_tokens\` → adaptive thinking, strip \`temperature\`/\`top_p\`/\`top_k\`, remove last-assistant-turn prefills. These already 400 on 4.7 and continue to 400 on 4.8.
+- [ ] **[TUNE]** Long-horizon / agentic work: put the full task spec in one well-specified first turn and run at \`high\` or \`xhigh\` effort (Claude Code: \`/goal\`; Managed Agents: an Outcome with a gradeable rubric)
+- [ ] **[TUNE]** Effort: sweep \`medium\` / \`high\` / \`xhigh\` on your eval set and pick per route by the intelligence ↔ latency ↔ cost tradeoff (default \`high\`, \`xhigh\` for coding/agentic)
+- [ ] **[TUNE]** Research depth & tool use: add a search-first instruction; add explicit triggering guidance for subagents, file-based memory, and custom tools (4.8 under-reaches for these by default) — in the system prompt and in each tool's own \`description\` (prescriptive "call this when…" descriptions give measurable lift)
+- [ ] **[TUNE]** Narration: remove forced-progress scaffolding (*"after every N tool calls…"*); add a silence-default if a coding agent is too chatty
+- [ ] **[TUNE]** Autonomy: add small-decisions-don't-ask guidance to cut ask-rate, while keeping caution on scope changes / destructive actions
+- [ ] **[TUNE]** Writing voice: re-evaluate style prompts added to counter 4.7's directness — 4.8 is warmer and less hedged by default
+- [ ] **[TUNE]** Code-review harnesses: keep the report-everything-filter-downstream pattern (4.8 follows "only high-severity" / "be conservative" filters literally, which can depress measured recall)
+- [ ] **[TUNE]** Thinking-disabled paths: add a final-answer-only instruction if reasoning leaks into the visible response
+- [ ] **[TUNE]** Consider mid-session system messages (\`role:"system"\` in \`messages\`) for context the app learns mid-session, instead of rebuilding the top-level system prompt and invalidating the cache
+
+---
+
+## Migrating to {{OPUS_NAME}}
+
+> **Model ID \`{{OPUS_ID}}\` is authoritative as written here.** When the user asks to migrate to {{OPUS_NAME}}, write \`model="{{OPUS_ID}}"\` exactly. Do **not** WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
+
+{{OPUS_NAME}} succeeds {{PREV_OPUS_NAME}} in the Opus line; strongest on long-horizon agentic work and coding. Layered on top of the Opus 4.8 migration above — from Opus 4.7 or older, apply those sections first. Like {{FABLE_NAME}}, it ships with **elevated cybersecurity safeguards, and its safety classifiers can decline a request**: a normal HTTP 200 with \`stop_reason: "refusal"\` and a \`stop_details\` category, not an error. Benign security and life-sciences work occasionally trips them, so **check \`stop_reason\` before reading \`response.content\`** — code that indexes \`content[0]\` unconditionally breaks on a refusal. Cyber-category refusals route to Opus 4.8 as the recommended fallback, so a fallback strategy genuinely recovers the request. Full refusal semantics (pre-output vs mid-stream billing, retry strategies, fallback credit) are in the {{FABLE_NAME}} section below and apply here unchanged.
+
+Existing prompts and evals carry over with strong out-of-the-box performance. **Drop-in upgrade at Opus 4.8's pricing** — $5 per million input tokens, $25 per million output — same feature set: 1M context (default, no beta header), 128K max output, adaptive thinking, prompt caching, batch processing, the Files API, PDF support, vision, and the full server-side and client-side tool set. \`{{OPUS_ID}}\` is a fixed ID with no date suffix, same scheme as \`claude-opus-4-8\`.
+
+The migration is **the model-ID swap plus prompt re-tuning**, with two breaking changes covered below.
+
+**Availability at launch:** Claude API (\`{{OPUS_ID}}\`), Amazon Bedrock (\`anthropic.{{OPUS_ID}}\`), Google Cloud (\`{{OPUS_ID}}\`), and Microsoft Foundry. Opus 4.8 stays available on all four.
+
+**Rate limits are a separate bucket.** Opus 4.8/4.7/4.6/4.5 share one combined Opus limit; {{OPUS_NAME}} does **not** draw from it — shifting traffic over neither frees headroom on the old bucket nor inherits it. Check your tier's {{OPUS_NAME}} limits before moving volume.
+
+**TL;DR for someone already on {{PREV_OPUS_NAME}}:** swap the model ID. Then re-tune: {{OPUS_NAME}} writes longer user-facing responses and longer files on disk (add explicit conciseness and deliverable-length instructions — \`effort\` does not reliably shorten visible output), verifies its own work without being told (**delete** your verification instructions and harness verification steps), and can expand task scope (add a scope-discipline instruction). Run a fresh effort sweep — \`low\` and \`medium\` are unusually strong here and are the primary cost/latency lever.
+
+### Breaking change 1: thinking is on by default
+
+A request that omits \`thinking\` **thinks** on {{OPUS_NAME}}, unlike {{PREV_OPUS_NAME}} and Opus 4.7 where omitting it meant no thinking. \`thinking: {type: "adaptive"}\` remains valid and is equivalent to the default — the wire value didn't change, the default did.
+
+A silent cost and truncation change: **\`max_tokens\` is a hard cap on thinking *plus* response text.** A workload that ran without thinking on Opus 4.8 and sized \`max_tokens\` tightly around its answer can now truncate mid-response. Revisit \`max_tokens\` on every route that never set \`thinking\`. To keep the old behavior, pass \`thinking: {type: "disabled"}\` — subject to the effort cap below.
+
+Raw thinking tokens are **never returned** on {{OPUS_NAME}}; \`display\` defaults to \`"omitted"\`, \`display: "summarized"\` gets you a summary. A fallback model cannot read {{OPUS_NAME}}'s thinking.
+
+### Breaking change 2: disabling thinking is capped at \`high\` effort
+
+Disabling thinking is available only at effort **\`high\` or lower**; \`thinking: {type: "disabled"}\` combined with \`xhigh\` or \`max\` returns a 400. Opus 4.8 accepts that combination, so audit any route that disables thinking before migrating.
+
+**The check is per request.** Effort and thinking are validated independently on every call, so a later request that raises effort to \`xhigh\` while thinking is still disabled is rejected even though earlier requests in the same conversation succeeded.
+
+\`\`\`python
+# 400 on {{OPUS_NAME}} — disabled thinking above \`high\`
+client.messages.create(
+    model="{{OPUS_ID}}",
+    max_tokens=4096,
+    thinking={"type": "disabled"},
+    output_config={"effort": "xhigh"},
+    messages=[...],
+)
+\`\`\`
+
+**Migrating:** either enable thinking at \`xhigh\`/\`max\`, or lower effort to \`high\` or below. Given how well {{OPUS_NAME}} performs at \`low\` and \`medium\`, a latency-sensitive route that previously ran \`xhigh\` + disabled thinking is usually better served by \`medium\` with thinking on.
+
+Everything else from the Opus 4.7/4.8 request surface is unchanged: \`budget_tokens\` still 400s (use \`output_config.effort\`), sampling parameters (\`temperature\`, \`top_p\`, \`top_k\`) still rejected, last-assistant-turn prefills still 400, \`thinking.display\` still defaults to \`"omitted"\`.
+
+### Two failure modes when thinking is disabled
+
+**Are you affected?** Only if you explicitly set \`thinking: {type: "disabled"}\`. Thinking is on by default (Breaking change 1), so an unmodified request never hits either — but code carrying a disabled-thinking setting forward from Opus 4.8, where it was the default behaviour, does.
+
+Both are specific to \`thinking: {type: "disabled"}\` on {{OPUS_NAME}}, and for both the **primary recommendation is the same: turn thinking back on and use a lower \`effort\` to control cost and verbosity instead.** Disabling thinking is what triggers these, and \`low\`/\`medium\` effort already gets you most of the token and latency saving (see § Effort below).
+
+**1. Tool calls can arrive as plain text.** The model occasionally writes a tool call into its user-facing text rather than emitting a structured \`tool_use\` block. **The turn completes normally and the call never runs** — no error and no \`tool_use\` block to catch, so a harness sees a successful turn that silently did nothing. Worse in an agentic loop: the bogus text stays in conversation history and skews later turns. Most common on tool-heavy workloads such as search.
+
+If you cannot enable thinking, give the model explicit permission to talk first — the failure appears to come from suppressing the preamble it wants to write:
+
+> *"You may say a brief sentence before using a tool."*
+
+**2. \`<thinking>\` tags can leak into the visible response.** The model may emit \`<thinking>\` or other internal XML in its user-facing output.
+
+If you cannot enable thinking, two counterintuitive rules:
+
+- **Delete any instruction telling the model not to think or not to reason.** That kind of rule *increases* tag leakage rather than suppressing it.
+- **Write the instruction generically, and do not name thinking tags.** Calling them out by name is measurably less effective than the general form:
+
+> *"Do not include internal or system XML tags in your response."*
+
+### New API features
+
+Two additions, each behind its own beta header. Both are optional — a migrated request works without them.
+
+**1. \`fallbacks: "default"\` — recommended for every caller.** {{OPUS_NAME}}'s safety classifiers can decline a request; the \`fallbacks\` parameter re-runs a declined request on another model server-side instead of returning the refusal to you. Previously you named the substitute yourself (\`"fallbacks": [{"model": "{{PREV_OPUS_ID}}"}]\`). The new \`"default"\` mode picks Anthropic's recommended fallback automatically, routed **by refusal category** — cyber-category refusals go to {{PREV_OPUS_NAME}}.
+
+\`\`\`http
+POST /v1/messages
+anthropic-beta: server-side-fallback-2026-07-01
+
+{"model": "{{OPUS_ID}}", "fallbacks": "default", "max_tokens": 1024,
+ "messages": [{"role": "user", "content": "Say OK."}]}
+\`\`\`
+
+**Prefer \`"default"\` over pinning a model.** Different fallback models carry different classifiers, so the right substitute depends on *why* the request was declined — and \`"default"\` removes the migration you would otherwise owe when a pinned fallback model is deprecated. The header is \`server-side-fallback-2026-07-01\`, distinct from the \`-2026-06-01\` header that gates the array form; the array form's semantics (content blocks, \`usage.iterations\`, sticky routing) are unchanged and documented in the {{FABLE_NAME}} refusal section below.
+
+**2. Mid-conversation tool changes (beta \`mid-conversation-tool-changes-2026-07-01\`).** Change a conversation's tool set between turns without invalidating the prompt cache. Previously \`tools\` was fixed for the conversation's lifetime and any edit re-billed the whole prefix. Append a \`{"role": "system", "content": [...]}\` message carrying a \`tool_addition\` or \`tool_removal\` block:
+
+\`\`\`python
+messages = [
+    {"role": "user", "content": "What tools do you have for weather in Paris?"},
+    {"role": "system", "content": [
+        {"type": "tool_addition", "tool": {"type": "tool_reference", "name": "get_forecast"}},
+    ]},
+]
+\`\`\`
+
+The added tool must already be declared in \`tools[]\` with \`"defer_loading": True\` — declared up front, but not loaded into context until a \`tool_addition\` surfaces it. A \`tool_removal\` block must sit either immediately before an assistant message or at the end of \`messages\`. To *change* a tool's definition, remove the old one on one request, then send the updated entry in \`tools[]\` on the next. See \`shared/tool-use-concepts.md\` § Mid-conversation tool changes.
+
+> ⚠️ Earlier previews used a different beta header and different block shapes. Both are deprecated — if the code you're migrating carries anything other than \`mid-conversation-tool-changes-2026-07-01\` with \`tool_addition\` / \`tool_removal\` / \`tool_reference\`, update the header and the shapes together.
+
+> **SDK typings lag these blocks.** Pass them as plain dicts in Python (the SDK forwards unknown keys unchanged) or add a \`@ts-expect-error\` in TypeScript until the types catch up. \`extra_body\` / \`extra_headers\` work on \`.stream()\` exactly as on \`.create()\`.
+
+### Capability improvements
+
+**Agentic coding.** A workhorse for agentic coding, strongest on *difficult* tasks — multi-file features, larger refactors, end-to-end feature work. It completes tasks rather than leaving stubs or placeholders. The gap over prior models is smaller on easy single-turn edits, so evaluate it on the hard end of your workload. Give the complete task specification up front and let it run; longer autonomous sessions with more parallel agents show the strongest results, short interactive edits the least.
+
+**Code review and bug-finding.** High precision *and* high recall — a high rate of real bugs per pass, with the extra findings mostly real rather than false positives. It stays accurate at lower effort, making a cheap fast pass at review time plus a thorough pass later a practical pattern.
+
+**Effort: the full ladder, and where to start.** {{OPUS_NAME}} supports all five levels — \`low\`, \`medium\`, \`high\`, \`xhigh\`, \`max\` — with no beta header. The API default is \`high\`.
+
+The published starting points and the model's measured behavior pull in slightly different directions; both are worth knowing:
+
+- **Start at \`xhigh\` for coding and agentic work, \`high\` for other intelligence-sensitive workloads.** That's the documented recommendation, and \`max\` is the explicit top tier for the deepest reasoning — worth testing where capability matters more than spend, though it can show diminishing returns and overthink simpler tasks.
+- **Then sweep downward, because \`low\` and \`medium\` punch well above their weight on this model** — strong quality at a fraction of the tokens and latency on many workloads. Step down only where your evals show quality holds, but do run the sweep: effort defaults carried over from a prior model are usually not the right setting here.
+
+At \`xhigh\` or \`max\`, **set a large \`max_tokens\`** so the model has room to think and act across tool calls and subagents. Start at 64K and tune.
+
+**Lower prompt-cache minimum.** The minimum cacheable prompt is **512 tokens** on {{OPUS_NAME}}, down from 1024 on Opus 4.8 — prompts previously too short to cache now create entries with no code change, so re-check any you'd written off as uncacheable. See \`shared/prompt-caching.md\`.
+
+**Fast mode.** \`speed: "fast"\` (beta header \`fast-mode-2026-02-01\`) is supported on {{OPUS_NAME}}, priced at $10 / $50 per MTok. Research preview on the **Claude API only** — including Managed Agents — and **not** available on Amazon Bedrock, Google Cloud, or Microsoft Foundry. Draws on dedicated rate limits separate from the standard Opus pools.
+
+**Vision — give it tools, not more thinking.** Stronger on chart, document, and diagram understanding, and on UI and frontend visual replication. The highest-leverage change is **giving it tools to iteratively analyze, crop, and visually verify its own work**: tool use is a markedly more cost-effective lever than raising thinking alone. {{OPUS_NAME}} sits in the high-resolution tier alongside Opus 4.8 — 2576 px on the long edge, up to 4784 visual tokens per image — so coordinates map 1:1 to pixels and no scale-factor math is needed. Re-validate any prompt-side workaround added for a prior model's vision limitations; several are now counterproductive.
+
+**Long context.** 1M-token context window as both the default *and* the maximum. Instruction following, tool calling, and reasoning stay strong across the full window.
+
+**Office and document tasks.** Generates and edits complex multi-sheet Excel files with non-trivial formulas, and visually strong PowerPoint decks that follow slide-design best practices; can be prompted to adhere to a specific style or template.
+
+**Multi-agent coordination.** Coordinates teams of subagents well — few cases of agents overwriting each other's work, effective writer-verifier patterns. **Cost-sensitive workloads should cap multi-agent usage** — see the delegation section below; this model reaches for subagents more readily than its predecessors.
+
+### Behavioral shifts (prompt-tunable)
+
+**Longer user-facing responses.** Default response text is longer than on prior models. **\`effort\` is not the lever here** — changing it may move thinking volume without reliably changing visible output length. Prompting is: in testing, a short conciseness instruction cut user-facing response length by ~20%.
+
+> *"Keep responses focused, brief, and concise to avoid overwhelming the person. Disclaimers and caveats are brief, with most of the response on the main answer; when asked to explain something, give a high-level summary unless an in-depth one is specifically requested."*
+
+For a long system prompt, pair that with a one-line reminder near the end:
+
+> \`\`\`
+> <tone_preference>
+> Keep outputs reasonably concise.
+> </tone_preference>
+> \`\`\`
+
+**More narration in agentic sessions** (the lever runs both ways — the same explicit-description technique tunes narration *up* or restyles it). {{OPUS_NAME}} narrates what it is about to do, and its per-message output in agentic sessions is longer than prior models'. It responds well to explicit guidance on *how* to communicate during a task rather than just *how much*. For coding agents, this block calibrates it:
+
+> \`\`\`
+> # Communicating with the user
+> Your text output is what the user reads between tool calls; they usually can't see your thinking or the raw tool results. Write it for a teammate who stepped away and is catching up, not for a log file: they don't know the codenames or shorthand you created along the way, and they didn't watch your process unfold. Before your first tool call, say in a sentence what you're about to do; while working, give brief updates when you find something load-bearing or change direction.
+>
+> Lead with the outcome. Your first sentence after finishing should answer "what happened" or "what did you find" — the thing the user would ask for if they said "just give me the TLDR." Supporting detail and reasoning should come after, for readers who want them.
+>
+> Being readable and being concise are different things, and readable matters more. If the user has to reread your summary or ask you to explain, any time saved by brevity is gone. The way to keep output short is to be selective about what you include (drop details that don't change what the reader would do next), not to compress the writing into fragments, abbreviations, arrow chains like \`A → B → fails\`, or jargon. What you do include, write in complete sentences with the technical terms spelled out. Don't make the reader cross-reference labels or numbering you invented earlier; say what you mean in place.
+>
+> Match the response to the question: a simple question should be answered with a direct answer in prose, not headers and sections. Use tables only for short enumerable facts, with explanations in the surrounding prose rather than the cells. Calibrate to the user — a bit tighter for an expert, more explanatory for someone newer.
+>
+> Write code that reads like the surrounding code: match its comment density, naming, and idiom.
+>
+> Only write a code comment to state a constraint the code itself can't show — never to say where it came from, what the next line does, or why your change is correct; that's you talking to the reviewer, not the next reader, and it's noise the moment the PR merges.
+> \`\`\`
+
+**Longer written deliverables.** Separate from conversational verbosity: files {{OPUS_NAME}} writes to disk — reports, Markdown documents, summaries — are often longer than on prior models. If your product ships Claude-authored documents, calibrate length explicitly:
+
+> *"Match the length of written deliverables (especially Markdown files) to what the task needs: cover the substance, but do not pad documents with filler sections, redundant summaries, or boilerplate."*
+
+**Self-check instructions are the same trap.** Beyond harness scaffolding, per-prompt re-check phrasing — *"double-check your answer"*, *"re-verify before responding"* — triggers the same extra work. Note this **inverts a standard prompting best practice**: "ask Claude to self-check" is generally sound advice and is wrong here, so a prompt library that applies it uniformly needs a carve-out for this model rather than a global rule.
+
+**Over-verification — delete your verification scaffolding.** {{OPUS_NAME}} verifies its own work without being asked. Instructions that *tell* it to verify ("include a final verification step for virtually any non-trivial task", "use a subagent to verify") now cause over-verification. **Removing them reduces over-verification with no capability regression** — a delete, not a rewrite. Same for harness-level scaffolding: separate verification steps carried over from prior models are likely redundant now.
+
+**Task scope expansion.** It can add steps the user didn't request, or apply its own judgment about what the task should be without making that clear. In testing, this instruction reduced scope changes to nearly zero without producing excessive clarifying questions:
+
+> *"Deliver what the user asked for, at the scope they intended. Interpret ambiguity the way a careful colleague would: make routine judgment calls yourself, and check in only when different readings would lead to materially different work. If you conclude the ask is mistaken or a better approach exists, say so in a sentence and keep going with the task as asked — don't quietly narrow, widen, or transform it. Finish the whole task, not just the easy part of it - only report completion when it's fully done. If you genuinely can't complete something, do the rest and state plainly what's missing and why. Stop short of actions or changes that are clearly beyond what the user's ask implies."*
+
+The wording adds a **finish-the-whole-task** clause — report completion only when the work is actually done, and if something genuinely can't be finished, do the rest and say plainly what is missing. That covers premature "done" claims, which scope-discipline wording alone did not.
+
+**Delegates to subagents more readily — the opposite of Opus 4.8.** A direction change: Opus 4.8 *under*-reached for subagents and needed prompting to delegate. {{OPUS_NAME}} reaches for them freely, which multiplies cost and latency — each subagent re-establishes context, re-explores, reports back, and then the coordinator re-reads the report. If your harness supports subagents, **any "delegate more" guidance you added for Opus 4.8 should come out**, and you likely want an explicit cap. A deterministic ceiling on spawn count is the reliable lever; this block reduces delegation and token spend:
+
+> \`\`\`
+> ## Delegating to subagents
+> Subagents multiply cost and time: each one re-establishes context, re-explores, and reports back, and you then re-read its report. Delegate rarely and only when the payoff clearly exceeds that overhead.
+>
+> Do use subagents for:
+> - Large tasks that are genuinely independent and parallelizable. For example, wide multi-file investigations.
+>
+> Do NOT use subagents for:
+> - Work you could finish yourself in a handful of tool calls. For example: a few file reads, a handful of edits, a simple search task, relatively simple verification.
+> - Review, verification, or to double check your work. Verification belongs in your main agent loop.
+>
+> Use of parallel or multiple subagents:
+> - Do not use multiple subagents on a single small task. Parallel subagents are for genuinely independent, sizeable tracks (unrelated modules, a wide multi-file investigation), not for splitting one modest job into pieces.
+> - If the task can be completed with one subagent, choose one subagent over multiple subagents. Keep spawn counts low.
+> - Never use more than 20 parallel agents unless the user explicitly requests it.
+>
+> When delegating to subagents:
+> - Brief the subagent precisely the first time. Avoid launching, waiting, and re-briefing.
+> - If you delegate, commit to the delegation. Never redo the subagent's work and do not re-derive its findings once it reports back.
+> - If you launch multiple agents for independent work, send them in a single message with multiple tool uses so they run concurrently.
+> \`\`\`
+
+Note the interaction with over-verification: "do not use subagents to verify" and "delete your verification scaffolding" are the same underlying fix seen from two angles.
+
+**Narrates self-corrections more than prior models.** It flags and explains its own earlier mistakes at length, which reads as thrash in a user-facing product. Scope corrections to the ones that actually change the user's outcome:
+
+> \`\`\`
+> # Corrections
+> Avoid unnecessary or excessive self-correction. Only correct an earlier statement in your user-facing text when the error would change the user's code, conclusions, or decisions. State corrections plainly and concisely, and continue the task; combine multiple corrections rather than enumerating them all. For slips that change nothing for the user, simply make the correction and move on - no need to note it explicitly. Don't add apologies or preambles, don't be overly self-critical, and don't ruminate or give a detailed account of the mistake or tally past errors. Sometimes, other agents will report incorrect or misleading results - don't always take them at face value immediately. If other agents correct your statements and they are right, then simply update your approach without narrating too much about the correction to the user. This instruction does not apply to thinking blocks.
+>
+> A follow-up question about your earlier work is not, by itself, a signal that you got something wrong — answer what was asked. A statement that was accurate needs no correction: don't re-audit how you phrased it, how you verified it, or limits you already stated. When the user does point to a real error, correct it plainly as above.
+> \`\`\`
+
+The second paragraph matters as much as the first: a plain follow-up question can otherwise trigger a re-audit of work that was correct.
+
+**Severity filters still depress measured recall.** Unchanged from 4.7/4.8: if a review harness says "only report high-severity issues" or "be conservative", {{OPUS_NAME}} follows it literally. Ask it to report everything with confidence and severity, and filter in a separate pass — see the **Code review** guidance in the Opus 4.7 section for the recommended prompt.
+
+### {{OPUS_NAME}} Migration Checklist
+
+**\`[BLOCKS]\`** items cause a 400 error if missed; **\`[TUNE]\`** items are quality/cost adjustments — surface them to the user as recommendations.
+
+- [ ] **[BLOCKS]** Update the \`model=\` string to \`{{OPUS_ID}}\`
+- [ ] **[BLOCKS]** Any route combining \`thinking: {type: "disabled"}\` with \`effort\` of \`xhigh\` or \`max\`: enable thinking, or lower effort to \`high\` or below. Validated per request, so audit every call site, not just the first
+- [ ] **[BLOCKS]** Every route that never set \`thinking\`: it now thinks, and \`max_tokens\` caps thinking + response text together. Raise \`max_tokens\` or pass \`thinking: {type: "disabled"}\` at effort \`high\` or below — otherwise responses truncate mid-answer
+- [ ] **[BLOCKS]** *(only if coming from Opus 4.7 or earlier)* Apply the **Migrating to Opus 4.7** breaking changes first — \`budget_tokens\` → adaptive thinking, strip \`temperature\`/\`top_p\`/\`top_k\`, remove last-assistant-turn prefills
+- [ ] **[TUNE]** Effort: start \`xhigh\` for coding/agentic and \`high\` elsewhere, then sweep down — \`low\`/\`medium\` are unusually strong here, and prior-model defaults rarely transfer. At \`xhigh\`/\`max\`, set \`max_tokens\` to at least 64K
+- [ ] **[TUNE]** Re-check prompts you'd written off as uncacheable — the minimum drops to 512 tokens (from 1024 on Opus 4.8)
+- [ ] **[TUNE]** Rate limits: {{OPUS_NAME}} is a separate bucket from the combined Opus 4.x pool — confirm your tier's limits before shifting volume
+- [ ] **[TUNE]** Fast mode (\`speed: "fast"\`, \`fast-mode-2026-02-01\`, $10/$50) is Claude-API-only — drop it on Bedrock, Google Cloud, and Foundry routes
+- [ ] **[TUNE]** Verbosity: add a conciseness instruction (and a \`<tone_preference>\` tag for long system prompts). Do **not** try to shorten output by lowering \`effort\` — it doesn't reliably work
+- [ ] **[TUNE]** Agentic sessions: add a "Communicating with the user" block to calibrate inter-tool-call narration
+- [ ] **[TUNE]** Claude-authored files: add a deliverable-length instruction
+- [ ] **[TUNE]** **Delete** verification instructions from prompts and verification steps from the harness — including per-prompt *"double-check your answer"* phrasing, which inverts the usual self-check best practice on this model
+- [ ] **[TUNE]** Add the scope-discipline instruction if the model expands task scope
+- [ ] **[TUNE]** Vision pipelines: re-validate prompt-side workarounds written for a prior model's vision limitations
+- [ ] **[TUNE]** Consider mid-conversation tool changes (\`mid-conversation-tool-changes-2026-07-01\`) — changes the tool set between turns without invalidating the prompt cache. Note per-turn \`effort\` / \`task_budget\` are **not** in this launch; both stay request-level
+- [ ] **[TUNE]** Subagent-capable harnesses: this model delegates *more* readily than Opus 4.8 — remove any "delegate more" guidance you added for 4.8 and add an explicit cap
+- [ ] **[TUNE]** User-facing products: add the corrections instruction if self-correction narration reads as thrash
+- [ ] **[TUNE]** Any route running \`thinking: {type: "disabled"}\`: prefer turning thinking on at \`low\`/\`medium\` effort. Disabled thinking can emit tool calls as plain text (the call silently never runs) and leak \`<thinking>\` tags into output. If you must stay thinking-off, add *"You may say a brief sentence before using a tool"*, delete any don't-think/don't-reason rule, and use a generic *"no internal or system XML tags"* instruction
+- [ ] **[TUNE]** Vision pipelines: give it crop/analyze/verify tools — cheaper and more effective than raising thinking
+- [ ] **[TUNE]** Handle \`stop_reason: "refusal"\` before reading \`content\`, and opt into \`fallbacks: "default"\` (\`server-side-fallback-2026-07-01\`) rather than pinning a model — cyber-category refusals route to {{PREV_OPUS_NAME}}
+- [ ] **[TUNE]** Long-horizon / agentic work: give the complete task spec up front in one turn rather than building it up across interactive turns
+
+---
+
+## Migrating to {{SONNET_NEXT_NAME}}
+
+> **Model ID \`{{SONNET_NEXT_ID}}\` is authoritative as written here.** When the user asks to migrate to {{SONNET_NEXT_NAME}}, write \`model="{{SONNET_NEXT_ID}}"\` exactly. Do not WebFetch to verify — this guide is the source of truth for migration target IDs. The corresponding entry exists in \`shared/models.md\`.
+
+{{SONNET_NEXT_NAME}} substantially improves on Sonnet 4.6 for coding and agentic work, reaching previously Opus-tier quality on many tasks. Its API surface aligns with Opus 4.7/4.8: manual extended thinking is removed (adaptive or disabled only; adaptive is the default), and non-default sampling parameters are rejected. Layered on top of the Sonnet 4.6 migration above — from Sonnet 4.5 or older, apply the 4.6 changes first, then this one.
+
+**TL;DR for someone already on Sonnet 4.6:** swap the model ID to \`{{SONNET_NEXT_ID}}\`. Replace any remaining \`thinking: {type: "enabled", budget_tokens: N}\` with \`thinking: {type: "adaptive"}\` (the transitional escape hatch is gone — it now 400s); note that omitting \`thinking\` now runs adaptive (4.6 ran thinking-off). Strip non-default \`temperature\`/\`top_p\`/\`top_k\`. Re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` — the new tokenizer produces ~30% more tokens for the same text, so token-budgeted limits and cost baselines shift even though per-token pricing is unchanged. \`effort\` defaults to \`high\` (same as Sonnet 4.6) — raise to \`xhigh\` for the hardest coding and agentic tasks ({{SONNET_NEXT_NAME}} supports the full \`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\` range), and give \`max_tokens\` headroom at \`xhigh\`/\`max\`. Then re-tune prompts: it interprets instructions more literally than 4.6 (holdover style/tone directives now apply at face value); it's more agentic by default, reaching for tools and self-verification more readily (with thinking disabled it's less tool-eager — add an explicit nudge); it gives better in-progress updates (drop forced "summarize every N tool calls" scaffolding); and code-review harnesses with conservative-reporting instructions may see lower recall (tell it to report everything and filter downstream).
+
+### Breaking changes (will 400 on {{SONNET_NEXT_NAME}})
+
+These bring the Sonnet line onto the same request surface as Opus 4.7/4.8. See the **Per-SDK Syntax Reference** above for the language-specific spelling of each.
+
+**1. Extended thinking removed — adaptive only.** \`thinking: {type: "enabled", budget_tokens: N}\` returns a 400; the transitional escape hatch that still worked on Sonnet 4.6 is gone. Use adaptive thinking with an effort hint:
+
+\`\`\`python
+# Before — deprecated on Sonnet 4.6, now errors on {{SONNET_NEXT_NAME}}
+thinking={"type": "enabled", "budget_tokens": 10000}
+
+# After
+thinking={"type": "adaptive"},
+output_config={"effort": "high"},  # or "xhigh" for the hardest coding/agentic tasks
+\`\`\`
+
+To turn thinking off entirely, set \`thinking: {type: "disabled"}\` — but see *Adaptive vs. disabled* below first.
+
+**2. Sampling parameters rejected.** Setting \`temperature\`, \`top_p\`, or \`top_k\` to a non-default value returns a 400; omitting it, or passing its default, is still accepted. Safest migration: omit them and steer with prompting. If the caller relied on \`temperature=0\` for determinism, note it never guaranteed identical outputs.
+
+\`\`\`python
+# Before
+client.messages.create(model="claude-sonnet-4-6", temperature=0.2, ...)
+
+# After — omit entirely
+client.messages.create(model="{{SONNET_NEXT_ID}}", ...)
+\`\`\`
+
+**3. Bedrock only: forced \`tool_choice\` requires \`thinking: {type: "disabled"}\`.** On Amazon Bedrock, pass \`thinking: {type: "disabled"}\` alongside \`tool_choice: {type: "tool", name: ...}\` or \`tool_choice: {type: "any"}\`. The Claude API and Vertex AI don't require this.
+
+**Not a request-shape error, but handle it: cybersecurity safeguards.** {{SONNET_NEXT_NAME}} is substantially more cyber-capable than Sonnet 4.6, so — like Opus 4.7/4.8 — requests touching prohibited or high-risk topics may be refused. Handle it as a content outcome (see the \`refusal\` stop-reason guidance in the {{FABLE_NAME}} section for a fallback path).
+
+**Unchanged from Sonnet 4.6:** assistant-turn prefills still 400 (use \`output_config.format\` or a system-prompt instruction); the 1M-token context window, 128k max-output ceiling, prompt caching, batch processing, Files API, PDF support, vision, and the full server- and client-side tool set all carry over.
+
+### Silent default change: adaptive thinking on when \`thinking\` is omitted
+
+On Sonnet 4.6, a request with no \`thinking\` field runs **without** thinking. On {{SONNET_NEXT_NAME}}, the same request runs with **adaptive thinking** — callers who never set \`thinking\` now see thinking output (and spend thinking tokens) where they didn't before. Since \`max_tokens\` is a hard limit on total output (thinking + response text), a workload that ran thinking-off on 4.6 by omission may now truncate. Either set \`thinking: {type: "disabled"}\` explicitly to keep the old behavior, or raise \`max_tokens\` to leave room for thinking.
+
+### Silent default change: \`thinking.display\` defaults to \`"omitted"\`
+
+\`thinking.display\` defaults to \`"omitted"\` on {{SONNET_NEXT_NAME}} (matching Opus 4.7/4.8 and {{FABLE_NAME}}); on Sonnet 4.6 it defaulted to \`"summarized"\`. With the default, \`thinking\` blocks stream with empty text — to a streaming UI this looks like a long pause before output. Combined with adaptive-on-by-default, a 4.6 caller who omits \`thinking\` now gets adaptive thinking *and* empty-text thinking blocks. If you stream reasoning to users, set \`thinking: {type: "adaptive", display: "summarized"}\` explicitly. \`display\` controls visibility only — thinking happens and is billed the same under every setting.
+
+### New tokenizer (~30% more tokens)
+
+{{SONNET_NEXT_NAME}} uses the same new tokenizer as Opus 4.7/4.8 — the same input text produces ~30% more tokens than on Sonnet 4.6. No request/response shape changes and no code edits, but **everything measured or budgeted in tokens shifts**: \`usage\` fields and \`count_tokens()\` results are higher, the 1M context window holds less text, and a \`max_tokens\` limit tuned for 4.6 may truncate equivalent output. Per-token pricing is unchanged at the $3/$15 sticker (introductory $2/$10 per MTok through 2026-08-31), so an equivalent request's cost can differ. Re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` rather than reusing counts from earlier models, and re-baseline cost dashboards before reacting.
+
+### Choosing an effort level on {{SONNET_NEXT_NAME}}
+
+\`effort\` defaults to \`high\` when unset (same as Sonnet 4.6 and Opus 4.8). {{SONNET_NEXT_NAME}} supports the full \`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\` range — the first Sonnet-tier model with \`xhigh\`. Keep \`high\` for most work, raise to \`xhigh\` for the hardest coding and agentic tasks:
+
+| Level    | When to use on {{SONNET_NEXT_NAME}} |
+| -------- | ----- |
+| \`max\`    | Highest capability with no token constraint. Can deliver gains but may show diminishing returns and sometimes overthinks — test before committing |
+| \`xhigh\`  | The hardest coding and agentic use cases — the recommended setting for those |
+| \`high\`   | The default; balances token usage and intelligence for most use cases |
+| \`medium\` | Cost-saving step-down from the default — comparable to Sonnet 4.6 at \`high\` |
+| \`low\`    | Short, scoped tasks and latency-sensitive workloads that aren't intelligence-sensitive |
+
+Rough cross-model mapping: {{SONNET_NEXT_NAME}} at \`medium\` ≈ Sonnet 4.6 at \`high\`, and at \`high\` ≈ Sonnet 4.6 at \`max\`. When benchmarking, match by observed thinking length, not effort name.
+
+{{SONNET_NEXT_NAME}} respects effort levels strictly, especially at the low end. At \`low\`/\`medium\` it scopes work to what was asked — good for latency and cost, but on moderately complex tasks at \`low\` there's some risk of under-thinking. If shallow reasoning shows up on complex problems, raise effort to \`high\`/\`xhigh\` rather than prompting around it. If \`effort\` must stay \`low\` for latency: *"This task involves multi-step reasoning. Think carefully through the problem before responding."*
+
+**Leave \`max_tokens\` headroom at \`xhigh\`/\`max\`.** Set a large output budget (up to the 128k cap, unchanged from Sonnet 4.6) so the model has room for thinking and tool calls. On long tasks adaptive thinking can take a large share of the budget; if it's tight you may see a response that's almost all thinking, a truncated answer, and \`stop_reason: "max_tokens"\` — raise \`max_tokens\` or drop to \`medium\`. The new tokenizer (~30% more tokens) means 4.6-tuned \`max_tokens\` limits may truncate equivalent output.
+
+### Adaptive vs. disabled thinking
+
+Leave adaptive thinking on — {{SONNET_NEXT_NAME}} calibrates thinking spend to task complexity, and the small added latency is usually worth the quality gain. If the caller ran Sonnet 4.6 with thinking off, try adaptive + \`effort: "low"\` first rather than \`thinking: {type: "disabled"}\`.
+
+Triggering is steerable. If it emits thinking blocks more often than wanted (can happen with large/complex system prompts), prompt it directly and measure the effect on quality: *"Thinking adds latency and should only be used when it will meaningfully improve answer quality, typically for problems that require multi-step reasoning. When in doubt, respond directly."* Conversely, if hard workloads at \`medium\` under-think, raise effort first.
+
+### Capability improvements
+
+**Coding and agentic tasks.** The largest gains over Sonnet 4.6. {{SONNET_NEXT_NAME}} performs well out of the box on existing 4.6 prompts.
+
+**High-resolution vision.** First Sonnet-tier model with high-resolution image support: max **2576 pixels on the long edge** (up from 1568px on Sonnet 4.6). High-res images can use up to ~3× more image tokens (4784 vs 1568 per image at the limit) — downsample before sending if the fidelity isn't needed. No beta header or opt-in.
+
+**Computer use.** Supports \`computer_20251124\` (beta header \`computer-use-2025-11-24\`). Works across resolutions up to the 2576px / 3.75MP maximum; **1080p** screenshots balance performance and cost, **720p** or **1366×768** are lower-cost options. Test for ideal settings; experimenting with \`effort\` can help.
+
+### Behavioral shifts (prompt-tunable)
+
+None break code, but prompts tuned for Sonnet 4.6 may land differently. {{SONNET_NEXT_NAME}} follows instructions closely, so small explicit directives close the gap.
+
+**Response length and verbosity.** Calibrates length to task complexity rather than a fixed verbosity — shorter on simple lookups, longer on open-ended analysis. To decrease verbosity: *"Provide concise, focused responses. Skip non-essential context, and keep examples minimal."* For specific verbosity (e.g. over-explaining), add targeted instructions; positive examples of the desired concision work better than telling it what not to do.
+
+**Tool use triggering.** More agentic than Sonnet 4.6 by default — reaches for tools and runs self-verification loops more readily. **With thinking disabled**, it's less likely to reach for tools or search; if the harness relies on tool calls with thinking off, add an explicit nudge. \`effort\` is also a lever (\`high\`/\`xhigh\` show substantially more tool usage in agentic search and coding). For under-used tools, instruct when and how to use them.
+
+**User-facing progress updates.** Provides regular, higher-quality updates throughout long agentic traces by default. Drop forced interim-status scaffolding ("After every 3 tool calls, summarize progress"); if the updates aren't well-calibrated, describe what they should look like with an example.
+
+**More literal instruction following.** Interprets prompts literally and explicitly, especially at lower effort. It won't silently generalize an instruction from one item to another or infer requests you didn't make — better for tuned prompts, structured extraction, and predictable pipelines. State the scope explicitly when an instruction should apply broadly ("Apply this formatting to every section, not just the first"). The same literalism means holdover style/tone directives from 4.6 may over-apply — re-baseline lines like "be concise" before keeping them.
+
+**Tone and writing style.** Prose style on long-form writing may shift; re-evaluate style prompts against the new baseline. For a warmer voice: *"Use a warm, collaborative tone. Acknowledge the user's framing before answering."* Because \`temperature\`/\`top_p\`/\`top_k\` are rejected, callers who relied on \`temperature\` for stylistic variety must use system-prompt instructions instead.
+
+**Code review harnesses.** Same caveat as Opus 4.7/4.8: with "only report high-severity" / "be conservative" filters, {{SONNET_NEXT_NAME}} follows them more faithfully — precision rises but measured recall can fall even though bug-finding improved. Tell it to report everything with confidence + severity and filter downstream — see the **Code review** guidance in the 4.7 section for the recommended prompt.
+
+**Design and frontend defaults.** May settle into a consistent default visual style on open-ended briefs. Generic instructions ("don't use that color," "make it clean and minimal") shift it to a different fixed palette rather than producing variety. Two reliable approaches: specify a concrete alternative (palette, typography, layout, spacing), or have the model propose 4 distinct visual directions (bg hex / accent hex / typeface + one-line rationale) and pick one. With \`temperature\` rejected, propose-then-pick is the way to get meaningfully different directions across runs. The anti-slop nudge from the 4.7 **Design and frontend coding** section applies here too.
+
+**Interactive coding products.** Token usage and behavior differ between autonomous single-turn agents and interactive multi-turn ones. To maximize performance and efficiency, use \`effort: "xhigh"\`/\`"high"\`, add autonomous features (e.g. auto mode), and reduce required human interactions. Specify task, intent, and constraints upfront in the first turn — well-specified initial prompts maximize autonomy and intelligence while minimizing extra token usage; ambiguous, progressively-revealed prompts reduce efficiency and sometimes performance.
+
+### {{SONNET_NEXT_NAME}} Migration Checklist
+
+\`[BLOCKS]\` items cause a 400 or truncated output if missed — apply as code edits. \`[TUNE]\` items are quality/cost adjustments — surface as recommendations.
+
+- [ ] **[BLOCKS]** Update the \`model=\` string to \`{{SONNET_NEXT_ID}}\`
+- [ ] **[BLOCKS]** Replace \`thinking: {type: "enabled", budget_tokens: N}\` with \`thinking: {type: "adaptive"}\` + \`output_config.effort\` — the Sonnet 4.6 transitional escape hatch is gone
+- [ ] **[BLOCKS]** Strip \`temperature\`, \`top_p\`, \`top_k\` from request construction (use system-prompt instructions for tone/variety instead)
+- [ ] **[BLOCKS]** Bedrock only: pass \`thinking: {type: "disabled"}\` alongside forced \`tool_choice\` (\`{type: "tool"}\` / \`{type: "any"}\`) — not required on the Claude API or Vertex AI
+- [ ] **[BLOCKS]** At \`effort: "xhigh"\` or \`"max"\`: set a large \`max_tokens\` (up to 128k, unchanged from Sonnet 4.6) so the model has room for thinking and tool calls — 4.6-tuned limits may truncate under the new tokenizer (symptom: \`stop_reason: "max_tokens"\`)
+- [ ] **[TUNE]** Thinking-field omitted: adaptive is now the default (4.6 ran thinking-off) — set \`thinking: {type: "disabled"}\` to preserve the old behavior, or revisit \`max_tokens\` for the added thinking spend
+- [ ] **[TUNE]** \`thinking.display\` defaults to \`"omitted"\` (4.6 defaulted to \`"summarized"\`): if you stream reasoning to users, set \`thinking: {type: "adaptive", display: "summarized"}\` explicitly — the default streams empty-text thinking blocks (long pause before output)
+- [ ] **[TUNE]** New tokenizer: re-run \`count_tokens()\` against \`{{SONNET_NEXT_ID}}\` (~30% more tokens for the same text); revisit \`max_tokens\` and compaction triggers; re-baseline cost dashboards before reacting (per-token pricing unchanged)
+- [ ] **[TUNE]** Effort: keep the \`high\` default; raise to \`xhigh\` for the hardest coding/agentic tasks; \`medium\` is a cost-saving step-down (≈ Sonnet 4.6 at \`high\`); reserve \`low\` for short, latency-sensitive, non-intelligence-sensitive tasks. If shallow reasoning shows up at \`low\`/\`medium\`, raise effort rather than prompting around it
+- [ ] **[TUNE]** Thinking-off callers: try \`thinking: {type: "adaptive"}\` + \`effort: "low"\` instead of \`disabled\`; if \`disabled\` must stay, add an explicit tool-triggering nudge (less tool-eager with thinking off)
+- [ ] **[TUNE]** Tool usage: more agentic than 4.6 by default — \`effort\` is a lever (\`high\`/\`xhigh\` for more tool use); add explicit when/how triggering instructions for under-used tools
+- [ ] **[TUNE]** Drop forced progress-update scaffolding ("after every N tool calls, summarize") — default updates are higher quality; describe the desired shape if it still needs tuning
+- [ ] **[TUNE]** Re-baseline holdover style/tone/scope directives — instructions are followed literally; state the scope explicitly when one should apply broadly
+- [ ] **[TUNE]** Verbosity-sensitive routes: tune response length via prompt (positive examples > "don't" instructions)
+- [ ] **[TUNE]** Code-review harnesses with conservative-reporting instructions: switch to a coverage-first prompt (report everything with confidence + severity) and filter downstream — measured recall can otherwise fall even though bug-finding improved
+- [ ] **[TUNE]** Open-ended frontend/design briefs: specify a concrete spec, or have the model propose 3–4 visual directions and pick one (the substitute for \`temperature\`-driven variety)
+- [ ] **[TUNE]** Interactive coding products: use \`effort: "xhigh"\`/\`"high"\`, add autonomous features (e.g. auto mode), and put task/intent/constraints in the first turn
+- [ ] **[TUNE]** Vision-heavy / computer-use pipelines: leave images at native resolution up to 2576px long edge (downsample to control image-token cost if fidelity isn't needed); for computer use, 1080p screenshots balance performance/cost with \`computer_20251124\`
+- [ ] **[TUNE]** Security workloads: add handling for safeguard refusals (cyber-capable topics may now be declined where Sonnet 4.6 answered)
+
+---
+
+## Migrating to {{FABLE_NAME}}
+
+> **Model IDs \`{{FABLE_ID}}\` and \`{{MYTHOS_ID}}\` are authoritative as written here.** Migrating to {{FABLE_NAME}}: write \`model="{{FABLE_ID}}"\`. A Mythos Preview migrator in Project Glasswing writes \`model="{{MYTHOS_ID}}"\` (everyone else: \`{{FABLE_ID}}\`). Don't WebFetch to verify — this guide is the source of truth for migration target IDs.
+
+{{FABLE_NAME}} is Anthropic's most capable widely released model. **{{MYTHOS_NAME}}** (\`{{MYTHOS_ID}}\`) has the same capabilities, pricing, and API behavior through Project Glasswing (the only way to access it) and succeeds the invitation-only **Claude Mythos Preview** (\`claude-mythos-preview\`). Everything here applies to both — only the ID differs. 1M token context window by default; up to 128K output tokens per request.
+
+Migrate here only when the user explicitly chose it — pricing is above Opus-tier, so it's *not* the default Opus upgrade. For "upgrade to the latest model", the target stays \`{{OPUS_ID}}\`.
+
+### Breaking changes (vs Opus-tier and Mythos Preview)
+
+1. **Thinking is always on — remove all \`thinking\` configuration.** Adaptive thinking applies automatically when \`thinking\` is unset (explicit \`{type: "adaptive"}\` is also accepted). \`{type: "disabled"}\` and \`{type: "enabled", budget_tokens: N}\` both 400. \`budget_tokens\` has no replacement — \`output_config.effort\` is an output-level control, not a thinking budget.
+
+\`\`\`python
+# After ({{FABLE_NAME}}) — no thinking field at all
+client.messages.create(
+    model="{{FABLE_ID}}",
+    max_tokens=16000,
+    output_config={"effort": "high"},
+    messages=[...],
+)
+\`\`\`
+
+2. **Assistant prefill is not supported.** Replace last-assistant-turn prefills with structured outputs (\`output_config.format\`) or system-prompt instructions — same patterns as the 4.6-family prefill removal above. (Exception: the fallback-credit prefill claim — see the refusal section.)
+3. **Interleaved scratchpad is not supported** (Mythos Preview migrators only). Inter-tool reasoning comes back in thinking blocks instead, which adaptive thinking produces automatically between tool calls.
+
+### Thinking output
+
+Raw chain of thought is never returned. You get **regular \`thinking\` blocks** (not encrypted blobs or \`redacted_thinking\`): \`display: "summarized"\` returns a readable summary; \`"omitted"\` (default, as on Opus 4.8/4.7) still includes \`thinking\` blocks but with an empty \`thinking\` field. \`display\` controls visibility only; thinking happens and is billed the same. Continuing on the same model: pass each thinking block back **exactly as received — including empty ones**. The API rejects *modified* blocks, not blocks you've read.
+
+{{FABLE_NAME}}/{{MYTHOS_NAME}} thinking is the exception to cross-model replay: a thinking block from these models replayed to a *different* model is **dropped from the prompt** rather than rendered — typically silently (early builds hard-rejected; reverted before launch but still rolling out, so don't depend on either outcome). The drop happens before pricing, so it **lowers \`usage.input_tokens\`** — nothing to strip. Don't strip *regular* thinking blocks either (removing them can trigger ordering/signature 400s). A request trying to elicit internal reasoning *in the response text* can refuse with \`stop_details.category: "reasoning_extraction"\` — read the summarized \`thinking\` blocks instead.
+
+### Tokenizer — unchanged from Opus 4.8
+
+Same tokenizer as Opus 4.8 (introduced with Opus 4.7). From Opus 4.7/4.8 or \`claude-mythos-preview\`: token counts roughly unchanged — re-baseline cost/latency for the per-token price difference. From Opus 4.6 / Sonnet / Haiku / older: ~1×–1.35× as many tokens; re-baseline with \`count_tokens\` (call once per model, compare \`input_tokens\`).
+
+### \`refusal\` stop reason — handle before reading content
+
+{{FABLE_NAME}} runs safety classifiers on incoming requests (research biology, most cybersecurity — not its intended domains); benign adjacent work can trigger false positives, which is why fallbacks matter even for legitimate workloads. A declined request returns **HTTP 200** with \`stop_reason: "refusal"\` plus a \`stop_details\` object carrying the policy category (\`"cyber"\`, \`"bio"\`, \`"reasoning_extraction"\`, \`"frontier_llm"\`, or \`null\` — \`null\` is a valid permanent state). **Branch on \`stop_reason\`, never on \`stop_details\`** (it's informational, can be \`null\` on a refusal, and \`explanation\` isn't guaranteed). Classifier blocks and ordinary model refusals both surface as \`stop_reason: "refusal"\`; \`stop_details.category\` tells which. The classifier can fire **before any output** (empty \`content\`; not billed — no tokens, no rate-limit consumption) or **mid-stream** (already-streamed output billed normally — discard it). Code reading \`response.content[0]\` unconditionally breaks — check \`stop_reason\` first.
+
+**Default to opting in.** Fallbacks are not automatic on the API. Ship migrated/new {{FABLE_NAME}} code with pattern 1 (or pattern 2 where server-side isn't supported) from day one — emit it, tell the user, remove only if they decline. Three ways to retry a refused request on another model, in order of preference:
+
+**1. Server-side \`fallbacks\` parameter (beta; **Claude API only** — Claude Platform on AWS support is still being validated, so don't assume it) — preferred.** One round trip, plain client. Only supported target at launch is \`claude-opus-4-8\`. On a policy decline the API runs the next model on the same request; a final \`stop_reason: "refusal"\` means the whole chain refused.
+
+\`\`\`python
+response = client.beta.messages.create(
+    model="{{FABLE_ID}}",
+    max_tokens=1024,
+    betas=["server-side-fallback-2026-06-01"],
+    fallbacks=[{"model": "claude-opus-4-8"}],
+    messages=[{"role": "user", "content": "Hello, Claude"}],
+)
+\`\`\`
+
+- **Header depends on the form.** The **array** form (\`fallbacks: [{...}]\`) requires exactly \`server-side-fallback-2026-06-01\` — other \`server-side-fallback-*\` values 400; that date is the *earliest* of the series (\`-2026-06-09\`/\`-2026-06-02\` were earlier previews), so don't "correct" it newer. The **\`"default"\` scalar** form uses \`server-side-fallback-2026-07-01\` instead (see § New API features under Migrating to {{OPUS_NAME}}). Pairing either header with the other form 400s. Rejected on Batches; not on Bedrock/Vertex/Foundry (use pattern 2 there). Per-entry \`max_tokens\` override allowed; \`thinking\`/\`output_config\`/\`speed\` overrides are rolling out — until then include only \`model\` and \`max_tokens\`. Entries must be distinct and in the model's \`allowed_fallback_models\`.
+- **Triggers on policy declines only** — rate limits, overloads, server errors are returned as-is.
+- **Reading the response:** a \`fallback\` content block (\`{"type":"fallback","from":{...},"to":{...}}\`) marks each switch point; the served-by signal is a \`fallback_message\` entry in \`usage.iterations\` (don't rely on the block — sticky-served turns have none). Top-level \`model\` names the producer.
+- **Billing:** \`usage.iterations\` is per-attempt source of truth; top-level \`usage\` covers only the returned attempt. Declined-before-output attempts are reported, not billed. Each attempt claims its own model's rate limits — if the fallback is rate-limited/overloaded it isn't tried and the refusal is returned with \`stop_details.recommended_model\` (a hint, \`null\` when none).
+- **Sticky routing:** once a conversation falls back, later *non-streaming* \`fallbacks\` requests serve directly from the fallback model ~1 hour (best-effort, org-scoped content hash, not for ZDR orgs). Not consulted on streaming.
+- **Echoing fallback turns back:** after a mid-output fallback, omit \`thinking\`/\`redacted_thinking\`/\`tool_use\` blocks (plus any \`server_tool_use\` without its \`server_tool_result\`, and unknown model-internal blocks) that appear *before* the final \`fallback\` block; text, paired server-tool blocks, and everything after echo normally. The \`fallback\` block is an ignorable audit marker.
+
+**2. SDK client-side middleware — for providers without server-side fallbacks (Bedrock, Vertex, Foundry).** Register on the client; every \`client.beta.messages\` request (streaming included) retries refusals, splicing the fallback model's events onto the open stream in pattern-1 wire shape. Sends \`fallback-credit-2026-06-01\` by default so retries reprice via credit tokens. \`BetaFallbackState\` pins follow-up turns to the model that accepted — **one state per conversation** (it's the pinning scope).
+
+\`\`\`python
+from anthropic import Anthropic, BetaFallbackState, BetaRefusalFallbackMiddleware
+
+client = Anthropic(middleware=[BetaRefusalFallbackMiddleware([{"model": "claude-opus-4-8"}])])
+state = BetaFallbackState()
+with state:
+    response = client.beta.messages.create(model="{{FABLE_ID}}", max_tokens=1024, messages=messages)
+\`\`\`
+
+Per-language naming (from the GA SDK examples — don't improvise): TypeScript \`betaRefusalFallbackMiddleware([...])\` + \`{ fallbackState: state }\`; Go \`betafallback.BetaRefusalFallbackMiddleware(...)\` (\`lib/betafallback\`) + \`betafallback.WithBetaFallbackState\`; C# \`BetaRefusalFallbackHandler\` (\`Anthropic.Helpers\`) + \`BetaFallbackState.Create()\` scoped with \`using (state.Use()){...}\`. Java/Ruby/PHP and full runnable programs: each SDK repo ships a fallbacks example under \`examples/\` — WebFetch the repo from \`shared/live-sources.md\` rather than improvising.
+
+**3. Hand-rolled retry + fallback credit (raw HTTP, or SDKs without the middleware).** Detect the refusal via \`stop_reason\` and re-send the conversation as-is on a broader-availability model like \`claude-opus-4-8\` ({{FABLE_NAME}}'s thinking blocks are silently ignored by other models). **Fallback credit** (beta: Claude API, AWS, Bedrock, Vertex, Foundry) makes the retry cheaper — caches are per-model, so a plain retry pays cold cache-writes. With \`fallback-credit-2026-06-01\` (send on both original and retry), the refusal's \`stop_details\` carries \`fallback_credit_token\` (opaque; \`null\` when unavailable) and \`fallback_has_prefill_claim\`. Echo the token as the top-level \`fallback_credit_token\` request param on the retry and the cached span bills at cache-read rates. Rules: retry body must match the refused request **exactly** in every prompt-shaping field (\`system\`, \`messages\`, \`tools\`, \`tool_choice\`, \`thinking\` — don't strip thinking blocks); retry model must be in \`allowed_fallback_models\`; token expires in 5 min; Batches results carry no tokens. If \`fallback_has_prefill_claim\` is \`true\`, append one assistant message echoing the refused response's \`content\` (strip trailing whitespace from a final \`text\` block; omit unpaired \`tool_use\` blocks). On a 400 naming \`fallback_credit_token\`, retry without it (credit forfeited).
+
+**Migrating code built on the v1 preview.** If the code carries any v1 marker, migrate to the v2 shapes above and ship header + parameter changes together (v1 params under the v2 header = 400):
+
+| v1 marker (replace) | v2 |
+|---|---|
+| \`server-side-fallback-2026-06-09\` / \`-2026-06-02\` header | \`server-side-fallback-2026-06-01\` (array form; the \`"default"\` scalar form uses \`-2026-07-01\`) |
+| \`fallback: {model, on_partial}\` single object | \`fallbacks: [{model, ...}]\` array (1–3); \`on_partial\` gone (streams keep partial, non-streaming omits it); unknown entry keys 400 |
+| top-level \`response.fallback\` (\`from_model\`, \`reason\`) | never emitted — read \`fallback\` content blocks + \`usage.iterations\` |
+| \`event: fallback\` SSE with discard indices | no dedicated event; switch arrives as an ordinary \`content_block_start\`/\`stop\` of type \`fallback\` |
+| \`fallback_primary\` / \`fallback_retry\` iteration types | blocked attempts are plain \`message\`; the serving attempt is \`fallback_message\` |
+| \`reason: "sticky"\` | no reason field — detect via \`fallback_message\` + \`response.model\` |
+| \`recommended_model\` meaning "primary served the refusal" | now populated only when the fallback *couldn't run* (rate-limited/overloaded) |
+
+### Data retention requirement
+
+{{FABLE_NAME}} requires **30-day data retention** and is unavailable under zero data retention. Requests from a ZDR org return \`400 invalid_request_error\` — if a migration suddenly 400s with no obvious request problem, check the org's retention config before debugging the payload. On Bedrock/Vertex/Foundry, retention is set per platform.
+
+### What carries over unchanged
+
+Same Messages API and tool-use patterns as Opus-tier and Mythos Preview. At launch: \`output_config.effort\` (\`low\`/\`medium\`/\`high\`/\`xhigh\`/\`max\`), Task Budgets (beta \`task-budgets-2026-03-13\`), compaction (beta \`compact-2026-01-12\`), the memory tool, tool-call clearing via context editing, high-res vision (no downscaling cap, as on Opus 4.7+).
+
+### Behavioral shifts (prompt-tunable)
+
+The 4.8 behavioral shifts above apply; {{FABLE_NAME}}-specific deltas:
+
+- **Longer turns by default.** Hard tasks can run many minutes at higher effort (a 15-min single request is normal). Plan timeouts, streaming, async check-ins, and progress UX before migrating; structure work so callers check in asynchronously rather than blocking in one request.
+- **Consider all effort levels.** \`high\` for most tasks, \`xhigh\` for the most capability-sensitive, \`medium\`/\`low\` for routine. Low effort still performs very well — often beating prior models' \`xhigh\`/\`max\`. Reduce effort if a task completes correctly but slowly. At higher effort on routine work it can deliberate/refactor beyond the task — add a no-tidying instruction if so.
+- **De-prescribe migrated prompts and skills.** Prompts/skills written for prior models are often too prescriptive and *reduce* output quality. A/B with older step-by-step scaffolding removed; prefer stating goal + constraints over enumerating steps.
+- **Add a \`send_to_user\` tool** when an async agent must deliver content the user sees *exactly as written* mid-run — tool inputs are never summarized. Return a simple acknowledgement as the tool result.
+
+### {{FABLE_NAME}} Migration Checklist
+
+- [ ] **[BLOCKS]** Update \`model=\` to \`{{FABLE_ID}}\` (\`{{MYTHOS_ID}}\` for Mythos Preview migrators)
+- [ ] **[BLOCKS]** Remove all \`thinking\` configuration — \`{type: "disabled"}\` and \`{type: "enabled", budget_tokens: N}\` both 400; control depth with \`output_config.effort\`
+- [ ] **[BLOCKS]** Replace assistant prefill with structured outputs or system-prompt instructions
+- [ ] **[BLOCKS]** Confirm the org meets the 30-day data-retention requirement (ZDR orgs 400 on every request)
+- [ ] **[BLOCKS]** If thinking content is surfaced to users/logs: add \`thinking: {type: "adaptive", display: "summarized"}\` (default \`"omitted"\` renders empty)
+- [ ] **[TUNE]** Re-baseline cost/latency — token counts ~unchanged from Opus 4.7/4.8 and Mythos (same tokenizer); from Opus 4.6/Sonnet/Haiku/older use \`count_tokens\` per model
+- [ ] **[TUNE]** Add \`stop_reason == "refusal"\` handling before reading \`response.content\` (pre-output: empty + unbilled; mid-stream: partial billed — discard); opt into a fallback by default — server-side \`fallbacks\` (Claude API only: \`fallbacks: "default"\` with \`server-side-fallback-2026-07-01\`, or the array form with \`server-side-fallback-2026-06-01\`) where available, else SDK middleware or fallback credit (\`fallback-credit-2026-06-01\`)
+- [ ] **[TUNE]** Plan for minutes-long turns: timeouts, streaming, async check-ins, progress UX
+- [ ] **[TUNE]** Run an effort sweep including low/medium for routine workloads; add the no-tidying instruction if higher effort over-refactors
+- [ ] **[TUNE]** A/B with prior-model scaffolding removed — over-prescriptive prompts/skills reduce {{FABLE_NAME}} output quality
 
 ---
 
 ## Verify the Migration
 
-After updating, spot-check that the new model is actually being used. Replace \`YOUR_TARGET_MODEL\` with the model string you migrated to (e.g. \`claude-opus-4-7\`, \`claude-opus-4-6\`, \`claude-sonnet-4-6\`, \`claude-haiku-4-5\`) and keep the assertion prefix in sync:
+After updating, spot-check that the new model is actually being used. Replace \`YOUR_TARGET_MODEL\` with the model string you migrated to (e.g. \`{{FABLE_ID}}\`, \`{{OPUS_ID}}\`, \`claude-opus-4-8\`, \`claude-opus-4-7\`, \`{{SONNET_NEXT_ID}}\`, \`claude-sonnet-4-6\`, \`claude-haiku-4-5\`) and keep the assertion prefix in sync:
 
 \`\`\`python
-YOUR_TARGET_MODEL = "{{OPUS_ID}}" # or "claude-opus-4-6", "claude-sonnet-4-6", "claude-haiku-4-5"
+YOUR_TARGET_MODEL = "{{OPUS_ID}}"  # or "claude-opus-4-7", "{{SONNET_NEXT_ID}}", "claude-sonnet-4-6", "claude-haiku-4-5"
 response = client.messages.create(model=YOUR_TARGET_MODEL, max_tokens=64, messages=[...])
 assert response.model.startswith(YOUR_TARGET_MODEL), response.model
 \`\`\`

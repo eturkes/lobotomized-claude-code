@@ -3,7 +3,7 @@ name: 'Data: Claude API reference — Python'
 description: >-
   Python SDK reference including installation, client initialization, basic
   requests, thinking, and multi-turn conversation
-ccVersion: 2.1.183
+ccVersion: 2.1.219
 -->
 # Claude API — Python
 
@@ -125,7 +125,7 @@ response = client.messages.create(
 
 ### Mid-conversation system messages (model-gated)
 
-For operator instructions that arrive mid-conversation (mode switches, injected state), append \`{"role": "system", ...}\` to \`messages\` instead of editing top-level \`system\` — this preserves the cached prefix and carries operator authority. Must follow a user message; cannot be \`messages[0]\`. Unsupported models return a 400 (\`role 'system' is not supported on this model\`). See \`shared/prompt-caching.md\` for when to use this vs. top-level \`system\`.
+For operator instructions that arrive mid-conversation (mode switches, injected state), append \`{"role": "system", ...}\` to \`messages\` instead of editing top-level \`system\` — this preserves the cached prefix and carries operator authority. Must follow a user message (or an \`assistant\` message ending in server-tool use), and must be either the last entry in \`messages\` or be followed by an \`assistant\` turn; cannot be \`messages[0]\`. Unsupported models return a 400 (\`role 'system' is not supported on this model\`). See \`shared/prompt-caching.md\` for when to use this vs. top-level \`system\`.
 
 \`\`\`python
 response = client.messages.create(
@@ -136,7 +136,7 @@ response = client.messages.create(
         {"role": "user", "content": user_message},
         {"role": "system", "content": "Terse mode enabled — keep responses under 40 words."},
     ],
-)
+)  # No beta header needed — use regular client.messages.create
 \`\`\`
 
 ---
@@ -256,16 +256,17 @@ If \`cache_read_input_tokens\` is zero across repeated identical-prefix requests
 
 ## Extended Thinking
 
-> **Fable 5, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Fable 5, Opus 4.8, and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
+> **Fable 5, {{OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Fable 5, {{OPUS_NAME}}, Opus 4.8, and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
+> **{{OPUS_NAME}}:** thinking is on by default — omitting \`thinking\` runs adaptive (\`{"type": "adaptive"}\` is equivalent), unlike Opus 4.8/4.7 where omitting it meant no thinking. \`{"type": "disabled"}\` is accepted only at effort \`high\` or lower; pairing it with \`xhigh\`/\`max\` returns a 400.
 > **Older models:** Use \`thinking: {type: "enabled", budget_tokens: N}\` (must be < \`max_tokens\`, min 1024).
 
 \`\`\`python
-# Fable 5 / Opus 4.8 / 4.7 / 4.6: adaptive thinking (recommended)
+# Fable 5 / {{OPUS_NAME}} / Opus 4.8 / 4.7 / 4.6: adaptive thinking (recommended)
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
-    thinking={"type": "adaptive", "display": "summarized"},  # display opt-in: default is omitted (empty thinking text) on Fable 5 / Mythos 5 / Opus 4.8 / 4.7
-    output_config={"effort": "high"},  # low | medium | high | max
+    thinking={"type": "adaptive", "display": "summarized"},  # display opt-in: default is omitted (empty thinking text) on Fable 5 / Mythos 5 / {{OPUS_NAME}} / Opus 4.8 / 4.7
+    output_config={"effort": "high"},  # low | medium | high | xhigh | max
     messages=[{"role": "user", "content": "Solve this step by step..."}]
 )
 
@@ -387,7 +388,7 @@ response2 = conversation.send("What's my name?")  # Claude remembers "Alice"
 
 ### Compaction (long conversations)
 
-> **Beta, Fable 5, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations grow large, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
+> **Beta, Fable 5, {{OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
 
 \`\`\`python
 import anthropic
@@ -453,7 +454,7 @@ response = client.beta.messages.create(
     model="{{FABLE_ID}}",
     max_tokens=16000,
     betas=["server-side-fallback-2026-06-01"],
-    fallbacks=[{"model": "{{OPUS_ID}}"}],
+    fallbacks=[{"model": "{{PREV_OPUS_ID}}"}],
     messages=[{"role": "user", "content": "..."}],
 )
 
@@ -471,7 +472,7 @@ if fallback_ran and response.stop_reason != "refusal":
     print(f"Served by {response.model}")
 \`\`\`
 
-\`stop_reason: "refusal"\` on the final response means the whole chain refused. Header must be exactly \`server-side-fallback-2026-06-01\`. Rejected on the Batches API; unavailable on Bedrock, Vertex AI, and Microsoft Foundry — register the client-side \`BetaRefusalFallbackMiddleware\` there instead. Full semantics: \`shared/model-migration.md\` → Migrating to {{FABLE_NAME}} → \`refusal\` stop reason.
+\`stop_reason: "refusal"\` on the final response means the whole chain refused. Header must be exactly \`server-side-fallback-2026-06-01\` **for this array form**; the newer \`fallbacks: "default"\` scalar form uses \`server-side-fallback-2026-07-01\` instead (see \`shared/model-migration.md\` → Migrating to {{OPUS_NAME}} → New API features), and pairing either header with the other form returns a 400. Rejected on the Batches API; unavailable on Bedrock, Vertex AI, and Microsoft Foundry — register the client-side \`BetaRefusalFallbackMiddleware\` there instead. Full semantics: \`shared/model-migration.md\` → Migrating to {{FABLE_NAME}} → \`refusal\` stop reason.
 
 ---
 

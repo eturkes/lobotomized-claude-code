@@ -3,7 +3,7 @@ name: 'Data: Claude API reference — Python'
 description: >-
   Python SDK reference including installation, client initialization, basic
   requests, thinking, and multi-turn conversation
-ccVersion: 2.1.128
+ccVersion: 2.1.219
 -->
 # Claude API — Python
 
@@ -18,10 +18,12 @@ pip install anthropic
 \`\`\`python
 import anthropic
 
-# Default (uses ANTHROPIC_API_KEY env var)
+# Default — resolves credentials from the environment:
+# ANTHROPIC_API_KEY, or ANTHROPIC_AUTH_TOKEN, or an \`ant auth login\` profile.
+# Prefer this for local dev; don't hardcode a key.
 client = anthropic.Anthropic()
 
-# Explicit API key
+# Explicit API key (only when you must inject a specific key)
 client = anthropic.Anthropic(api_key="your-api-key")
 
 # Async client
@@ -80,7 +82,7 @@ Use \`DefaultHttpxClient\` / \`DefaultAsyncHttpxClient\` — not raw \`httpx.Cli
 from anthropic import Anthropic, DefaultHttpxClient
 
 client = Anthropic(
-    base_url="http://my.test.server.example.com:8083", # or ANTHROPIC_BASE_URL env var
+    base_url="http://my.test.server.example.com:8083",  # or ANTHROPIC_BASE_URL env var
     http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com"),
 )
 \`\`\`
@@ -119,6 +121,22 @@ response = client.messages.create(
     system="You are a helpful coding assistant. Always provide examples in Python.",
     messages=[{"role": "user", "content": "How do I read a JSON file?"}]
 )
+\`\`\`
+
+### Mid-conversation system messages (model-gated)
+
+For operator instructions that arrive mid-conversation (mode switches, injected state), append \`{"role": "system", ...}\` to \`messages\` instead of editing top-level \`system\` — this preserves the cached prefix and carries operator authority. Must follow a user message (or an \`assistant\` message ending in server-tool use), and must be either the last entry in \`messages\` or be followed by an \`assistant\` turn; cannot be \`messages[0]\`. Unsupported models return a 400 (\`role 'system' is not supported on this model\`). See \`shared/prompt-caching.md\` for when to use this vs. top-level \`system\`.
+
+\`\`\`python
+response = client.messages.create(
+    model=MODEL_ID,  # must support mid-conversation system messages
+    max_tokens=16000,
+    system=[{"type": "text", "text": STABLE_SYSTEM, "cache_control": {"type": "ephemeral"}}],
+    messages=history + [
+        {"role": "user", "content": user_message},
+        {"role": "system", "content": "Terse mode enabled — keep responses under 40 words."},
+    ],
+)  # No beta header needed — use regular client.messages.create
 \`\`\`
 
 ---
@@ -189,7 +207,7 @@ Use top-level \`cache_control\` to automatically cache the last cacheable block 
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
-    cache_control={"type": "ephemeral"}, # auto-caches the last cacheable block
+    cache_control={"type": "ephemeral"},  # auto-caches the last cacheable block
     system="You are an expert on this large document...",
     messages=[{"role": "user", "content": "Summarize the key points"}]
 )
@@ -206,7 +224,7 @@ response = client.messages.create(
     system=[{
         "type": "text",
         "text": "You are an expert on this large document...",
-        "cache_control": {"type": "ephemeral"} # default TTL is 5 minutes
+        "cache_control": {"type": "ephemeral"}  # default TTL is 5 minutes
     }],
     messages=[{"role": "user", "content": "Summarize the key points"}]
 )
@@ -218,7 +236,7 @@ response = client.messages.create(
     system=[{
         "type": "text",
         "text": "You are an expert on this large document...",
-        "cache_control": {"type": "ephemeral", "ttl": "1h"} # 1 hour TTL
+        "cache_control": {"type": "ephemeral", "ttl": "1h"}  # 1 hour TTL
     }],
     messages=[{"role": "user", "content": "Summarize the key points"}]
 )
@@ -227,9 +245,9 @@ response = client.messages.create(
 ### Verifying Cache Hits
 
 \`\`\`python
-print(response.usage.cache_creation_input_tokens) # tokens written to cache (~1.25x cost)
-print(response.usage.cache_read_input_tokens) # tokens served from cache (~0.1x cost)
-print(response.usage.input_tokens) # uncached tokens (full cost)
+print(response.usage.cache_creation_input_tokens)  # tokens written to cache (~1.25x cost)
+print(response.usage.cache_read_input_tokens)      # tokens served from cache (~0.1x cost)
+print(response.usage.input_tokens)                 # uncached tokens (full cost)
 \`\`\`
 
 If \`cache_read_input_tokens\` is zero across repeated identical-prefix requests, a silent invalidator is at work — \`datetime.now()\` or a UUID in the system prompt, unsorted \`json.dumps()\`, or a varying tool set. See \`shared/prompt-caching.md\` for the full audit table.
@@ -238,16 +256,17 @@ If \`cache_read_input_tokens\` is zero across repeated identical-prefix requests
 
 ## Extended Thinking
 
-> **Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Opus 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
+> **Fable 5, {{OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Fable 5, {{OPUS_NAME}}, Opus 4.8, and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
+> **{{OPUS_NAME}}:** thinking is on by default — omitting \`thinking\` runs adaptive (\`{"type": "adaptive"}\` is equivalent), unlike Opus 4.8/4.7 where omitting it meant no thinking. \`{"type": "disabled"}\` is accepted only at effort \`high\` or lower; pairing it with \`xhigh\`/\`max\` returns a 400.
 > **Older models:** Use \`thinking: {type: "enabled", budget_tokens: N}\` (must be < \`max_tokens\`, min 1024).
 
 \`\`\`python
-# Opus 4.7 / 4.6: adaptive thinking (recommended)
+# Fable 5 / {{OPUS_NAME}} / Opus 4.8 / 4.7 / 4.6: adaptive thinking (recommended)
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
-    thinking={"type": "adaptive"},
-    output_config={"effort": "high"},  # low | medium | high | max
+    thinking={"type": "adaptive", "display": "summarized"},  # display opt-in: default is omitted (empty thinking text) on Fable 5 / Mythos 5 / {{OPUS_NAME}} / Opus 4.8 / 4.7
+    output_config={"effort": "high"},  # low | medium | high | xhigh | max
     messages=[{"role": "user", "content": "Solve this step by step..."}]
 )
 
@@ -296,9 +315,9 @@ Every response object exposes \`_request_id\` (populated from the \`request-id\`
 
 \`\`\`python
 message = client.messages.create(...)
-print(message._request_id) # req_018EeWyXxfu5pfWkrYcMdjWG
-print(message.to_json()) # serialize the Pydantic model
-print(message.to_dict()) # plain dict
+print(message._request_id)       # req_018EeWyXxfu5pfWkrYcMdjWG
+print(message.to_json())          # serialize the Pydantic model
+print(message.to_dict())          # plain dict
 \`\`\`
 
 To access raw headers or other response metadata, use \`.with_raw_response\`:
@@ -310,7 +329,7 @@ raw = client.messages.with_raw_response.create(
     messages=[{"role": "user", "content": "Hello"}],
 )
 print(raw.headers.get("request-id"))
-message = raw.parse() # the Message object messages.create() would have returned
+message = raw.parse()  # the Message object messages.create() would have returned
 \`\`\`
 
 ---
@@ -356,19 +375,20 @@ conversation = ConversationManager(
 )
 
 response1 = conversation.send("My name is Alice.")
-response2 = conversation.send("What's my name?") # Claude remembers "Alice"
+response2 = conversation.send("What's my name?")  # Claude remembers "Alice"
 \`\`\`
 
 **Rules:**
 
-- Messages must alternate between \`user\` and \`assistant\`
+- Consecutive same-role messages are allowed — the API combines them into a single turn
 - First message must be \`user\`
+- \`role: "system"\` messages are allowed mid-conversation on supporting models (no beta header) — see § Mid-conversation system messages above
 
 ---
 
 ### Compaction (long conversations)
 
-> **Beta, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
+> **Beta, Fable 5, {{OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
 
 \`\`\`python
 import anthropic
@@ -421,9 +441,38 @@ When \`stop_reason\` is \`"refusal"\`, the response includes a \`stop_details\` 
 
 \`\`\`python
 if response.stop_reason == "refusal" and response.stop_details:
-    print(f"Category: {response.stop_details.category}")   # "cyber" | "bio" | None
+    print(f"Category: {response.stop_details.category}")   # e.g. "cyber", "bio", "reasoning_extraction", "frontier_llm", or None — see docs for the full set
     print(f"Explanation: {response.stop_details.explanation}")
 \`\`\`
+
+### Refusal Fallbacks ({{FABLE_NAME}}) — opt in by default
+
+Fallbacks are **opt-in** (without them a refused request stops). Include the server-side \`fallbacks\` parameter in \`{{FABLE_ID}}\` code by default — on a policy decline the API re-runs the same request on the fallback model inside the same call. A pre-output decline isn't billed (mid-stream bills the streamed partial); the rescue bills at the fallback model's rates, cache repricing applied.
+
+\`\`\`python
+response = client.beta.messages.create(
+    model="{{FABLE_ID}}",
+    max_tokens=16000,
+    betas=["server-side-fallback-2026-06-01"],
+    fallbacks=[{"model": "{{PREV_OPUS_ID}}"}],
+    messages=[{"role": "user", "content": "..."}],
+)
+
+# One fallback block per model that ran and declined this turn
+for block in response.content:
+    if block.type == "fallback":
+        print(f"{block.from_.model} declined; {block.to.model} continued")
+
+# Served-by signal — covers sticky turns (no fallback block). Pair with
+# stop_reason: the fallback model can itself refuse.
+fallback_ran = any(
+    entry.type == "fallback_message" for entry in response.usage.iterations or []
+)
+if fallback_ran and response.stop_reason != "refusal":
+    print(f"Served by {response.model}")
+\`\`\`
+
+\`stop_reason: "refusal"\` on the final response means the whole chain refused. Header must be exactly \`server-side-fallback-2026-06-01\` **for this array form**; the newer \`fallbacks: "default"\` scalar form uses \`server-side-fallback-2026-07-01\` instead (see \`shared/model-migration.md\` → Migrating to {{OPUS_NAME}} → New API features), and pairing either header with the other form returns a 400. Rejected on the Batches API; unavailable on Bedrock, Vertex AI, and Microsoft Foundry — register the client-side \`BetaRefusalFallbackMiddleware\` there instead. Full semantics: \`shared/model-migration.md\` → Migrating to {{FABLE_NAME}} → \`refusal\` stop reason.
 
 ---
 
@@ -437,7 +486,7 @@ response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
     cache_control={"type": "ephemeral"},
-    system=large_document_text, # e.g., 50KB of context
+    system=large_document_text,  # e.g., 50KB of context
     messages=[{"role": "user", "content": "Summarize the key points"}]
 )
 
@@ -450,21 +499,21 @@ response = client.messages.create(
 \`\`\`python
 # Default to Opus for most tasks
 response = client.messages.create(
-    model="{{OPUS_ID}}", # $5.00/$25.00 per 1M tokens
+    model="{{OPUS_ID}}",  # $5.00/$25.00 per 1M tokens
     max_tokens=16000,
     messages=[{"role": "user", "content": "Explain quantum computing"}]
 )
 
 # Use Sonnet for high-volume production workloads
 standard_response = client.messages.create(
-    model="{{SONNET_ID}}", # $3.00/$15.00 per 1M tokens
+    model="{{SONNET_ID}}",  # $3.00/$15.00 per 1M tokens
     max_tokens=16000,
     messages=[{"role": "user", "content": "Summarize this document"}]
 )
 
 # Use Haiku only for simple, speed-critical tasks
 simple_response = client.messages.create(
-    model="{{HAIKU_ID}}", # $1.00/$5.00 per 1M tokens
+    model="{{HAIKU_ID}}",  # $1.00/$5.00 per 1M tokens
     max_tokens=256,
     messages=[{"role": "user", "content": "Classify this as positive or negative"}]
 )
@@ -479,7 +528,7 @@ count_response = client.messages.count_tokens(
     system=system
 )
 
-estimated_input_cost = count_response.input_tokens * 0.000005 # $5/1M tokens
+estimated_input_cost = count_response.input_tokens * 0.000005  # $5/1M tokens
 print(f"Estimated input cost: \${estimated_input_cost:.4f}")
 \`\`\`
 
@@ -513,7 +562,7 @@ def call_with_retry(
             if e.status_code >= 500:
                 last_exception = e
             else:
-                raise # Client errors (4xx except 429) should not be retried
+                raise  # Client errors (4xx except 429) should not be retried
 
         delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
         print(f"Retry {attempt + 1}/{max_retries} after {delay:.1f}s")

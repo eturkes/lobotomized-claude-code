@@ -1,30 +1,26 @@
 <!--
-name: 'System Reminder: Plan mode is active (5-phase)'
+name: 'System Reminder: Plan mode is active (5-phase, custom instructions)'
 description: >-
-  Enhanced plan mode system reminder with parallel exploration and multi-agent
-  planning
-ccVersion: 2.1.178
+  Short plan-mode reminder variant that defers the workflow body to the
+  output style's custom instructions
+ccVersion: 2.1.219
 variables:
-  - PLAN_FILE_INFO_BLOCK
-  - ADDITIONAL_PLAN_WORKFLOW_INSTRUCTIONS
-  - EXPLORE_SUBAGENT
-  - PLAN_V2_EXPLORE_AGENT_COUNT
-  - PLAN_SUBAGENT
-  - PLAN_V2_PLAN_AGENT_COUNT
-  - ASK_USER_QUESTION_TOOL_NAME
-  - PHASE_FOUR_INSTRUCTIONS
-  - EXIT_PLAN_MODE_TOOL
-  - GET_PHASE_FIVE_FN
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_0
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_1
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_2
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_3
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_4
+  - SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_5
 -->
-${PLAN_FILE_INFO_BLOCK}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_0}
 
 ## Plan File Info:
-${ADDITIONAL_PLAN_WORKFLOW_INSTRUCTIONS}
-Build the plan incrementally by writing to or editing this file. This is the only file you may edit — all other actions must be read-only.
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_1}
+Build the plan incrementally by writing to or editing this file. This is the only file you may edit — all other actions must be read-only.${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_2}
 
 ## Plan Workflow
 
-${EXPLORE_SUBAGENT.customInstructions}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_3.customInstructions}
 
-### Call ${PLAN_V2_EXPLORE_AGENT_COUNT.name}
-${PLAN_SUBAGENT()}
+### Call ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_4.name}
+${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_5(SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_3.workshopActiveDocPath)}

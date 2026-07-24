@@ -1,8 +1,6 @@
 <!--
 name: 'Data: Model Catalog Opus 4.8'
-description: >-
-  descriptionForModel for Opus 4.8 in the model catalog: best for everyday,
-  complex tasks.
-ccVersion: 2.1.178
+description: Model-facing catalog description of Opus 4.8 in the selectable model list
+ccVersion: 2.1.219
 -->
-Opus 4.8 - best for everyday, complex tasks
+Opus 4.8 - previous Opus version

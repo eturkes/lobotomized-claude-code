@@ -4,7 +4,7 @@ description: >-
   The merge-state.mjs write-back helper bundled as a whiteboard-skill file,
   extracted to the skill base directory that Claude is pointed at when the
   whiteboard skill loads.
-ccVersion: 2.1.218
+ccVersion: 2.1.219
 -->
 // Whiteboard write-back helper. Reads the board state the page embeds, appends
 // Claude's elements, places each new element clear of everything already on
@@ -13,11 +13,12 @@ ccVersion: 2.1.218
 // the page's own serializer does, so board text can never close the
 // embedded script block. Runs on node or bun, no dependencies.
 //
-// usage: node merge-state.mjs --state <file with the fetched page or its wb-state JSON>
+// usage: node merge-state.mjs --state <fetched page, or a bare board state such as {"v":1,"els":[],"pingCount":0,"ping":null}>
 //                             --add <file with a JSON array of elements to add>
 //                             --template <path to template.html>
 //                             --out <path to whiteboard.html>
 //                             [--retire id1,id2]   (your own cl_ ids to remove)
+//                             [--title "Whiteboard — <topic>"]   (name the board on first publish)
 
 import { readFileSync, writeFileSync } from 'node:fs'
 
@@ -28,24 +29,60 @@ function arg(name){
   return i === -1 ? undefined : process.argv[i + 1]
 }
 function fail(msg){ process.stderr.write('whiteboard merge: ' + msg + '\\n'); process.exit(1) }
+function read(p, what){
+  try{ return readFileSync(p, 'utf8') }
+  catch(e){ fail('cannot read ' + what + ' at ' + p + ' — pass the path you wrote it to (' + e.code + ')') }
+}
 
 const statePath = arg('state'), addPath = arg('add'), tplPath = arg('template'), outPath = arg('out')
 if(!statePath || !addPath || !tplPath || !outPath) fail('need --state, --add, --template and --out')
 const retire = new Set((arg('retire') || '').split(',').map(s => s.trim()).filter(Boolean))
 
+// --- the page title: an explicit --title, else the one the board carries, else the default.
+// titleFrom is the ONE place a candidate becomes a name: NFC-normalize; replace every DENIED code
+// point (controls, invisible format chars except the ZWJ/ZWNJ a name can need, bidi overrides,
+// LS/PS) with a space; collapse whitespace; cap by code point; strip BLANK runs (whitespace and
+// joiners) from both edges; then a name exists only if some code point actually renders
+// (VISIBLE) — the same emptiness test the rename guard relies on, so display and refusal agree
+// (standalone sibling of sanitizeArtifactTitle in src/tools/ArtifactTool/constants.ts) ---
+const DEFAULT_TITLE = 'Whiteboard — sketch architecture at wireframe fidelity'
+const escHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+const unescHtml = s => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&')
+const DENIED = /(?![\\u200c\\u200d])[\\p{C}\\u202a-\\u202e\\u2066-\\u2069\\u2028\\u2029]/gu
+const EDGE_BLANK = /^[\\s\\u200c\\u200d]+|[\\s\\u200c\\u200d]+$/gu
+// blank to the eye: whitespace, joiners, combining marks without a base, and the fillers and
+// blank glyphs that render as nothing — a name needs at least one code point outside all of it
+const VISIBLE = /[^\\s\\u200c\\u200d\\p{M}\\u2800\\u3164\\uffa0\\u115f\\u1160]/u
+function titleFrom(plain){
+  const t = String(plain || '').normalize('NFC').replace(DENIED, ' ').replace(/\\s+/g, ' ')
+  const capped = Array.from(t).slice(0, 120).join('') // cap by code point so no surrogate pair splits
+  const name = capped.replace(EDGE_BLANK, '')
+  return VISIBLE.test(name) ? escHtml(name) : ''
+}
+
 // --- read the state: either a bare JSON object or the page carrying the wb-state block ---
 // The block is matched only where a real board carries it — after the page's body comment
 // (a sent board), after the title line (a page this helper wrote), or on its own — so the
 // opener string inside the page's own script source can never be mistaken for it.
-const raw = readFileSync(statePath, 'utf8')
+const raw = read(statePath, 'the --state board')
 let stateText = raw.trim()
-if(stateText[0] !== '{'){
+const bareState = stateText[0] === '{'
+let stateAt = -1
+if(!bareState){
   const m = raw.match(/(?:^\\s*|<body>\\s*|-->\\s*|<\\/title>\\s*)<script type="application\\/json" id="wb-state">(\\{[\\s\\S]*?\\})<\\/script>/)
   // an anchored opener with no closer is a sent board whose read was cut off, not an unsent one
   if(!m) fail(/(?:^\\s*|<body>\\s*|-->\\s*|<\\/title>\\s*)<script type="application\\/json" id="wb-state">\\{/.test(raw)
     ? 'the wb-state block in ' + statePath + ' is cut off — the board read is incomplete; read the full saved HTML by path and run again'
     : 'no wb-state block in ' + statePath + ' — a board that has never been sent has no state to write back to; ask the user to hit Send to Claude first')
-  stateText = m[1]
+  stateText = m[1]; stateAt = m.index + m[0].indexOf('<script')
+}
+// a fetched PAGE names the board in the FIRST <title> of its head — the head is the content before
+// the wb-state block, so a <title> literal later in the page's script source is never a name
+let carried = ''
+if(!bareState){
+  const head = raw.slice(0, stateAt), openAt = head.indexOf('<title>')
+  const closeAt = openAt === -1 ? -1 : head.indexOf('</title>', openAt + 7)
+  if(closeAt !== -1) carried = titleFrom(unescHtml(head.slice(openAt + 7, closeAt)))
 }
 let state
 try{ state = JSON.parse(stateText) }
@@ -54,7 +91,7 @@ if(!state || !Array.isArray(state.els)) fail('state has no els array')
 
 // --- read the additions and enforce the authorship rules ---
 let additions
-try{ additions = JSON.parse(readFileSync(addPath, 'utf8')) }
+try{ additions = JSON.parse(read(addPath, 'the --add additions file')) }
 catch(e){ fail('additions file is not valid JSON (' + e.message + ')') }
 if(!Array.isArray(additions)) fail('additions must be a JSON array of elements')
 const existingIds = new Set(state.els.map(e => e && e.id))
@@ -138,8 +175,21 @@ const line = '<script type="application/json" id="wb-state">' + esc(state) + '</
 // The page code comes ONLY from the skill's own template: refuse anything that is not its
 // exact two-line head, so a fetched or foreign page can never be laundered into the publish.
 // line endings normalized — a CRLF checkout of the template must still match its own head
-const tpl = readFileSync(tplPath, 'utf8').replace(/\\r\\n/g, '\\n').split('\\n')
-if(tpl[0] !== '<title>Whiteboard — sketch architecture at wireframe fidelity</title>' || tpl[1] !== '<script>')
+const tpl = read(tplPath, 'the --template').replace(/\\r\\n/g, '\\n').split('\\n')
+if(tpl[0] !== '<title>' + DEFAULT_TITLE + '</title>' || tpl[1] !== '<script>')
   fail('that is not the skill template — pass template.html from the skill directory')
-writeFileSync(outPath, [tpl[0], line].concat(tpl.slice(1)).join('\\n'))
+// the only template line the output varies is its <title>: explicit name, else the board's own, else the default
+let explicit = arg('title')
+if(explicit !== undefined && (/^\\s*--/.test(explicit) || /<topic>/i.test(explicit)))
+  fail('--title needs the board\\'s name (e.g. "Whiteboard — ingest pipeline"), got ' + JSON.stringify(explicit))
+const explicitTitle = titleFrom(explicit)
+const title = explicitTitle || carried || DEFAULT_TITLE
+if(!explicitTitle && !carried){
+  // a sent board is named where the user can see it; with no --title and nothing to carry,
+  // writing the default would silently rename it, so refuse unless the board was never sent
+  if((state.pingCount || 0) > 0 || state.ping)
+    fail('this board has been sent but --state carries no <title> to keep — pass the saved page (head included) so the board keeps its name, or pass --title')
+  process.stderr.write('whiteboard merge: no --title and the board carries no name — using the default title\\n')
+}
+writeFileSync(outPath, ['<title>' + title + '</title>', line].concat(tpl.slice(1)).join('\\n'))
 process.stdout.write('wrote ' + outPath + ' — ' + additions.length + ' added, ' + retire.size + ' retired, ' + state.els.length + ' elements total\\n')
