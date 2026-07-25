@@ -13,14 +13,14 @@ Don't write a browser driver. Use `chromium-cli`.
 
 ## Dev server
 
-Find the dev command (`package.json` `scripts.dev`, `Makefile`, README), start it in the background, and wait for it to serve:
+Find the dev command (`package.json` `scripts.dev`, `Makefile`, README), start it in the background, and wait for it to actually serve:
 
 ```bash
 npm run dev &   # or yarn dev, pnpm dev, make serve, ./dev.sh
 timeout 30 bash -c 'until curl -sf http://localhost:3000 >/dev/null; do sleep 1; done'
 ```
 
-Poll the port, don't `sleep 5`. Stop by killing the port's listener — `lsof -ti:3000 -sTCP:LISTEN | xargs -r kill` — before relaunching, or the next run hits `EADDRINUSE`. `$!` after `npm run dev &` is only the npm wrapper, and npm doesn't forward SIGTERM to the server it spawned, so the port kill is what frees it. A broad `pkill -f` pattern matches the agent's own command line and kills the session.
+Don't `sleep 5` — poll the port. Stop by killing the port's listener — `lsof -ti:3000 -sTCP:LISTEN | xargs -r kill` — before relaunching, or the next run hits `EADDRINUSE`. `$!` after `npm run dev &` is only the npm wrapper, and npm doesn't forward SIGTERM to the server it spawned, so the port kill is what frees it. A broad `pkill -f` pattern matches the agent's own command line and kills the session.
 
 ## Drive
 
@@ -50,7 +50,7 @@ For iterative debugging, run it under tmux and `send-keys` one command at a time
 
 The project-specific bits only — `chromium-cli` handles the mechanics.
 
-- **Dev command + port + stop.** The exact start line, env vars it needs, and the port kill to stop it.
+- **Dev command + port + stop.** The exact start line, any env vars it needs, and the `kill` to stop it.
 - **Auth.** Whatever gets a logged-in session — a `set-cookie` line, a `fill`/`click` login sequence, or a helper script that does the API dance and emits the cookie.
 - **One representative interaction.** One path that proves it's running, ending in a screenshot — not the whole app.
 - **App-specific gotchas.** Only the ones you actually hit.

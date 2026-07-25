@@ -8,4 +8,4 @@ variables:
   - TOOL_DESCRIPTION_WRITE_READ_EXISTING_FILE_FRAGMENT_VAR_0
 -->
 
-- For an existing file, read it with the ${TOOL_DESCRIPTION_WRITE_READ_EXISTING_FILE_FRAGMENT_VAR_0} tool first. This tool fails if you did not read the file first.
+- If this is an existing file, you MUST use the ${TOOL_DESCRIPTION_WRITE_READ_EXISTING_FILE_FRAGMENT_VAR_0} tool first to read the file's contents. This tool will fail if you did not read the file first.

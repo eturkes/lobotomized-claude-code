@@ -29,14 +29,14 @@ ${PHASE_0_GATHER_DIFF}
 ## Phase 1 — Find candidates (5 correctness angles + 3 cleanup angles + 1 altitude angle + 1 conventions angle, up to 8 each)
 
 Run **10 independent finder angles** via the ${AGENT_TOOL_NAME} tool. Each
-surfaces **up to 8 candidate findings**. Don't let one angle's conclusions
+surfaces **up to 8 candidate findings**. Do NOT let one angle's conclusions
 suppress another's — if two angles flag the same line for different reasons,
 record both. ${HIGH_EFFORT_ANGLES}
 
 ${ANGLE_REUSE}
 ${ANGLE_SIMPLIFICATION}
 ${ANGLE_EFFICIENCY}
-This is recall mode — a single non-REFUTED vote carries the finding. Don't
+This is recall mode — a single non-REFUTED vote carries the finding. Do NOT
 drop on uncertainty.
 
 ${ANGLE_ALTITUDE}

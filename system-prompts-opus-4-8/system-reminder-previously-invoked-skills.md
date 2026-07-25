@@ -8,6 +8,8 @@ ccVersion: 2.1.119
 variables:
   - FORMATTED_SKILLS_LIST
 -->
-These skills were invoked earlier in this session, before compaction. Shown for context only — don't re-execute their setup actions (scheduling, file creation). The "## Input" sections show the original arguments from when each skill first ran; they aren't the current user message. Apply ongoing behavioral guidelines where still relevant.
+The following skills were invoked EARLIER in this session (before the conversation was compacted), not on the current turn. They are shown here for context only so you remain aware of their guidelines.
+
+IMPORTANT: Do NOT re-execute these skills or perform their one-time setup actions (e.g., scheduling, creating files) again. The "## Input" sections below reflect the original arguments from when each skill was first invoked — they are NOT the user's current message. Only continue to apply ongoing behavioral guidelines from these skills where still relevant.
 
 ${FORMATTED_SKILLS_LIST}

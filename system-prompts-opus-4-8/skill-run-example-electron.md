@@ -23,7 +23,7 @@ The driver is the product — without it, the skill describes a GUI an agent can
 
 **Graduation path:** if the driver grows launch helpers the project's real e2e suite wants to share, move it to \`e2e-playwright/driver.mjs\` (or \`scripts/drive.mjs\`) and update the skill's paths. The skill stays at \`.claude/skills/run-desktop/\`; the driver finds a better home.
 
-## Step 1 — get the app to launch under xvfb
+## Step 1 — get the app to launch AT ALL under xvfb
 
 This produces most of the Gotchas. The README will say "macOS/Windows only" — ignore that. Install xvfb + the Chromium shared libs, find the Electron binary, and launch it:
 

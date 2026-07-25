@@ -13,7 +13,11 @@ variables:
 
 Review target: GitHub pull request \`${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_0}\`.
 
-Gather the diff (not a local \`git diff\`): \`gh pr view ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_0} --json title,body,author,baseRefName,headRefName,state,additions,deletions,changedFiles,labels\` for context, then \`gh pr diff ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_0}\` for the unified diff. The PR's diff is the only review scope — local working-tree changes are out of scope. When you need surrounding code, Read it from this checkout if the branch matches, otherwise fetch via \`gh\`.
+Gather this target's diff with (instead of any local \`git diff\`):
+1. \`gh pr view ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_0} --json title,body,author,baseRefName,headRefName,state,additions,deletions,changedFiles,labels\` for context
+2. \`gh pr diff ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_0}\` for the unified diff
+
+The PR's diff is the only review scope — local working-tree changes are out of scope. When you need surrounding code, Read the files in this checkout if it matches the PR's branch, otherwise fetch file contents via \`gh\`.
 ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_1?`
 Additional instructions from the user: ${AGENT_PROMPT_REVIEW_PR_SLASH_COMMAND_VAR_1}
 `:""}

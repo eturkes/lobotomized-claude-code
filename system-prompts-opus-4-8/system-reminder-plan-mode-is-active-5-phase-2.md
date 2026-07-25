@@ -16,7 +16,7 @@ ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_0}
 
 ## Plan File Info:
 ${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_1}
-Build the plan incrementally by writing to or editing this file. This is the only file you may edit — all other actions must be read-only.${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_2}
+You should build your plan incrementally by writing to or editing this file. NOTE that this is the only file you are allowed to edit - other than this you are only allowed to take READ-ONLY actions.${SYSTEM_REMINDER_PLAN_MODE_IS_ACTIVE_5_PHASE_2_VAR_2}
 
 ## Plan Workflow
 
