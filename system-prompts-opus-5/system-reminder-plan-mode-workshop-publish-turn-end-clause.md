@@ -5,4 +5,3 @@ description: >-
   end by publishing the workshop document.
 ccVersion: 2.1.219
 -->
-, or by publishing the workshop document and ending your turn so the user can take decisions on the page

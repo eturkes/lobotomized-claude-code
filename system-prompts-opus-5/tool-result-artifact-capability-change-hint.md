@@ -5,4 +5,3 @@ description: >-
   capabilities.
 ccVersion: 2.1.206
 -->
- To change it, pass `capabilities` explicitly on the next publish; to clear it, pass `capabilities: {}`.

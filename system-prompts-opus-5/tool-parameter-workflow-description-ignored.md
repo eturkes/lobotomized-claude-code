@@ -5,4 +5,3 @@ description: >-
   sent to the model as part of the tool definition.
 ccVersion: 2.1.191
 -->
-Ignored — set the workflow description in the script's `meta` block.

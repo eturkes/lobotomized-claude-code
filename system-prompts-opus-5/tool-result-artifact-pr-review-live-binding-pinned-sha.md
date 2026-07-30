@@ -6,4 +6,3 @@ description: >-
   <tool_use_error> tool result.
 ccVersion: 2.1.218
 -->
-a live.input value looks like a commit sha — the live binding must track the PR head by reference

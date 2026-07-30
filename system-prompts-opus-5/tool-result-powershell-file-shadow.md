@@ -7,4 +7,3 @@ ccVersion: 2.1.206
 variables:
   - TOOL_RESULT_POWERSHELL_FILE_SHADOW_VAR_0
 -->
-An earlier sub-command writes a file (./${TOOL_RESULT_POWERSHELL_FILE_SHADOW_VAR_0}.*) that would shadow the later \`${TOOL_RESULT_POWERSHELL_FILE_SHADOW_VAR_0}\` command under Windows PowerShell 5.1 cwd-first resolution.

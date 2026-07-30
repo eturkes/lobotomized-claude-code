@@ -5,4 +5,3 @@ description: >-
   machine.
 ccVersion: 2.1.206
 -->
-- Since this memory is local-scope (not checked into version control), tailor your memories to this project and machine

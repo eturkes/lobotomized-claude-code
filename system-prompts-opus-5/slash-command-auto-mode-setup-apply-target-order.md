@@ -6,4 +6,3 @@ description: >-
   result.
 ccVersion: 2.1.218
 -->
---apply-target must come before --expect-sha256 and --apply-file — not after --apply-file.

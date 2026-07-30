@@ -6,4 +6,3 @@ description: >-
   JSON result.
 ccVersion: 2.1.218
 -->
---request-id must come first, before --apply-target and --expect-sha256.

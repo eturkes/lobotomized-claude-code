@@ -7,4 +7,3 @@ description: >-
   tool-result-artifact-too-large-mermaid-note.
 ccVersion: 2.1.214
 -->
- — includes the inline syntax-highlight runtime (~1MB), appended because the page contains fenced code

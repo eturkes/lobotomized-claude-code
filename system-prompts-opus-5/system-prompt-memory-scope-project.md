@@ -5,4 +5,3 @@ description: >-
   version control.
 ccVersion: 2.1.206
 -->
-- Since this memory is project-scope and shared with your team via version control, tailor your memories to this project

@@ -6,4 +6,3 @@ description: >-
   <local-command-stdout> and replayed into the model's context.
 ccVersion: 2.1.218
 -->
-workflow-launch-exec: no pending launch handoff for this invocation (expected when a restored session replays the dispatch turn); nothing executed.

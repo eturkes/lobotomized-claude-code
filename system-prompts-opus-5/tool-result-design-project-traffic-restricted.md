@@ -5,4 +5,3 @@ description: >-
   disabled.
 ccVersion: 2.1.206
 -->
-Projects is unavailable while nonessential network traffic is restricted (CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC is set).

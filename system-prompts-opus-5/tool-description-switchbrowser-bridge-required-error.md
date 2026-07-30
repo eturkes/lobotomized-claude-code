@@ -5,4 +5,3 @@ description: >-
   connection.
 ccVersion: 2.1.178
 -->
-Browser switching is only available with bridge connections.

@@ -7,8 +7,3 @@ ccVersion: 2.1.178
 variables:
   - TOOL_DESCRIPTION_CHROME_TAB_CONTEXT_RESULT_VAR_0
 -->
-
-
-Tab Context:
-- Available tabs:
-${TOOL_DESCRIPTION_CHROME_TAB_CONTEXT_RESULT_VAR_0}

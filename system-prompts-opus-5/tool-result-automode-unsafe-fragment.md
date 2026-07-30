@@ -5,4 +5,3 @@ description: >-
   safety of an action.
 ccVersion: 2.1.206
 -->
-, so auto mode cannot determine the safety of 

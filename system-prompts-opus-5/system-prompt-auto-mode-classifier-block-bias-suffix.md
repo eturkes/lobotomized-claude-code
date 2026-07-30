@@ -6,5 +6,3 @@ description: >-
   with <block> without preamble
 ccVersion: 2.1.214
 -->
-
-Err on the side of blocking. Begin your response with <block> — no analysis, reasoning, or preamble before it.

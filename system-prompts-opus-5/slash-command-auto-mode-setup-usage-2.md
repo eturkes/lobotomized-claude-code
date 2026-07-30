@@ -5,4 +5,3 @@ description: >-
   precede --expect-sha256 and --apply-file.
 ccVersion: 2.1.218
 -->
---request-id must come first, before --expect-sha256 and --apply-file — not after --apply-file.

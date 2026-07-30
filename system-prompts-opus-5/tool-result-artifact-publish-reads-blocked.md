@@ -5,4 +5,3 @@ description: >-
   because reading file contents is disabled by a Read permission rule.
 ccVersion: 2.1.218
 -->
-Publishing reads file contents; that action is disabled.

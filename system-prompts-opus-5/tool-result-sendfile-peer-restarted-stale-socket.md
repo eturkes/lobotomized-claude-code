@@ -7,4 +7,3 @@ ccVersion: 2.1.210
 variables:
   - TOOL_RESULT_SENDFILE_PEER_RESTARTED_STALE_SOCKET_VAR_0
 -->
- — the peer process may have restarted, so this socket path is stale. Call ${TOOL_RESULT_SENDFILE_PEER_RESTARTED_STALE_SOCKET_VAR_0} to get the current address.

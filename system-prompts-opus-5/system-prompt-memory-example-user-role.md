@@ -5,4 +5,3 @@ description: >-
   user-role memory.
 ccVersion: 2.1.206
 -->
-    assistant: [saves user memory: user is a data scientist, currently focused on observability/logging]

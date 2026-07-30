@@ -5,5 +5,3 @@ description: >-
   execution tool
 ccVersion: 2.1.178
 -->
-
-The JavaScript code to execute. Evaluated in the page context with REPL semantics: top-level `await` works, and the result of the last expression is returned automatically — write the expression you want (e.g. `window.myData.value`, or `await fetch(url).then(r=>r.json())`) rather than `return ...`.

@@ -5,4 +5,3 @@ description: >-
   (::) provider paths.
 ccVersion: 2.1.206
 -->
-Module-qualified provider paths (::) cannot be statically validated and require manual approval

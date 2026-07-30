@@ -8,4 +8,3 @@ ccVersion: 2.1.207
 variables:
   - DATA_ARTIFACT_UNOBSERVED_CONNECTOR_WARNING_VAR_0
 -->
-This page declares connector "${DATA_ARTIFACT_UNOBSERVED_CONNECTOR_WARNING_VAR_0}" but no successful call to it was observed in this session, so the page is published against an unobserved interface. Verify its calls against a real response if you can safely make one, or tell the user the page's "${DATA_ARTIFACT_UNOBSERVED_CONNECTOR_WARNING_VAR_0}" integration is unverified.

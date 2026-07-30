@@ -6,4 +6,3 @@ description: >-
   non-empty.
 ccVersion: 2.1.210
 -->
-Optional carve-outs. Empty when nothing was suggested. When non-empty, must start with the literal entry "$defaults".

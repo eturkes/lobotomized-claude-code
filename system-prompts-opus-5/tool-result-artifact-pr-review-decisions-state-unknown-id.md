@@ -8,4 +8,3 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_STATE_UNKNOWN_ID_VAR_0
 -->
-decisions_state names "${TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_STATE_UNKNOWN_ID_VAR_0.id}", which is not on the published page

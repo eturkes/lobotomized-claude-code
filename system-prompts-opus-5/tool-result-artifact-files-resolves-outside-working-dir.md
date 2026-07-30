@@ -5,4 +5,3 @@ description: >-
   resolves outside the working directory (via a symlink).
 ccVersion: 2.1.218
 -->
-directory (symlink?) — only files under it can be published

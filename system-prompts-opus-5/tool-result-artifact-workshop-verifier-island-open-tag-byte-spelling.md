@@ -7,4 +7,3 @@ ccVersion: 2.1.219
 variables:
   - TOOL_RESULT_ARTIFACT_WORKSHOP_VERIFIER_ISLAND_OPEN_TAG_BYTE_SPELLING_VAR_0
 -->
-The ws-decisions island's open tag must END with the exact bytes ${TOOL_RESULT_ARTIFACT_WORKSHOP_VERIFIER_ISLAND_OPEN_TAG_BYTE_SPELLING_VAR_0} (double-quoted id attribute, last in the tag, as the template ships it) — the session's mechanical extraction scans for that sequence.

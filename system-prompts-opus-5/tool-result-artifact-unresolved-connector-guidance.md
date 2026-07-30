@@ -6,4 +6,3 @@ description: >-
   rejected.
 ccVersion: 2.1.202
 -->
-between `mcp__` and the next `__` of a tool name from this session (for `mcp__claude_ai_Slack_beta__search`, use `claude_ai_Slack_beta`, copied exactly), or to the connector's exact display name. The control plane would accept this manifest, but the page would break at view time

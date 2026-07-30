@@ -8,4 +8,3 @@ variables:
   - SYSTEM_PROMPT_MEMORY_READ_ONLY_SESSION_2_VAR_0
   - SYSTEM_PROMPT_MEMORY_READ_ONLY_SESSION_2_VAR_1
 -->
-If the user asks you to remember something, explain that memory is read-only in this session.

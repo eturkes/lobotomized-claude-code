@@ -5,4 +5,3 @@ description: >-
   duplicate key.
 ccVersion: 2.1.206
 -->
-Remove the duplicate; JSON uses only the last value

@@ -5,4 +5,3 @@ description: >-
   inside <template> content.
 ccVersion: 2.1.219
 -->
-Workshop surface (the island or decision markup) must not sit inside <template> content — the page script can never see it there.

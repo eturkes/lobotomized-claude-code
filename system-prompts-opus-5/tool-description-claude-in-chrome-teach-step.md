@@ -5,4 +5,3 @@ description: >-
   the user to click Next.
 ccVersion: 2.1.178
 -->
-Show one guided-tour tooltip and wait for the user to click Next. On Next, execute the actions, 

@@ -5,4 +5,3 @@ description: >-
   for the computer/find tool input schema.
 ccVersion: 2.1.178
 -->
-ID of a previously captured screenshot (from the computer tool's screenshot action) or a user-uploaded image

@@ -5,4 +5,3 @@ description: >-
   resumed.
 ccVersion: 2.1.206
 -->
-Memory sync recovered for a previously-paused memory store; memory files are syncing normally again.

@@ -5,4 +5,3 @@ description: >-
   screenshot before clicking.
 ccVersion: 2.1.206
 -->
-Screen content at the target location changed since the last screenshot. Take a new screenshot before clicking.

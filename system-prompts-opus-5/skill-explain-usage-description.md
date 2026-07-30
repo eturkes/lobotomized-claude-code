@@ -6,4 +6,3 @@ description: >-
   token-usage explainer.
 ccVersion: 2.1.218
 -->
-Explain where this session's tokens went. Use when: explain usage, where did my tokens go, token usage breakdown.

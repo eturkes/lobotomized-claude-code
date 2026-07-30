@@ -8,6 +8,3 @@ ccVersion: 2.1.210
 variables:
   - DATA_AUTO_MODE_RECON_REPOS_FOUND_HEADER_VAR_0
 -->
-Repos found (path — \`host/org/repo\` remotes; userinfo and any path beyond owner/repo are stripped at the parse):
-${DATA_AUTO_MODE_RECON_REPOS_FOUND_HEADER_VAR_0.join(`
-`)}

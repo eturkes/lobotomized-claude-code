@@ -5,4 +5,3 @@ description: >-
   published-path map, returned to the model.
 ccVersion: 2.1.218
 -->
-files: pass a list of paths or a published-path map

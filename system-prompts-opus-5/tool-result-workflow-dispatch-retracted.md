@@ -5,4 +5,3 @@ description: >-
   dispatch was retracted by a server fallback.
 ccVersion: 2.1.206
 -->
-Tool dispatch was retracted by a server fallback; the input may be truncated.

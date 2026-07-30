@@ -5,4 +5,3 @@ description: >-
   server-side.
 ccVersion: 2.1.206
 -->
-The memory store has been archived server-side and no longer accepts writes.

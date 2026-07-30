@@ -6,4 +6,3 @@ description: >-
   of the model-facing recon context.
 ccVersion: 2.1.210
 -->
-#### Destructive permissions.allow entries (honored at runtime — auto-approved with no prompt, in your user settings)

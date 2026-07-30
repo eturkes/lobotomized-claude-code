@@ -5,4 +5,3 @@ description: >-
   real database.
 ccVersion: 2.1.178
 -->
-    assistant: [saves feedback memory: integration tests must hit a real database, not mocks. Reason: prior incident where mock/prod divergence masked a broken migration]

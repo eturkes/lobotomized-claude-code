@@ -5,4 +5,3 @@ description: >-
   row.
 ccVersion: 2.1.206
 -->
-No arguments were given — treat this as the "(none)" row.

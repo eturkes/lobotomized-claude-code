@@ -6,8 +6,3 @@ description: >-
   them.
 ccVersion: 2.1.206
 -->
-
-</classifier_system_prompt>
-
-Here are the user's custom rules (each section header notes whether they replace or extend the defaults):
-

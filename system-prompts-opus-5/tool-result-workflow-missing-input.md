@@ -5,4 +5,3 @@ description: >-
   script/name/scriptPath is provided.
 ccVersion: 2.1.206
 -->
-Must provide script, name, or scriptPath

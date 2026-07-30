@@ -5,4 +5,3 @@ description: >-
   is set.
 ccVersion: 2.1.206
 -->
-Dynamic workflows are disabled by managed settings (`disableWorkflows`).

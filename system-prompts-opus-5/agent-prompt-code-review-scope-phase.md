@@ -5,4 +5,3 @@ description: >-
   instructions.
 ccVersion: 2.1.206
 -->
-Pin the diff command, changed files, applicable CLAUDE.md files, and conventions

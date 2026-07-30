@@ -9,4 +9,3 @@ variables:
   - SLASH_COMMAND_AUTO_MODE_SETUP_SCOPE_MISMATCH_UNRECORDED_VAR_0
   - SLASH_COMMAND_AUTO_MODE_SETUP_SCOPE_MISMATCH_UNRECORDED_VAR_1
 -->
-This proposal was generated before save scope was recorded, so --apply-target ${SLASH_COMMAND_AUTO_MODE_SETUP_SCOPE_MISMATCH_UNRECORDED_VAR_0.target} can’t confirm it matches. Regenerate the proposal with --propose, answering scope=${SLASH_COMMAND_AUTO_MODE_SETUP_SCOPE_MISMATCH_UNRECORDED_VAR_1}.

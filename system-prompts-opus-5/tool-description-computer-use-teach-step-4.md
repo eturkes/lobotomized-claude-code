@@ -5,4 +5,3 @@ description: >-
   ends.
 ccVersion: 2.1.206
 -->
-Text you emit outside teach_step calls is NOT visible until teach mode ends. 

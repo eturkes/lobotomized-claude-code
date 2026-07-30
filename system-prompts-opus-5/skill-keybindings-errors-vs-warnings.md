@@ -5,4 +5,3 @@ description: >-
   and non-blocking warnings.
 ccVersion: 2.1.206
 -->
-**Errors** prevent bindings from working and must be fixed. **Warnings** indicate potential conflicts but the binding may still work.

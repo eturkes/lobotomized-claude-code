@@ -5,4 +5,3 @@ description: >-
   alongside the files.
 ccVersion: 2.1.210
 -->
-Optional short message delivered alongside the files

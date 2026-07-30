@@ -5,4 +5,3 @@ description: >-
   step-by-step using fullscreen tooltip overlays instead of direct access
 ccVersion: 2.1.84
 -->
-

@@ -5,4 +5,3 @@ description: >-
   subtree.
 ccVersion: 2.1.219
 -->
-<math> is not allowed on a workshop page — MathML subtrees are serialization-hazard surfaces (mutation-XSS carriers); render formulas as text or SVG.

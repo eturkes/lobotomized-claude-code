@@ -5,4 +5,3 @@ description: >-
   is soft.
 ccVersion: 2.1.206
 -->
-This is a guideline, not a hard limit — follow it unless the user's prompt calls for a different scale.

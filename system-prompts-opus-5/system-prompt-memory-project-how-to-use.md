@@ -5,4 +5,3 @@ description: >-
   system prompt (FDr types block).
 ccVersion: 2.1.206
 -->
-    <how_to_use>Use these memories to more fully understand the details and nuance behind the user's request, anticipate coordination issues across users, make better informed suggestions.</how_to_use>

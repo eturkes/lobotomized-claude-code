@@ -5,8 +5,3 @@ description: >-
   parsed as the script return value
 ccVersion: 2.1.178
 -->
-
-
----
-
-NOTE: You are running inside a workflow script. Your final text response is the return value parsed by the calling script, not a message to a human — output the literal result, no confirmations like "Done."

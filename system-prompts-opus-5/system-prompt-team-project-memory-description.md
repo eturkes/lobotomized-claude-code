@@ -5,4 +5,3 @@ description: >-
   or incidents within a working directory
 ccVersion: 2.1.178
 -->
-    <description>Information you learn about ongoing work, goals, initiatives, bugs, or incidents in the project that isn't derivable from the code or git history.</description>

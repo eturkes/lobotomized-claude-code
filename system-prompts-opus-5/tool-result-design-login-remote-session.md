@@ -5,4 +5,3 @@ description: >-
   session.
 ccVersion: 2.1.206
 -->
-This session is remote, so the browser can't reach the local sign-in listener. Run /design-login instead — it supports pasting the authorization code manually.

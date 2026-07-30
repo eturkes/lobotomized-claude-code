@@ -5,4 +5,3 @@ description: >-
   the artifact control plane is overridden to a local stack.
 ccVersion: 2.1.218
 -->
-Live subscription: skipped — the artifact control plane is overridden to a local stack, so the live edge is not reachable.

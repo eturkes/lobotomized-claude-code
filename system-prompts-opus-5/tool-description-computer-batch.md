@@ -5,4 +5,3 @@ description: >-
   computer-use actions in one call to save round trips.
 ccVersion: 2.1.178
 -->
-Execute a sequence of actions in one tool call. Each individual tool call requires a model→API round trip (seconds);

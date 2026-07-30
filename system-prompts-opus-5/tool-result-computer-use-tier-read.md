@@ -5,4 +5,3 @@ description: >-
   screenshots only, no interaction.
 ccVersion: 2.1.206
 -->
-visible in screenshots only, no clicks or typing.

@@ -5,4 +5,3 @@ description: >-
   tool, serialized into the model's tool list.
 ccVersion: 2.1.191
 -->
-Set to true to run this command in the background.

@@ -5,4 +5,3 @@ description: >-
   unavailable this session.
 ccVersion: 2.1.206
 -->
- (Capability management is unavailable in this session.)

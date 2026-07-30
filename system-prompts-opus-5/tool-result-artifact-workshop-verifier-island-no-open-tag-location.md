@@ -5,4 +5,3 @@ description: >-
   open-tag source location to spell-check.
 ccVersion: 2.1.219
 -->
-The island element has no source location — refusing rather than skipping the canonical-spelling check.

@@ -5,4 +5,3 @@ description: >-
   ignore memory.
 ccVersion: 2.1.206
 -->
-- If the user says to *ignore* or *not use* memory: Do not apply remembered facts, cite, compare against, or mention memory content.

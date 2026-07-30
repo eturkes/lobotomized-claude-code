@@ -5,5 +5,3 @@ description: >-
   max 256, paths must be in finalized plan
 ccVersion: 2.1.178
 -->
-
-register_assets: cards to register in the Design System pane. Run after write_files succeeds.

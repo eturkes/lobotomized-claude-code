@@ -8,4 +8,3 @@ ccVersion: 2.1.218
 variables:
   - DATA_MEMORY_SYNC_SYNCED_PROJECT_PARKED_OR_ENDED_VAR_0
 -->
-Synced project memory is ${DATA_MEMORY_SYNC_SYNCED_PROJECT_PARKED_OR_ENDED_VAR_0.state} for this session; this write was saved locally, not persisted to shared memory.

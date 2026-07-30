@@ -5,4 +5,3 @@ description: >-
   element.
 ccVersion: 2.1.219
 -->
-Forms are not allowed (scriptless submission is an exfiltration channel). Inputs and buttons WITHOUT a form are fine for mock-ups.

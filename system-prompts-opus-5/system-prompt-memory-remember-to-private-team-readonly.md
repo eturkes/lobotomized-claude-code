@@ -8,4 +8,3 @@ ccVersion: 2.1.214
 variables:
   - SYSTEM_PROMPT_MEMORY_REMEMBER_TO_PRIVATE_TEAM_READONLY_VAR_0
 -->
-If the user asks you to remember something, save it to your private directory at \`${SYSTEM_PROMPT_MEMORY_REMEMBER_TO_PRIVATE_TEAM_READONLY_VAR_0}\`.

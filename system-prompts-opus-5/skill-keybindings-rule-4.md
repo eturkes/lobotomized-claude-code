@@ -5,4 +5,3 @@ description: >-
   additive.
 ccVersion: 2.1.206
 -->
-4. When adding a new binding for an existing action, the new binding is additive (existing default still works unless explicitly unbound)

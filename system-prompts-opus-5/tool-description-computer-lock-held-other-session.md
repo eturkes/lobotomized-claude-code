@@ -7,4 +7,3 @@ ccVersion: 2.1.178
 variables:
   - TOOL_DESCRIPTION_COMPUTER_LOCK_HELD_OTHER_SESSION_VAR_0
 -->
-Computer use is in use by another Claude session (${TOOL_DESCRIPTION_COMPUTER_LOCK_HELD_OTHER_SESSION_VAR_0.slice(0,8)}…). Wait for that session to finish or run /exit there.

@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_DESIGN_AUTH_401_LOGIN_EXPIRED_VAR_0
   - TOOL_RESULT_DESIGN_AUTH_401_LOGIN_EXPIRED_VAR_1
 -->
-${TOOL_RESULT_DESIGN_AUTH_401_LOGIN_EXPIRED_VAR_0} The design credential (from /design login) is expired or revoked${TOOL_RESULT_DESIGN_AUTH_401_LOGIN_EXPIRED_VAR_1?", and /design login requires an interactive terminal — re-authenticate outside this session":" — run /design login to re-authenticate"}.

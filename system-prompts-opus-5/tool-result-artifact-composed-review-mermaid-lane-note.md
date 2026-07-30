@@ -6,4 +6,3 @@ description: >-
   with a diagram must republish through the composed lane.
 ccVersion: 2.1.218
 -->
- — composed review pages with a diagram must republish through the composed lane, not as raw HTML

@@ -5,4 +5,3 @@ description: >-
   element other than the JSON island script.
 ccVersion: 2.1.219
 -->
-Only the ws-decisions JSON script element may carry this id — the page script locates the island by it.

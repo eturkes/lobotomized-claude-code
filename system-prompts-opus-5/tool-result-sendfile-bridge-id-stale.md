@@ -7,4 +7,3 @@ ccVersion: 2.1.210
 variables:
   - TOOL_RESULT_SENDFILE_BRIDGE_ID_STALE_VAR_0
 -->
- — the peer session may have ended or restarted, so this bridge ID is stale. Call ${TOOL_RESULT_SENDFILE_BRIDGE_ID_STALE_VAR_0} to get the current address.

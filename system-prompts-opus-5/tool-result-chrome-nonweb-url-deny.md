@@ -5,4 +5,3 @@ description: >-
   targets a browser-internal or unparseable URL.
 ccVersion: 2.1.206
 -->
-Can't interact with browser-internal or unparseable URLs. Navigate to a web page first.

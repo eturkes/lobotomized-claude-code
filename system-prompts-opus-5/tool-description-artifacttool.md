@@ -5,4 +5,3 @@ description: >-
   default-private hosted web page on claude.ai
 ccVersion: 2.1.214
 -->
-Render an HTML or Markdown file to an Artifact — a default-private claude.ai web page the user can share with teammates.

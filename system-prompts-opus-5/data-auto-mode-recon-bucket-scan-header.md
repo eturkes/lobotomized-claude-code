@@ -5,5 +5,3 @@ description: >-
   report given to the proposing model.
 ccVersion: 2.1.214
 -->
-
-#### Bucket names in config (repo-wide scan, by occurrence count)

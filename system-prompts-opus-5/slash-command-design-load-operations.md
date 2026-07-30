@@ -6,4 +6,3 @@ description: >-
   their argument schemas.
 ccVersion: 2.1.199
 -->
-"})` to load the available Claude Design operations and their argument schemas. If the `

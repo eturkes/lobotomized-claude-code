@@ -6,4 +6,3 @@ description: >-
   model-facing recon context.
 ccVersion: 2.1.210
 -->
-#### permissions.allow entries auto mode ignores (classifier-bypassing, in your user settings)

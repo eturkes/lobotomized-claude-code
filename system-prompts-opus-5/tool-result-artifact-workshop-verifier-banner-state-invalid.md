@@ -5,4 +5,3 @@ description: >-
   in-progress|ready|started.
 ccVersion: 2.1.219
 -->
-data-ws-state must be one of in-progress|ready|started.

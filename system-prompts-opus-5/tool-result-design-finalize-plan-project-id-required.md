@@ -5,4 +5,3 @@ description: >-
   as an invalid-input tool_result when finalize_plan lacks a project_id.
 ccVersion: 2.1.207
 -->
-ClaudeDesign finalize_plan: project_id is required (a plan is always scoped to one project).

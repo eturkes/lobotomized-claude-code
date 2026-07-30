@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_WORKSHOP_ISLAND_BYTE_SEQUENCE_COLLISION_VAR_1
   - TOOL_RESULT_ARTIFACT_WORKSHOP_ISLAND_BYTE_SEQUENCE_COLLISION_VAR_2
 -->
-The byte sequence ${TOOL_RESULT_ARTIFACT_WORKSHOP_ISLAND_BYTE_SEQUENCE_COLLISION_VAR_0} appears ${TOOL_RESULT_ARTIFACT_WORKSHOP_ISLAND_BYTE_SEQUENCE_COLLISION_VAR_1} time(s) but ${TOOL_RESULT_ARTIFACT_WORKSHOP_ISLAND_BYTE_SEQUENCE_COLLISION_VAR_2.islands.length} real island element(s) exist — the session's mechanical island extraction scans for exactly that sequence. Keep the island's id attribute LAST in its script tag (as the template ships it), and escape or rephrase any other text containing the sequence.

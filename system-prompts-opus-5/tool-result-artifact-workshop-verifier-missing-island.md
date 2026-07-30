@@ -5,4 +5,3 @@ description: >-
   ws-decisions island.
 ccVersion: 2.1.219
 -->
-Decision items exist but there is no ws-decisions island — the session reads decisions ONLY from the island.

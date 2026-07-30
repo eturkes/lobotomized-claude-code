@@ -8,6 +8,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_STORED_CAPABILITY_VAR_0
   - TOOL_RESULT_ARTIFACT_STORED_CAPABILITY_VAR_1
 -->
-
-
-This artifact has a stored capability declaration that was carried forward: ${TOOL_RESULT_ARTIFACT_STORED_CAPABILITY_VAR_0(TOOL_RESULT_ARTIFACT_STORED_CAPABILITY_VAR_1.stored)}.

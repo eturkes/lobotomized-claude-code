@@ -5,4 +5,3 @@ description: >-
   exactly the lowercase </script>.
 ccVersion: 2.1.219
 -->
-The ws-decisions island's close tag must be exactly the lowercase </script> as the template ships it — case-variant or attribute-bearing closes split the island locators.

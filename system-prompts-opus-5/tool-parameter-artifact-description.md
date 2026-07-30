@@ -5,4 +5,3 @@ description: >-
   the Artifact tool input schema
 ccVersion: 2.1.196
 -->
-One-sentence subtitle shown on the gallery card. Say what the page is or does.

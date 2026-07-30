@@ -5,4 +5,3 @@ description: >-
   disallowed URL scheme.
 ccVersion: 2.1.219
 -->
-Only http(s), mailto, relative, or fragment URLs are allowed.

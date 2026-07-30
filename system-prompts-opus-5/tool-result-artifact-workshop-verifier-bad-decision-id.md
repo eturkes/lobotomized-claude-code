@@ -5,4 +5,3 @@ description: >-
   the slug grammar.
 ccVersion: 2.1.219
 -->
-data-decision-id must match the slug grammar.

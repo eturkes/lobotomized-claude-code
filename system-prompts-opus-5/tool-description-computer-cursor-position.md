@@ -5,4 +5,3 @@ description: >-
   position in image-pixel or logical coordinates.
 ccVersion: 2.1.178
 -->
-Get the current mouse cursor position. Returns image-pixel coordinates relative to the most recent screenshot, or logical points if no screenshot has been taken.

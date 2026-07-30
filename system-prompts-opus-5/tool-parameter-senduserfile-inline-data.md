@@ -5,4 +5,3 @@ description: >-
   dynamic content only.
 ccVersion: 2.1.178
 -->
-"base64"). For small dynamic content only — anything you have on 

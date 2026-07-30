@@ -5,4 +5,3 @@ description: >-
   local-command-stdout.
 ccVersion: 2.1.199
 -->
-Design agent access granted for your Claude Design projects. Use /design revoke to undo.

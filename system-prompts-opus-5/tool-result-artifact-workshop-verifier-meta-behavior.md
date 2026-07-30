@@ -5,4 +5,3 @@ description: >-
   origin-trial meta tag.
 ccVersion: 2.1.219
 -->
-referrer and origin-trial metas are not allowed; charset/viewport/description metas are fine.

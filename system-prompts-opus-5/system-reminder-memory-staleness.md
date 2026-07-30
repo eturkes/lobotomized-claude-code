@@ -6,4 +6,3 @@ description: >-
   injected into the model's context alongside recalled memories.
 ccVersion: 2.1.206
 -->
-Memories are point-in-time observations, not live state — 

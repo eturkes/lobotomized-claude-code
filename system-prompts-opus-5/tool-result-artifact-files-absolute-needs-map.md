@@ -8,4 +8,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_FILES_ABSOLUTE_NEEDS_MAP_VAR_0
   - TOOL_RESULT_ARTIFACT_FILES_ABSOLUTE_NEEDS_MAP_VAR_1
 -->
-files: ${TOOL_RESULT_ARTIFACT_FILES_ABSOLUTE_NEEDS_MAP_VAR_0.stringify(TOOL_RESULT_ARTIFACT_FILES_ABSOLUTE_NEEDS_MAP_VAR_1.path)} is absolute — absolute sources need the map form ({"published/path": "source"}), which names the published path explicitly

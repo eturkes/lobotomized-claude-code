@@ -5,4 +5,3 @@ description: >-
   find.
 ccVersion: 2.1.178
 -->
-Natural language description of what to find (e.g., "search bar", "add to cart button", "product title containing organic")

@@ -5,4 +5,3 @@ description: >-
   stray data-resolved-* attribute.
 ccVersion: 2.1.219
 -->
-An open item must carry neither data-resolved-choice nor data-resolved-custom — remove the stray resolution attribute.

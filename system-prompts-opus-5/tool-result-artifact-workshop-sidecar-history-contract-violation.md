@@ -5,4 +5,3 @@ description: >-
   refusedSidecarHistory, so the sidecar-ordering gate cannot run.
 ccVersion: 2.1.219
 -->
-workshop publish contract violation: redeploys must pass refusedSidecarHistory (the AppState sidecar record for the target slug; [] when none) — refusing rather than skipping the sidecar-ordering gate

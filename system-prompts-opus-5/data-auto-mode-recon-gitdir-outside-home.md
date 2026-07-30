@@ -5,4 +5,3 @@ description: >-
   the home directory so remotes were not read.
 ccVersion: 2.1.210
 -->
-(gitdir points outside the home directory — remotes not read)

@@ -5,4 +5,3 @@ description: >-
   entry in the Cowork staged-call mcp tool inputSchema.
 ccVersion: 2.1.206
 -->
-Synced-file lane row to stage, e.g. /working/.cowork/originals/a.docx. A missing row fails with staging error_code=input_missing; the etag actually staged is echoed back in staging.inputs_used.

@@ -5,4 +5,3 @@ description: >-
   or modify ~/.claude/keybindings.json.
 ccVersion: 2.1.206
 -->
-Create or modify `~/.claude/keybindings.json` to customize keyboard shortcuts.

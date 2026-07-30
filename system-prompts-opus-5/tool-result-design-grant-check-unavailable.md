@@ -8,4 +8,3 @@ ccVersion: 2.1.211
 variables:
   - TOOL_RESULT_DESIGN_GRANT_CHECK_UNAVAILABLE_VAR_0
 -->
-ClaudeDesign ${TOOL_RESULT_DESIGN_GRANT_CHECK_UNAVAILABLE_VAR_0.operation}: could not check for a project write grant — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.

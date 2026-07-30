@@ -7,4 +7,3 @@ ccVersion: 2.1.178
 variables:
   - TOOL_DESCRIPTION_MEMORY_WRITE_SECRETS_BLOCKED_VAR_0
 -->
-Content contains potential secrets (${TOOL_DESCRIPTION_MEMORY_WRITE_SECRETS_BLOCKED_VAR_0}) and cannot be written to memory. Remove the sensitive content and try again.

@@ -5,6 +5,3 @@ description: >-
   classifier system prompt for review.
 ccVersion: 2.1.206
 -->
-Here is the full classifier system prompt that the auto mode classifier receives:
-
-<classifier_system_prompt>

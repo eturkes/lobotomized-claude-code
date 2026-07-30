@@ -5,4 +5,3 @@ description: >-
   inside SVG.
 ccVersion: 2.1.219
 -->
-foreignObject embeds arbitrary HTML inside SVG — draw with native SVG shapes and <text> instead.

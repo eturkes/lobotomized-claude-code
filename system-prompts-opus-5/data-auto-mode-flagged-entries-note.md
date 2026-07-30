@@ -7,5 +7,3 @@ ccVersion: 2.1.207
 variables:
   - DATA_AUTO_MODE_FLAGGED_ENTRIES_NOTE_VAR_0
 -->
-
-${DATA_AUTO_MODE_FLAGGED_ENTRIES_NOTE_VAR_0} additional flagged ${DATA_AUTO_MODE_FLAGGED_ENTRIES_NOTE_VAR_0===1?"entry":"entries"} can't be shown or auto-removed (unusual characters or length) — the user should review permissions.allow by hand.

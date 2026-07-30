@@ -5,5 +5,3 @@ description: >-
   noted).
 ccVersion: 2.1.178
 -->
-
-Middle-click (scroll-wheel click) at the given coordinates. Requires the frontmost app to be in the session allowlist.

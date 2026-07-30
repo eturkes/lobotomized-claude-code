@@ -7,4 +7,3 @@ ccVersion: 2.1.214
 variables:
   - SYSTEM_PROMPT_MEMORY_PRIVATE_ONLY_TEAM_READONLY_SESSION_VAR_0
 -->
-Save every memory type, including team-scoped ones, to your private directory at \`${SYSTEM_PROMPT_MEMORY_PRIVATE_ONLY_TEAM_READONLY_SESSION_VAR_0}\`.

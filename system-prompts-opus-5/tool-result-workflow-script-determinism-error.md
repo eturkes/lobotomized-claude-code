@@ -6,4 +6,3 @@ description: >-
   timestamps via args.
 ccVersion: 2.1.178
 -->
-Workflow scripts must be deterministic: Date.now()/Math.random()/new Date() are unavailable (breaks resume). Stamp results after the workflow returns, or pass timestamps via args.

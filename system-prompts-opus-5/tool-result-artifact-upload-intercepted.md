@@ -5,4 +5,3 @@ description: >-
   GCS (2xx without x-goog-generation).
 ccVersion: 2.1.206
 -->
-upload intercepted: 2xx without x-goog-generation — a proxy answered in place of GCS

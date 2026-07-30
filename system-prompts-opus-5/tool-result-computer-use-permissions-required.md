@@ -5,4 +5,3 @@ description: >-
   required.
 ccVersion: 2.1.206
 -->
-Accessibility and Screen Recording permissions are required. Call request_access to show the permission panel.

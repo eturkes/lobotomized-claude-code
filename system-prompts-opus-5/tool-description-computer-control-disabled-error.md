@@ -5,4 +5,3 @@ description: >-
   Settings; tells the model to enable it and retry.
 ccVersion: 2.1.178
 -->
-Computer control is disabled in Settings. Enable it and try again.

@@ -5,4 +5,3 @@ description: >-
   digest; nothing written.
 ccVersion: 2.1.218
 -->
-The proposal file’s bytes do not match the reviewed digest — the file changed after it was approved. Nothing was written; regenerate the proposal, re-review, and retry.

@@ -5,4 +5,3 @@ description: >-
   combinations with allowlist and system-combo checks
 ccVersion: 2.1.178
 -->
-Press and hold a key or key combination for the specified duration, then release. Requires the frontmost app to be in the session allowlist. System-level combos require the `systemKeyCombos` grant.

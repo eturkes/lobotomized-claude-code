@@ -7,4 +7,3 @@ ccVersion: 2.1.207
 variables:
   - DATA_AUTO_MODE_RECON_SETTINGS_LOCAL_TRACKED_VAR_0
 -->
-Tracked in git: ${DATA_AUTO_MODE_RECON_SETTINGS_LOCAL_TRACKED_VAR_0!==""?"yes — repo-authored":"no — but untracked does not prove user-authored"}

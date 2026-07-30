@@ -5,4 +5,3 @@ description: >-
   model context.
 ccVersion: 2.1.206
 -->
-Reference for the Claude API / Anthropic SDK — model ids, pricing, params, streaming, tool use, MCP, agents, caching, token counting, model migration.

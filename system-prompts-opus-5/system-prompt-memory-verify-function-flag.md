@@ -5,4 +5,3 @@ description: >-
   named function or flag.
 ccVersion: 2.1.206
 -->
-- If the memory names a function or flag: grep for it.

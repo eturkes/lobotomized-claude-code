@@ -5,4 +5,3 @@ description: >-
   style or workshop-surface attribute.
 ccVersion: 2.1.219
 -->
-SMIL may only animate geometry and paint properties — never URL (href/src/srcset…), navigation (target/rel/ping/referrerpolicy), script (on*), style/class, or workshop-surface attributes.

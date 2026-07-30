@@ -5,4 +5,3 @@ description: >-
   element.
 ccVersion: 2.1.219
 -->
-Each decision id may appear on exactly one element.

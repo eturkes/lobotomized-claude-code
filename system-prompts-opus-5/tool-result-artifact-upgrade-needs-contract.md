@@ -5,4 +5,3 @@ description: >-
   contract and needs the contract service reachable.
 ccVersion: 2.1.206
 -->
-an upgrade stamps the current contract, which requires the contract service. Retry when it is reachable.

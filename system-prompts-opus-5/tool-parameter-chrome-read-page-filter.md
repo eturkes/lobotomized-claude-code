@@ -5,4 +5,3 @@ description: >-
   the read_page tool.
 ccVersion: 2.1.178
 -->
-Filter elements: "interactive" for buttons/links/inputs only, "all" for all elements including non-visible ones (default: all elements)

@@ -8,4 +8,3 @@ ccVersion: 2.1.210
 variables:
   - DATA_ARTIFACT_CAPABILITY_FULLY_UNFETCHED_VAR_0
 -->
-**\`${DATA_ARTIFACT_CAPABILITY_FULLY_UNFETCHED_VAR_0}\`.** Its authoring guidance and type definitions could not be fetched this invocation — invoking this skill again retries.

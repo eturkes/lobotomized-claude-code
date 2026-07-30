@@ -7,4 +7,3 @@ description: >-
   inside a <tool_use_error> tool_result.
 ccVersion: 2.1.211
 -->
-Another Claude Code process is refreshing the OAuth token. Retry in a moment.

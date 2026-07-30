@@ -6,4 +6,3 @@ description: >-
   user review.
 ccVersion: 2.1.210
 -->
-One-shot --apply isn’t available (it would write model output with no review). Use --propose, show the result to the user, then --apply-file <path>.

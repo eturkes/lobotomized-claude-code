@@ -7,4 +7,3 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_WATCH_CAP_VAR_0
 -->
-Live subscription: skipped — this session already holds its maximum of ${TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_WATCH_CAP_VAR_0} artifact watches; unwatch one first.

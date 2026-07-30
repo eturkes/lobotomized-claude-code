@@ -6,4 +6,3 @@ description: >-
   loop.
 ccVersion: 2.1.219
 -->
-composed review publishing was turned off by an operator during this session — this gate re-checks the live switch, so retry after a few minutes, or start a new session once it is restored. Do not retry in a tight loop.

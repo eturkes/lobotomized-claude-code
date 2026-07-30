@@ -7,5 +7,3 @@ ccVersion: 2.1.191
 variables:
   - TOOL_RESULT_WORKFLOW_SYNTAX_ERROR_VAR_0
 -->
-Workflow script has a syntax error and was not launched:
-${TOOL_RESULT_WORKFLOW_SYNTAX_ERROR_VAR_0.error}

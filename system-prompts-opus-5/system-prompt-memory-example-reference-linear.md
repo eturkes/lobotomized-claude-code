@@ -5,4 +5,3 @@ description: >-
   about a Linear project.
 ccVersion: 2.1.206
 -->
-    assistant: [saves reference memory: pipeline bugs are tracked in Linear project "INGEST"]

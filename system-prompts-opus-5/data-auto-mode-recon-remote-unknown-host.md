@@ -5,4 +5,3 @@ description: >-
   known VCS host so it is not shown.
 ccVersion: 2.1.210
 -->
-(remote not on a known VCS host; not shown)

@@ -5,4 +5,3 @@ description: >-
   island entry's custom text byte for byte.
 ccVersion: 2.1.219
 -->
-data-resolved-custom must equal the island entry custom, byte for byte (and be absent for option picks).

@@ -5,4 +5,3 @@ description: >-
   stored.
 ccVersion: 2.1.206
 -->
-Could not save the design credential to secure storage. Retry, or run /design-login.

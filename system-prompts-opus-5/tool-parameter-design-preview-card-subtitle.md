@@ -5,4 +5,3 @@ description: >-
   tool the model calls; model-facing.
 ccVersion: 2.1.191
 -->
-Variants shown ("Primary / secondary / ghost, 3 sizes")

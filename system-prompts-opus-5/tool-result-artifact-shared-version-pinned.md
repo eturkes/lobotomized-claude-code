@@ -5,4 +5,3 @@ description: >-
   older shared version.
 ccVersion: 2.1.206
 -->
-This artifact is shared, and viewers are pinned to an older version — they will not see this update until the user moves the shared version forward from the page's share menu.

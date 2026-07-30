@@ -5,4 +5,3 @@ description: >-
   current group.
 ccVersion: 2.1.178
 -->
-Tab ID to list shortcuts from. Must be a tab in the current group. Use tabs_context_mcp first if you don't have a valid tab ID.

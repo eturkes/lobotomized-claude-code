@@ -5,4 +5,3 @@ description: >-
   the frontmatter format.
 ccVersion: 2.1.206
 -->
-Write each memory to its own file in the chosen directory (private or team, per the type's scope guidance) using this frontmatter format:

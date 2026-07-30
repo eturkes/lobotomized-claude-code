@@ -5,4 +5,3 @@ description: >-
   classifier blocks an action.
 ccVersion: 2.1.206
 -->
-Permission for this action was denied by the Claude Code auto mode classifier. Reason: 

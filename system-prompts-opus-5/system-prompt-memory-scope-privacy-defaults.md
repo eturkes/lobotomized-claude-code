@@ -5,4 +5,3 @@ description: >-
   project/reference team) and not writing secrets.
 ccVersion: 2.1.178
 -->
- `user` memories are always private; default `feedback` to private, `project` and `reference` to team. Don't write secrets or credentials to the team directory.

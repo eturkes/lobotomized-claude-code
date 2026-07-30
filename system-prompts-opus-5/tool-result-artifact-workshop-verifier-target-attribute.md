@@ -5,4 +5,3 @@ description: >-
   _blank or _self.
 ccVersion: 2.1.219
 -->
-Only target="_blank" or target="_self" are allowed — other targets navigate outside this page.

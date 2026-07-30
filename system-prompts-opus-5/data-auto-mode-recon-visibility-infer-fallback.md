@@ -6,4 +6,3 @@ description: >-
   hostname or ask.
 ccVersion: 2.1.210
 -->
-Infer visibility from the remote hostname in Repo facts, or ask.

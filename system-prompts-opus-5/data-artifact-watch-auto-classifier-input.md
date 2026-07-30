@@ -7,4 +7,3 @@ ccVersion: 2.1.218
 variables:
   - DATA_ARTIFACT_WATCH_AUTO_CLASSIFIER_INPUT_VAR_0
 -->
-watch artifact for republish notifications → ${DATA_ARTIFACT_WATCH_AUTO_CLASSIFIER_INPUT_VAR_0} (background connection to claude.ai for the session)

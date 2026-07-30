@@ -5,4 +5,3 @@ description: >-
   Claude Design agent tool (var ABm, tool RBm)
 ccVersion: 2.1.199
 -->
-Action input object (server-validated). Pass {} for operations that take no input.

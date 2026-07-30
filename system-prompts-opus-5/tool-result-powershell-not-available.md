@@ -5,4 +5,3 @@ description: >-
   system.
 ccVersion: 2.1.206
 -->
-PowerShell is not available on this system.

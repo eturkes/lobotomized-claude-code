@@ -5,4 +5,3 @@ description: >-
   action.
 ccVersion: 2.1.178
 -->
-Duration in seconds (0–100).

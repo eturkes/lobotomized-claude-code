@@ -13,5 +13,3 @@ inlineBlobKind: string
 injectionGate: 'memory enabled, varies by mode'
 ccVersion: 2.1.141
 -->
-
-Build up this memory system over time so future conversations carry the context behind the user's work and how they prefer to collaborate.

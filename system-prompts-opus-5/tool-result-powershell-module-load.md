@@ -5,4 +5,3 @@ description: >-
   module/script load-install-download commands.
 ccVersion: 2.1.206
 -->
-Command loads, installs, or downloads a PowerShell module or script, which can execute arbitrary code

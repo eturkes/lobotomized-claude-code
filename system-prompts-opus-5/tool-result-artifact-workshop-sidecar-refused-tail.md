@@ -5,4 +5,3 @@ description: >-
   executable sidecar files.
 ccVersion: 2.1.219
 -->
-each is a URL that bypasses the publish-time verifier: 

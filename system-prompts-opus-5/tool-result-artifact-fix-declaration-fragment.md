@@ -5,4 +5,3 @@ description: >-
   capability declaration itself since upgrading will not help.
 ccVersion: 2.1.206
 -->
-itself, fix the declaration instead — upgrading will not 

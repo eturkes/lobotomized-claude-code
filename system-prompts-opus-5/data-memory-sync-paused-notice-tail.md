@@ -5,4 +5,3 @@ description: >-
   context.
 ccVersion: 2.1.206
 -->
- yet — sync retries automatically and will push it if the server recovers while this session is still running.

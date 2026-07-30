@@ -5,4 +5,3 @@ description: >-
   element.
 ccVersion: 2.1.219
 -->
-noscript is not allowed — its contents bypass inspection (raw text to scripting-enabled parsers) yet render for JS-off viewers.

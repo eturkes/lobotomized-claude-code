@@ -6,4 +6,3 @@ description: >-
   propose model call.
 ccVersion: 2.1.210
 -->
-_NOT GATHERED — the user picked "just this project" (Q2), was not asked yet, or the policy gate is off. Do not fetch this yourself; infer the org posture from Repo facts and Q1 instead._

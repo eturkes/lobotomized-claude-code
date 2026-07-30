@@ -5,4 +5,3 @@ description: >-
   self-contained script.
 ccVersion: 2.1.178
 -->
-Name of a predefined workflow (built-in or from .claude/workflows/). Resolves to a self-contained script.

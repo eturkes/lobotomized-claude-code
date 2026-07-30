@@ -5,4 +5,3 @@ description: >-
   island entry's opts.
 ccVersion: 2.1.219
 -->
-data-lean-choice must be one of the island entry opts.

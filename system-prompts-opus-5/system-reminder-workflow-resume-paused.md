@@ -8,4 +8,3 @@ variables:
   - SYSTEM_REMINDER_WORKFLOW_RESUME_PAUSED_VAR_0
   - SYSTEM_REMINDER_WORKFLOW_RESUME_PAUSED_VAR_1
 -->
-Resume the paused workflow by calling: Workflow({scriptPath: '${SYSTEM_REMINDER_WORKFLOW_RESUME_PAUSED_VAR_0.scriptPath}', resumeFromRunId: '${SYSTEM_REMINDER_WORKFLOW_RESUME_PAUSED_VAR_0.workflowRunId}'${SYSTEM_REMINDER_WORKFLOW_RESUME_PAUSED_VAR_1}}) — completed agents return cached results.

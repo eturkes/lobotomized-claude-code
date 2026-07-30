@@ -5,4 +5,3 @@ description: >-
   specific italicized line.
 ccVersion: 2.1.206
 -->
- End the confirmation with this exact line on its own, italicized: ${"`_Runs until you close this session · For durable cloud-based loops, use /schedule_`"}

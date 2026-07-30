@@ -5,4 +5,3 @@ description: >-
   bundled PR.
 ccVersion: 2.1.178
 -->
-    assistant: [saves private feedback memory: for refactors in this area, user prefers one bundled PR over many small ones. Confirmed after I chose this approach — a validated judgment call, not a correction]

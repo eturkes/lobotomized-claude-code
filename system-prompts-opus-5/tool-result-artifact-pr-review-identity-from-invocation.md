@@ -8,4 +8,3 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_IDENTITY_FROM_INVOCATION_VAR_0
 -->
-but this session's review invocation resolves to ${TOOL_RESULT_ARTIFACT_PR_REVIEW_IDENTITY_FROM_INVOCATION_VAR_0} — the page's identity comes from the invocation, not the payload

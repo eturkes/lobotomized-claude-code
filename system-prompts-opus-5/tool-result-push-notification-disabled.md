@@ -5,4 +5,3 @@ description: >-
   mobile push is off in /config.
 ccVersion: 2.1.206
 -->
-Push not sent — mobile push is disabled in /config.

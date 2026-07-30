@@ -8,4 +8,3 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_TEMPLATE_MISMATCH_VAR_0
 -->
-This page carries the artifact-pr-review machinery but failed publish-time validation: ${TOOL_RESULT_ARTIFACT_PR_REVIEW_TEMPLATE_MISMATCH_VAR_0.reason}. Fix that within the skill's contract and retry.

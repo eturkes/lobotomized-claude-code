@@ -5,4 +5,3 @@ description: >-
   return.
 ccVersion: 2.1.191
 -->
-project_search: number of hits (default 5)

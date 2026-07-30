@@ -5,4 +5,3 @@ description: >-
   renderer was appended, returned to the model.
 ccVersion: 2.1.210
 -->
- — includes the inline mermaid diagram renderer (~3.3MB), appended because the page contains a <pre class="mermaid"> block

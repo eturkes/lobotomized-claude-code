@@ -5,4 +5,3 @@ description: >-
   traffic is off.
 ccVersion: 2.1.206
 -->
-Claude Design is disabled because nonessential network traffic is restricted.

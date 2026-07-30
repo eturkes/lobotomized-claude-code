@@ -5,4 +5,3 @@ description: >-
   input schema.
 ccVersion: 2.1.178
 -->
-Key or chord to hold, e.g. "space", "shift+down".

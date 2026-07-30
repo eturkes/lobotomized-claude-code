@@ -5,4 +5,3 @@ description: >-
   reading is disabled by rule.
 ccVersion: 2.1.210
 -->
-SendFile reads file contents; that action is disabled.

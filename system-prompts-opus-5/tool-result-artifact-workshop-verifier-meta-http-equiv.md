@@ -5,4 +5,3 @@ description: >-
   meta tag.
 ccVersion: 2.1.219
 -->
-http-equiv metas (CSP/refresh) are not allowed; a charset meta is fine.
