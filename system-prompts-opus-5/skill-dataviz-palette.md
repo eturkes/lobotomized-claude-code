@@ -5,3 +5,4 @@ description: >-
   palette with validated default hex values
 ccVersion: null
 -->
+

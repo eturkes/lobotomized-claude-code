@@ -6,3 +6,4 @@ variables:
   - OUTPUT_STYLE_CONFIG
   - OUTPUT_STYLE_TURN_REMINDER
 -->
+

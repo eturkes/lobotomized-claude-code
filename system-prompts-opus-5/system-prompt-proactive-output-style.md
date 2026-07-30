@@ -7,3 +7,4 @@ ccVersion: 2.1.178
 variables:
   - SYSTEM_PROMPT_PROACTIVE_OUTPUT_STYLE_VAR_0
 -->
+

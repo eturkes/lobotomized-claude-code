@@ -8,3 +8,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_TEMPLATE_MISMATCH_VAR_0
 -->
+

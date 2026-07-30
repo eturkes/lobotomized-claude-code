@@ -15,3 +15,4 @@ variables:
   - MEMORY_DELETE_COMMAND
   - IS_BASH_ENV
 -->
+

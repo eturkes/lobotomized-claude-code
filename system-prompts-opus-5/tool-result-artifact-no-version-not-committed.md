@@ -7,3 +7,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_NO_VERSION_NOT_COMMITTED_VAR_0
 -->
+

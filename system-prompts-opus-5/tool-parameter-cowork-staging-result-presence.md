@@ -5,3 +5,4 @@ description: >-
   Cowork staged-call mcp tool output schema.
 ccVersion: 2.1.206
 -->
+

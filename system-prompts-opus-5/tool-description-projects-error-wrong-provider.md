@@ -5,3 +5,4 @@ description: >-
   claude.ai auth (Bedrock/Vertex/etc.)
 ccVersion: 2.1.178
 -->
+

@@ -8,3 +8,4 @@ variables:
   - MAX_FINDINGS
   - SKILL_CODE_REVIEW_OUTPUT_FORMAT_VAR_1
 -->
+

@@ -7,3 +7,4 @@ ccVersion: 2.1.214
 variables:
   - ARTIFACT_CAPABILITIES_SKILL_NAME
 -->
+

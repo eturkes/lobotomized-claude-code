@@ -5,3 +5,4 @@ description: >-
   categorical chart palette against the computable data-viz checks
 ccVersion: null
 -->
+

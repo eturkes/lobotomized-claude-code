@@ -5,3 +5,4 @@ description: >-
   position in image-pixel or logical coordinates.
 ccVersion: 2.1.178
 -->
+

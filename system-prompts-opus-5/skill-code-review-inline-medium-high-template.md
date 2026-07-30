@@ -20,3 +20,4 @@ variables:
   - REVIEW_OUTPUT_FORMATTER_FN
   - MAX_FINDINGS
 -->
+

@@ -7,3 +7,4 @@ ccVersion: 2.1.206
 variables:
   - TOOL_RESULT_ARTIFACT_CONTRACT_PIN_YANKED_VAR_0
 -->
+

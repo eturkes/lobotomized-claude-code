@@ -5,3 +5,4 @@ description: >-
   and returned to the model as a ClaudeDesign/DesignSync tool_result error.
 ccVersion: 2.1.207
 -->
+

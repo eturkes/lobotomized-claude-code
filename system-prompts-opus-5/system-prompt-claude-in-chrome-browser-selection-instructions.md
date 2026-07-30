@@ -8,3 +8,4 @@ variables:
   - ASK_USER_TOOL_NAME
   - CHROME_CONFIRMATION_OPTION_LABEL
 -->
+

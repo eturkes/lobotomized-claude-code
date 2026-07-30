@@ -5,3 +5,4 @@ description: >-
   component type (skills, commands, agents, MCP, hooks)
 ccVersion: 2.1.165
 -->
+

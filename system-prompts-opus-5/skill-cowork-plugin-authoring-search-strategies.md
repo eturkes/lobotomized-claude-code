@@ -5,3 +5,4 @@ description: >-
   context from a Knowledge MCP during plugin customization
 ccVersion: 2.1.165
 -->
+

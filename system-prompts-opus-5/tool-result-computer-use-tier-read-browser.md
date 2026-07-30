@@ -5,3 +5,4 @@ description: >-
   Claude-in-Chrome MCP for browser interaction.
 ccVersion: 2.1.206
 -->
+

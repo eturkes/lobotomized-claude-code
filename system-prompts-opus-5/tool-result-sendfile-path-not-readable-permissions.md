@@ -7,3 +7,4 @@ ccVersion: 2.1.210
 variables:
   - TOOL_RESULT_SENDFILE_PATH_NOT_READABLE_PERMISSIONS_VAR_0
 -->
+

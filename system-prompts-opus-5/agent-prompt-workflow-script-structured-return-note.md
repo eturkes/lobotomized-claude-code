@@ -7,3 +7,4 @@ ccVersion: 2.1.178
 variables:
   - STRUCTURED_OUTPUT_TOOL_NAME
 -->
+

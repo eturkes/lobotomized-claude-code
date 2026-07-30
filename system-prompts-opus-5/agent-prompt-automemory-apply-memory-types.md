@@ -7,3 +7,4 @@ ccVersion: 2.1.206
 variables:
   - AGENT_PROMPT_AUTOMEMORY_APPLY_MEMORY_TYPES_VAR_0
 -->
+

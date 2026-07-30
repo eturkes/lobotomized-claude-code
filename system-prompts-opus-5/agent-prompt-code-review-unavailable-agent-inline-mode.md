@@ -18,3 +18,4 @@ variables:
   - MAX_FINDINGS
   - INLINE_REVIEW_DISCLOSURE
 -->
+

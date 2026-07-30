@@ -5,3 +5,4 @@ description: >-
   any mcp__claude-in-chrome__* tools for browser-based actions.
 ccVersion: 2.1.178
 -->
+

@@ -7,3 +7,4 @@ ccVersion: 2.1.219
 variables:
   - REPORT_FINDINGS_TOOL_NAME
 -->
+

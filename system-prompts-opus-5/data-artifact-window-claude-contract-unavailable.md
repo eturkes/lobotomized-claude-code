@@ -8,3 +8,4 @@ ccVersion: 2.1.210
 variables:
   - DATA_ARTIFACT_WINDOW_CLAUDE_CONTRACT_UNAVAILABLE_VAR_0
 -->
+

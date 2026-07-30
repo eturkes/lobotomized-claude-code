@@ -5,3 +5,4 @@ description: >-
   plugin customization (search_mcp_registry et al.)
 ccVersion: 2.1.165
 -->
+

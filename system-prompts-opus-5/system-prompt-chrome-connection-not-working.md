@@ -6,3 +6,4 @@ description: >-
   mcp__claude-in-chrome__* tools are unavailable and to continue without them
 ccVersion: 2.1.206
 -->
+

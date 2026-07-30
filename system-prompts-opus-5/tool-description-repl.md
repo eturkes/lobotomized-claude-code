@@ -10,3 +10,4 @@ variables:
   - IS_BASH_ENV
   - TEMP_FILE_HEREDOC_COMMAND_EXAMPLE
 -->
+

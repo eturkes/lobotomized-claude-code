@@ -8,3 +8,4 @@ ccVersion: 2.1.210
 variables:
   - TOOL_PARAMETER_ARTIFACT_CAPABILITIES_VAR_0
 -->
+

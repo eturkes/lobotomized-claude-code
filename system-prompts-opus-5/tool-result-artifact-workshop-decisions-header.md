@@ -8,3 +8,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_WORKSHOP_DECISIONS_HEADER_VAR_0
 -->
+

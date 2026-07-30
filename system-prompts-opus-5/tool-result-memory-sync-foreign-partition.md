@@ -7,3 +7,4 @@ ccVersion: 2.1.219
 variables:
   - TOOL_RESULT_MEMORY_SYNC_FOREIGN_PARTITION_VAR_0
 -->
+

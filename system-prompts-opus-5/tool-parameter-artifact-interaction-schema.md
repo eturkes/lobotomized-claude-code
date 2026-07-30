@@ -8,3 +8,4 @@ ccVersion: 2.1.219
 variables:
   - TOOL_PARAMETER_ARTIFACT_INTERACTION_SCHEMA_VAR_0
 -->
+

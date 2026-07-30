@@ -22,3 +22,4 @@ style: >-
   deliberate deviations from CDS values. Dark mode keys off prefers-color-scheme
   (the standalone equivalent of CDS data-mode).
 -->
+

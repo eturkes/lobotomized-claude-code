@@ -7,3 +7,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_ACTION_REQUIRES_URL_VAR_0
 -->
+

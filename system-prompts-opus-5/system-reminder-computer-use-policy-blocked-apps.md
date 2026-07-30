@@ -8,3 +8,4 @@ variables:
   - POLICY_BLOCKED_APP_LIST
   - HAS_SINGLE_POLICY_BLOCKED_APP
 -->
+
