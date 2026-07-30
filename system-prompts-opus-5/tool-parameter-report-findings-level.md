@@ -5,4 +5,4 @@ description: >-
   the ReportFindings tool input.
 ccVersion: 2.1.196
 -->
-Effort level the review ran at
+

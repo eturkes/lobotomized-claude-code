@@ -5,4 +5,4 @@ description: >-
   schema (one-sentence statement of the defect)
 ccVersion: 2.1.196
 -->
-One-sentence statement of the defect
+

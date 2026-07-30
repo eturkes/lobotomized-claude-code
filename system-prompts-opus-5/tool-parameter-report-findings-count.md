@@ -5,4 +5,4 @@ description: >-
   (number of findings reported)
 ccVersion: 2.1.196
 -->
-Number of findings reported
+

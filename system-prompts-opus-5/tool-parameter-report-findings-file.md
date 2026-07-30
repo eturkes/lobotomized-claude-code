@@ -5,4 +5,4 @@ description: >-
   schema (repo-relative path of the file the finding is in)
 ccVersion: 2.1.196
 -->
-Repo-relative path of the file the finding is in
+
