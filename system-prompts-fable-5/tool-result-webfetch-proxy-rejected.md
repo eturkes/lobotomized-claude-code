@@ -1,9 +1,11 @@
 <!--
-name: WebFetch proxy rejected
+name: 'Tool Result: WebFetch proxy rejected'
 description: >-
-  Error surfaced to the model when the fetch proxy rejects the request with an
-  HTTP error status.
-ccVersion: 2.1.206
+  errorMessage for a PROXY_REJECTED ccr response; JSON-serialized into a thrown
+  TelemetrySafeError from the WebFetch path, which the tool harness returns to
+  the model as <tool_use_error>. Sibling of
+  tool-result-webfetch-proxy-transport-error.
+ccVersion: 2.1.214
 variables:
   - TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_0
   - TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_1
@@ -11,4 +13,4 @@ variables:
   - TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_3
   - TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_4
 -->
-The ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_0} proxy rejected the request (HTTP ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_1.status}${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_2?`: ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_2}`:""}).
+The ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_0} proxy rejected the request (HTTP ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_1.status}${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_2}${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_3}${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_4?`: ${TOOL_RESULT_WEBFETCH_PROXY_REJECTED_VAR_4}`:""}).

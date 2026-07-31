@@ -3,7 +3,7 @@ name: 'Skill: Code Review (high effort)'
 description: >-
   Effort-tier prompt for high code review — 3+5 angles, up to 6 candidates,
   recall-biased verify, up to 10 findings
-ccVersion: 2.1.206
+ccVersion: 2.1.218
 variables:
   - PHASE_0_GATHER_DIFF
   - AGENT_TOOL_NAME
