@@ -5,4 +5,4 @@ description: >-
   screenshot/zoom images are saved for sharing.
 ccVersion: 2.1.178
 -->
-For screenshot/zoom actions: save the image to disk so it can be attached to a message for the user; returns the saved path. Set only when you intend to share the image.
+

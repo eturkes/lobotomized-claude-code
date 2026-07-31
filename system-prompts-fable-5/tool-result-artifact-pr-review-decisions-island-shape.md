@@ -6,4 +6,4 @@ description: >-
   ArtifactInputError the model receives as the Artifact publish tool result.
 ccVersion: 2.1.218
 -->
-the decisions island is not {items: [...]}
+

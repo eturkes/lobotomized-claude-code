@@ -7,4 +7,4 @@ ccVersion: 2.1.214
 variables:
   - TOOL_RESULT_SENDFEEDBACK_CALL_CAP_REACHED_VAR_0
 -->
-SendFeedback has reached its per-session limit of ${TOOL_RESULT_SENDFEEDBACK_CALL_CAP_REACHED_VAR_0} calls.
+

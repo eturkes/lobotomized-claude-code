@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.210
 -->
 
-These are CANDIDATES, not vetted context: keep only the ones whose org already appears in Repo facts or the sibling-docs section.

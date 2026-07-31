@@ -5,4 +5,4 @@ description: >-
   into model context.
 ccVersion: 2.1.206
 -->
-- Code patterns, conventions, architecture, file paths, or project structure — these can be derived by reading the current project state.
+

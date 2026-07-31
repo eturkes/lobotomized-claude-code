@@ -5,4 +5,4 @@ description: >-
   sequence (key action only).
 ccVersion: 2.1.178
 -->
-Number of times to repeat the key sequence. Only for the `key` action. Integer 1-100. Default 1.
+

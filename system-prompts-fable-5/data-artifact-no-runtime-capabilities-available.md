@@ -6,4 +6,4 @@ description: >-
   guess any `capabilities` name for this artifact.
 ccVersion: 2.1.214
 -->
-**No runtime capabilities are available for this artifact.** If the user asked for one, tell them it is unavailable and build a static page.
+

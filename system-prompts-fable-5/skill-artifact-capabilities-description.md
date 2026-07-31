@@ -6,4 +6,4 @@ description: >-
   available-skills listing so it knows when to load the skill.
 ccVersion: 2.1.214
 -->
-behavior static HTML cannot provide on its own, such as the page reading live or connected data, keeping state shared across viewers, or updating and republishing itself. Serves this user's live capability roster and the typed call definitions. Load it whenever the user asks for an artifact needing any such runtime behavior.
+

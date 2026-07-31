@@ -5,4 +5,4 @@ description: >-
   /auto-mode-setup command result.
 ccVersion: 2.1.210
 -->
-Couldn’t read the proposal file. Check the path and that it is a regular file.
+

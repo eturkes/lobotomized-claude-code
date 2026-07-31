@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.206
 -->
 
-(More may exist — pass a higher `limit` (up to 50); artifacts not updated recently can be beyond the listing window.)

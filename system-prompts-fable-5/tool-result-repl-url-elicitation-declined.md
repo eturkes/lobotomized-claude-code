@@ -8,4 +8,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_REPL_URL_ELICITATION_DECLINED_VAR_0
 -->
-URL elicitation was declined; the tool "${TOOL_RESULT_REPL_URL_ELICITATION_DECLINED_VAR_0.name}" could not complete.
+

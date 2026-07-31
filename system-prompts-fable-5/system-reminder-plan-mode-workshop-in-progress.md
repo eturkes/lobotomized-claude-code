@@ -9,5 +9,3 @@ variables:
   - SYSTEM_REMINDER_PLAN_MODE_WORKSHOP_IN_PROGRESS_VAR_1
 -->
 
-
-A decision workshop is in progress for this session — ${SYSTEM_REMINDER_PLAN_MODE_WORKSHOP_IN_PROGRESS_VAR_0(SYSTEM_REMINDER_PLAN_MODE_WORKSHOP_IN_PROGRESS_VAR_1.workshopActiveDocPath,{form:"full",mode:"active"})} Fold each resolved decision back into the plan file as the workshop progresses.

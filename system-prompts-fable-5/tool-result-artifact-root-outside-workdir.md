@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_ROOT_OUTSIDE_WORKDIR_VAR_0
   - TOOL_RESULT_ARTIFACT_ROOT_OUTSIDE_WORKDIR_VAR_1
 -->
-root: ${TOOL_RESULT_ARTIFACT_ROOT_OUTSIDE_WORKDIR_VAR_0.stringify(TOOL_RESULT_ARTIFACT_ROOT_OUTSIDE_WORKDIR_VAR_1)} is outside the working directory — pass a working-directory-relative path
+

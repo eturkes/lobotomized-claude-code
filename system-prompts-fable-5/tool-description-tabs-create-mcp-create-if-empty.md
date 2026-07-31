@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-If no MCP tab group exists, creates a new window with a tab group containing an empty tab. If one already exists, this parameter has no effect.

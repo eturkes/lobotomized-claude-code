@@ -5,4 +5,4 @@ description: >-
   needs the current contract; retry when the service is reachable.
 ccVersion: 2.1.206
 -->
-contract. Retry when the contract service is reachable — 
+

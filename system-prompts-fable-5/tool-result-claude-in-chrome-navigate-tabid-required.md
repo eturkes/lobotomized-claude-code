@@ -6,4 +6,4 @@ description: >-
   tabs_context_mcp first.
 ccVersion: 2.1.211
 -->
-tabId is required for url:"back"/"forward". Call tabs_context_mcp first to get a tab ID.
+

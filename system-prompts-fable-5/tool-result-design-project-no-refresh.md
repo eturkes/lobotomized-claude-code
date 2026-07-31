@@ -5,4 +5,4 @@ description: >-
   gain scopes.
 ccVersion: 2.1.206
 -->
-The OAuth token was supplied via CLAUDE_CODE_OAUTH_TOKEN and cannot be expanded with project scopes. Run /login in this session.
+

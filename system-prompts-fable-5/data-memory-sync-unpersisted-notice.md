@@ -5,4 +5,4 @@ description: >-
   shared memory.
 ccVersion: 2.1.206
 -->
-This write was saved locally; treat it as NOT yet persisted to shared memory until sync succeeds.
+

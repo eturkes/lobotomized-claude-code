@@ -6,4 +6,4 @@ description: >-
   receives as the Artifact publish tool result.
 ccVersion: 2.1.218
 -->
-a decisions item state is not open, resolved, or acted
+

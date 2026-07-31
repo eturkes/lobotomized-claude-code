@@ -5,4 +5,4 @@ description: >-
   to batch actions via browser_batch.
 ccVersion: 2.1.178
 -->
-Prefer browser_batch to run multiple actions (clicks, types, navigations, screenshots) in one call — it is significantly faster.
+

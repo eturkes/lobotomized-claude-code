@@ -7,4 +7,4 @@ ccVersion: 2.1.206
 variables:
   - SLASH_COMMAND_SCHEDULE_WHEN_TO_USE_VAR_0
 -->
-When the user wants to schedule a recurring cloud agent, set up automated tasks, create a cron job for Claude Code, or manage their scheduled agents/routines.${SLASH_COMMAND_SCHEDULE_WHEN_TO_USE_VAR_0("tengu_mocha_barista",!1)?' Also use when the user wants a one-time scheduled run ("run this once at 3pm", "remind me to check X tomorrow").':""}
+

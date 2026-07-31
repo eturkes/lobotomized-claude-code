@@ -5,4 +5,4 @@ description: >-
   keyboard focus; instructs clicking the target app first.
 ccVersion: 2.1.178
 -->
-Claude's window still has keyboard focus. Click on the target application first.
+

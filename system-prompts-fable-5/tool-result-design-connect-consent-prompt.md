@@ -7,4 +7,4 @@ description: >-
   model.
 ccVersion: null
 -->
-Connect to Claude Design? Claude can read and edit your Design projects from this tool. Change anytime in Claude Design settings or with /design revoke.
+

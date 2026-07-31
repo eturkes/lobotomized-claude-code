@@ -5,4 +5,4 @@ description: >-
   system prompt.
 ccVersion: 2.1.206
 -->
-ongoing work, deadlines, or decisions not derivable from code or git history
+

@@ -5,4 +5,4 @@ description: >-
   granted.
 ccVersion: 2.1.206
 -->
-macOS Accessibility and Screen Recording are now both granted. 
+

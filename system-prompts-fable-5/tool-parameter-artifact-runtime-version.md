@@ -5,4 +5,4 @@ description: >-
   Artifact tool input schema.
 ccVersion: 2.1.202
 -->
-The artifact's runtime version. Omit to keep its current version (the default); 'latest' to upgrade; a specific version to pin or roll back. Changing it changes how the 
+

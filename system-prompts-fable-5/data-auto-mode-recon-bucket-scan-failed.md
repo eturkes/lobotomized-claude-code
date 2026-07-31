@@ -6,5 +6,3 @@ description: >-
 ccVersion: 2.1.214
 -->
 
-#### Bucket names in config (repo-wide scan)
-_The bucket scan failed — treat bucket evidence as unavailable, not absent._

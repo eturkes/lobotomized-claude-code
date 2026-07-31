@@ -8,4 +8,4 @@ ccVersion: 2.1.211
 variables:
   - TOOL_RESULT_DESIGN_GRANT_UNAVAILABLE_SUBAGENT_HOOK_VAR_0
 -->
-ClaudeDesign ${TOOL_RESULT_DESIGN_GRANT_UNAVAILABLE_SUBAGENT_HOOK_VAR_0.operation}: writing without a plan_token requires a one-time project approval, which is not available in subagent or PermissionRequest-hook sessions — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.
+

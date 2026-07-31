@@ -5,4 +5,4 @@ description: >-
   writes/deletes.
 ccVersion: 2.1.206
 -->
-finalize_plan needs at least one write or delete path.
+

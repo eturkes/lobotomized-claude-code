@@ -5,4 +5,4 @@ description: >-
   the key press, default 1.
 ccVersion: 2.1.178
 -->
-Number of times to repeat the key press. Default is 1.
+

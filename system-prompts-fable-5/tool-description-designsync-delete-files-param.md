@@ -5,4 +5,4 @@ description: >-
   paths; notes a max of 256 per call and to split large sets.
 ccVersion: 2.1.178
 -->
-Design System pane card should be removed. Max 256 per call — 
+

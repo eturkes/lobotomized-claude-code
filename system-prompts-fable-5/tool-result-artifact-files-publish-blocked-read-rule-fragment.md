@@ -5,4 +5,4 @@ description: >-
   the file or approve the prompt.
 ccVersion: 2.1.218
 -->
-Read permission rule — remove it from the publish, or 
+

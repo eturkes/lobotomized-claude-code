@@ -5,4 +5,4 @@ description: >-
   'Nothing to save.' when appropriate.
 ccVersion: 2.1.206
 -->
-If nothing is worth saving, output only 'Nothing to save.' Do not explain why.
+

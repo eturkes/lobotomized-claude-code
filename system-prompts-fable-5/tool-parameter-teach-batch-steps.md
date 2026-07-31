@@ -5,4 +5,4 @@ description: >-
   errors before any tooltip shows.
 ccVersion: 2.1.178
 -->
-Ordered steps. Validated upfront — a typo in step 5 errors before any tooltip shows.
+

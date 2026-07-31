@@ -8,4 +8,4 @@ ccVersion: 2.1.207
 variables:
   - TOOL_RESULT_DESIGN_CREDENTIAL_EXPIRED_NONINTERACTIVE_VAR_0
 -->
-${TOOL_RESULT_DESIGN_CREDENTIAL_EXPIRED_NONINTERACTIVE_VAR_0} The claude.ai credential is expired or revoked, and /login requires an interactive terminal — re-authenticate outside this session.
+

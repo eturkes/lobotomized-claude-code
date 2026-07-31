@@ -9,4 +9,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_ACTED_WITHOUT_RESOLVE_VAR_0
 -->
-decisions_state marks "${TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_ACTED_WITHOUT_RESOLVE_VAR_0.id}" acted, but no writer has resolved it on the published page — acted provenance must trace to a pill click
+

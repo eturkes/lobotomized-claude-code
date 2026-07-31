@@ -5,4 +5,4 @@ description: >-
   handling a Claude Design command.
 ccVersion: 2.1.206
 -->
-You are handling a `/design` command for Claude Design (claude.ai/design).
+

@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_0
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_1
 -->
-${TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_0(TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_1.watches.length,"artifact watch")} in this session (session-local; none survive a restart):
+

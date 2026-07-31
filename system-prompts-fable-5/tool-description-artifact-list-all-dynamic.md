@@ -5,4 +5,4 @@ description: >-
   covering both published and shared artifacts.
 ccVersion: 2.1.210
 -->
-List artifacts published by the user or shared with them — titles and links from their earlier sessions and from other people's shared artifacts will be read into the conversation (read-only).
+

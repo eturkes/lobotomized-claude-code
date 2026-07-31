@@ -5,4 +5,4 @@ description: >-
   remote sessions do not hold the watch.
 ccVersion: 2.1.218
 -->
-Live subscription: skipped — remote sessions do not hold the watch.
+

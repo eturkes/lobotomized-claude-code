@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-When the user wants to interact with web pages, automate browser tasks, capture screenshots, read console logs, or perform any browser-based actions.

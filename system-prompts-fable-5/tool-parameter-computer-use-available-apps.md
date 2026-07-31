@@ -5,4 +5,4 @@ ccVersion: 2.1.206
 variables:
   - TOOL_PARAMETER_COMPUTER_USE_AVAILABLE_APPS_VAR_0
 -->
- Available applications on this machine: ${TOOL_PARAMETER_COMPUTER_USE_AVAILABLE_APPS_VAR_0.join(", ")}.
+

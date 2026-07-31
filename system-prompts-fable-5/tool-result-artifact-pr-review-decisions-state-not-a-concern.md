@@ -8,4 +8,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_STATE_NOT_A_CONCERN_VAR_0
 -->
-decisions_state names "${TOOL_RESULT_ARTIFACT_PR_REVIEW_DECISIONS_STATE_NOT_A_CONCERN_VAR_0.id}", which is not a concern with options in this payload
+

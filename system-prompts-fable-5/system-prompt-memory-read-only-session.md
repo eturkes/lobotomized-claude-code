@@ -5,4 +5,4 @@ description: >-
   session.
 ccVersion: 2.1.206
 -->
-If the user asks you to remember something, explain that memory is read-only in this session.
+

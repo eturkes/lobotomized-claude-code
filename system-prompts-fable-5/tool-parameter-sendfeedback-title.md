@@ -5,4 +5,4 @@ description: >-
   model with the tool definition.
 ccVersion: 2.1.214
 -->
-Short, specific one-line summary of the issue.
+

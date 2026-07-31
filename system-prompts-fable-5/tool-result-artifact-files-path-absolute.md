@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_FILES_PATH_ABSOLUTE_VAR_0
   - TOOL_RESULT_ARTIFACT_FILES_PATH_ABSOLUTE_VAR_1
 -->
-files: published path ${TOOL_RESULT_ARTIFACT_FILES_PATH_ABSOLUTE_VAR_0.stringify(TOOL_RESULT_ARTIFACT_FILES_PATH_ABSOLUTE_VAR_1)} is absolute — published paths are relative to the artifact root
+

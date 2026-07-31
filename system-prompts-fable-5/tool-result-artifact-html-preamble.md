@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_HTML_PREAMBLE_VAR_0
   - TOOL_RESULT_ARTIFACT_HTML_PREAMBLE_VAR_1
 -->
-${TOOL_RESULT_ARTIFACT_HTML_PREAMBLE_VAR_0(TOOL_RESULT_ARTIFACT_HTML_PREAMBLE_VAR_1.bytes)} total — saving the full HTML to disk failed; raw HTML (may be truncated) follows
+

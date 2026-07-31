@@ -5,4 +5,4 @@ description: >-
   requested.
 ccVersion: 2.1.206
 -->
-deny list in Settings — you cannot request this through the tool.
+

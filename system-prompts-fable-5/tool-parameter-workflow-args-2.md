@@ -5,4 +5,4 @@ description: >-
   tool schema.
 ccVersion: 2.1.206
 -->
-`args.map` in the script. Use for parameterized named workflows (e.g. a research question).
+

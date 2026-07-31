@@ -5,4 +5,4 @@ description: >-
   register_assets card entries, serialized into the model's tool list.
 ccVersion: 2.1.191
 -->
-Short human-readable label ("Primary buttons"), not a path
+

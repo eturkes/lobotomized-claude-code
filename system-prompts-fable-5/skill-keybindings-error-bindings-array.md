@@ -5,4 +5,4 @@ description: >-
   an array.
 ccVersion: 2.1.206
 -->
-Set `"bindings"` to an array: `[{ context: ..., bindings: ... }]`
+

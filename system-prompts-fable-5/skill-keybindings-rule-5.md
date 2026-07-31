@@ -5,4 +5,4 @@ description: >-
   key and add the new one.
 ccVersion: 2.1.206
 -->
-5. To fully replace a default binding, unbind the old key AND add the new one
+

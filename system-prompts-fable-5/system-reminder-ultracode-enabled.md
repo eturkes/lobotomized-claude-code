@@ -5,4 +5,4 @@ description: >-
   substantive tasks when Ultracode is enabled
 ccVersion: 2.1.178
 -->
-Ultracode is on: optimize for the most exhaustive, correct answer. Use the Workflow tool on every substantive task; token cost is not a constraint. See the Workflow tool's Ultracode section and quality patterns. Solo only on conversational/trivial turns.
+

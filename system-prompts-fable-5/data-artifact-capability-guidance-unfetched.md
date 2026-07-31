@@ -10,4 +10,4 @@ variables:
   - DATA_ARTIFACT_CAPABILITY_GUIDANCE_UNFETCHED_VAR_1
   - DATA_ARTIFACT_CAPABILITY_GUIDANCE_UNFETCHED_VAR_2
 -->
-**\`${DATA_ARTIFACT_CAPABILITY_GUIDANCE_UNFETCHED_VAR_0}\`.** Its authoring guidance could not be fetched this invocation; its type definitions are extracted at \`${DATA_ARTIFACT_CAPABILITY_GUIDANCE_UNFETCHED_VAR_1}/${DATA_ARTIFACT_CAPABILITY_GUIDANCE_UNFETCHED_VAR_2}\` — Read that file before declaring this capability.
+

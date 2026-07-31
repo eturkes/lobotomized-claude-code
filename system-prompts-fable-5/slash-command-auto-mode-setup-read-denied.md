@@ -5,4 +5,4 @@ description: >-
   permissions.deny read rule; returned as /auto-mode-setup command result.
 ccVersion: 2.1.210
 -->
-That path is covered by a permissions.deny read rule. Write the proposal somewhere the session can read.
+

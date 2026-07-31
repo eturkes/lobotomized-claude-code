@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.210
 -->
 
-The user opted into this at Q2. Raw command lines were never read into the transcript — only the command words above. Merge these with the per-project counts in the section above.

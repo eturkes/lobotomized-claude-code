@@ -10,4 +10,4 @@ inlineBlobKind: string
 injectionGate: memory enabled
 ccVersion: 2.1.141
 -->
-If the user explicitly asks you to remember something, save it immediately as whichever type fits best. If they ask you to forget something, find and remove the relevant entry.
+

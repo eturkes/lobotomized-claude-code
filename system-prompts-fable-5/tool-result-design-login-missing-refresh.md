@@ -5,4 +5,4 @@ description: >-
   refresh token/expiry.
 ccVersion: 2.1.206
 -->
-The token response was missing a refresh token or expiry — cannot store a usable design credential.
+

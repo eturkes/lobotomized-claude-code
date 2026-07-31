@@ -5,4 +5,4 @@ description: >-
   system prompt.
 ccVersion: 2.1.206
 -->
-where to find information in an external system (issue tracker, dashboard, channel)
+

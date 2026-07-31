@@ -7,4 +7,4 @@ ccVersion: 2.1.178
 variables:
   - TOOL_PARAMETER_CLAUDE_IN_CHROME_LEFT_CLICK_DRAG_START_COORDINATE_VAR_0
 -->
-(x, y) start point. If omitted, drags from the current cursor position. ${TOOL_PARAMETER_CLAUDE_IN_CHROME_LEFT_CLICK_DRAG_START_COORDINATE_VAR_0.x}
+

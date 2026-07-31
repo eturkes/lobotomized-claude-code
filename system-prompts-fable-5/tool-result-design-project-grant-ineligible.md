@@ -8,4 +8,4 @@ ccVersion: 2.1.211
 variables:
   - TOOL_RESULT_DESIGN_PROJECT_GRANT_INELIGIBLE_VAR_0
 -->
-ClaudeDesign ${TOOL_RESULT_DESIGN_PROJECT_GRANT_INELIGIBLE_VAR_0.operation}: this project cannot hold a durable write grant for this account (it may be shared from another organization) — use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.
+

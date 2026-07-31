@@ -5,4 +5,4 @@ description: >-
   only an interactive/SDK main-loop session holds the watch.
 ccVersion: 2.1.218
 -->
-Live subscription: skipped — only an interactive or SDK main-loop session holds the watch (not a subagent, teammate, background, or print session).
+

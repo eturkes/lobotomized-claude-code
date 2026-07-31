@@ -7,4 +7,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_DATA_ISLAND_ABSENT_VAR_0
 -->
-No "${TOOL_RESULT_ARTIFACT_DATA_ISLAND_ABSENT_VAR_0.schema}" data island at ${TOOL_RESULT_ARTIFACT_DATA_ISLAND_ABSENT_VAR_0.url} (version ${TOOL_RESULT_ARTIFACT_DATA_ISLAND_ABSENT_VAR_0.ver}) — the page carries no entries for that schema, or is not that kind of page.
+

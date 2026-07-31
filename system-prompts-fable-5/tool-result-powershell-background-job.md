@@ -5,4 +5,4 @@ description: >-
   background job (&) operator.
 ccVersion: 2.1.206
 -->
-Command uses the background job operator (`&`) which spawns a child PowerShell process
+

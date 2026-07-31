@@ -5,4 +5,4 @@ description: >-
   SendFile cannot accept, so nothing was sent.
 ccVersion: 2.1.210
 -->
-The permission handler narrowed the input to a shape SendFile does not accept — nothing was sent.
+

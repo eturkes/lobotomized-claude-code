@@ -6,4 +6,4 @@ description: >-
   returned to the model by the Artifact publish tool.
 ccVersion: 2.1.218
 -->
-the body carries an element that can reach the network, navigate, or execute
+

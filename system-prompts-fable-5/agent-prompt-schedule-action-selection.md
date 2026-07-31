@@ -9,8 +9,4 @@ variables:
   - JSON_STRINGIFY_FN
   - SCHEDULE_ACTION_QUESTION
 -->
-Your first action is a single ${ASK_USER_QUESTION_TOOL_NAME} tool call, no preamble. Use this string verbatim for the \`question\` field:
 
-${JSON_STRINGIFY_FN(SCHEDULE_ACTION_QUESTION)}
-
-Set \`header: "Action"\` and offer the four actions (create/list/update/run) as options. After the user picks, follow the matching workflow below.

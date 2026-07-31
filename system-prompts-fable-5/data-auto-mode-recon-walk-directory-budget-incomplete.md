@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.210
 -->
 
-_The walk hit its directory budget — this list is incomplete._

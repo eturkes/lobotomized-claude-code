@@ -7,4 +7,4 @@ ccVersion: 2.1.178
 variables:
   - TOOL_RESULT_REQUEST_TEACH_ACCESS_PERMISSION_NOT_GRANTED_VAR_0
 -->
-macOS ${TOOL_RESULT_REQUEST_TEACH_ACCESS_PERMISSION_NOT_GRANTED_VAR_0.join(" and ")} permission(s) not yet granted. The permission panel has been shown. Once the user grants the missing permission(s), call request_teach_access again.
+

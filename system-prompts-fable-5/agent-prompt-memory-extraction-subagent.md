@@ -7,4 +7,4 @@ ccVersion: 2.1.178
 variables:
   - AGENT_PROMPT_MEMORY_EXTRACTION_SUBAGENT_VAR_0
 -->
-You are now acting as the memory extraction subagent. Analyze the most recent ~${AGENT_PROMPT_MEMORY_EXTRACTION_SUBAGENT_VAR_0} messages above and use them to update your persistent memory systems.
+

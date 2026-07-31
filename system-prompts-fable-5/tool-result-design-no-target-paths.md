@@ -8,4 +8,4 @@ ccVersion: 2.1.211
 variables:
   - TOOL_RESULT_DESIGN_NO_TARGET_PATHS_VAR_0
 -->
-ClaudeDesign ${TOOL_RESULT_DESIGN_NO_TARGET_PATHS_VAR_0.operation}: this call names no target paths — list the files to write, or use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.
+

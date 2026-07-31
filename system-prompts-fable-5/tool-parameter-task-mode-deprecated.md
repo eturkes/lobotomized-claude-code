@@ -6,4 +6,4 @@ description: >-
   mode
 ccVersion: 2.1.214
 -->
-Deprecated; ignored. Subagents inherit the parent session's permission mode; agent-definition frontmatter may override it.
+

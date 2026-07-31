@@ -5,4 +5,4 @@ description: >-
   in the Artifact tool result.
 ccVersion: 2.1.218
 -->
-Live subscription: skipped — that is not an artifact this session can name.
+

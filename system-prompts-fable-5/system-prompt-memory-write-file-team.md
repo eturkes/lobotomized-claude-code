@@ -7,4 +7,4 @@ ccVersion: 2.1.206
 variables:
   - SYSTEM_PROMPT_MEMORY_WRITE_FILE_TEAM_VAR_0
 -->
-Write each memory to its own file in ${SYSTEM_PROMPT_MEMORY_WRITE_FILE_TEAM_VAR_0} using this frontmatter format:
+

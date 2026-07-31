@@ -7,4 +7,4 @@ ccVersion: 2.1.178
 variables:
   - INDEX_FILE
 -->
-**Step 2** — add a pointer to that file in \`${INDEX_FILE}\`. \`${INDEX_FILE}\` is an index, not a memory — each entry should be one line, under ~150 characters: \`- [Title](file.md) — one-line hook\`. It has no frontmatter. Never write memory content directly into \`${INDEX_FILE}\`.
+

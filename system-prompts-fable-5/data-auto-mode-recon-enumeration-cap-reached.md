@@ -9,4 +9,3 @@ variables:
   - DATA_AUTO_MODE_RECON_ENUMERATION_CAP_REACHED_VAR_1
 -->
 
-_Enumeration cap reached — the ${DATA_AUTO_MODE_RECON_ENUMERATION_CAP_REACHED_VAR_0.statCap} first-enumerated of ${DATA_AUTO_MODE_RECON_ENUMERATION_CAP_REACHED_VAR_1} transcripts were considered; the most-recent selection is drawn from that subset, so a recent session in a project past the cap may be missing._

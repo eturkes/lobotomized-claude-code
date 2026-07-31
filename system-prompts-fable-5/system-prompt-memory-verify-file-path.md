@@ -5,4 +5,4 @@ description: >-
   path exists.
 ccVersion: 2.1.206
 -->
-- If the memory names a file path: check the file exists.
+

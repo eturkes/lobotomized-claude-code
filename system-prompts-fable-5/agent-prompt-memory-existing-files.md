@@ -8,9 +8,3 @@ variables:
   - AGENT_PROMPT_MEMORY_EXISTING_FILES_VAR_0
 -->
 
-
-## Existing memory files
-
-${AGENT_PROMPT_MEMORY_EXISTING_FILES_VAR_0}
-
-Check this list before writing — update an existing file rather than creating a duplicate.

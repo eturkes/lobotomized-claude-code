@@ -8,4 +8,4 @@ variables:
   - DATA_ARTIFACT_GUIDANCE_PINNED_NOTE_VAR_0
   - DATA_ARTIFACT_GUIDANCE_PINNED_NOTE_VAR_1
 -->
-_This guidance is pinned to runtime contract ${DATA_ARTIFACT_GUIDANCE_PINNED_NOTE_VAR_0.version} — the contract the target${DATA_ARTIFACT_GUIDANCE_PINNED_NOTE_VAR_1} currently runs._
+

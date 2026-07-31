@@ -5,4 +5,4 @@ description: >-
   connection.
 ccVersion: 2.1.178
 -->
-Listing browsers is only available with bridge connections.
+

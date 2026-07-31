@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-Each type below declares a <scope> of `private`, `team`, or guidance for choosing between the two.

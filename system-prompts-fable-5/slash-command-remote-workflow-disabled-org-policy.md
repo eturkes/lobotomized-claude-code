@@ -7,4 +7,4 @@ description: >-
   <local-command-stdout>, which is replayed to the model.
 ccVersion: 2.1.218
 -->
-dynamic workflows are disabled for this session (org policy `allow_workflows`).
+

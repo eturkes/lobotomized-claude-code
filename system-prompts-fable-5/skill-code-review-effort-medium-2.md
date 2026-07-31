@@ -17,9 +17,4 @@ variables:
   - PHASE_2_VERIFY_3_STATE
   - OUTPUT_FORMAT_FN
 -->
-You are reviewing for **precision** at medium effort: every finding you surface
-should be one a maintainer would act on.
 
-Precision here means verified, not downgraded. A defect you confirmed stays a
-finding at full severity — name it a bug, not a convention or a deliberate
-design decision.

@@ -5,4 +5,4 @@ description: >-
   tool; relative to root or absolute under cwd.
 ccVersion: 2.1.218
 -->
-Source file path — relative to `root` (default: the working directory), or absolute under the working directory.
+

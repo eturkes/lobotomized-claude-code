@@ -5,4 +5,4 @@ description: >-
   button at the current cursor position
 ccVersion: 2.1.178
 -->
-Release the left mouse button at the current cursor position. Pairs with left_mouse_down; safe to call even if the button is not held. Requires the frontmost app to be in the session allowlist.
+

@@ -5,4 +5,4 @@ description: >-
   budget.remaining() is Infinity.
 ccVersion: 2.1.206
 -->
-no token budget was set — remaining() returns Infinity when budget.total is null. 
+

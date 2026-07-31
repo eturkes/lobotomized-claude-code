@@ -5,4 +5,4 @@ description: >-
   model in the memory prompt.
 ccVersion: 2.1.206
 -->
-description: {{one-line summary — used to decide relevance in future conversations, so be specific}}
+

@@ -5,4 +5,4 @@ description: >-
   environment, returned in the Artifact tool result.
 ccVersion: 2.1.218
 -->
-Live subscription: skipped — the live connection could not be opened from this environment.
+

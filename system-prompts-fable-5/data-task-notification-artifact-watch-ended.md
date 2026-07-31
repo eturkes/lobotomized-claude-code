@@ -8,4 +8,4 @@ variables:
   - DATA_TASK_NOTIFICATION_ARTIFACT_WATCH_ENDED_VAR_0
   - DATA_TASK_NOTIFICATION_ARTIFACT_WATCH_ENDED_VAR_1
 -->
-Watch on ${DATA_TASK_NOTIFICATION_ARTIFACT_WATCH_ENDED_VAR_0.url} ended — ${DATA_TASK_NOTIFICATION_ARTIFACT_WATCH_ENDED_VAR_1}. This session will no longer hear when it is republished; watch it again if you still need that.
+

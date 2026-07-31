@@ -8,4 +8,4 @@ ccVersion: 2.1.218
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_HEAD_MOVED_VAR_0
 -->
-the PR moved since the review: the payload reviewed ${TOOL_RESULT_ARTIFACT_PR_REVIEW_HEAD_MOVED_VAR_0.reviewed_head_sha.slice(0,12)}… but 
+

@@ -6,4 +6,4 @@ description: >-
   long/deep/invalid; model-facing.
 ccVersion: 2.1.201
 -->
-The server rejected a memory file's path (too long, too deep, or containing invalid characters). Rename the offending file.
+

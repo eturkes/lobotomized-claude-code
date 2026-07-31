@@ -5,4 +5,4 @@ description: >-
   output block.
 ccVersion: 2.1.206
 -->
-[keybindings] [warning] "ctrl+c" may not work: Terminal interrupt (SIGINT)
+

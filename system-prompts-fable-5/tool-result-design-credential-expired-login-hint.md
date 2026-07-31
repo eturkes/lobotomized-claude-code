@@ -7,4 +7,4 @@ ccVersion: 2.1.207
 variables:
   - TOOL_RESULT_DESIGN_CREDENTIAL_EXPIRED_LOGIN_HINT_VAR_0
 -->
-${TOOL_RESULT_DESIGN_CREDENTIAL_EXPIRED_LOGIN_HINT_VAR_0} Run /login, or /design login for a separate design credential.
+

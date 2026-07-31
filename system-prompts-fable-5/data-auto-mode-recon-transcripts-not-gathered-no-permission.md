@@ -5,4 +5,4 @@ description: >-
   context was available to enforce permissions.deny.
 ccVersion: 2.1.210
 -->
-_NOT GATHERED — no permission context was available to enforce permissions.deny, so no other project’s transcripts were read._
+

@@ -5,4 +5,4 @@ description: >-
   token failed.
 ccVersion: 2.1.206
 -->
-Could not refresh the design access token (transient error). Retry shortly, or run /design-login to re-authorize.
+

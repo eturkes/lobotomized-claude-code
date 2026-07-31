@@ -5,4 +5,4 @@ description: >-
   Invoke-Item can execute arbitrary code.
 ccVersion: 2.1.206
 -->
-Invoke-Item opens files with the default handler (ShellExecute). On executable files this runs arbitrary code.
+

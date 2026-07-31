@@ -5,4 +5,4 @@ description: >-
   computer_batch
 ccVersion: 2.1.178
 -->
-Queue multiple teach steps in one tool call. Parallels computer_batch: 
+

@@ -6,4 +6,4 @@ description: >-
   still work.
 ccVersion: 2.1.210
 -->
-Cross-machine file transfer is unavailable: it uploads file contents through Anthropic servers, which this provider/privacy configuration does not allow. Same-machine (uds:) transfers still work.
+

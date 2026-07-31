@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-One line describing exactly what will happen when the user clicks Next. Example: "Next: I'll click Create Bucket and type the name."

@@ -8,4 +8,4 @@ ccVersion: 2.1.211
 variables:
   - TOOL_RESULT_DESIGN_BATCH_TOO_LARGE_FOR_APPROVAL_VAR_0
 -->
-ClaudeDesign ${TOOL_RESULT_DESIGN_BATCH_TOO_LARGE_FOR_APPROVAL_VAR_0.operation}: this batch is too large to display fully for approval — split it into smaller batches, or use finalize_plan with writes (and deletes if needed), then pass the returned plan_token.
+

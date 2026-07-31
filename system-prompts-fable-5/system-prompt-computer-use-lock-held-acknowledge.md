@@ -6,4 +6,4 @@ description: >-
   non-computer approach
 ccVersion: 2.1.178
 -->
-Another Claude session is currently using the computer. Wait for that session to finish, or find a non-computer-use approach.
+

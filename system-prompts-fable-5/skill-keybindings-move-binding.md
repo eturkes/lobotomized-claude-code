@@ -5,4 +5,4 @@ description: >-
   adding the new one.
 ccVersion: 2.1.206
 -->
-- To **move** a binding to a different key: unbind the old key (`null`) AND add the new binding
+

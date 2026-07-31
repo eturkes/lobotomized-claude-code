@@ -6,4 +6,4 @@ variables:
   - OUTPUT_STYLE_CONFIG
   - OUTPUT_STYLE_TURN_REMINDER
 -->
-${OUTPUT_STYLE_CONFIG.name} output style is active. ${OUTPUT_STYLE_TURN_REMINDER.turnReminder??"Follow the guidelines for this style."}
+

@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-The workflow runs against a fresh clone of the pushed branch; phase progress is visible at the session URL, not in /workflows. You will be notified when it completes.

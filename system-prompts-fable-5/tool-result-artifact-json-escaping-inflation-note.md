@@ -5,4 +5,4 @@ description: >-
   advising the model to split or shrink the file.
 ccVersion: 2.1.218
 -->
-heavily escaped text (quotes, backslashes, control characters) inflates when JSON-encoded; split or shrink the file
+

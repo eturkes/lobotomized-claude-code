@@ -5,4 +5,4 @@ description: >-
   servable media type inferred from the extension otherwise.
 ccVersion: 2.1.218
 -->
-Servable media type; inferred from the extension for common types (css/js/json/png/…) — pass explicitly otherwise.
+

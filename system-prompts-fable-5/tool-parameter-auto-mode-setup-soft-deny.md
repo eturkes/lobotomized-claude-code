@@ -6,4 +6,4 @@ description: >-
   non-empty.
 ccVersion: 2.1.210
 -->
-Optional extra soft blocks. Empty when nothing was suggested. When non-empty, must start with "$defaults".
+

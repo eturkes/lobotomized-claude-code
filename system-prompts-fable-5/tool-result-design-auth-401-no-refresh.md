@@ -5,4 +5,4 @@ description: >-
   built by mDy and returned to the model as a ClaudeDesign tool_result error.
 ccVersion: 2.1.207
 -->
-Claude Design authentication failed (HTTP 401): the credential was rejected and an automatic refresh did not produce a new one.
+

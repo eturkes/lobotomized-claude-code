@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-register_assets: cards to register in the Design System pane. Run after write_files succeeds.

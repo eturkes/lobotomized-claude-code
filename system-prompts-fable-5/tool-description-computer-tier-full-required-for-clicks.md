@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-right-click, middle-click, and clicks with modifier keys require tier "full". Plain left_click is allowed here.

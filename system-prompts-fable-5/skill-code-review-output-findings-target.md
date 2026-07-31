@@ -9,6 +9,4 @@ variables:
   - SKILL_CODE_REVIEW_OUTPUT_FINDINGS_TARGET_VAR_0
   - SKILL_CODE_REVIEW_OUTPUT_FINDINGS_TARGET_VAR_1
 -->
-## Output
 
-Target **at least ${SKILL_CODE_REVIEW_OUTPUT_FINDINGS_TARGET_VAR_0.floor(SKILL_CODE_REVIEW_OUTPUT_FINDINGS_TARGET_VAR_1/2)} findings**. If fewer genuine findings exist, emit what you have — do not invent to hit the floor.

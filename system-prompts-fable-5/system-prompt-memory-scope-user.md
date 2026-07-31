@@ -5,4 +5,4 @@ description: >-
   projects.
 ccVersion: 2.1.206
 -->
-- Since this memory is user-scope, keep learnings general since they apply across all projects
+

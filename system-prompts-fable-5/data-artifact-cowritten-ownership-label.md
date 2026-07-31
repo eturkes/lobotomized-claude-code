@@ -5,4 +5,4 @@ description: >-
   telling the model the artifact includes other writers' contributions.
 ccVersion: 2.1.207
 -->
-owned by you; includes contributions from other writers
+

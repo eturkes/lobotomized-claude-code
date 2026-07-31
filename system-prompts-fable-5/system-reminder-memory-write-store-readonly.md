@@ -6,4 +6,4 @@ description: >-
   overwritten on next pull.
 ccVersion: 2.1.210
 -->
-This file's memory store is mounted read-only: writes are never synced, and the next sync pull will overwrite local edits with server content. This write was saved locally only.
+

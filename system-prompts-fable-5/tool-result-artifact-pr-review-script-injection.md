@@ -6,4 +6,4 @@ description: >-
   to the model by the Artifact publish tool.
 ccVersion: 2.1.218
 -->
-the body would trigger a runtime script injection after validation (mermaid fence, language-tagged code, or chart marker)
+

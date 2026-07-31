@@ -5,4 +5,4 @@ description: >-
   scroll action.
 ccVersion: 2.1.178
 -->
-Direction to scroll.
+

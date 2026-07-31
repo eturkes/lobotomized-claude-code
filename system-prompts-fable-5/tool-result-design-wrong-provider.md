@@ -7,4 +7,4 @@ description: >-
   Bedrock/Vertex/third-party providers.
 ccVersion: 2.1.199
 -->
-Claude Design is only available with claude.ai authentication. It is not supported through Bedrock, Vertex, or other third-party providers.
+

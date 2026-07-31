@@ -5,4 +5,4 @@ description: >-
   personal and team memories.
 ccVersion: 2.1.206
 -->
-- When memories (personal or team) seem relevant, or the user references prior work with them or others in their organization.
+

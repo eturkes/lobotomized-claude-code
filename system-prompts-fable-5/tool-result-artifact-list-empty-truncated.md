@@ -7,4 +7,4 @@ ccVersion: 2.1.210
 variables:
   - TOOL_RESULT_ARTIFACT_LIST_EMPTY_TRUNCATED_VAR_0
 -->
-No ${TOOL_RESULT_ARTIFACT_LIST_EMPTY_TRUNCATED_VAR_0} in the most recent listing window — older ones may exist in the claude.ai gallery.
+

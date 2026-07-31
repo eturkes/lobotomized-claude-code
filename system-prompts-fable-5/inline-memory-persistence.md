@@ -8,4 +8,4 @@ inlineBlobKind: string
 injectionGate: memory enabled
 ccVersion: 2.1.141
 -->
-## Memory and other forms of persistence
+

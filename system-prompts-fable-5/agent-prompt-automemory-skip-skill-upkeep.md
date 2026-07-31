@@ -5,4 +5,4 @@ description: >-
   only a feedback memory.
 ccVersion: 2.1.206
 -->
-Skip the project-skill upkeep step here: your writes are restricted to the memory directory, so record the correction as a feedback memory only.
+

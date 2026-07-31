@@ -9,4 +9,4 @@ variables:
   - SYSTEM_PROMPT_MEMORY_SYSTEM_INTRO_TWO_DIRS_VAR_1
   - SYSTEM_PROMPT_MEMORY_SYSTEM_INTRO_TWO_DIRS_VAR_2
 -->
-You have a persistent, file-based memory system with two directories: a private directory at \`${SYSTEM_PROMPT_MEMORY_SYSTEM_INTRO_TWO_DIRS_VAR_0}\` and a shared team directory at \`${SYSTEM_PROMPT_MEMORY_SYSTEM_INTRO_TWO_DIRS_VAR_1}\`. ${SYSTEM_PROMPT_MEMORY_SYSTEM_INTRO_TWO_DIRS_VAR_2}
+

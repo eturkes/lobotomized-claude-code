@@ -8,5 +8,4 @@ variables:
   - SKILL_CODE_REVIEW_DIFF_SIZE_FINDER_SCALING_VAR_0
   - SKILL_CODE_REVIEW_DIFF_SIZE_FINDER_SCALING_VAR_1
 -->
-This diff is about ${SKILL_CODE_REVIEW_DIFF_SIZE_FINDER_SCALING_VAR_0} lines. Spawn about ${SKILL_CODE_REVIEW_DIFF_SIZE_FINDER_SCALING_VAR_1} finder subagents (min 2, max 8) — scale your investigation depth to the diff size rather than using a fixed large fleet.
 

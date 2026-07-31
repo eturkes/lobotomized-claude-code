@@ -5,4 +5,4 @@ description: >-
   SOURCE paths resolve against.
 ccVersion: 2.1.218
 -->
-Base directory that relative SOURCE paths resolve against (like a bundler root) — saves retyping a long build prefix. Never changes published paths. Absolute, or relative to the working directory; must lie within it. Requires `files`.
+

@@ -12,4 +12,4 @@ inlineBlobRawPassthrough: 'true'
 injectionGate: 'memory prompts when the lean-memory-types gate is on'
 ccVersion: '2.1.179'
 -->
-"## Types of memory","","Save a memory when you learn one of the following — pick the matching `type:`:","",...H.map((_)=>`- **${_}** — ${Fu5[_]}`),"",`Invoke the \`${lL8}\` skill for scope, body structure and examples once you've decided to save.`,""
+
