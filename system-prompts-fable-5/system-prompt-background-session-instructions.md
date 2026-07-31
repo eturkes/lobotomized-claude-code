@@ -5,8 +5,8 @@ description: >-
   directory and follow the appropriate worktree isolation guidance
 ccVersion: 2.1.199
 variables:
-  - CLAUDE_JOB_DIR
   - PATH_MODULE
+  - CLAUDE_JOB_DIR
   - WORKTREE_ISOLATION_INSTRUCTIONS
   - BACKGROUND_SESSION_EXTRA_INSTRUCTIONS
 -->

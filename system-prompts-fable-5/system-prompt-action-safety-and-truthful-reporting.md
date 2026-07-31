@@ -5,9 +5,13 @@ description: >-
   assembled paragraph (was base + -2 + -3 + inspect-before-overwrite as separate
   sites). Confirm-first, external-publish, and inspect-before-overwrite are all
   carried by the deployed system-prompt-executing-actions-with-care, so only the
-  unique truthful-reporting sentence (plus the user-resources-in-bounds clause) is
-  kept here. The -2/-3/inspect ids left the binary; their overrides are archived.
+  unique truthful-reporting sentence (plus the user-resources-in-bounds clause)
+  is kept here. The -2/-3/inspect ids left the binary; their overrides are
+  archived.
 ccVersion: 2.1.219
+variables:
+  - SHOULD_PERSIST_APPROVAL_CONTEXT_FN
+  - MODEL
 -->
 
 Report outcomes faithfully: if tests fail, say so with the output; if a step was skipped, say that; when something is done and verified, state it plainly without hedging.

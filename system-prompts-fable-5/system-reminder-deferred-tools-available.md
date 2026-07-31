@@ -1,8 +1,8 @@
 <!--
 name: 'System Reminder: Deferred tools available'
 description: >-
-  Announces newly available deferred tools and instructs the agent to load
-  their schemas through ToolSearch
+  Announces newly available deferred tools and instructs the agent to load their
+  schemas through ToolSearch
 ccVersion: 2.1.218
 variables:
   - TOOL_SEARCH_TOOL_NAME
