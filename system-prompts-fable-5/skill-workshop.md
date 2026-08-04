@@ -7,11 +7,11 @@ description: >-
   until the workshop is finalized. Use when asked to workshop a design,
   brainstorm with decision points, or drive an iterative decide-and-revise
   loop through an artifact.
-ccVersion: 2.1.219
+ccVersion: 2.1.221
 -->
 ---
 name: workshop
-description: Run an interactive decision workshop as a published Artifact — present choices the reader answers from the page, pick their decisions up in this session, apply them, and republish the updated document until the reader kicks off the build. Use when asked to workshop a design, brainstorm with decision points, or drive an iterative decide-and-revise loop through an artifact.
+description: Build a design together with the user, one decision at a time — publish an evolving plan document as an Artifact, surface each open decision on the page for the reader to answer there, apply their choices in this session, and republish the updated draft until the reader starts the build. Use when asked to workshop a design, brainstorm with decision points, or drive an iterative decide-and-revise loop through an artifact.
 ---
 
 Run a decision loop through a published Artifact: you present choices as
@@ -29,19 +29,27 @@ appears. The plumbing is yours to rely on silently; surface it when they
 ask, or when something broke and the detail explains it.
 
 This starts with your very first line. The kickoff announcement is about
-their experience, never your preparation: say what the workshop will let
-them do — e.g. "Let's workshop this. I'm preparing an interactive plan
-document where I lay out my thinking and you shape the decisions before we
-build" — then quietly do whatever setup that takes. Skill names, loading
-steps, capability declarations, and what makes the page interactive are all
-machinery ("let me first load the capabilities skill so the published page
-can be interactive" is exactly the line NOT to say).
+their experience, never your preparation. A good opener tells them what the
+document is (an evolving plan you will write up and keep current), that THEY
+make the open decisions — on the page itself — and that the build waits
+until those decisions are in; the setup rides silently in that same turn
+(template-HTML lane: see "The default lane"). Say it in your own framing,
+fitted to what they asked for: vary your wording every time and do not reuse
+a stock phrase — a canned line is the first thing that makes the workshop
+feel like a template. Skill names, loading steps, capability declarations,
+and what makes the page interactive are all machinery ("let me first load
+the capabilities skill so the published page can be interactive" is exactly
+the line NOT to say).
 
-The same rule carries through every update round: narrate the deliverable,
-never the scratchpad — "I've read your decisions and I'm preparing
-follow-up questions to add to the page", "I have everything I need —
-finalizing the doc". Editing your local copy, flipping island entries,
-regenerating markup, chasing a dangling tag are all machinery.
+The same rule carries through every update round. Narrate the deliverable,
+never the scratchpad: a good status line tells the user what just landed
+from their decisions and what the page will give them next — which parts of
+the plan moved, whether new questions are coming or the document is nearly
+settled — in a sentence of your own, varied each round rather than a
+recurring phrase. Do not narrate scratchpad changes — editing your local
+copy, flipping island entries, regenerating markup, chasing a dangling tag
+are all machinery; the user hears what the page will give them next, not how
+you make it.
 
 ## Choosing the lane
 
@@ -71,13 +79,62 @@ ending in `.workshop.html` (exact, case-sensitive — the suffix routes the
 publish through the structural verifier), fill it with your workshop's
 draft and decisions, and publish that file. Every revision edits YOUR local
 copy and republishes it. The template gives you full control of layout and
-lets you hand-draw a small SVG diagram above each decision. Your local copy
-is the only authoring surface — never author by WebFetch round-tripping the
-served page, NEVER live-edit a workshop page (the publish path is the
-validation chokepoint live-edit would bypass; the tool refuses it), and
-treat a copy you cannot confirm you wrote this session as missing
-(show-and-confirm only, exactly like the missing-source rule in "Reading
-decisions back" below).
+carries the page's design, so the artifact-design skill is NOT loaded for
+it — load the artifact-diagramming skill instead, before you draw the
+page's figures (next paragraphs).
+
+**Set up in one turn, read the template in one more.** In the SAME turn as
+your kickoff sentence, issue the setup tool calls together: load the
+artifact-capabilities skill, load the artifact-diagramming skill, and `cp`
+the template to your `.workshop.html` path — three calls, one turn, never
+one per turn. Then read ONLY the parts of your copy you author, as two
+parallel ranged Reads in ONE turn: lines 1–56 (the in-file contract) and
+lines 1438–1526 (the fillable `<article>` and the `ws-decisions` island
+right after it). The template is 2,919 lines, and everything outside those
+two ranges — the theme script (lines 57–80), the `<style>` block (lines
+81–1437), and the decisions script (lines 1548–2919) — is fixed template
+bytes your copy must keep byte-identical: you never edit it, so never spend
+a turn or your context reading it (a whole-file Read would page through all
+of it, 2–3 sequential reads). Slice into the style block only on the rare
+round you deliberately restyle — just the presentation layer at its END is
+editable. Edit the copy in place, surgically — never rewrite the whole
+file, which would re-emit bytes you never read. Those line numbers describe
+the pristine copy you just made; once your edits shift them, navigate by
+content (an Edit anchors on its surrounding text), not by line.
+
+**Publish twice — the first page goes up fast.** The FIRST publish is an
+opening version: the header (banner `data-ws-state="in-progress"` with text
+true to THIS version — no decision count yet, since none are on the page;
+the page script rewrites the banner only when a decision lands, so what you
+author is what the reader sees), eyebrow, title, lede, the context section
+filled with the reader's real context (or dropped — never the template's
+placeholder prose), the working-draft prose, the MAIN diagram, and NO
+decisions yet — drop the sample decision (its figure AND its call-item),
+leave the Decisions section a single line saying the open decisions land in
+the next version, and empty the island to `{"items":[]}` (a decisions-free
+page is fully legal, and the banner stays in-progress). Publish it now,
+with the capability the loop needs (see "Making the page interactive"), and
+arm the watch right after it; it opens in the reader's browser. The SECOND
+publish adds the decisions: draw each decision's figure, author its
+call-item from the template's sample call-item you read (that sample stays
+your verbatim source for the markup even after your copy dropped it — and
+if a long session has pushed it out of your context, re-read the Decisions
+section of the source template rather than writing the markup from memory),
+fill the island to match, and republish — the open tab live-reloads.
+Between the two publishes, tell the user the page is up, the decisions are
+next, and an approval for the update may be waiting back in this terminal
+so they glance back from the browser — and, because this opening publish IS
+the first publish, say then what the interactive page means for them (see
+"Making the page interactive"). Beyond that, keep your working notes
+between tool calls silent and never name page internals (banner, island,
+markup) to the user. After the second publish, it is the ordinary loop.
+
+Your local copy is the only authoring surface — never author by WebFetch
+round-tripping the served page, NEVER live-edit a workshop page (the
+publish path is the validation chokepoint live-edit would bypass; the tool
+refuses it), and treat a copy you cannot confirm you wrote this session as
+missing (show-and-confirm only, exactly like the missing-source rule in
+"Reading decisions back" below).
 
 The publish path runs a structural verifier on the FINAL payload of every
 `*.workshop.html` publish (and of any HTML publish carrying the island
@@ -120,20 +177,26 @@ contract, listing every violation with a fix hint. The contract:
   there would arm and then eat the reader's answer; omit that `<div>` when
   authoring the kickoff item.
 
-**Diagrams — two kinds, both hand-authored inline SVG.** One overall
-`<figure>` in the working draft shows the current plan as a whole, redrawn
-as decisions land. Then EVERY call-item gets its own small `<figure>`
-directly above it, scoped to that one decision (its data flow, its
-component boundary, a before/after per option) — the overall diagram never
-stands in for these. The template shows both shapes to copy. SVG is the
+**Diagrams — two kinds, both hand-authored inline SVG.** The MAIN diagram
+sits in the working draft at the top of the page: the whole plan as it
+stands now, drawn at the scale the system actually has, and redrawn every
+round as decisions land (see "The loop"). Then EVERY call-item gets its own
+`<figure>` directly above it, scoped to that one decision and drawn to SHOW
+the choice: the actual mechanism or architecture under each option — the
+hop that one option adds, the boundary the other crosses, the before and
+the after — at whatever complexity the decision genuinely carries. One
+labeled box per option is a restated option list, not a diagram; the reader
+should be able to point at what differs. The overall diagram never stands
+in for these, and the template shows both kinds to copy. SVG is the
 preferred illustration on this lane (markdown ```mermaid fences do not
 exist here; a raw `<pre class="mermaid">` element does render via the
 injected runtime, but prefer SVG — it needs no runtime and you control
-every pixel). Draw with native shapes and `<text>`; keep each diagram
-small. Constraints the verifier enforces, so draw within them rather than
-discovering refusals: no `<script>`, `<style>`, or `<foreignObject>` inside
-SVG, and none of the rawtext-named elements (`<xmp>`, `<noembed>`,
-`<noframes>`, `<plaintext>`, `<noscript>`) either; resource references
+every pixel); the artifact-diagramming skill carries the drawing know-how.
+Draw with native shapes and `<text>`. Constraints the verifier enforces,
+so draw within them rather than discovering refusals: no `<script>`,
+`<style>`, or `<foreignObject>` inside SVG, and none of the rawtext-named
+elements (`<xmp>`, `<noembed>`, `<noframes>`, `<plaintext>`, `<noscript>`)
+either; resource references
 (`<use>`, gradients, patterns, filters) stay fragment-internal
 (`href="#id"`); `<a>` and `<image>` inside SVG follow the page URL rules;
 never animate URL (`href`, `src`, `srcset`, …), navigation (`target`,
@@ -177,10 +240,11 @@ exactly the content (quoted user text, repo excerpts) that needs it most.
    working tree.
 2. **Structure**: open with a heading (becomes the page title) and a
    one-paragraph summary of what is being decided (becomes the lede). Then
-   the working draft — the thing being shaped, carrying one overall mermaid
-   diagram of the current plan as a whole — and the open decisions, each
-   decision fence with its own small mermaid diagram directly above it,
-   scoped to that decision (see "Explaining decisions").
+   the working draft, LEADING the page — the thing being shaped, opening
+   with the MAIN mermaid diagram of the current plan as a whole — then any
+   background the reader needs, and the open decisions, each decision fence
+   with its own mermaid diagram directly above it, scoped to that decision
+   (see "Explaining decisions").
 3. **Publish with the Artifact tool** (the file path, like any publish).
    Republish the same path after every revision; the version history stays
    on one artifact.
@@ -188,8 +252,10 @@ exactly the content (quoted user text, repo excerpts) that needs it most.
 ## Making the page interactive
 
 Decisions are answered from the published page only when the artifact can
-update itself. On the FIRST publish of a workshop document, load the
-artifact-capabilities skill, then pass `capabilities: {"self": {}}` on the
+update itself. Before the FIRST publish of a workshop document — the
+opening version — have the artifact-capabilities skill loaded (on the
+template-HTML lane it rides the setup turn; on the markdown lane, load it
+before you publish), then pass `capabilities: {"self": {}}` on that
 publish. Default to doing this — the user invoked an interactive skill, so
 an actionable page is the point. One exception: if the user asked for a
 page they can share outside the org, publish static instead (the self
@@ -282,11 +348,13 @@ and should be able to choose in under a minute:
 - Keep the explanation concise: the question, one-line option labels, a
   one-line lean reason, and at most a sentence or two of context above the
   block. Cut any detail that doesn't change which option the reader picks.
-- Diagram twice: ONE overall diagram in the working draft showing the
-  current plan as a whole (redrawn as decisions land), and a small diagram
-  directly above EVERY decision, scoped to that decision only — its data
-  flow, its component boundary, a before/after shape per option. The
-  overall diagram never stands in for the per-decision ones. A top-level
+- Diagram twice: the MAIN diagram in the working draft showing the current
+  plan as a whole (redrawn every round as decisions land), and a diagram
+  directly above EVERY decision, scoped to that decision only and drawn to
+  show what is actually being chosen — the mechanism or architecture under
+  each option, a before and an after, the one edge an option adds or
+  removes — at whatever complexity the decision carries. The overall
+  diagram never stands in for the per-decision ones. A top-level
   fence with the `mermaid` info string renders as a themed diagram (light
   and dark) on the published page, with no external services, so on the
   markdown lane the pair is a ```mermaid fence immediately above its
@@ -314,6 +382,46 @@ and should be able to choose in under a minute:
   content-security policy blocks external image hosts, so an `https:` image
   will silently not load. Prefer a mermaid fence; it is self-contained and
   needs no hosting. (The template-HTML lane supports inline SVG natively.)
+
+## Prototype first or build directly
+
+One decision is about the build rather than the design: whether to build a
+working prototype as its own published artifact before the full
+implementation. Raise it ONLY when a self-contained, shareable page can
+genuinely stand in for the thing being workshopped — a user-facing page,
+UI, or small visual experience the reader could click through and pass
+around. When it can, surface it as ONE early decision, among the first open
+decisions while the plan is still taking shape.
+
+Choose the lean per task, like any other decision: weigh how much a page
+the reader can open would actually settle before anyone commits — lean
+`prototype` when the open questions are ones a real page answers cheaply,
+lean `direct` when the shape is already settled and a prototype would only
+delay the build — and say which in the lean reason. Omit the lean only when
+genuinely torn.
+
+When no such page could stand in for the work — the substance is backend,
+infrastructure, command-line, refactoring, or anything else with nothing to
+render — do not raise it, and do not mention prototyping at all.
+
+It is an ordinary decision block:
+
+````
+```decision
+id: build-approach
+question: Build a working prototype as a published artifact first, or implement directly?
+option: prototype | Prototype as an artifact first
+option: direct | Implement directly
+lean: prototype | the layout questions here are ones a clickable page answers cheaply
+```
+````
+
+Resolved to `prototype`: when the reader starts the build, the first
+deliverable is that prototype, published as its OWN artifact — separate
+from this workshop page — and linked here like any other shipped
+deliverable (see "After the build: close the loop on the page"), before the
+full implementation follows. Resolved to `direct`: build as the draft
+describes.
 
 ## Reading decisions back
 
@@ -404,7 +512,13 @@ HTML lane the markup still says `data-decision-state="open"`):
    twice: a crash between applying and republishing replays the decision,
    and a second session holding the same workshop (the user opened another
    terminal) may race you on the same item.
-5. **Republish** the updated markdown to the same path. Never force-publish
+5. **Evolve the working draft** — every round, before you republish:
+   rewrite the working-draft prose so it states the plan AS NOW DECIDED
+   (not the plan plus a list of changes), AND redraw the MAIN diagram to
+   match. The draft is the page's hero and the part the reader rereads each
+   visit; if a round of decisions lands and the draft and its diagram read
+   the same as before, the round is invisible.
+6. **Republish** the updated markdown to the same path. Never force-publish
    inside the loop: your publish carries the last page version this session
    observed, and that version check is what catches a confirm that landed
    while you were editing. On a conflict (publish_conflict), re-read the
@@ -427,14 +541,14 @@ you already applied, the existing record stands.
 A single republish may carry several resolved entries: the reader selects
 options across multiple decisions and confirms them together from the
 page's footer. Apply each pending entry independently through steps 2–4,
-then republish once.
+evolve the draft once for the whole batch (step 5), then republish once.
 
 **The loop lives in the artifact, not in chat.** After applying a batch,
-evolve the draft to reflect the decisions, and when that opens new
-questions, surface them as new decision blocks in the same republish — the
-reader answers from the page, exactly like the first round. No "should I
-finalize?" or "want me to build it?" messages; the page carries those
-states.
+ITERATE on the page: the evolved draft and redrawn main diagram carry the
+decisions, and when the evolution opens new questions, surface them as NEW
+decision blocks in the same republish — the reader answers from the page,
+exactly like the first round. No "should I finalize?" or "want me to build
+it?" messages; the page carries those states.
 
 This includes YOUR follow-up questions. A typed answer that surprises you
 or underdetermines the work — it names a direction but not the specifics —
@@ -442,9 +556,12 @@ is not an invitation to ask about it in chat: turn each clarification into
 a decision block (options for the plausible readings, and the typed-answer
 input covers the rest) and republish. Place NEW open decisions ABOVE
 existing and decided ones when you republish — the reader opens the page to
-see what needs them first, not to scroll past what is already settled. Chat
-is only for what a decision block genuinely cannot express: blockers,
-access problems, something broken.
+see what needs them first, not to scroll past what is already settled. That
+float applies only while a decision is OPEN: when a decision is decided,
+return it to its original authoring position on the next republish — a
+fully decided document reads in authoring order, top to bottom, the order
+the plan was built in. Chat is only for what a decision block genuinely
+cannot express: blockers, access problems, something broken.
 
 ## Ready to build
 
@@ -465,11 +582,27 @@ The renderer treats the canonical kickoff specially: no decision card.
 Instead the page's top banner flips to "Ready to build" and a published
 status footer appears with a one-click "Start building" button and a quiet
 "Keep iterating" decline. (The banner otherwise shows "In progress" with
-the open-decision count, mechanically — you never author it.) Never add the
-kickoff while other decisions are still open, and never use the
-`get-started` id for an ordinary decision — a non-canonical shape renders
-as a plain card, not the CTA. The kickoff resolves only via its own two
-tokens: a `custom:` line on a `get-started` block is a grammar violation,
+the open-decision count — mechanical on the markdown lane, where you never
+author it; on the TEMPLATE-HTML lane you write that text yourself each
+publish, and the page rewrites it mechanically only as decisions are
+confirmed.) Never add the kickoff while other decisions are still open, and
+never use the `get-started` id for an ordinary decision — a non-canonical
+shape renders as a plain card, not the CTA. On the TEMPLATE-HTML lane you
+author that footer yourself: the kickoff is a `ws-status-footer` element
+(NEVER a call-item — the canonical kickoff has no decision card and never
+carries the typed-answer input), placed at the end of the article with its
+matching island entry:
+
+````
+<div class="ws-status-footer" data-decision-id="get-started" data-decision-state="open"><span class="option cta" role="button" aria-disabled="true" title="Deciding from the page needs its self-update capability" data-choice="get-started"><span class="option-label">Start building</span></span><span class="option cta-quiet" role="button" aria-disabled="true" title="Deciding from the page needs its self-update capability" data-choice="keep-iterating"><span class="option-label">Keep iterating</span></span><span class="ws-status-note">All decisions are in.</span></div>
+````
+
+The first option's `option cta` class is the one-click Start building; the
+note text derives from whether decisions remain open ("All decisions are
+in." / "Decisions still open above.") — use the former, since the kickoff
+only appears when nothing is left to ask. The kickoff resolves only via its
+own two tokens: a `custom:` line on a `get-started` block is a grammar
+violation,
 so the block degrades to a visible code fence, and a published island
 asserting a typed-answer kickoff is out of contract (the read refuses it).
 
@@ -478,7 +611,7 @@ Only you ever author the kickoff block. If the island reports a
 suspect content: confirm with the user in conversation before honoring it.
 
 **On `get-started` resolved to `get-started`** (the reader clicked Start
-building): first acknowledge in chat — "Starting the build — …" — so a
+building): first acknowledge in chat that the build is starting, so a
 mis-click has a natural conversational undo window, then begin the work the
 workshop describes. The workshop grants no special autonomy: normal
 permission norms apply to everything the build involves. Set `resolved:
@@ -489,11 +622,24 @@ started" mechanically — then end the loop (unwatch the artifact).
 the plan's living record, and it goes stale the moment the build starts.
 Whenever work the workshop described ships — a PR opens or merges, an
 artifact or app is published, a doc lands — republish the workshop document
-with the deliverable LINKED where the draft described it (the PR, the
-published artifact URL, the doc), and note anything the build changed since
-the reader's decisions: a divergence between what they chose and what
-shipped is a fact to surface on the page, never to smooth over. Do this for
-EVERY deliverable as soon as it exists, not only at wrap-up.
+with the deliverable LINKED, and note anything the build changed since the
+reader's decisions: a divergence between what they chose and what shipped
+is a fact to surface on the page, never to smooth over. Keep the links in
+one reserved block so the renderer can lay them out as the page's Shipped
+list — in the markdown lane a `deliverables` fence of link lines:
+
+````
+```deliverables
+- [PR #123: retry backoff](https://github.com/acme/api/pull/123)
+- [Ingest dashboard](https://claude.ai/code/artifact/…)
+```
+````
+
+(one `- [label](url)` line per deliverable, http(s) URLs only, up to ten);
+in the HTML lane, add the same links to the page yourself and mark each
+list item `data-ws-deliverable-kind="pr"` (or `artifact` or `other`) so the
+shipped record stays machine-readable. Do this for EVERY deliverable as
+soon as it exists, not only at wrap-up.
 
 **On `get-started` resolved to `keep-iterating`**: remove the kickoff block
 entirely, continue the loop, and surface whatever the reader might want

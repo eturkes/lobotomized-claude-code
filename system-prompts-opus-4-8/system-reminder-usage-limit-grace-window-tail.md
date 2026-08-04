@@ -1,0 +1,9 @@
+<!--
+name: 'System Reminder: Usage limit grace window (tail)'
+description: >-
+  Trailing fragment of the usage-limit grace-window reminder: forbids starting
+  subagents or long work.
+ccVersion: null
+-->
+
+checkpoint; don't start subagents or long work.]

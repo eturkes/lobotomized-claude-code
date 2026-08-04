@@ -4,7 +4,7 @@ description: >-
   The full HTML template for the iteratively-republished workshop
   decision-document artifact (fill contract, CDS tokens, decision-block styling)
   that the model fills and publishes.
-ccVersion: null
+ccVersion: 2.1.221
 -->
 <!--
 name: workshop
@@ -910,6 +910,9 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
       --text-secondary: #52514e;
       --text-accent: #184f95;
       --border: rgba(11, 11, 11, 0.1);
+      /* Card rules paint with the shadow token family (var(--shadow-sm));
+         re-pin its color component so a dark-stamped page prints light. */
+      --shadow-color: rgba(11, 11, 11, 0.08);
       --border-strong: rgba(11, 11, 11, 0.2);
       --border-stronger: rgba(11, 11, 11, 0.4);
       --fill-control: rgba(11, 11, 11, 0.1);
@@ -1075,6 +1078,14 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
   .call-item {
     display: flex;
     gap: var(--gap-sm);
+    /* Separation: air AFTER each card — the unit boundary. The card's
+       own diagram stays at the base flex gap above it (tight grouping);
+       margin-top here would invert that proximity. margin-bottom is
+       adjacency-independent, so the lanes' varying between-elements
+       can't defeat it. Shadow is theme-aware: --shadow-sm composes
+       --shadow-color, darkens for dark scheme, re-pinned for print. */
+    margin-bottom: var(--gap-xs);
+    box-shadow: var(--shadow-sm);
     /* Right padding mirrors the marker column (card padding + marker
        width + flex gap) so option rows sit equidistant from the card's
        left and right edges. */
@@ -1143,13 +1154,13 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
   </header>
 
   <section>
-    <h2>What we're deciding</h2>
-    <!-- SLOT: context -->
+    <h2>Working draft</h2>
+    <!-- SLOT: draft -->
   </section>
 
   <section>
-    <h2>Working draft</h2>
-    <!-- SLOT: draft -->
+    <h2>What we're deciding</h2>
+    <!-- SLOT: context -->
   </section>
 
   <section>

@@ -1,8 +1,9 @@
 <!--
 name: 'System Prompt: Claude in Chrome browser automation'
 description: Instructions for using Claude in Chrome browser automation tools effectively
-ccVersion: 2.1.172
+ccVersion: 2.1.221
 -->
+
 
 # Claude in Chrome browser automation
 

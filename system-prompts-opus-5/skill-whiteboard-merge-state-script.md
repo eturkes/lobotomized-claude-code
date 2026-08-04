@@ -4,8 +4,9 @@ description: >-
   The merge-state.mjs write-back helper bundled as a whiteboard-skill file,
   extracted to the skill base directory that Claude is pointed at when the
   whiteboard skill loads.
-ccVersion: 2.1.219
+ccVersion: 2.1.221
 -->
+
 // Whiteboard write-back helper. Reads the board state the page embeds, appends
 // Claude's elements, places each new element clear of everything already on
 // the board, and writes the republishable page: the skill's template plus
@@ -94,7 +95,10 @@ let additions
 try{ additions = JSON.parse(read(addPath, 'the --add additions file')) }
 catch(e){ fail('additions file is not valid JSON (' + e.message + ')') }
 if(!Array.isArray(additions)) fail('additions must be a JSON array of elements')
-const existingIds = new Set(state.els.map(e => e && e.id))
+// the page identifies an element by the first 40 characters of its id, so uniqueness is
+// checked on that same key
+const idKey = id => typeof id === 'string' ? id.slice(0, 40) : id
+const existingIds = new Set(state.els.map(e => e && idKey(e.id)))
 for(const id of retire){
   const el = state.els.find(e => e && e.id === id)
   if(!el) continue
@@ -105,9 +109,27 @@ for(const e of additions){
   if(!e || typeof e !== 'object' || !ADDABLE.has(e.type)) fail('additions must be text, rect, ellipse, cylinder, diamond, sticky or arrow (got ' + JSON.stringify(e && e.type) + ')')
   e.author = 'claude'
   if(typeof e.id !== 'string' || !e.id.startsWith('cl_')) fail('every addition needs an id starting with cl_ (got ' + JSON.stringify(e.id) + ')')
+  // the page keeps ids to 40 characters, so a longer one would no longer be unique on the board
+  if(e.id.length > 40) fail('addition id ' + JSON.stringify(e.id.slice(0, 40)) + '… is over 40 characters — shorten it')
   if(existingIds.has(e.id)) fail('addition id ' + e.id + ' already exists on the board or earlier in this batch')
   existingIds.add(e.id)
   if(!Number.isInteger(e.seed)) e.seed = 1 + Math.floor(Math.random() * 1e9)
+  // a text node may carry its font size; clamp it to the range the page itself accepts
+  if(e.type === 'text'){
+    if(Number.isFinite(e.size)) e.size = Math.max(8, Math.min(64, e.size))
+    else delete e.size
+  }
+}
+// --- an arrow binds only to a box, sticky or text node on the board; the page clears anything else ---
+const CONNECTABLE = new Set(['text', 'rect', 'ellipse', 'cylinder', 'diamond', 'sticky'])
+const bindable = new Set(state.els.concat(additions)
+  .filter(e => e && !retire.has(e.id) && CONNECTABLE.has(e.type)).map(e => idKey(e.id)))
+for(const e of additions){
+  if(e.type !== 'arrow') continue
+  for(const k of ['fromId', 'toId']){
+    if(e[k] == null) continue
+    if(!bindable.has(e[k])) fail(e.id + ': ' + k + ' must name a box, sticky or text node on the board (got ' + JSON.stringify(String(e[k]).slice(0, 40)) + ')')
+  }
 }
 
 // --- geometry: the same boxes the page uses, with an estimate for unmeasured text ---
@@ -126,7 +148,7 @@ function bbox(e){
       return {x: x0, y: y0, w: Math.max(1, x1 - x0), h: Math.max(1, y1 - y0)}
     }
     case 'text': {
-      const m = textSize(e.text, FONT_SIZE)
+      const m = textSize(e.text, Number.isFinite(e.size) ? e.size : FONT_SIZE)
       return {x: e.x, y: e.y, w: e.w || m.w, h: e.h || m.h}
     }
     case 'sticky': {
@@ -166,6 +188,23 @@ for(const e of additions){
   occupied.push(placed)
 }
 
+// --- the send marker is carried forward bounded the same way the page bounds it: an integer
+// count in 0..1e9 and a short timestamp string, so a write-back never re-emits a malformed one ---
+// captured before bounding: the rename guard must judge the marker as the board carried it,
+// and bounding normalizes a present-but-unparseable marker (string count, ping with no
+// numeric n) to absent/null — any truthy marker, parseable or not, means the board was sent
+const everSent = Boolean(state.pingCount || state.ping)
+const pingN = v => Number.isFinite(v) ? Math.max(0, Math.min(1e9, Math.floor(v))) : null
+// derive the count the way the page does — the explicit field, else the marker's n — and never
+// write a count the board didn't carry, so an older board keyed only by ping.n keeps its place
+const markN = state.ping ? pingN(state.ping.n) : null
+const countN = pingN(state.pingCount)
+if(countN !== null) state.pingCount = countN
+else if(markN !== null) state.pingCount = markN
+else delete state.pingCount
+state.ping = markN === null ? null
+  : {n: markN, at: typeof state.ping.at === 'string' ? state.ping.at.slice(0, 64) : null}
+
 // --- merge: fetched state verbatim, minus retired own elements, plus additions ---
 state.els = state.els.filter(e => e && !retire.has(e.id)).concat(additions)
 
@@ -186,9 +225,17 @@ const explicitTitle = titleFrom(explicit)
 const title = explicitTitle || carried || DEFAULT_TITLE
 if(!explicitTitle && !carried){
   // a sent board is named where the user can see it; with no --title and nothing to carry,
-  // writing the default would silently rename it, so refuse unless the board was never sent
-  if((state.pingCount || 0) > 0 || state.ping)
-    fail('this board has been sent but --state carries no <title> to keep — pass the saved page (head included) so the board keeps its name, or pass --title')
+  // writing the default would silently rename it, so refuse unless the board was never
+  // sent — judged on the pre-bounding marker (everSent above), never the bounded one
+  if(everSent){
+    // bounding already ran: only a marker that bounded to a positive send count evidences
+    // a send — anything that bounds to zero (unparseable, negative, sub-1 fractional) does not
+    const evidenced = (state.pingCount || 0) > 0 || Boolean(state.ping && state.ping.n > 0)
+    fail((evidenced
+      ? 'this board has been sent but --state carries no <title> to keep'
+      : 'this board carries a send marker that could not be read as a send count, so it may have been sent, and --state carries no <title> to keep')
+      + ' — pass the saved page (head included) so the board keeps its name, or pass --title')
+  }
   process.stderr.write('whiteboard merge: no --title and the board carries no name — using the default title\\n')
 }
 writeFileSync(outPath, ['<title>' + title + '</title>', line].concat(tpl.slice(1)).join('\\n'))

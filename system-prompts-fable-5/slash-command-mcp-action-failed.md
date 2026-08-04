@@ -1,0 +1,15 @@
+<!--
+name: MCP Action Failed Result
+description: >-
+  Generic /mcp failure result naming the attempted action, the server, and the
+  underlying error, returned when an enable/disable/reconnect promise rejects.
+ccVersion: null
+variables:
+  - SLASH_COMMAND_MCP_ACTION_FAILED_VAR_0
+  - SLASH_COMMAND_MCP_ACTION_FAILED_VAR_1
+  - SLASH_COMMAND_MCP_ACTION_FAILED_VAR_2
+  - SLASH_COMMAND_MCP_ACTION_FAILED_VAR_3
+  - SLASH_COMMAND_MCP_ACTION_FAILED_VAR_4
+-->
+
+Couldn't ${SLASH_COMMAND_MCP_ACTION_FAILED_VAR_0} "${SLASH_COMMAND_MCP_ACTION_FAILED_VAR_1}" — ${SLASH_COMMAND_MCP_ACTION_FAILED_VAR_2(SLASH_COMMAND_MCP_ACTION_FAILED_VAR_3(SLASH_COMMAND_MCP_ACTION_FAILED_VAR_4))}. Run \`/mcp\` in the terminal to check.
