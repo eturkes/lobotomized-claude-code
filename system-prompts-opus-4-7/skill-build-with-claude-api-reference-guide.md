@@ -3,8 +3,9 @@ name: 'Skill: Build with Claude API (reference guide)'
 description: >-
   Template for presenting language-specific reference documentation with quick
   task navigation
-ccVersion: 2.1.141
+ccVersion: 2.1.221
 -->
+
 ## Reference Documentation
 
 The relevant documentation for your detected language is included below in `<doc>` tags. Each tag has a `path` attribute showing its original file path. Use this to find the right section:
@@ -25,6 +26,9 @@ The relevant documentation for your detected language is included below in `<doc
 
 **Prompt caching / optimize caching / "why is my cache hit rate low":**
 → Refer to `shared/prompt-caching.md` + `{lang}/claude-api/README.md` (Prompt Caching section)
+
+**Audit / clean up prompts, skills, or tool descriptions for outdated patterns ("cruft"):**
+→ Refer to `shared/prompt-audit.md`
 
 **Function calling / tool use / agents:**
 → Refer to `{lang}/claude-api/README.md` + `shared/tool-use-concepts.md` + `{lang}/claude-api/tool-use.md`

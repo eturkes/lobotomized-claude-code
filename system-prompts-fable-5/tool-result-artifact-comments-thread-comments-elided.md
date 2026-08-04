@@ -1,0 +1,12 @@
+<!--
+name: Artifact Comments Thread Comments Elided
+description: >-
+  Placeholder row substituted for a thread's comment bodies when the comments
+  tool_result hits its size cap.
+ccVersion: null
+variables:
+  - TOOL_RESULT_ARTIFACT_COMMENTS_THREAD_COMMENTS_ELIDED_VAR_0
+  - TOOL_RESULT_ARTIFACT_COMMENTS_THREAD_COMMENTS_ELIDED_VAR_1
+-->
+
+  [${TOOL_RESULT_ARTIFACT_COMMENTS_THREAD_COMMENTS_ELIDED_VAR_0.comments.length} ${TOOL_RESULT_ARTIFACT_COMMENTS_THREAD_COMMENTS_ELIDED_VAR_1(TOOL_RESULT_ARTIFACT_COMMENTS_THREAD_COMMENTS_ELIDED_VAR_0.comments.length,"comment")} elided — size cap; full text is on the artifact page]

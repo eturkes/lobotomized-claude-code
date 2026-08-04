@@ -1,0 +1,16 @@
+<!--
+name: Artifact Reply Auto-Classifier Input
+description: >-
+  The `toAutoClassifierInput` summary for Artifact action=reply, carrying thread
+  id, artifact URL, sanitized reply text and share status into the
+  auto-permission classifier's prompt.
+ccVersion: null
+variables:
+  - DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_0
+  - DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_1
+  - DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_2
+  - DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_3
+  - DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_4
+-->
+
+reply to comment thread ${DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_0} on ${DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_1!==null?DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_2(DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_1):"(unrecognized artifact)"}: "${DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_3}"${DATA_ARTIFACT_REPLY_AUTO_CLASSIFIER_INPUT_VAR_4}

@@ -1,8 +1,9 @@
 <!--
-name: 'Skill: Artifact PR-review HTML template'
+name: 'Skill: Artifact PR review HTML template'
 description: >-
-  HTML body-fragment template for the PR-review artifact, with slot markers and
-  instructions to the model to HTML-escape untrusted PR-derived input.
+  The full self-contained HTML body template (tokens, layout, slot markers,
+  escaping rules) the artifact PR-review skill fills in when publishing a review
+  page.
 ccVersion: null
 -->
 
