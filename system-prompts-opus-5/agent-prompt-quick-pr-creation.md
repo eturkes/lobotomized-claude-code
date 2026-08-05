@@ -21,6 +21,7 @@ variables:
   - PR_ATTRIBUTION_TEXT
   - PR_SLACK_SHARING_FOLLOWUP_NOTE
 -->
+
 ${PREAMBLE_BLOCK}## Context
 
 - \`SAFEUSER\`: ${SAFE_USER_VALUE}
@@ -67,22 +68,32 @@ The closing \`'@\` must be at column 0 with no leading whitespace.`}
    - Keep PR titles short (under 70 characters). Use the body for details.
 ${IS_BASH_ENV_FN()?`\`\`\`
 gh pr create --title "Short, descriptive title" --body "$(cat <<'EOF'
+<In one or two plain sentences, explain why this PR is needed and what changed.>
+
 ## Summary
 <1-3 bullet points>
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_BODY_EXTRA_SECTIONS}${PR_ATTRIBUTION_TEXT?`
+- Commands run: <commands actually run>
+- Observed behavior: <results observed>
+- Failures: <failures encountered, or "None">
+- Unverified: <anything not verified, stated plainly, or "None">${PR_BODY_EXTRA_SECTIONS}${PR_ATTRIBUTION_TEXT?`
 
 ${PR_ATTRIBUTION_TEXT}`:""}
 EOF
 )"
 \`\`\``:`\`\`\`
 gh pr create --title "Short, descriptive title" --body @'
+<In one or two plain sentences, explain why this PR is needed and what changed.>
+
 ## Summary
 <1-3 bullet points>
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_BODY_EXTRA_SECTIONS}${PR_ATTRIBUTION_TEXT?`
+- Commands run: <commands actually run>
+- Observed behavior: <results observed>
+- Failures: <failures encountered, or "None">
+- Unverified: <anything not verified, stated plainly, or "None">${PR_BODY_EXTRA_SECTIONS}${PR_ATTRIBUTION_TEXT?`
 
 ${PR_ATTRIBUTION_TEXT}`:""}
 '@

@@ -5,5 +5,3 @@ description: >-
   asked for it
 ccVersion: 2.1.220
 -->
-
-Do not call the AgentTool unless the user requested it

@@ -5,9 +5,10 @@ ccVersion: 2.1.204
 variables:
   - SHOULD_INCLUDE_LEGACY_PROTOCOL_RESPONSES
 -->
+
 # SendMessage
 
-Send a message to another agent.
+Send a message to another agent. Background subagents can use `to: "main"` to message the main conversation.
 
 \`\`\`json
 {"to": "researcher", "summary": "assign task 1", "message": "start on task #1"}

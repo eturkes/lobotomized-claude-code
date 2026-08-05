@@ -7,4 +7,5 @@ ccVersion: 2.1.206
 variables:
   - SYSTEM_REMINDER_MONITOR_EVENTS_SUPPRESSED_VAR_0
 -->
-[${SYSTEM_REMINDER_MONITOR_EVENTS_SUPPRESSED_VAR_0} events suppressed — output rate too high. Consider using TaskStop to restart this monitor with a more selective filter.]
+
+[${SYSTEM_REMINDER_MONITOR_EVENTS_SUPPRESSED_VAR_0} events suppressed — output rate too high. Stop this monitor with TaskStop, then start a new monitor with a more selective filter.]

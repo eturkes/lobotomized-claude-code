@@ -6,4 +6,4 @@ description: >-
   model-facing.
 ccVersion: 2.1.191
 -->
-The tool this prompt applies to
+

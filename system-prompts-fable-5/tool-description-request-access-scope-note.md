@@ -4,4 +4,4 @@ description: Clarifies the approval authorizes only the specific action under re
 ccVersion: 2.1.220
 -->
 
-authorizes the specific action under review — same operation, same 
+Authorization covers only the specific action under review: the same operation, target, and scope.

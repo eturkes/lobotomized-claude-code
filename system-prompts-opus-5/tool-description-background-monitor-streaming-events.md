@@ -8,10 +8,11 @@ ccVersion: 2.1.210
 variables:
   - BACKGROUND_TASKS_DISABLED
 -->
+
 Start a background monitor that streams stdout events from a long-running script. Each stdout line is an event that arrives as a chat notification while you keep working; events arrive on their own schedule and are not user replies, even if one lands while you await an answer. Exit ends the watch.
 
 Pick by how many notifications you need:
-- **One** (server ready, build finishes) → **Bash with \`run_in_background\`** and a command that exits when true, e.g. \`until grep -q "Ready in" dev.log; do sleep 0.5; done\`.
+- **One** (server ready, build finishes) → Bash with `run_in_background` when background tasks are available, or foreground Bash when they are not and a command that exits when true, e.g. \`until grep -q "Ready in" dev.log; do sleep 0.5; done\`.
 - **One per occurrence, indefinitely** (every ERROR line) → Monitor with an unbounded command (\`tail -f\`, \`inotifywait -m\`, \`while true\`).
 - **One per occurrence, until a known end** (each CI step, stop when the run completes) → Monitor with a command that emits lines then exits.
 
@@ -40,7 +41,7 @@ Pick by how many notifications you need:
     sleep 30
   done
 
-Don't use an unbounded command for a single notification. \`tail -f\`, \`inotifywait -m\`, and \`while true\` never exit on their own, so the monitor stays armed until timeout even after the event fires — use Bash \`run_in_background\` with an \`until\` loop instead. \`tail -f log | grep -m 1 ...\` does not fix this: if the log goes quiet after the match, \`tail\` never receives SIGPIPE and the pipeline hangs.
+Don't use an unbounded command for a single notification. \`tail -f\`, \`inotifywait -m\`, and \`while true\` never exit on their own, so the monitor stays armed until timeout even after the event fires — use Bash with `run_in_background` when background tasks are available, or foreground Bash when they are not and an \`until\` loop instead. \`tail -f log | grep -m 1 ...\` does not fix this: if the log goes quiet after the match, \`tail\` never receives SIGPIPE and the pipeline hangs.
 
 Script quality:
 - Every pipe stage must flush per line, or matches sit in its buffer for minutes: \`grep\` needs \`--line-buffered\`, \`awk\` needs \`fflush()\`. \`head\` can't flush — \`| head -N\` emits nothing until N matches accumulate, then ends the stream.

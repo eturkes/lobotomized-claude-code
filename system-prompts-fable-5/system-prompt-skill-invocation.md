@@ -7,4 +7,5 @@ ccVersion: 2.1.206
 variables:
   - SYSTEM_PROMPT_SKILL_INVOCATION_VAR_0
 -->
-When the user types \`/<skill-name>\`, invoke it via ${SYSTEM_PROMPT_SKILL_INVOCATION_VAR_0}. Only use skills listed in the user-invocable skills section — don't guess.
+
+When the user types `/<skill-name>`, invoke it via ${SYSTEM_PROMPT_SKILL_INVOCATION_VAR_0}.

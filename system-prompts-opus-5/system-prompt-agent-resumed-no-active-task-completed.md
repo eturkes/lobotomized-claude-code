@@ -9,6 +9,7 @@ variables:
   - SYSTEM_PROMPT_AGENT_RESUMED_NO_ACTIVE_TASK_COMPLETED_VAR_0
   - SYSTEM_PROMPT_AGENT_RESUMED_NO_ACTIVE_TASK_COMPLETED_VAR_1
 -->
-Agent "${SYSTEM_PROMPT_AGENT_RESUMED_NO_ACTIVE_TASK_COMPLETED_VAR_0.to}" had no active task; resumed from transcript with your message and ran to completion. Result:
+
+Agent "${SYSTEM_PROMPT_AGENT_RESUMED_NO_ACTIVE_TASK_COMPLETED_VAR_0.agentName}" had no active task; resumed from transcript with your message and ran to completion. Result:
 
 ${SYSTEM_PROMPT_AGENT_RESUMED_NO_ACTIVE_TASK_COMPLETED_VAR_1.finalText||"(no text output)"}

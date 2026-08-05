@@ -6,4 +6,4 @@ description: >-
   to re-run a search it has already delegated.
 ccVersion: 2.1.215
 -->
-For a single-fact lookup where you already know the file, symbol, or value, search directly. Once you've delegated a search, don't also run it yourself — wait for the result.
+

@@ -9,6 +9,7 @@ variables:
   - INCLUDE_NOOP_GUIDANCE
   - PROMPT_CACHE_TTL_CLASSIFICATION
 -->
+
 ${SCHEDULE_WAKEUP_BASE_DESCRIPTION}${INCLUDE_NOOP_GUIDANCE?`
 
 ${'Set `noop: true` if nothing changed — you checked and there\'s nothing to report ("no change", "still waiting", "quiet hold"). Set `noop: false` if something happened worth keeping — you edited a file, posted a message, advanced state, or surfaced a finding. Consecutive `noop: true` ticks are collapsed in the user\'s terminal view and tracked as a streak, so long quiet holds stay legible to the user without scrolling. Omit `noop` when stopping (`stop: true`).'}`:""}
@@ -21,9 +22,7 @@ Match the delay to what you're actually waiting for:
 
 - **Actively polling external state the harness can't notify you about** (a CI run, a deploy, a remote queue): pick the delay from how fast that state actually changes. A CI run that takes ~8 minutes deserves one ~480s check, not eight 60s ones.
 - **The long fallback heartbeat** (something else — a Monitor, a task notification — is the primary wake signal): 1200s+, so quiet wakeups stay rare.
-- **Idle ticks with no specific signal to watch**: default to **1200s–1800s** (20–30 min). The loop still checks back regularly, and the user can always interrupt if they need you sooner.
-
-Don't think in cache windows — think about what you're actually waiting for.`:PROMPT_CACHE_TTL_CLASSIFICATION===!1?`## Picking delaySeconds
+- **Idle ticks with no specific signal to watch**: default to **1200s–1800s** (20–30 min). The loop still checks back regularly, and the user can always interrupt if they need you sooner.`:PROMPT_CACHE_TTL_CLASSIFICATION===!1?`## Picking delaySeconds
 
 This session's requests use the default 5-minute Anthropic prompt-cache TTL. Sleeping past 300 seconds means the next wake-up reads your full conversation context uncached — slower and more expensive. So the natural breakpoints:
 

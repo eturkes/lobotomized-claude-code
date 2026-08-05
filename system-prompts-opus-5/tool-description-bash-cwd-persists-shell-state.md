@@ -7,4 +7,4 @@ description: >-
   description the model reads.
 ccVersion: 2.1.211
 -->
-- Working directory persists between calls. Shell state (env vars, functions) does not persist; the shell is initialized from the user's profile.
+

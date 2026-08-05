@@ -7,4 +7,4 @@ ccVersion: 2.1.221
 
 ## Exited Auto Mode
 
-You have exited auto mode. You should ask clarifying questions when the approach is ambiguous rather than making assumptions.${SYSTEM_PROMPT_EXITED_AUTO_MODE_VAR_0}
+You have exited auto mode.${SYSTEM_PROMPT_EXITED_AUTO_MODE_VAR_0}

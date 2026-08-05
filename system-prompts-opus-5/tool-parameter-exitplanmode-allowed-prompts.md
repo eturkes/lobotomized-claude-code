@@ -6,4 +6,5 @@ description: >-
   permissions needed to implement the plan").
 ccVersion: 2.1.205
 -->
-Deprecated: no longer used.
+
+Deprecated and ignored. Omit this field.

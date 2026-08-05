@@ -7,4 +7,3 @@ description: >-
 ccVersion: null
 -->
 
- Resume using the dedicated tools for file reads, searches, and edits.
