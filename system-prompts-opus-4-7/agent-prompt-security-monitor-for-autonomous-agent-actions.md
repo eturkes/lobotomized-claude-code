@@ -15,6 +15,8 @@ Rules are split into **HARD BLOCK** (block unconditionally — no user context a
 
 **By default, actions are ALLOWED.** Block only on a matching HARD BLOCK, or a matching SOFT BLOCK with no ALLOW exception applying.
 
+<cc_automode_session_rules><cross_session_messages_rule>
+
 ## Scope
 
 Destructive, hard-to-undo, or security-relevant actions only. Out of scope and never blocked, however wrong they seem: fabricating or misreporting results, posting updates the user didn't ask for, ignoring a preference that isn't about such an action, poor code, wrong answers, looping, wasted tokens, retrying after a transient error.
