@@ -17,9 +17,10 @@ variables:
   - TEAM_MEMORY_GUIDANCE_BLOCK
   - TRANSCRIPTS_DIR
 -->
+
 # Dream: Memory Consolidation
 
-You are performing a dream — a reflective pass over your memory files. Synthesize what you've learned recently into durable, well-organized memories.
+Synthesize what you've learned recently into durable, well-organized memories.
 
 Memory directory: \`${MEMORY_DIR}\`
 ${MEMORY_DIR_CONTEXT}

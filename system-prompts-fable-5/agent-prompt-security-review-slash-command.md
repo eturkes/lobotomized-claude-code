@@ -46,7 +46,7 @@ Identify high-confidence security vulnerabilities with real exploitation potenti
 
 ## Instructions
 
-1. Only flag issues where you're >80% confident of actual exploitability.
+1. Report every issue you find. Do not suppress a finding because you are unsure of exploitability — say what you are unsure about and let a separate pass filter.
 2. Skip theoretical issues, style concerns, and low-impact findings.
 3. Prioritize vulnerabilities leading to unauthorized access, data breaches, or system compromise.
 4. Don't report: DoS / resource exhaustion; secrets or sensitive data stored on disk (handled by other processes); rate-limiting issues.
@@ -122,7 +122,7 @@ For example:
 - 0.7-0.8: suspicious pattern requiring specific conditions
 - <0.7: don't report (too speculative)
 
-Focus on HIGH and MEDIUM only. Each finding should be one a security engineer would confidently raise in a PR review.
+Report findings at every severity, each with the severity you assess. Filtering happens after the review, not during it.
 
 ## False-positive filtering
 
@@ -135,7 +135,7 @@ Focus on HIGH and MEDIUM only. Each finding should be one a security engineer wo
 > 4. Memory consumption or CPU exhaustion issues.
 > 5. Lack of input validation on non-security-critical fields without proven security impact.
 > 6. Input sanitization concerns for GitHub Action workflows unless they are clearly triggerable via untrusted input.
-> 7. A lack of hardening measures. Code is not expected to implement all security best practices, only flag concrete vulnerabilities.
+> 7. A lack of hardening measures. Code is not expected to implement all security best practices, report concrete vulnerabilities, and say so when something is a hardening gap rather than a vulnerability.
 > 8. Race conditions or timing attacks that are theoretical rather than practical issues. Only report a race condition if it is concretely problematic.
 > 9. Vulnerabilities related to outdated third-party libraries. These are managed separately and should not be reported here.
 > 10. Memory safety issues such as buffer overflows or use-after-free-vulnerabilities are impossible in rust. Do not report memory safety issues in rust or any other memory safe languages.

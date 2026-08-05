@@ -5,4 +5,4 @@ description: >-
   generates a GitHub issue title from a bug report.
 ccVersion: 2.1.206
 -->
-Claude Code is an agentic coding CLI based on the Anthropic API.
+

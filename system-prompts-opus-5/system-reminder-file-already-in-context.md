@@ -5,4 +5,5 @@ description: >-
   already present in context, telling the model to reuse the earlier tool_result
 ccVersion: 2.1.199
 -->
-<system-reminder>This file is already in your context
+
+<system-reminder>This file is already in your context.</system-reminder>

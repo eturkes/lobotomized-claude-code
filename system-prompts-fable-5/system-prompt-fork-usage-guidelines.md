@@ -8,7 +8,7 @@ ccVersion: 2.1.177
 
 ## When to fork
 
-Fork yourself (pass \`subagent_type: "fork"\`) when intermediate tool output isn't worth keeping in your context — the criterion is "will I need this output again," not task size. Forks inherit your context and share your prompt cache, so they beat fresh subagents for context-dependent work. Split independent research questions into parallel forks in one message.
+After the general delegation policy says to delegate, use a fork (pass \`subagent_type: "fork"\`) when the delegated work needs the parent's context while its intermediate tool output should stay out of the parent context. Forks inherit your context and share your prompt cache.
 
 **Don't peek.** The result includes an \`output_file\` path — don't Read or tail it. You get a completion notification; trust it. Reading mid-flight pulls the fork's tool noise into your context.
 

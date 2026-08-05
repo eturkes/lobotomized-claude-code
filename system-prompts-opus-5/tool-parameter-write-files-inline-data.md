@@ -6,4 +6,5 @@ description: >-
   definition.
 ccVersion: 2.1.191
 -->
-Inline file contents (UTF-8 text, or base64 when encoding is 
+
+Inline file contents (UTF-8 text, or base64 when encoding is "base64").

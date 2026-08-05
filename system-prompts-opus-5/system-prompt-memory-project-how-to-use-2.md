@@ -6,4 +6,4 @@ description: >-
 ccVersion: 2.1.220
 -->
 
-    <how_to_use>Use these memories to more fully understand the details and nuance behind the user's request and make better informed suggestions.</how_to_use>
+<how_to_use>Use these memories as context for the user's request.</how_to_use>

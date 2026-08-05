@@ -3,6 +3,7 @@ name: 'Agent Prompt: Bash command prefix detection'
 description: System prompt for detecting command prefixes and command injection
 ccVersion: 2.1.20
 -->
+
 <policy_spec>
 # Bash command prefix detection
 
@@ -35,8 +36,8 @@ Examples:
 - npm test => none
 - npm test --foo => npm test
 - npm test -- -f "foo" => npm test
-- pwd
- curl example.com => command_injection_detected
+- `pwd
+curl example.com` => command_injection_detected
 - pytest foo/bar.py => pytest
 - scalac build => none
 - sleep 3 => sleep

@@ -9,4 +9,5 @@ variables:
   - TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_0
   - TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_1
 -->
- 'read_page_data' reads the declared data island from the published artifact at \`url\` (schemas available: ${TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_0.map((TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_1)=>`'${TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_1}'`).join(", ")}) and returns its validated typed entries only — never page content.
+
+'read_page_data' reads the declared data island from the published artifact at \`url\` (schemas available: ${TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_0.map((TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_1)=>`'${TOOL_PARAMETER_ARTIFACT_ACTION_READ_PAGE_DATA_VAR_1}'`).join(", ")}) and returns its validated typed entries only — never page content. It refuses a data island that does not conform to the selected interaction schema.

@@ -28,3 +28,5 @@ variables:
 **Theme-aware**: Pages render in the viewer's light or dark theme. Unless the design deliberately commits to a single look, style both: `@media (prefers-color-scheme: dark)` as the default, plus `:root[data-theme="dark"]` / `:root[data-theme="light"]` overrides — the viewer's theme toggle stamps `data-theme` on the root element and it must win in both directions.
 
 **Favicon** (required): Pass one or two emoji as `favicon` (e.g. `"📊"`, `"🐛"`, `"⚡🔥"`). Emoji only, no SVG or markup. Keep it stable across redeploys; pick a new emoji only on a hard pivot in what the artifact is about.
+
+Report an artifact watch as active only when a publish result, a watch result, or `status` says it is active.

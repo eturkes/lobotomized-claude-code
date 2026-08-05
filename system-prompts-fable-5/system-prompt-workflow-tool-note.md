@@ -8,4 +8,5 @@ variables:
   - SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_0
   - SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_1
 -->
-- **${SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_0}** (if available) - Run a multi-step subagent pipeline; prefer it over hand-orchestrating ${SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_1} calls when a matching workflow exists
+
+- **${SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_0}** (if available) - After its explicit opt-in condition is satisfied, run a matching multi-step subagent pipeline instead of hand-orchestrating ${SYSTEM_PROMPT_WORKFLOW_TOOL_NOTE_VAR_1} calls

@@ -6,4 +6,4 @@ description: >-
 ccVersion: 2.1.178
 -->
 
-register_assets: cards to register in the Design System pane. Run after write_files succeeds.
+register_assets: cards to register in the Design System pane. Each path must be in the finalized plan. Run after `write_files` succeeds. Maximum 256 per call.

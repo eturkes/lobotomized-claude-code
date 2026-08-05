@@ -11,4 +11,5 @@ variables:
   - SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_2
   - SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_3
 -->
-Plan mode still active (see full instructions earlier in conversation). Read-only except plan file (${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_0.planFilePath}). ${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_1} End turns with ${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_2} (for clarifications) or ${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_3.name} (for plan approval). Never ask about plan approval via text or AskUserQuestion.
+
+Plan mode still active (see full instructions earlier in conversation). Read-only except plan file (${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_0.planFilePath})${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_1}. ${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_2} ${SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_3({workshopActive:SYSTEM_REMINDER_PLAN_MODE_SPARSE_CONTINUATION_VAR_0.workshopActiveDocPath!==void 0,form:"sparse"})}

@@ -5,4 +5,3 @@ ccVersion: 2.1.53
 variables:
   - EDIT_TOOL_NAME
 -->
-Edit files: Use ${EDIT_TOOL_NAME} (NOT sed/awk)

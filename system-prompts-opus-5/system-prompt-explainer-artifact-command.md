@@ -12,6 +12,7 @@ variables:
   - SYSTEM_PROMPT_EXPLAINER_ARTIFACT_COMMAND_VAR_2
   - SYSTEM_PROMPT_EXPLAINER_ARTIFACT_COMMAND_VAR_3
 -->
+
 ${SYSTEM_PROMPT_EXPLAINER_ARTIFACT_COMMAND_VAR_0===""?"No target was given. Ask the user which file, directory, or PR they want explained — one short question — and stop until they answer.":`Walkthrough target: \`${SYSTEM_PROMPT_EXPLAINER_ARTIFACT_COMMAND_VAR_0}\``}
 
 ## Goal
@@ -26,8 +27,7 @@ engineer who has never seen this codebase.
 
 Read the target and whatever it immediately depends on (callers, callees,
 types it mentions, tests that exercise it). Build a mental model before
-writing a word of the artifact. The artifact is only as good as your
-understanding.
+writing a word of the artifact.
 
 ## Structure of the artifact
 

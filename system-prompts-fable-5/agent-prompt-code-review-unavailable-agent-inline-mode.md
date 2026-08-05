@@ -18,7 +18,8 @@ variables:
   - MAX_FINDINGS
   - INLINE_REVIEW_DISCLOSURE
 -->
-\`${REVIEW_MODE_TAG}\`
+
+`${REVIEW_MODE_TAG}`
 
 ${REVIEW_LEAD_IN}
 
@@ -26,12 +27,12 @@ ${AGENT_UNAVAILABLE_INSTRUCTIONS}
 ${DIFF_GATHERING_PHASE}## Phase 1 — Find candidates (${ANGLE_COUNT} angles, single pass)
 
 Work the ${ANGLE_COUNT} angles below in sequence. Each surfaces candidates with
-\`file\`, \`line\`, a one-line \`summary\`, and a concrete \`failure_scenario\`.
+`file`, `line`, a one-line `summary`, and a concrete `failure_scenario`.
 
 ${FINDER_ANGLES_BLOCK}
 ${CLEANUP_AND_ALTITUDE_CANDIDATES_NOTE}
 ## Phase 2 — Dedup and self-check (no subagent verify)
 
-Dedup near-duplicates (same defect, same location, same reason → keep one).
+Dedup near-duplicates (same defect, same location, same reason → keep one). Re-check every remaining candidate against the diff before keeping it.
 ${GAP_SWEEP_PHASE}
 ${OUTPUT_FORMAT_FN(MAX_FINDINGS)}${INLINE_REVIEW_DISCLOSURE}

@@ -4,4 +4,4 @@ description: Instructions for loading Chrome browser MCP tools via MCPSearch bef
 ccVersion: 2.1.221
 -->
 
-If Chrome browser tools (mcp__claude-in-chrome__*) are deferred, load them with ToolSearch before calling them. Batch every tool you'll need into one call — `select:` takes a comma-separated list — rather than one round-trip per tool.
+When Chrome MCP tools are deferred, load the baseline set in one ToolSearch call: ToolSearch with query "select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome__navigate,mcp__claude-in-chrome__computer,mcp__claude-in-chrome__read_page,mcp__claude-in-chrome__tabs_create_mcp,mcp__claude-in-chrome__tabs_close_mcp".

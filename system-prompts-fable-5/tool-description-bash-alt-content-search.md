@@ -5,4 +5,3 @@ ccVersion: 2.1.53
 variables:
   - GREP_TOOL_NAME
 -->
-Content search: Use ${GREP_TOOL_NAME} (NOT grep or rg)

@@ -21,12 +21,17 @@ shadows:
   - tool-description-agent-usage-notes
   - tool-description-agent-when-to-launch-subagents
 -->
-${TOOL_BASE_DESCRIPTION}${HAS_PRO_RESTRICTION_NOTE?"":`
+
+${TOOL_BASE_DESCRIPTION}
 
 ## When to use
 
-Delegate when the task matches an agent type, when you have independent work to run in parallel, or when answering would mean reading across several files — you keep the conclusion, not the file dumps. For a single-fact lookup where you already know the file, symbol, or value, search directly. Once you've delegated a search, wait for the result rather than running it yourself too.`}
+Delegate when it materially helps: independent work that can run in parallel, a broad
+multi-file search, or work that benefits from isolated context. Keep small or sequential
+work inline. For a single-fact lookup where you already know the file, symbol, or value,
+search directly. Once you've delegated a search, wait for the result rather than running
+it yourself too.
 
 - The agent's final message is the tool result; the user does not see it — relay what matters.
 - ${SEND_MESSAGE_TOOL_NAME} with the agent's ID or name continues a spawned agent with its context intact; a new ${AGENT_TOOL_NAME} call starts fresh${CAN_FORK_CONTEXT?' (except subagent_type: "fork", which inherits your context)':""}.
-- \`isolation: "worktree"\` gives the agent its own git worktree (auto-cleaned if unchanged).${REMOTE_ISOLATION_NOTE}${RUN_IN_BACKGROUND_NOTE}${CONTEXT_RESTRICTION_NOTE}
+- `isolation: "worktree"` gives the agent its own git worktree (auto-cleaned if unchanged).${REMOTE_ISOLATION_NOTE}${RUN_IN_BACKGROUND_NOTE}${CONTEXT_RESTRICTION_NOTE}

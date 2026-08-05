@@ -11,3 +11,4 @@ Write a continuation summary so you (or another instance) can resume this unfini
 3. **Important Discoveries** — technical constraints, decisions and rationale, errors and how they were resolved, approaches that didn't work.
 4. **Next Steps** — specific remaining actions, blockers, open questions, in priority order.
 5. **Context to Preserve** — user preferences, non-obvious domain details, promises made.
+6. **Runtime State** — active subagent, workflow, and monitor identifiers and statuses; the last completed tool action and its outcome; and any pending operation awaiting notification.
