@@ -1,10 +1,10 @@
 <!--
 name: 'Inline blob: memory how to save noteam'
-description: '## How to save memories — no-team variant (single directory)'
-inlineBlobAnchor: '\["## How to save memories","","Write each memory to its own file \(e\.g\., `user_role\.md`, `feedback_testing\.md`\) using this frontmatter format:'
+description: '## How to save memories — no-team variant (single directory), built by the parameterised builder'
+inlineBlobAnchor: 'skipIndex:[$\w]+,heading:[$\w]+="## How to save memories"[^\[]*\}=[$\w]+;return [$\w]+\?\['
 inlineBlobKind: 'array'
-injectionGate: 'memory enabled + no team memory'
-ccVersion: '2.1.191'
+injectionGate: 'memory enabled + no index (skipIndex branch of the how-to-save builder)'
+ccVersion: '2.1.224'
 inlineBlobRawPassthrough: 'true'
 -->
 

@@ -1,8 +1,8 @@
 <!--
-name: 'Memory: wrap cited content in cc-memory tags'
+name: 'System Prompt: Cite memories with cc-memory tags'
 description: >-
-  Memory system prompt instruction to wrap cited memory content in <cc-memory>
-  tags when communicating with the user.
-ccVersion: 2.1.206
+  Reworded version of the 2.1.221 id: gated memory-section line requiring
+  <cc-memory> wrapping when citing a memory to the user.
+ccVersion: 2.1.224
 -->
 

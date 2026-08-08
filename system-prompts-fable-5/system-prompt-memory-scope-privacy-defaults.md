@@ -1,8 +1,6 @@
 <!--
-name: 'System Prompt: Memory Scope Privacy Defaults'
-description: >-
-  Memory-instructions fragment on default scopes (user/feedback private,
-  project/reference team) and not writing secrets.
-ccVersion: 2.1.178
+name: 'System Prompt: Memory scope privacy defaults'
+description: 'Same emission site and rendered text as the 2.1.221 id (the first sentence was factored out into the Ayo() helper): per-type privacy defaults plus the no-secrets-in-team rule.'
+ccVersion: 2.1.224
 -->
 

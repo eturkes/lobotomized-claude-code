@@ -7,7 +7,7 @@ description: >-
   until the workshop is finalized. Use when asked to workshop a design,
   brainstorm with decision points, or drive an iterative decide-and-revise
   loop through an artifact.
-ccVersion: 2.1.221
+ccVersion: 2.1.226
 -->
 ---
 name: workshop
@@ -87,18 +87,20 @@ page's figures (next paragraphs).
 your kickoff sentence, issue the setup tool calls together: load the
 artifact-capabilities skill, load the artifact-diagramming skill, and `cp`
 the template to your `.workshop.html` path — three calls, one turn, never
-one per turn. Then read ONLY the parts of your copy you author, as two
-parallel ranged Reads in ONE turn: lines 1–56 (the in-file contract) and
-lines 1438–1526 (the fillable `<article>` and the `ws-decisions` island
-right after it). The template is 2,919 lines, and everything outside those
-two ranges — the theme script (lines 57–80), the `<style>` block (lines
-81–1437), and the decisions script (lines 1548–2919) — is fixed template
-bytes your copy must keep byte-identical: you never edit it, so never spend
-a turn or your context reading it (a whole-file Read would page through all
-of it, 2–3 sequential reads). Slice into the style block only on the rare
-round you deliberately restyle — just the presentation layer at its END is
-editable. Edit the copy in place, surgically — never rewrite the whole
-file, which would re-emit bytes you never read. Those line numbers describe
+one per turn. Then read ONLY the parts of your
+copy you author, as two parallel ranged Reads in ONE turn: lines
+1–56 (the in-file contract) and lines 1438–1526 (the fillable
+\`<article>\` and the \`ws-decisions\` island right after it). The
+template is 2,948 lines, and everything outside those two ranges —
+the theme script, the \`<style>\` block, and the decisions script — is
+fixed template bytes your copy must keep byte-identical: you never
+edit it, so never spend a turn or your context reading it (a
+whole-file Read would page through all of it, 2–3 sequential reads).
+Slice into the style
+block only on the rare round you deliberately restyle — just the
+presentation layer at its END is editable. Edit the copy in place,
+surgically — never rewrite the whole file, which would re-emit bytes
+you never read. Those line numbers describe
 the pristine copy you just made; once your edits shift them, navigate by
 content (an Edit anchors on its surrounding text), not by line.
 
@@ -108,9 +110,12 @@ true to THIS version — no decision count yet, since none are on the page;
 the page script rewrites the banner only when a decision lands, so what you
 author is what the reader sees), eyebrow, title, lede, the context section
 filled with the reader's real context (or dropped — never the template's
-placeholder prose), the working-draft prose, the MAIN diagram, and NO
-decisions yet — drop the sample decision (its figure AND its call-item),
-leave the Decisions section a single line saying the open decisions land in
+placeholder prose; do not retell the conversation: only the goals and
+constraints a decision depends on), the working-draft prose (a few short
+paragraphs stating the plan — sized by selection, never completeness), the
+MAIN diagram, and NO decisions yet — drop the sample decision (its figure
+AND its call-item), leave the Decisions section a single line saying the
+open decisions land in
 the next version, and empty the island to `{"items":[]}` (a decisions-free
 page is fully legal, and the banner stays in-progress). Publish it now,
 with the capability the loop needs (see "Making the page interactive"), and
@@ -120,8 +125,11 @@ call-item from the template's sample call-item you read (that sample stays
 your verbatim source for the markup even after your copy dropped it — and
 if a long session has pushed it out of your context, re-read the Decisions
 section of the source template rather than writing the markup from memory),
-fill the island to match, and republish — the open tab live-reloads.
-Between the two publishes, tell the user the page is up, the decisions are
+fill the island to match, and republish — the
+open tab live-reloads (if the decisions don't appear after the second
+publish, ask the user to refresh the tab). Between the two publishes,
+tell the user the
+page is up, the decisions are
 next, and an approval for the update may be waiting back in this terminal
 so they glance back from the browser — and, because this opening publish IS
 the first publish, say then what the interactive page means for them (see
@@ -244,7 +252,10 @@ exactly the content (quoted user text, repo excerpts) that needs it most.
    with the MAIN mermaid diagram of the current plan as a whole — then any
    background the reader needs, and the open decisions, each decision fence
    with its own mermaid diagram directly above it, scoped to that decision
-   (see "Explaining decisions").
+   (see "Explaining decisions"). Size the draft and the background by
+   selection, never completeness: a few short paragraphs stating the plan,
+   and only the background a decision depends on — do not retell the
+   conversation.
 3. **Publish with the Artifact tool** (the file path, like any publish).
    Republish the same path after every revision; the version history stays
    on one artifact.
@@ -263,9 +274,8 @@ capability narrows the page to org-internal viewing and blocks public
 links) and say why the decision rows are not clickable.
 
 On that first publish, tell the user what the capability means: the page is
-org-internal; only people with write access can confirm a decision; the
-browser asks each viewer once for consent before the page may update
-itself; each confirmed decision republishes the page as a new version.
+org-internal; only people with write access can confirm a decision; and
+each confirmed decision republishes the page as a new version.
 
 Republishes inside the loop omit the `capabilities` field — the stored
 declaration carries forward, and re-declaring on every publish invites
@@ -517,7 +527,16 @@ HTML lane the markup still says `data-decision-state="open"`):
    (not the plan plus a list of changes), AND redraw the MAIN diagram to
    match. The draft is the page's hero and the part the reader rereads each
    visit; if a round of decisions lands and the draft and its diagram read
-   the same as before, the round is invisible.
+   the same as before, the round is invisible. The document should visibly
+   accrete toward the final design, round by round — and what accretes is
+   DECISIONS, not prose. A settled point usually takes fewer words than the
+   open question it replaced, so the draft should hold its size or shrink as
+   the plan converges; a round that only adds paragraphs without recording a
+   new decision has gone wrong. Before each republish, reread the page as its
+   cold reader and cut — silently, as part of the rewrite — any sentence that
+   does not state the plan, record a decision, or bear on an open one. Cut
+   whole sentences, never words: compressing what remains into fragments is
+   not brevity.
 6. **Republish** the updated markdown to the same path. Never force-publish
    inside the loop: your publish carries the last page version this session
    observed, and that version check is what catches a confirm that landed

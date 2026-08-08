@@ -5,7 +5,7 @@ description: >-
   (registered as SKILL_FILES + PLAN_TEMPLATE) - the title/eyebrow/summary +
   section-run HTML/CSS scaffold the SKILL.md tells the model to copy and fill by
   hand, and that the auto-publish path fills mechanically.
-ccVersion: null
+ccVersion: 2.1.224
 fill contract: >-
   the automatic publish path (src/frame/planArtifactHtml.ts) fills this
   mechanically — {{TITLE}}, {{EYEBROW}}, and {{SUMMARY}} are replaced by a fixed

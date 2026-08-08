@@ -5,6 +5,6 @@ description: >-
   it is the prefix of the thrown _Ce (DesignSyncPreconditionError), which
   mapToolResultToToolResultBlockParam turns into a tool_result carried to the
   model.
-ccVersion: null
+ccVersion: 2.1.201
 -->
 

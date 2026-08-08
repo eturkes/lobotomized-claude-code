@@ -1,9 +1,10 @@
 <!--
-name: 'Slash Command: Inline code-review prompt assembly'
+name: 'Slash Command: Code review inline assembly'
 description: >-
-  Composition shell joining header, review target, effort body and trailing
-  notes into the inline /code-review prompt
-ccVersion: 2.1.219
+  Template that assembles the inline /code-review prompt from the target header,
+  base review text, cell-specific block and the optional guidance tails; gained
+  one extra appended slot in 2.1.224.
+ccVersion: 2.1.224
 variables:
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_0
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_1
@@ -21,5 +22,6 @@ variables:
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_13
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_14
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_15
+  - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_16
 -->
 
