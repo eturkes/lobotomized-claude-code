@@ -5,4 +5,4 @@ description: >-
   the loop; injected into model context on each loop tick.
 ccVersion: 2.1.206
 -->
-newly blocked on a decision you won't make alone, you're ending the loop
+

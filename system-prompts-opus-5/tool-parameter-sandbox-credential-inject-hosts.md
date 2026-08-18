@@ -6,4 +6,4 @@ description: >-
   network.allowedDomains.
 ccVersion: 2.1.199
 -->
-every reachable host. Each entry must be reachable via `network.allowedDomains` (sandbox-runtime validates this).
+

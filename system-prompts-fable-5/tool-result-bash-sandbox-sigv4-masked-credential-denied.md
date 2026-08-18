@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_BASH_SANDBOX_SIGV4_MASKED_CREDENTIAL_DENIED_VAR_0
 -->
 
-AWS SigV4 ${TOOL_RESULT_BASH_SANDBOX_SIGV4_MASKED_CREDENTIAL_DENIED_VAR_0.kind} request uses a masked credential but cannot be re-signed by the sandbox proxy; denied by policy. Set credentials.sigv4.${TOOL_RESULT_BASH_SANDBOX_SIGV4_MASKED_CREDENTIAL_DENIED_VAR_0.kind} to "passthrough" to forward it unmodified (it will fail upstream: the signature covers the masked placeholder).

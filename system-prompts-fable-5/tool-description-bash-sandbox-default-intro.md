@@ -5,4 +5,4 @@ description: >-
   controls.
 ccVersion: 2.1.178
 -->
-By default, commands run in a sandbox that controls which directories and network hosts they may access or modify without an explicit override.
+

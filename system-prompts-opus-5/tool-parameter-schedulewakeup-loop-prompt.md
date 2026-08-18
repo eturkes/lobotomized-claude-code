@@ -9,4 +9,4 @@ variables:
   - TOOL_PARAMETER_SCHEDULEWAKEUP_LOOP_PROMPT_VAR_0
   - TOOL_PARAMETER_SCHEDULEWAKEUP_LOOP_PROMPT_VAR_1
 -->
-The /loop input to fire on wake-up. Pass the same /loop input verbatim each turn so the next firing re-enters the skill and continues the loop. For autonomous /loop (no user prompt), pass the literal sentinel \`${TOOL_PARAMETER_SCHEDULEWAKEUP_LOOP_PROMPT_VAR_0}\` instead (the dynamic-pacing variant, not the CronCreate-mode \`${TOOL_PARAMETER_SCHEDULEWAKEUP_LOOP_PROMPT_VAR_1}\`). Required unless \`stop\` is true.
+

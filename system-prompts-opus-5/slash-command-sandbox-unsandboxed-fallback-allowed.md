@@ -5,4 +5,4 @@ description: >-
   which changes what it can safely attempt without asking.
 ccVersion: 2.1.233
 -->
-✓ Unsandboxed fallback allowed - commands can run outside sandbox when necessary
+

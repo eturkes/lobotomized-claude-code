@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-Fast mode for Claude Code uses Claude Opus with faster output (it does not downgrade to a smaller model). It can be toggled with /fast and is available on Opus 5/4.8.

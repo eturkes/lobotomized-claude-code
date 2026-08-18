@@ -8,4 +8,3 @@ variables:
   - DATA_SANDBOX_INSTALL_TRUST_CA_FAILED_VAR_0
 -->
 
-The sandbox TLS inspection CA couldn't be trusted for the sandbox user: ${DATA_SANDBOX_INSTALL_TRUST_CA_FAILED_VAR_0}. Sandboxed HTTPS won't work — run /sandbox install again to retry.

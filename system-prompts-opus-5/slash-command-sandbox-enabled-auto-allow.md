@@ -5,4 +5,4 @@ description: >-
   commands without permission prompts inside that boundary.
 ccVersion: 2.1.233
 -->
-✓ Sandbox enabled with auto-allow for bash commands
+

@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_LOOP_STOPPED_CRON_DELETE_TOOL
   - TOOL_RESULT_LOOP_STOPPED_REARM_SUFFIX
 -->
-Loop stopped — any dynamic loop in this session is ended; there was no pending wakeup to cancel. If you are running a fixed-interval /loop (a recurring cron), it is NOT stopped by this call — cancel it with ${TOOL_RESULT_LOOP_STOPPED_CRON_DELETE_TOOL}. ${TOOL_RESULT_LOOP_STOPPED_REARM_SUFFIX}
+
