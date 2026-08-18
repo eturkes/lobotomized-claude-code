@@ -1,7 +1,7 @@
 <!--
 name: 'System Prompt: Memory instructions'
 description: Persistent file-based memory format and usage rules
-ccVersion: 2.1.224
+ccVersion: 2.1.227
 variables:
   - MEMORY_LOCATION_CONTEXT
   - MEMORY_LINKING_INSTRUCTIONS
@@ -15,7 +15,7 @@ Persistent file-based memory ${MEMORY_LOCATION_CONTEXT} Each memory file holds o
 ```markdown
 ---
 name: <short-kebab-case-slug>
-description: <one-line summary — used to decide relevance during recall>
+description: <one-line summary, used to decide relevance during recall>
 metadata:
   type: user | feedback | project | reference
 ---

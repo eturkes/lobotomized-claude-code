@@ -3,7 +3,7 @@ name: Bash Command Timed Out Result
 description: >-
   Model-facing Bash tool_result text written into the command's stdout/stderr
   output when the command exceeds its timeout.
-ccVersion: 2.1.205
+ccVersion: 2.1.233
 variables:
   - TOOL_RESULT_BASH_COMMAND_TIMED_OUT_VAR_0
 -->

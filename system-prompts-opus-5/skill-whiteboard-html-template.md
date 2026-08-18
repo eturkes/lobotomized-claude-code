@@ -1,9 +1,8 @@
 <!--
 name: 'Skill: Whiteboard HTML Template'
 description: >-
-  The whiteboard canvas template.html bundled with the whiteboard skill,
-  extracted to the skill base directory for Claude to publish and edit as the
-  whiteboard artifact.
-ccVersion: 2.1.224
+  Provides the bundled whiteboard HTML template extracted for Claude when the
+  whiteboard skill is activated.
+ccVersion: 2.1.233
 -->
 

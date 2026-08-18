@@ -5,7 +5,7 @@ description: >-
   JavaScript workflow script that orchestrates subagents via
   agent()/parallel()/pipeline()/phase(); env-gated behind
   CLAUDE_CODE_WORKFLOWS
-ccVersion: 2.1.224
+ccVersion: 2.1.231
 variables:
   - AGENT_TOOL_NAME
   - WORKFLOW_INVOCATION_QUALIFIER
@@ -13,5 +13,6 @@ variables:
   - WORKFLOW_AGENT_ISOLATION_OPTION
   - WORKFLOW_AGENT_ISOLATION_NOTE
   - WORKFLOW_GROUP_PREFIX
+  - MAX_WORKFLOW_ITEMS_PER_CALL
 -->
 

@@ -4,7 +4,7 @@ description: >-
   The full HTML template for the iteratively-republished workshop
   decision-document artifact (fill contract, CDS tokens, decision-block styling)
   that the model fills and publishes.
-ccVersion: 2.1.224
+ccVersion: 2.1.233
 -->
 <!--
 name: workshop
@@ -1402,8 +1402,8 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
 <!-- DECISIONS SCRIPT — FIXED, VETTED CODE. Never edit, reorder, or extend it;
      a test pins this block by exact hash, so any change is a deliberate,
      reviewed hash update in the same change. It arms the decision option rows
-     only where the page can save a decision (the publish declared the self
-     capability; the shell enforces the writer gate server-side — this
+     only where the page can save a decision (the publish declared the
+     artifact-publish capability; the shell enforces the writer gate server-side — this
      script holds no authority) AND the render
      emitted the ws-decisions island. The interaction is two-step by design:
      selecting rows — one option per decision, across any number of
@@ -1537,9 +1537,26 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
     }
     return n;
   }
+  /* A 0.2.x viewer runtime hands the namespace to claude.use('artifact'),
+     null when this view cannot run it; a 0.1.x runtime has no use() and
+     mounts it on window.claude synchronously (artifact, legacy self). A
+     read-only view gets it either way and learns so when publish() rejects. */
+  var used = null;
+  var asked = false;
   function selfApi() {
     var c = window.claude;
-    return c && c.self && typeof c.self.publish === 'function' ? c.self : null;
+    if (c && typeof c.use === 'function') {
+      if (!asked) {
+        asked = true;
+        c.use('artifact').then(function (got) {
+          used = got;
+          arm();
+        });
+      }
+      return used && typeof used.publish === 'function' ? used : null;
+    }
+    var a = c && (c.artifact || c.self);
+    return a && typeof a.publish === 'function' ? a : null;
   }
   function openRows(scope) {
     return scope.querySelectorAll('[data-decision-state="open"] .option[data-choice]');
@@ -1547,38 +1564,45 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
   function itemSel(id) {
     return '[data-decision-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]';
   }
-  /* Affordance only — authorization stays server-side. The viewer runtime
-     mounts a queueing window.claude.self stub synchronously when the
-     capability is declared, so a brief poll covers only script-order skew.
-     No island means nothing to arm: the render emits the island exactly
-     when the page shows open call-items. */
+  /* Affordance only — authorization stays server-side. Arms once, from
+     whichever answers first: use()'s resolution, or a brief poll that on
+     a 0.1.x runtime covers only script-order skew (the stub mounts
+     synchronously when the capability is declared). No island once the
+     markup has parsed means nothing to arm (the render emits the island
+     exactly when the page shows open call-items); none while it is still
+     parsing only means not yet, so the latch waits for a later tick. */
+  var armed = false;
+  function arm() {
+    if (armed || !selfApi()) return;
+    var island = document.getElementById('ws-decisions');
+    if (!island && document.readyState === 'loading') return;
+    armed = true;
+    if (island) {
+      var rows = openRows(document);
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].removeAttribute('aria-disabled');
+        rows[i].removeAttribute('title');
+        rows[i].setAttribute('tabindex', '0');
+        rows[i].className += ' armed';
+      }
+      /* The typed-answer inputs arm under the SAME gate as the rows
+         (review r3618320565): on a static publish they stay disabled
+         and explain themselves via the title, exactly like the greyed
+         rows, instead of eating text that can never confirm. */
+      var ins = document.querySelectorAll('[data-decision-state="open"] .option-input');
+      for (var j = 0; j < ins.length; j++) {
+        ins[j].removeAttribute('disabled');
+        ins[j].removeAttribute('aria-disabled');
+        ins[j].removeAttribute('title');
+      }
+    }
+  }
   var tries = 0;
   var timer = setInterval(function () {
-    if (selfApi()) {
-      if (document.getElementById('ws-decisions')) {
-        var rows = openRows(document);
-        for (var i = 0; i < rows.length; i++) {
-          rows[i].removeAttribute('aria-disabled');
-          rows[i].removeAttribute('title');
-          rows[i].setAttribute('tabindex', '0');
-          rows[i].className += ' armed';
-        }
-        /* The typed-answer inputs arm under the SAME gate as the rows
-           (review r3618320565): on a static publish they stay disabled
-           and explain themselves via the title, exactly like the greyed
-           rows, instead of eating text that can never confirm. */
-        var ins = document.querySelectorAll('[data-decision-state="open"] .option-input');
-        for (var j = 0; j < ins.length; j++) {
-          ins[j].removeAttribute('disabled');
-          ins[j].removeAttribute('aria-disabled');
-          ins[j].removeAttribute('title');
-        }
-      }
-      clearInterval(timer);
-    } else if (++tries > 20) {
-      clearInterval(timer);
-    }
+    arm();
+    if (armed || ++tries > 20) clearInterval(timer);
   }, 250);
+  selfApi();
   function note(item, text) {
     var n = item.querySelector('.note-live');
     if (!n) {
@@ -2496,7 +2520,7 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
     if (code === 'conflict') return null; /* shell reloads to the winner */
     if (code === 'upstream_error' && msg.indexOf('(409)') !== -1) return null;
     if (code === 'consent_required')
-      return 'Page updates were not allowed for this artifact — reload and allow self-update to decide here.';
+      return 'Page updates were not allowed for this artifact — reload and allow it to update itself to decide here.';
     if (code === 'not_writer')
       return 'Only someone with edit access can decide from the page.';
     if (code === 'not_declared')
@@ -2732,6 +2756,35 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
     e.preventDefault();
     onActivate(e);
   });
+  /* Opening version: published before any decision exists (empty island,
+     no decision rows), so the page is waiting on the session's next
+     version — show the painter until that version loads. */
+  (function () {
+    var isl = document.getElementById('ws-decisions');
+    if (!isl) return;
+    var parsed = null;
+    try {
+      parsed = JSON.parse(isl.textContent || '');
+    } catch (e) {
+      return;
+    }
+    var items = parsed && parsed.items;
+    if (!Array.isArray(items) || items.length !== 0) return;
+    if (document.querySelector('[data-decision-id]')) return;
+    showPainter(true);
+    /* The session may have died between the two publishes: escalate once
+       into the footer bar (textContent only) rather than spin forever. */
+    setTimeout(function () {
+      if (!painterCanvas) return;
+      if (!footer) {
+        footer = document.createElement('div');
+        footer.className = 'ws-footer';
+        document.body.appendChild(footer);
+        document.body.style.paddingBottom = '72px';
+      }
+      footerStatus('Still nothing — Claude may not be watching this page right now. Reload to check for the latest version.');
+    }, 180000);
+  })();
   /* Confirm-reboot continuity: re-enter the waiting state recorded at
      publish time, then verify against the now-stored bytes and exit
      cleanly when a NEWER version (the session's apply) is what loaded.

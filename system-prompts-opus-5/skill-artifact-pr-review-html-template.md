@@ -1,9 +1,9 @@
 <!--
 name: 'Skill: Artifact PR review HTML template'
 description: >-
-  The full self-contained HTML body template (tokens, layout, slot markers,
-  escaping rules) the artifact PR-review skill fills in when publishing a review
-  page.
-ccVersion: 2.1.224
+  HTML body-fragment template the Artifact PR-review skill gives the model, with
+  escaping rules for untrusted PR strings, design tokens, slot markers and the
+  baked decisions script
+ccVersion: 2.1.233
 -->
 

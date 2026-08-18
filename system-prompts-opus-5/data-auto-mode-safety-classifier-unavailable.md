@@ -1,9 +1,9 @@
 <!--
-name: 'Data: Auto mode safety classifier unavailable'
+name: Auto Mode Safety Classifier Unavailable
 description: >-
-  tool_result text telling the model the safety classifier is down and to retry
-  later or do read-only work.
-ccVersion: 2.1.226
+  Tells the model that the auto-mode safety classifier is temporarily
+  unavailable and provides retry guidance in the denied tool result.
+ccVersion: 2.1.231
 variables:
   - DATA_AUTO_MODE_SAFETY_CLASSIFIER_UNAVAILABLE_VAR_0
   - DATA_AUTO_MODE_SAFETY_CLASSIFIER_UNAVAILABLE_VAR_1

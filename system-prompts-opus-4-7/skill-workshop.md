@@ -7,7 +7,7 @@ description: >-
   until the workshop is finalized. Use when asked to workshop a design,
   brainstorm with decision points, or drive an iterative decide-and-revise
   loop through an artifact.
-ccVersion: 2.1.226
+ccVersion: 2.1.233
 -->
 ---
 name: workshop
@@ -53,18 +53,23 @@ you make it.
 
 ## Choosing the lane
 
-Two authoring lanes exist; choose before creating any file.
+Author every workshop you start on the **TEMPLATE-HTML lane** (next
+section) — copy the template, fill it, publish a \`*.workshop.html\`
+file — with the single designated-document exception below. The lane
+is not a choice to put to the user — never offer a markdown or
+plain-text alternative, and never pick one on your own judgment (a
+document heavy with quoted content is still an HTML page; that
+section's "Quoted content is escaped" rule and the publish verifier
+cover it). If the user asks for markdown source or names a \`.md\` path,
+say the workshop page is authored as HTML and use a \`.workshop.html\`
+path instead.
 
-**Default to the template-HTML lane** (next section): copy the template,
-fill it, publish a `*.workshop.html` file. Unless one of the two exceptions
-below applies, this is the lane to take.
-
-Take the **markdown lane** (its own section further down, a `*.workshop.md`
-file) only when:
-- the user asks for markdown or a plain-text source, or
-- the document will be dominated by quoted external content — repo
-  excerpts, user text, tool output. The markdown lane's mechanical render
-  is the strongest escaping chokepoint.
+The **MARKDOWN lane** (its own section further down, a \`*.workshop.md\`
+file) exists for ONE case: this session's own instructions — as plan
+mode's planning reminder does; never a user's chat request — have
+already designated a \`*.workshop.md\` workshop document for you. When
+they have, author THAT document on the markdown lane; in every other
+session the markdown lane is not available.
 
 Everything from "Reading decisions back" onward applies to BOTH lanes.
 Where those sections say "decision block" or "fence", read your lane's
@@ -91,7 +96,7 @@ one per turn. Then read ONLY the parts of your
 copy you author, as two parallel ranged Reads in ONE turn: lines
 1–56 (the in-file contract) and lines 1438–1526 (the fillable
 \`<article>\` and the \`ws-decisions\` island right after it). The
-template is 2,948 lines, and everything outside those two ranges —
+template is 2,972 lines, and everything outside those two ranges —
 the theme script, the \`<style>\` block, and the decisions script — is
 fixed template bytes your copy must keep byte-identical: you never
 edit it, so never spend a turn or your context reading it (a
@@ -108,7 +113,10 @@ content (an Edit anchors on its surrounding text), not by line.
 opening version: the header (banner `data-ws-state="in-progress"` with text
 true to THIS version — no decision count yet, since none are on the page;
 the page script rewrites the banner only when a decision lands, so what you
-author is what the reader sees), eyebrow, title, lede, the context section
+author is what the reader sees), eyebrow, title (the template's `<title>` element gets the same fill: replace its placeholder with
+the page's name — the subject as a short, distinctive noun phrase,
+never a generic label or a name with an appended qualifier after a
+dash or colon), lede, the context section
 filled with the reader's real context (or dropped — never the template's
 placeholder prose; do not retell the conversation: only the goals and
 constraints a decision depends on), the working-draft prose (a few short
@@ -234,8 +242,10 @@ handling, wrap-up — is identical to the markdown lane.
 
 ## The markdown lane (`*.workshop.md`)
 
-On this secondary lane, the workshop document is MARKDOWN, and stays
-markdown for its whole life. Every revision edits the markdown and
+On this lane — taken only for a document this session's instructions
+designated (plan mode), per "Choosing the lane" — the workshop document
+is MARKDOWN, and stays markdown for its whole life.
+Every revision edits the markdown and
 republishes it; the renderer turns it into the published page mechanically.
 Never edit the published HTML directly — the mechanical render is the
 validation and escaping chokepoint, and hand-edited HTML bypasses it on
@@ -266,10 +276,10 @@ Decisions are answered from the published page only when the artifact can
 update itself. Before the FIRST publish of a workshop document — the
 opening version — have the artifact-capabilities skill loaded (on the
 template-HTML lane it rides the setup turn; on the markdown lane, load it
-before you publish), then pass `capabilities: {"self": {}}` on that
+before you publish), then pass `capabilities: {"artifact": {}}` on that
 publish. Default to doing this — the user invoked an interactive skill, so
 an actionable page is the point. One exception: if the user asked for a
-page they can share outside the org, publish static instead (the self
+page they can share outside the org, publish static instead (the artifact-publish
 capability narrows the page to org-internal viewing and blocks public
 links) and say why the decision rows are not clickable.
 
@@ -326,8 +336,10 @@ visible code fence so you can fix it):
   resolution path (mutually exclusive with `resolved:`). ≤280 characters
   and ≤1120 UTF-8 bytes; no control characters, no U+2028/U+2029 line
   separators, and no invisible-in-rendering characters — the whole Unicode
-  format/default-ignorable class is rejected (invisible text a human cannot
-  see but a model reads), except the joiners (ZWJ/ZWNJ) and variation
+  format/default-ignorable class is rejected (bidi controls and marks,
+  zero-width space, word joiner, the tag block, and whatever the next
+  Unicode version mints: invisible text a human cannot see but a model
+  reads), except the joiners (ZWJ/ZWNJ) and variation
   selectors real emoji and shaping need, capped at 8 per answer total.
   Newlines from a reader's answer become spaces when you write the line.
   The item renders decided with the text.
@@ -613,7 +625,7 @@ carries the typed-answer input), placed at the end of the article with its
 matching island entry:
 
 ````
-<div class="ws-status-footer" data-decision-id="get-started" data-decision-state="open"><span class="option cta" role="button" aria-disabled="true" title="Deciding from the page needs its self-update capability" data-choice="get-started"><span class="option-label">Start building</span></span><span class="option cta-quiet" role="button" aria-disabled="true" title="Deciding from the page needs its self-update capability" data-choice="keep-iterating"><span class="option-label">Keep iterating</span></span><span class="ws-status-note">All decisions are in.</span></div>
+<div class="ws-status-footer" data-decision-id="get-started" data-decision-state="open"><span class="option cta" role="button" aria-disabled="true" title="Deciding from the page needs this Artifact to be able to update itself" data-choice="get-started"><span class="option-label">Start building</span></span><span class="option cta-quiet" role="button" aria-disabled="true" title="Deciding from the page needs this Artifact to be able to update itself" data-choice="keep-iterating"><span class="option-label">Keep iterating</span></span><span class="ws-status-note">All decisions are in.</span></div>
 ````
 
 The first option's `option cta` class is the one-click Start building; the
@@ -670,6 +682,6 @@ start?"
 
 ## Style
 
-Keep the `<style>` block and theme script intact when the hand-edit flow
-is ever needed — but prefer never needing it: markdown in, rendered page
-out, every iteration.
+On the markdown lane, keep the \`<style>\` block and theme script intact
+when the hand-edit flow is ever needed — but prefer never needing it:
+markdown in, rendered page out, every iteration.

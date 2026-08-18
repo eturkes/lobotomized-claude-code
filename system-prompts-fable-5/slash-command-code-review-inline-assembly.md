@@ -4,7 +4,7 @@ description: >-
   Template that assembles the inline /code-review prompt from the target header,
   base review text, cell-specific block and the optional guidance tails; gained
   one extra appended slot in 2.1.224.
-ccVersion: 2.1.224
+ccVersion: 2.1.232
 variables:
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_0
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_1

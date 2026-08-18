@@ -3,7 +3,7 @@ name: 'Slash Command: Inline code-review prompt assembly'
 description: >-
   Composition shell joining header, review target, effort body and trailing
   notes into the inline /code-review prompt
-ccVersion: 2.1.219
+ccVersion: 2.1.232
 variables:
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_0
   - SLASH_COMMAND_CODE_REVIEW_INLINE_ASSEMBLY_VAR_1
