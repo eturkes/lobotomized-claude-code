@@ -1,11 +1,19 @@
 <!--
-name: 'Tool Result: Artifact watches list item'
+name: 'Tool Result: Artifact Watches List Item'
 description: >-
-  Per-watch line in the watches tool result showing url, connection state,
-  whether requested or publish-armed, and the since timestamp.
-ccVersion: 2.1.218
+  Per-watch line in the Artifact watches tool result for a live (non-rail)
+  watch, showing url, connection or handshake state, whether requested or
+  publish-armed, auto-reply state, and the since timestamp.
+ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_0
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_1
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_2
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_3
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_4
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_5
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_6
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_7
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_8
 -->
 

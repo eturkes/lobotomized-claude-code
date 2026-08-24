@@ -3,7 +3,7 @@ name: Artifact publish consent prompt
 description: >-
   The `{behavior:"ask"}` permission message for publishing an artifact to
   claude.ai; it becomes the tool_result the model reads if the user declines.
-ccVersion: 2.1.232
+ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_PUBLISH_UPLOAD_CONSENT_ASK_VAR_0
   - TOOL_RESULT_ARTIFACT_PUBLISH_UPLOAD_CONSENT_ASK_VAR_1

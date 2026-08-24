@@ -1,9 +1,9 @@
 <!--
 name: 'Tool Result: Artifact watches list header'
 description: >-
-  Header of the Artifact watches tool result reporting the number of
-  session-local watches and noting that none survive a restart.
-ccVersion: 2.1.226
+  Header line of the watches tool result listing this session's artifact watches
+  (session-local; none survive a restart).
+ccVersion: 2.1.238
 variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_0
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_HEADER_VAR_1

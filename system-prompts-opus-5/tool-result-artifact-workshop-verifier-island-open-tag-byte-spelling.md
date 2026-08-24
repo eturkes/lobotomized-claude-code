@@ -3,7 +3,7 @@ name: 'Workshop Verifier: Island Open-Tag Byte Spelling'
 description: >-
   Verifier violation hint returned when the ws-decisions island open tag does
   not end with the exact template bytes.
-ccVersion: 2.1.219
+ccVersion: 2.1.238
 variables:
   - TOOL_RESULT_ARTIFACT_WORKSHOP_VERIFIER_ISLAND_OPEN_TAG_BYTE_SPELLING_VAR_0
 -->

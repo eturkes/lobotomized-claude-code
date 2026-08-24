@@ -5,7 +5,7 @@ description: >-
   Claude Code agents on cron triggers via the Anthropic cloud API
 ccVersion: 2.1.227
 variables:
-  - ONE_OFF_ENABLED_FN
+  - ONE_OFF_ENABLED
   - ASK_USER_QUESTION_TOOL_NAME
   - ADDITIONAL_INFO_BLOCK
   - REMOTE_TRIGGER_TOOL_NAME

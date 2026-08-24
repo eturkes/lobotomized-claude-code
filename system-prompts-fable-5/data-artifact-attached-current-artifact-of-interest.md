@@ -5,7 +5,7 @@ description: >-
   to the session, instructing Claude to re-read it (Artifact read_page_data with
   the workshop-decisions schema for workshop pages, otherwise WebFetch) before
   editing or republishing it.
-ccVersion: 2.1.218
+ccVersion: 2.1.239
 variables:
   - DATA_ARTIFACT_ATTACHED_CURRENT_ARTIFACT_OF_INTEREST_VAR_0
   - DATA_ARTIFACT_ATTACHED_CURRENT_ARTIFACT_OF_INTEREST_VAR_1

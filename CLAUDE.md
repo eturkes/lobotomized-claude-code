@@ -4,11 +4,15 @@ You're a coding agent invoked in this repo. Read this first. It explains what we
 
 ## What this is
 
-`lobotomized-claude-code` is a set of system-prompt overrides for [Claude Code](https://claude.com/claude-code), tuned for **Claude Opus 4.7**. Each `.md` in [`system-prompts/`](./system-prompts) replaces one of CC's built-in prompt fragments. A separate tool ([`tweakcc-fixed`](https://github.com/skrabe/tweakcc-fixed), see below) reads these files and patches the user's installed CC binary in place.
+`lobotomized-claude-code` is a set of system-prompt overrides for [Claude Code](https://claude.com/claude-code). Each `.md` replaces one of CC's built-in prompt fragments. A separate tool ([`tweakcc-fixed`](https://github.com/skrabe/tweakcc-fixed), see below) reads these files and patches the user's installed CC binary in place.
+
+Four per-model sets are maintained: `system-prompts-opus-5` (the **active** one — `~/.tweakcc/system-prompts` symlinks to it), `system-prompts-opus-4-8`, `system-prompts-fable-5`, and `system-prompts-opus-4-7` (real overrides only, no pristine stubs). `system-reminders/` is a single shared folder across all four. **Never name a set literally in a procedure** — resolve the active one with `readlink ~/.tweakcc/system-prompts`, because it moves when a new model ships.
 
 ## What we're trying to achieve
 
-**The goal of this repo is to remove useless shit and dumb guardrails so we have a clean agentic coding harness.** CC ships every model the same prompt-by-volume that worked for older Claudes. Opus 4.7 follows instructions more literally, overtriggers on CAPS, doesn't need anti-laziness scaffolding, and gets actively worse from safety theater that wasn't load-bearing in the first place. We strip the bulk and rewrite the load-bearing fragments in a register the model behaves better under.
+**The goal of this repo is to remove useless shit and dumb guardrails so we have a clean agentic coding harness.** CC ships every model the same prompt-by-volume that worked for older Claudes. Current models follow instructions more literally, overtrigger on CAPS, don't need anti-laziness scaffolding, and get actively worse from safety theater that wasn't load-bearing in the first place. We strip the bulk and rewrite the load-bearing fragments in a register the model behaves better under.
+
+**Which model a cut is justified against is per-set, and the card is the authority.** Ground every content edit in that set's system card before touching a file: `~/dev/anthropic-reference/Opus-5-Card-Digest.md` for the active `opus-5` set, `Claude-Opus-4.8-System-Card.pdf` for `opus-4-8`, `Fable-5-Card-Digest.md` for `fable-5`, `Claude-Opus-4.7-System-Card.pdf` for `opus-4-7`. The digests carry the keep/cut/reword calls with page cites. Where the fable digest and the opus-5 digest disagree, the opus-5 one wins for the active set — it explicitly reverses fable's anti-moralizing cut, because wet-blanket is flat 1.92 = 1.92 for Opus 5 and there is no improvement to bank.
 
 The README's "~60% leaner on every coding turn" claim is the bar. If your edits don't trend toward that ratio, you're not lobotomizing — you're just cosmeticking.
 
@@ -26,7 +30,7 @@ The earlier "trim, don't wipe" framing came from one specific incident — `syst
 - **Trimmed override**: some claims are unique-and-load-bearing, others are duplicated/default — keep the uniques, cut the duplicates.
 - **Full-wiped override** (empty body): every claim is duplicated/default/useless — we override with empty content to suppress the pristine entirely. Used when pristine **actively gets in the way of an always-on turn** (anti-laziness theater Anthropic ships, sibling-duplicated scaffolding). Empty body = file present, frontmatter with `ccVersion:`, zero body content.
 
-**"The user doesn't use this feature" is a wipe reason ONLY for an unconditional prompt.** A conditionally-loaded prompt — a bundled skill file, a `data-*` reference, a tool result — costs nothing until the moment something reads it, and at that moment it is the only copy of what it says. There is no token to save by wiping it, and a wipe converts "niche" into "unavailable". **Trim it: keep the facts that cannot be inferred (headers, limits, reserved names, exact error strings, event shapes), cut the tutorial prose and the SDK examples.** User directive, 2026-08-15, overturning the earlier blanket precedent that named `data-managed-agents-*` here — that family is conditionally loaded, so the family-wide wipe was wrong on its own terms. `data-managed-agents-multiagent-sessions` is now a 15.5 KB trim of a 25.1 KB pristine; `data-managed-agents-scheduled-deployments` was already an 8.6 KB trim. The rest of the family stays wiped until someone reads one and finds it needed.
+**"The user doesn't use this feature" is a wipe reason ONLY for an unconditional prompt.** A conditionally-loaded prompt — a bundled skill file, a `data-*` reference, a tool result — costs nothing until the moment something reads it, and at that moment it is the only copy of what it says. There is no token to save by wiping it, and a wipe converts "niche" into "unavailable". **Trim it: keep the facts that cannot be inferred (headers, limits, reserved names, exact error strings, event shapes), cut the tutorial prose and the SDK examples.** User directive, 2026-08-15, overturning the earlier blanket precedent that named `data-managed-agents-*` here — that family is conditionally loaded, so the family-wide wipe was wrong on its own terms. `data-managed-agents-multiagent-sessions` is now a 15.1 KB trim of a 25.9 KB pristine (measured against CC 2.1.237). `data-managed-agents-scheduled-deployments` is **not** a trim and never was — its 8,363-character body is byte-identical to 2.1.235 pristine, i.e. an untouched stub that happens to be 8.6 KB. Read a file before citing it as precedent for having been trimmed. **Resolved 2026-08-20 — the family is NOT wiped.** The parked wording above ('stays wiped until someone reads one') contradicted the directive it was appended to, and a queue that waits for someone to volunteer is a queue that never moves; the older sentence kept winning because it read as settled policy. Skrabe's ruling: *"my statement on niche stuff stays. they should exist, and be trimmed only if needed."* So every `data-managed-agents-*` and `agent-prompt-managed-agents-*` file EXISTS with content — all nine remaining ones were restored to pristine on CC 2.1.237 — and a trim is applied per file only where that file's own content warrants one, never as a family policy. **Existence is the default; the trim is the exception that has to be earned by reading the file.** This generalises: for any conditionally-loaded prompt, absence is a decision that needs a reason, and 'nobody has looked yet' is not one.
 
 ### Sibling-check protocol (mandatory)
 
@@ -37,6 +41,28 @@ For each candidate edit:
 4. Whatever remains is what stays. Could be the full prompt minus a few sentences. Could be one sentence. Could be empty.
 
 The user's framing: *"if the file contents aren't phrased similarly (same message conveyed) elsewhere, then trim it/cull it not wipe it"* — applies to *unique* content. *"something will get wiped if useless. and there will be many"* — applies to fully-duplicated/default/useless content. Both are true; the per-claim check is what decides which path each prompt takes.
+
+**Step 2 is a claim about the corpus AFTER your edit lands, not before it — and when a whole
+family is edited in one pass, that makes every cross-citation stale by construction.** Sibling X
+covering a claim is only a reason to drop it if X still says it once your batch is on disk. On the
+CC 2.1.237 managed-agents pass (10 files at once), the coverage claims were written against the
+pre-trim corpus, so a claim dropped "because core-concepts has it" vanished entirely when
+core-concepts dropped it too in the same batch. Two adversarial verification rounds could not
+settle it: each refuted 9-10 of 10 files, mostly on the stale CITATION rather than on absent text,
+and they disagreed with each other about which files were sound. Repairing prose never repairs the
+bookkeeping, so the loop does not converge.
+
+Settle it by computing instead: `node tools/checkFactCoverage.mjs data/prompts/prompts-X.Y.Z.json
+--set=<set> --ids=<changed ids>` in the patcher repo, on all four sets. It enumerates the names a
+model must reproduce EXACTLY — endpoint paths, SDK method chains, CLI commands, object keys — and
+asserts each still reaches the model somewhere in the set. On 2.1.237 it found 26 such facts across
+7 of the 10 files reachable nowhere, and correctly did NOT flag four that the agent rounds claimed
+were missing. Restore its list verbatim, re-run to zero, then stop. Use the adversarial pass for
+PROSE a name-based gate cannot see, not to decide when you are done.
+
+Losing an exact name is worse than carrying a duplicated sentence: a duplicated sentence costs
+tokens, a missing `mcp_servers` limit or `client.beta.memory_stores.memories.update` makes the
+model emit a call that fails at runtime.
 
 ### What "useless shit" looks like (cut on sight)
 
@@ -101,7 +127,7 @@ For each conflict reported by `tweakcc-fixed --apply` (or `.diff.html` produced 
 4. **Bump `ccVersion:` frontmatter** to the prompt's `lastModifiedVersion` from `tweakcc-fixed/data/prompts/prompts-X.Y.Z.json`. The apply log lists the targets explicitly.
 5. **Re-apply** locally. Verify zero stderr, zero conflicts, smoke test `claude --print "say hello"`.
 6. **Run the mis-bind audit** — dump upstream (`git show upstream/main:data/prompts/prompts-X.Y.Z.json > /tmp/pieb.json`) then `node ~/dev/tweakcc-fixed/tools/auditMisbinds.mjs ~/dev/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json /tmp/pieb.json` — must report **0**. A `${VAR}` being *in* the identifierMap is necessary but NOT sufficient: it must sit at the **same slot as upstream**, else it silently binds to the wrong minified var (wrong content, no crash, smoke and zero-conflicts both pass — croncreate, bash-git-commit and agent-usage-notes were all exactly this). Fix by adopting upstream's identifierMap for that prompt on the tweakcc-fixed side (the override body usually needs no change once the map is right).
-7. **Commit per logical group** with a one-line rationale explaining what changed and why (e.g. "tighten Edit override — drop CAPS, fold in new pristine paragraph as positive guidance").
+7. **Commit per logical group** with a one-line rationale explaining what changed and why (e.g. "tighten Edit override — drop CAPS, fold in new pristine paragraph as positive guidance"). Keep it to that one line. **This repo is public**, so a commit message must not quote prompt content, name Anthropic-internal identifiers or offsets, enumerate per-id cuts, or narrate the review process. Detail belongs in the private run dispatch.
 
 Just bumping `ccVersion:` without reading the diff is the lazy path. It silences the warning but skips the lobotomization work. Don't take it.
 
@@ -174,7 +200,7 @@ There used to be a `BenIsLegit/tweakcc-fixed` intermediary that this repo's earl
 
 ## When CC releases a new version (the recurring task)
 
-1. Pull upstream prompt JSONs into `tweakcc-fixed/data/prompts/`. They live as `prompts-X.Y.Z.json` and are the source of truth for the pristine prompt text + identifier maps. **Get them from Piebald, not by extracting locally.** When `git merge upstream/main` doesn't bring the new version yet, check open PRs at `Piebald-AI/tweakcc` — they're typically named `prompts/X.Y.Z` (`gh pr list --repo Piebald-AI/tweakcc --search "prompts/X.Y.Z"` finds it). `gh pr checkout <num> --repo Piebald-AI/tweakcc --detach`, copy the JSON, switch back to main, commit. The naive `tools/promptExtractor.js` finds a strict subset of what Piebald publishes; only fall back to it if upstream genuinely has no PR open. (See `tweakcc-fixed/AGENTS.md` for the full procedure.)
+1. Generate `tweakcc-fixed/data/prompts/prompts-X.Y.Z.json` with **our own** `tools/promptExtractor.js`, seeded from our previous version's JSON. That file is the source of truth for pristine prompt text + identifier maps, and our extractor is canonical — it detects several times what Piebald publishes (4,452 vs 677 on 2.1.235). Never `git merge upstream/main`. Piebald's per-version branch (`git show upstream/prompts/X.Y.Z:data/prompts/prompts-X.Y.Z.json`) is a **comparison signal only**, plus a source of fuller per-prompt `identifierMap`s when the `identifiers` array matches exactly — pass it as `TWEAKCC_UPSTREAM_JSON=` so shared prompts keep upstream's slot labels. The runnable procedure is the `showtime-skrabe` skill in `tweakcc-fixed/.claude/skills/`; `tweakcc-fixed/CLAUDE.md` carries the background.
 2. Run `tweakcc-fixed --apply`. It auto-rebases overrides whose pristine content is unchanged across versions; reports conflicts (with `.diff.html`) for ones where pristine diverged.
 3. For conflicts: open the diff HTML, decide whether to keep your override (and update its `ccVersion:` frontmatter) or accept upstream.
 4. Run the verification scan below. **This catches a class of bugs that don't show up in conflict reports.**

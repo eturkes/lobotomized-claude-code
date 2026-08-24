@@ -4,7 +4,7 @@ description: >-
   Guidance injected into the artifact runtime-capabilities skill body telling
   the model where the window.claude.mcp type definitions (.d.ts) are extracted
   and to read them before writing any window.claude.mcp call.
-ccVersion: 2.1.210
+ccVersion: 2.1.234
 variables:
   - DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_0
   - DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_1

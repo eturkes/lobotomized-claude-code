@@ -15,6 +15,6 @@ description: >-
   poster, flyer, brochure, banner, card, one-pager, or any visual layout they
   would rather tweak by hand than in code. Only for CREATING or re-seeding a
   canvas; an existing one is edited in its published Artifact.
-ccVersion: 2.1.232
+ccVersion: 2.1.239
 -->
 

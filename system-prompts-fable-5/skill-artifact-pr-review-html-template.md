@@ -4,6 +4,6 @@ description: >-
   The full self-contained HTML body template (tokens, layout, slot markers,
   escaping rules) the artifact PR-review skill fills in when publishing a review
   page.
-ccVersion: 2.1.233
+ccVersion: 2.1.234
 -->
 

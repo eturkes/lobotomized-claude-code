@@ -7,7 +7,7 @@ description: >-
   until the workshop is finalized. Use when asked to workshop a design,
   brainstorm with decision points, or drive an iterative decide-and-revise
   loop through an artifact.
-ccVersion: 2.1.233
+ccVersion: 2.1.239
 -->
 ---
 name: workshop
@@ -96,7 +96,7 @@ one per turn. Then read ONLY the parts of your
 copy you author, as two parallel ranged Reads in ONE turn: lines
 1–56 (the in-file contract) and lines 1438–1526 (the fillable
 \`<article>\` and the \`ws-decisions\` island right after it). The
-template is 2,972 lines, and everything outside those two ranges —
+template is 3,041 lines, and everything outside those two ranges —
 the theme script, the \`<style>\` block, and the decisions script — is
 fixed template bytes your copy must keep byte-identical: you never
 edit it, so never spend a turn or your context reading it (a
@@ -145,12 +145,12 @@ the first publish, say then what the interactive page means for them (see
 between tool calls silent and never name page internals (banner, island,
 markup) to the user. After the second publish, it is the ordinary loop.
 
-Your local copy is the only authoring surface — never author by WebFetch
-round-tripping the served page, NEVER live-edit a workshop page (the
-publish path is the validation chokepoint live-edit would bypass; the tool
-refuses it), and treat a copy you cannot confirm you wrote this session as
-missing (show-and-confirm only, exactly like the missing-source rule in
-"Reading decisions back" below).
+Your local copy is the only authoring surface — never author by
+round-tripping the served page you read back, NEVER live-edit a workshop
+page (the publish path is the validation chokepoint live-edit would
+bypass; the tool refuses it), and treat a copy you cannot confirm you
+wrote this session as missing (show-and-confirm only, exactly like the
+missing-source rule in "Reading decisions back" below).
 
 The publish path runs a structural verifier on the FINAL payload of every
 `*.workshop.html` publish (and of any HTML publish carrying the island
@@ -278,14 +278,11 @@ opening version — have the artifact-capabilities skill loaded (on the
 template-HTML lane it rides the setup turn; on the markdown lane, load it
 before you publish), then pass `capabilities: {"artifact": {}}` on that
 publish. Default to doing this — the user invoked an interactive skill, so
-an actionable page is the point. One exception: if the user asked for a
-page they can share outside the org, publish static instead (the artifact-publish
-capability narrows the page to org-internal viewing and blocks public
-links) and say why the decision rows are not clickable.
+an actionable page is the point.
 
-On that first publish, tell the user what the capability means: the page is
-org-internal; only people with write access can confirm a decision; and
-each confirmed decision republishes the page as a new version.
+On that first publish, tell the user what the capability means: only people
+with write access can confirm a decision, and each confirmed decision
+republishes the page as a new version.
 
 Republishes inside the loop omit the `capabilities` field — the stored
 declaration carries forward, and re-declaring on every publish invites
@@ -676,8 +673,8 @@ soon as it exists, not only at wrap-up.
 entirely, continue the loop, and surface whatever the reader might want
 revisited as fresh decision blocks.
 
-If the page cannot be interactive (published static for external sharing),
-fall back to asking in conversation: "all decisions are in — shall I
+If the page was published without the capability (its decision blocks are
+inert), fall back to asking in conversation: "all decisions are in — shall I
 start?"
 
 ## Style
