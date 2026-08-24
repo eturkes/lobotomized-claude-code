@@ -126,7 +126,7 @@ For each conflict reported by `tweakcc-fixed --apply` (or `.diff.html` produced 
 3. **Apply the Opus 4.7 checklist above.** Look for CAPS theater, negative-framed rules, always-on CTAs, redundant scaffolding. Tighten or replace.
 4. **Bump `ccVersion:` frontmatter** to the prompt's `lastModifiedVersion` from `tweakcc-fixed/data/prompts/prompts-X.Y.Z.json`. The apply log lists the targets explicitly.
 5. **Re-apply** locally. Verify zero stderr, zero conflicts, smoke test `claude --print "say hello"`.
-6. **Run the mis-bind audit** — dump upstream (`git show upstream/main:data/prompts/prompts-X.Y.Z.json > /tmp/pieb.json`) then `node ~/dev/tweakcc-fixed/tools/auditMisbinds.mjs ~/dev/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json /tmp/pieb.json` — must report **0**. A `${VAR}` being *in* the identifierMap is necessary but NOT sufficient: it must sit at the **same slot as upstream**, else it silently binds to the wrong minified var (wrong content, no crash, smoke and zero-conflicts both pass — croncreate, bash-git-commit and agent-usage-notes were all exactly this). Fix by adopting upstream's identifierMap for that prompt on the tweakcc-fixed side (the override body usually needs no change once the map is right).
+6. **Run the mis-bind audit** — dump upstream (`git show upstream/main:data/prompts/prompts-X.Y.Z.json > /tmp/pieb.json`) then `node ~/.local/app/tweakcc-fixed/tools/auditMisbinds.mjs ~/.local/app/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json /tmp/pieb.json` — must report **0**. A `${VAR}` being *in* the identifierMap is necessary but NOT sufficient: it must sit at the **same slot as upstream**, else it silently binds to the wrong minified var (wrong content, no crash, smoke and zero-conflicts both pass — croncreate, bash-git-commit and agent-usage-notes were all exactly this). Fix by adopting upstream's identifierMap for that prompt on the tweakcc-fixed side (the override body usually needs no change once the map is right).
 7. **Commit per logical group** with a one-line rationale explaining what changed and why (e.g. "tighten Edit override — drop CAPS, fold in new pristine paragraph as positive guidance"). Keep it to that one line. **This repo is public**, so a commit message must not quote prompt content, name Anthropic-internal identifiers or offsets, enumerate per-id cuts, or narrate the review process. Detail belongs in the private run dispatch.
 
 Just bumping `ccVersion:` without reading the diff is the lazy path. It silences the warning but skips the lobotomization work. Don't take it.
@@ -154,7 +154,7 @@ Per-version-bump realignment (rename / inline / archive when CC restructures) is
 ~/.tweakcc/lobotomized-claude-code/        ← THIS repo (canonical, has .git, GitHub remote skrabe/lobotomized-claude-code)
 ~/.tweakcc/system-prompts                  ← symlink → ./system-prompts (tweakcc-fixed reads from here)
 
-~/dev/tweakcc-fixed/                       ← the patcher (skrabe/tweakcc-fixed, direct fork of Piebald-AI/tweakcc)
+~/.local/app/tweakcc-fixed/                ← the patcher (skrabe/tweakcc-fixed, direct fork of Piebald-AI/tweakcc)
 ~/.tweakcc/config.json                     ← user's tweakcc settings (toggles, themes, etc.)
 ~/.tweakcc/orphans-removed-for-X.Y.Z/      ← prompts archived because the binary no longer references them
 ~/.tweakcc/native-binary.backup            ← pristine CC binary (auto-saved before first patch)
@@ -187,9 +187,9 @@ The `variables:` list is metadata; the actual binding happens via the pristine p
 
 ## Tweakcc-fixed (the patcher this repo depends on)
 
-`skrabe/tweakcc-fixed` is the user's **direct fork of `Piebald-AI/tweakcc`** with cherry-picked fixes that aren't upstreamed yet (Bun wrapper crash scoping, regex shape adapts for newer CC versions, the userMessageDisplay rewrite arc, max-effort default, sessionMemory graceful no-op, etc.). The fork-side work happens in `~/dev/tweakcc-fixed`. See [`tweakcc-fixed/AGENTS.md`](https://github.com/skrabe/tweakcc-fixed/blob/main/AGENTS.md) for the patcher-side context.
+`skrabe/tweakcc-fixed` is the user's **direct fork of `Piebald-AI/tweakcc`** with cherry-picked fixes that aren't upstreamed yet (Bun wrapper crash scoping, regex shape adapts for newer CC versions, the userMessageDisplay rewrite arc, max-effort default, sessionMemory graceful no-op, etc.). The fork-side work happens in `~/.local/app/tweakcc-fixed`. See [`tweakcc-fixed/AGENTS.md`](https://github.com/skrabe/tweakcc-fixed/blob/main/AGENTS.md) for the patcher-side context.
 
-Remotes in `~/dev/tweakcc-fixed`:
+Remotes in `~/.local/app/tweakcc-fixed`:
 
 ```
 origin    https://github.com/skrabe/tweakcc-fixed   (user's push target)
@@ -215,7 +215,7 @@ Anthropic occasionally renames, restructures, or removes prompts. After a versio
 import os, json
 USER_DIR = os.path.expanduser('~/.tweakcc/lobotomized-claude-code/system-prompts')
 new_ids = {p['id'] for p in json.load(
-    open(os.path.expanduser('~/dev/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json'))
+    open(os.path.expanduser('~/.local/app/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json'))
 )['prompts']}
 user_ids = {f[:-3] for f in os.listdir(USER_DIR) if f.endswith('.md')}
 print(sorted(user_ids - new_ids))
@@ -244,7 +244,7 @@ This generalizes — same shape, different variable, different prompt. Run the s
 ```python
 # scan_orphan_variables.py
 import json, os, re
-PROMPTS = '/Users/<you>/dev/tweakcc-fixed/data/prompts/prompts-<latest>.json'
+PROMPTS = os.path.expanduser('~/.local/app/tweakcc-fixed/data/prompts/prompts-<latest>.json')
 USER_DIR = os.path.expanduser('~/.tweakcc/lobotomized-claude-code/system-prompts')
 
 with open(PROMPTS) as f:
@@ -294,7 +294,7 @@ Useful for inspecting current shapes without running tweakcc end-to-end:
 
 ```javascript
 // extract.mjs
-import { extractClaudeJsFromNativeInstallation } from '/Users/<you>/dev/tweakcc-fixed/dist/nativeInstallation-*.mjs';
+import { extractClaudeJsFromNativeInstallation } from '<home>/.local/app/tweakcc-fixed/dist/nativeInstallation-*.mjs';
 import fs from 'node:fs';
 const r = await extractClaudeJsFromNativeInstallation('/Users/<you>/.nvm/versions/node/<v>/lib/node_modules/@anthropic-ai/claude-code/node_modules/@anthropic-ai/claude-code-darwin-arm64/claude');
 fs.writeFileSync('/tmp/cli.js', r.data);
@@ -315,7 +315,7 @@ npx -y tweakcc-fixed@latest --restore
 npx -y tweakcc-fixed@latest
 
 # Testing UNPUBLISHED tweakcc-fixed changes: use the local build instead.
-cd ~/dev/tweakcc-fixed && pnpm build && node dist/index.mjs --apply
+cd ~/.local/app/tweakcc-fixed && pnpm build && node dist/index.mjs --apply
 
 # Sync overrides to GitHub.
 cd ~/.tweakcc/lobotomized-claude-code && git add -A && git commit -m "..." && git push origin main
@@ -323,7 +323,7 @@ cd ~/.tweakcc/lobotomized-claude-code && git add -A && git commit -m "..." && gi
 
 ## The npm package IS the workflow (since 2.0.0)
 
-`npx -y tweakcc-fixed@latest --apply` is the standard apply path — the package is published from [skrabe/tweakcc-fixed](https://github.com/skrabe/tweakcc-fixed) (2.0.0+; versions ≤ 1.0.5 were BenIsLegit's earlier fork, superseded). Use the local build (`node ~/dev/tweakcc-fixed/dist/index.mjs`) only for tweakcc-fixed changes that aren't published yet — the published build always lags the working tree mid-development.
+`npx -y tweakcc-fixed@latest --apply` is the standard apply path — the package is published from [skrabe/tweakcc-fixed](https://github.com/skrabe/tweakcc-fixed) (2.0.0+; versions ≤ 1.0.5 were BenIsLegit's earlier fork, superseded). Use the local build (`node ~/.local/app/tweakcc-fixed/dist/index.mjs`) only for tweakcc-fixed changes that aren't published yet — the published build always lags the working tree mid-development.
 
 ## Things to surface (not assume)
 
