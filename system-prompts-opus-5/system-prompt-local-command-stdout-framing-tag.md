@@ -9,5 +9,4 @@ ccVersion: 2.1.218
 variables:
   - SYSTEM_PROMPT_LOCAL_COMMAND_STDOUT_FRAMING_TAG_VAR_0
 -->
-
-<local-command-stdout>${SYSTEM_PROMPT_LOCAL_COMMAND_STDOUT_FRAMING_TAG_VAR_0.displayText}</local-command-stdout>
+<local-command-stdout>Running in the background as @${SYSTEM_PROMPT_LOCAL_COMMAND_STDOUT_FRAMING_TAG_VAR_0.name}</local-command-stdout>
