@@ -1,8 +1,8 @@
 <!--
-name: 'Skill: Workshop description'
+name: Skill Workshop Description
 description: >-
-  The `description:` frontmatter of the bundled workshop skill, telling the
-  model what the decide-and-revise Artifact workshop does and when to invoke it.
-ccVersion: 2.1.221
+  Skill listing description for the workshop skill that iterates a design
+  artifact with the user.
+ccVersion: 2.1.246
 -->
 

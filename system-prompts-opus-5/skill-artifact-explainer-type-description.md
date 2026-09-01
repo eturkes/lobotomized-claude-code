@@ -1,9 +1,8 @@
 <!--
-name: 'Skill: Artifact explainer type description'
+name: 'Skill: Artifact Explainer Type Description'
 description: >-
-  Model-facing description field of the explainer artifact type
-  ({kind:'explainer',description:…}) that the model reads (keywords: explainer,
-  how it works, walkthrough…) to decide when to create an explainer artifact
-ccVersion: 2.1.206
+  Trigger description for creating a step-by-step explainer Artifact from a
+  template.
+ccVersion: 2.1.246
 -->
 

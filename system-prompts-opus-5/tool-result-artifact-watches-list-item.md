@@ -4,7 +4,7 @@ description: >-
   Per-watch line in the Artifact watches tool result for a live (non-rail)
   watch, showing url, connection or handshake state, whether requested or
   publish-armed, auto-reply state, and the since timestamp.
-ccVersion: 2.1.239
+ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_0
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_1
@@ -15,5 +15,8 @@ variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_6
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_7
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_8
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_9
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_10
+  - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ITEM_VAR_11
 -->
 

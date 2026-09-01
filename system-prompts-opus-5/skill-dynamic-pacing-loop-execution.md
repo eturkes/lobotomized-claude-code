@@ -4,7 +4,7 @@ description: >-
   Step-by-step instructions for executing a dynamic pacing loop that runs tasks,
   arms persistent monitors for event-gated waits, schedules fallback heartbeat
   ticks, and handles task notifications
-ccVersion: 2.1.202
+ccVersion: 2.1.246
 variables:
   - TASK_RUN_LABEL
   - MONITOR_TOOL_NAME

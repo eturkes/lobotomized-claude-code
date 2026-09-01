@@ -4,7 +4,7 @@ description: >-
   Instructs Claude how to self-pace a recurring loop by arming event monitors as
   primary wake signals and scheduling fallback heartbeat delays between
   iterations
-ccVersion: 2.1.207
+ccVersion: 2.1.246
 variables:
   - MONITOR_TOOL_NAME
   - SCHEDULE_WAKEUP_TOOL_NAME

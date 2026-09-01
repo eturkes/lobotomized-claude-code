@@ -1,9 +1,8 @@
 <!--
-name: 'Skill: Artifact PR review description'
+name: 'Skill: Artifact PR Review Description'
 description: >-
-  Trigger description for creating a shareable PR review briefing Artifact with
-  a recommendation, reviewer judgment calls, visual explainer, signals, and
-  blind spots
-ccVersion: 2.1.231
+  Trigger description for creating a PR review Artifact where edits to an
+  existing artifact modify its HTML directly.
+ccVersion: 2.1.246
 -->
 
