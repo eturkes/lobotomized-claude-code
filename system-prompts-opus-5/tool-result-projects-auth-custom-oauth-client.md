@@ -5,4 +5,4 @@ description: >-
   custom OAuth client that cannot be granted project scopes.
 ccVersion: 2.1.224
 -->
-
+The claude.ai login uses a custom OAuth client, which cannot be granted project scopes. Run /login with the standard "Claude account with subscription" flow to use Projects.

@@ -7,4 +7,4 @@ description: >-
   involved.
 ccVersion: 2.1.233
 -->
-
+`export const meta = { name, description, phases }` must be the FIRST statement in the script

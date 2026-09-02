@@ -5,4 +5,4 @@ description: >-
   completed in place.
 ccVersion: 2.1.257
 -->
-
+ It cannot be completed in place right now: publishing again creates a new one.

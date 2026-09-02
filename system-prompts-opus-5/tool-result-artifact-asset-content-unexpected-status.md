@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_CONTENT_UNEXPECTED_STATUS_VAR_0
 -->
-
+unexpected answer from the content host (HTTP ${TOOL_RESULT_ARTIFACT_ASSET_CONTENT_UNEXPECTED_STATUS_VAR_0.status})

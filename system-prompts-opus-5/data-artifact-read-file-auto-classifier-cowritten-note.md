@@ -5,4 +5,4 @@ description: >-
   list_files/read_file when a non-owner has published to the artifact.
 ccVersion: 2.1.239
 -->
-
+ [co-written: a non-owner has published to this artifact]

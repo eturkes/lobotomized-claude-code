@@ -5,4 +5,4 @@ description: >-
   approval card available.
 ccVersion: 2.1.234
 -->
-
+Deleting an artifact asset needs a consent surface, and no one can answer the prompt in this session. Do not retry the delete in this session.

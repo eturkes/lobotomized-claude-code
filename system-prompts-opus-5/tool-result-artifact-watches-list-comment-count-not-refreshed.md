@@ -5,4 +5,4 @@ description: >-
   refreshed yet.
 ccVersion: 2.1.239
 -->
-
+; its comment count is not refreshed yet — action "comments" shows them

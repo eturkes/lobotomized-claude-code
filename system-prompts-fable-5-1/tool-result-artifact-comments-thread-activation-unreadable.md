@@ -5,4 +5,4 @@ description: >-
   Claude-replies activation state could not be read.
 ccVersion: 2.1.238
 -->
-
+Claude: activation status could not be read

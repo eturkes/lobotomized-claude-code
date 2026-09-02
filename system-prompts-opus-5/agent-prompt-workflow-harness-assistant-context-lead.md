@@ -5,4 +5,4 @@ description: >-
   a workflow request may reply to the preceding assistant message.
 ccVersion: 2.1.246
 -->
-
+[Workflow harness — assistant context] The request above may reply to 

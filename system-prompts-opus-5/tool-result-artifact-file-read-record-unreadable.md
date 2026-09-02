@@ -5,4 +5,4 @@ description: >-
   or whether a file was saved cannot be taken from it
 ccVersion: 2.1.239
 -->
-
+This record of a file read is unreadable — where, or whether, a file was saved cannot be taken from it; run action "read_file" again if the file is needed.

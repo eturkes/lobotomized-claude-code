@@ -5,4 +5,4 @@ description: >-
   republish the page with `files` to change one file of a multi-file artifact.
 ccVersion: 2.1.239
 -->
-
+; to change one file of a multi-file artifact, publish the page again with `files`

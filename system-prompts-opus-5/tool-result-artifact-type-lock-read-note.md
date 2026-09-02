@@ -10,3 +10,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_TYPE_LOCK_READ_NOTE_VAR_1
 -->
 
+[${TOOL_RESULT_ARTIFACT_TYPE_LOCK_READ_NOTE_VAR_0(TOOL_RESULT_ARTIFACT_TYPE_LOCK_READ_NOTE_VAR_1.typeLock)} Publish data files to this URL with the Artifact tool (\`url\` plus \`file_path\`, more via \`files\`); its page and the type's other files can't be changed here.]

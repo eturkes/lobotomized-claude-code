@@ -5,4 +5,4 @@ description: >-
   object.
 ccVersion: 2.1.238
 -->
-
+`data` must be a JSON object — wrap a bare value, e.g. {"value": …}.

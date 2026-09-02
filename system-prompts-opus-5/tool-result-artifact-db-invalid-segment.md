@@ -5,4 +5,4 @@ description: >-
   malformed.
 ccVersion: 2.1.246
 -->
-
+collection must be a path of 1-15 "/"-separated segments and doc_id one segment (letters, digits, _ - . ~ : @ + per segment; "." and ".." reserved)

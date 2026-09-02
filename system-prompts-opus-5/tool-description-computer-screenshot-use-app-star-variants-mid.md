@@ -5,4 +5,4 @@ description: >-
   app-scoped suffix, through “those work in the”.
 ccVersion: 2.1.246
 -->
-
+app_* variants (app_screenshot, app_click, etc.) — those work in the 

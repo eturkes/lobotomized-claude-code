@@ -5,4 +5,4 @@ description: >-
   covers those surfaces.
 ccVersion: 2.1.246
 -->
-
+apps array — that single grant covers all of them.

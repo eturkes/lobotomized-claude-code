@@ -7,4 +7,4 @@ ccVersion: 2.1.257
 variables:
   - TOOL_DESCRIPTION_ARTIFACT_LIST_BY_TYPE_MINE_DYNAMIC_VAR_0
 -->
-
+List the user's own Artifacts made from one Artifact type (${TOOL_DESCRIPTION_ARTIFACT_LIST_BY_TYPE_MINE_DYNAMIC_VAR_0}) — titles and links (read-only).

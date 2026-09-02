@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_FILE_PATH_UNKNOWN_CONTENT_TYPE_VAR_0
   - TOOL_RESULT_ARTIFACT_FILE_PATH_UNKNOWN_CONTENT_TYPE_VAR_1
 -->
-
+file_path: ${TOOL_RESULT_ARTIFACT_FILE_PATH_UNKNOWN_CONTENT_TYPE_VAR_0(TOOL_RESULT_ARTIFACT_FILE_PATH_UNKNOWN_CONTENT_TYPE_VAR_1.key)} has no known content type for its extension — rename it to a known one (e.g. .json or .txt), or make another file the \`file_path\` and list this one under \`files\` in map form with an explicit servable contentType (e.g. {"published/name": {"from": "source/path", "contentType": "text/plain"}})

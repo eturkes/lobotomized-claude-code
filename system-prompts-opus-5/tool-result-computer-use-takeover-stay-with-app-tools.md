@@ -5,4 +5,4 @@ description: >-
   until full-screen control is approved.
 ccVersion: 2.1.246
 -->
-
+session), the display-scope tools proceed. Until then, stay with the app_* tools for the granted background apps.

@@ -5,4 +5,4 @@ description: >-
   declare the capability once, canonically as `artifact: {}`.
 ccVersion: 2.1.232
 -->
-
+Declare it once (canonically `artifact: {}`).

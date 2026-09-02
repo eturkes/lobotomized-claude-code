@@ -5,4 +5,4 @@ description: >-
   a with-removals or without-removals clause is concatenated.
 ccVersion: 2.1.246
 -->
-
+This artifact was created from an artifact type, so it takes supporting files only, and 

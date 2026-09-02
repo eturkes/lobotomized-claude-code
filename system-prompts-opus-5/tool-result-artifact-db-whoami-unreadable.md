@@ -7,4 +7,4 @@ ccVersion: 2.1.228
 variables:
   - TOOL_RESULT_ARTIFACT_DB_WHOAMI_UNREADABLE_VAR_0
 -->
-
+db ${TOOL_RESULT_ARTIFACT_DB_WHOAMI_UNREADABLE_VAR_0} failed (unavailable): resolving 'me' returned an unreadable response — the artifact db service may need an update

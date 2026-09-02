@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_0
   - TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_1
 -->
-
+ Resumed from the cursor: the ${TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_0} ${TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_1(TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_0,"thread")} at or before it in list order ${TOOL_RESULT_ARTIFACT_COMMENTS_CURSOR_RESUMED_NOTE_VAR_0===1?"is":"are"} skipped — threads enter or re-rank to the top as new comments arrive, so the skipped span can hold threads this walk never listed; re-run without \`cursor\` for the full list.

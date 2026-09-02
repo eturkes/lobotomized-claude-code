@@ -8,3 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_ROOMS_UNREADABLE_VAR_0
 -->
 
+(This record's list of the artifact rooms joined as an agent is unreadable — ${TOOL_RESULT_ARTIFACT_WATCHES_LIST_ROOMS_UNREADABLE_VAR_0}.)

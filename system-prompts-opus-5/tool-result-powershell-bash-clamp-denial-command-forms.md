@@ -5,4 +5,4 @@ description: >-
   the agent carries a per-spawn bashCommandClamp.
 ccVersion: 2.1.227
 -->
-
+fixed set of Bash command forms — PowerShell commands cannot 

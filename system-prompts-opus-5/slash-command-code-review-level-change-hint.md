@@ -6,4 +6,4 @@ description: >-
   part of the model-facing prompt prefix.
 ccVersion: 2.1.224
 -->
-
+typing a level (for example `/code-review high`) changes it

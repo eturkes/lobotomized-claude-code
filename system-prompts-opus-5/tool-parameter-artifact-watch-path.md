@@ -5,4 +5,4 @@ description: >-
   multi-file Artifact.
 ccVersion: 2.1.257
 -->
-
+watch only: the live file to listen to; required when the Artifact has more than one.

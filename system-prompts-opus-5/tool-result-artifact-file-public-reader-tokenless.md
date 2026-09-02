@@ -5,4 +5,4 @@ description: >-
   reader, whose files are not readable.
 ccVersion: 2.1.239
 -->
-
+this artifact is served to you as a public (non-member) reader, and its files are not readable that way

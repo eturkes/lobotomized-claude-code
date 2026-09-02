@@ -5,4 +5,4 @@ description: >-
   without app.
 ccVersion: 2.1.246
 -->
-
+`window_id` requires `app` — pass both to release one window, just 

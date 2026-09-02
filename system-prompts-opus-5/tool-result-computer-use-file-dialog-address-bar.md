@@ -5,4 +5,4 @@ description: >-
   which can pass non-path input to the shell.
 ccVersion: 2.1.246
 -->
-
+A click at these coordinates would land on the file dialog's address bar, which passes non-path input to the shell to run.

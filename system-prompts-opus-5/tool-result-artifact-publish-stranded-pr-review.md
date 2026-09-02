@@ -5,4 +5,4 @@ description: >-
   be completed in place.
 ccVersion: 2.1.257
 -->
-
+ A review page cannot be completed in place: publish the review again to create a new one.

@@ -6,4 +6,4 @@ description: >-
   the chosen sentence is then posted into the artifact's comment thread.
 ccVersion: 2.1.235
 -->
-
+I’m making this change to the Artifact now. I’ll reply here when it’s done.

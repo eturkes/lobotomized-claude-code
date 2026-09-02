@@ -5,4 +5,4 @@ description: >-
   not resolve to a local path.
 ccVersion: 2.1.235
 -->
-
+read_asset needs a valid asset_id (32 hex characters), and out_dir, when given, must be a resolvable local path

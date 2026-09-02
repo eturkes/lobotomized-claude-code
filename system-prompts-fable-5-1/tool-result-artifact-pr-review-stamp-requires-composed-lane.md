@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+approve-enabled review pages publish only through the composed lane — set the prr-stamp island to {"stamp":null}, or publish via /artifact-pr-review with a pr_review payload

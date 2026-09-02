@@ -5,4 +5,4 @@ description: >-
   organization.
 ccVersion: 2.1.238
 -->
-
+Wake subscriptions are not enabled for the user's organization, so none was registered; retrying will not help while that holds.

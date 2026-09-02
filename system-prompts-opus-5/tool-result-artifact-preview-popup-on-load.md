@@ -7,4 +7,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_PREVIEW_POPUP_ON_LOAD_VAR_0
 -->
-
+the page opens a new window (${TOOL_RESULT_ARTIFACT_PREVIEW_POPUP_ON_LOAD_VAR_0}) on load — blocked in preview; the published viewer allows pop-ups only from a click

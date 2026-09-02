@@ -10,4 +10,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_2
   - TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_3
 -->
-
+Upload a local file into a published artifact's asset store on claude.ai${TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_0(TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_1)} (${TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_2}); ${TOOL_DESCRIPTION_ARTIFACT_UPLOAD_ASSET_VAR_3?"each upload asks separately":"approving covers later uploads to this artifact this session; text files, linked files and files outside working paths still ask"}.

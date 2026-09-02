@@ -5,4 +5,4 @@ description: >-
   the rendered page when page is true.
 ccVersion: 2.1.251
 -->
-
+read only: a read of a LIVE DOC answers the path of its working-copy file (the file IS the document — use Read/Edit on it); pass page: true to get the rendered page instead.

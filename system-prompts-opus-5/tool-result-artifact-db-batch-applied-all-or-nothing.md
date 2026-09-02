@@ -5,4 +5,4 @@ description: >-
   supports them, otherwise sequential.
 ccVersion: 2.1.246
 -->
-
+applied all-or-nothing where the server supports batches, otherwise one at a time in order

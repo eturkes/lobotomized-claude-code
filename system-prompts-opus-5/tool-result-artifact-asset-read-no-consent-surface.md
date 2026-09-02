@@ -8,4 +8,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_READ_NO_CONSENT_SURFACE_VAR_0
 -->
-
+Reading or listing ${TOOL_RESULT_ARTIFACT_ASSET_READ_NO_CONSENT_SURFACE_VAR_0} needs a consent surface, and no one can answer the prompt in this session — raise the read with the user in chat; do not retry it in this session.

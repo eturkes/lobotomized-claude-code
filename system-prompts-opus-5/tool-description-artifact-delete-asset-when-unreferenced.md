@@ -5,4 +5,4 @@ description: >-
   and path when nothing references it.
 ccVersion: 2.1.257
 -->
-
+with `url` and `path` (an asset id) it removes that one uploaded asset — only one nothing references any more, and only when the user asks or when replacing one you uploaded

@@ -5,4 +5,4 @@ description: >-
   so the artifact was not changed.
 ccVersion: 2.1.238
 -->
-
+composing a requested automatic edit ran past its time limit and was abandoned, so the artifact was NOT changed. Read the thread and make the change yourself if appropriate.

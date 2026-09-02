@@ -6,4 +6,4 @@ description: >-
   own servers and local MCP servers.
 ccVersion: 2.1.246
 -->
-
+ Only claude.ai connectors are valid `server` values — the Claude app's own servers (`cowork`, `workspace`, `scheduled-tasks`, `session_info` and the like) and other locally-configured MCP servers in your tool list are not.

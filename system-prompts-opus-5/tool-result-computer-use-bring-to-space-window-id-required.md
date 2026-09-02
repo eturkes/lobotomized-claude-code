@@ -5,4 +5,4 @@ description: >-
   for app_bring_to_current_space.
 ccVersion: 2.1.246
 -->
-
+window_id (an integer from app_list_windows) is required.

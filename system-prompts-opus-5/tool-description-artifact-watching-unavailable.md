@@ -6,4 +6,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_WATCHING_UNAVAILABLE_VAR_0
   - TOOL_DESCRIPTION_ARTIFACT_WATCHING_UNAVAILABLE_VAR_1
 -->
-
+**Watching for republishes**: not available in this session — nothing notifies it when an artifact is republished elsewhere${TOOL_DESCRIPTION_ARTIFACT_WATCHING_UNAVAILABLE_VAR_0?" or when a comment on one is sent to Claude":""}. If the user asks you to watch an artifact, say so plainly, and do not claim you are watching one.${TOOL_DESCRIPTION_ARTIFACT_WATCHING_UNAVAILABLE_VAR_1}

@@ -5,4 +5,4 @@ description: >-
   user owns; every delete asks the user.
 ccVersion: 2.1.247
 -->
-
+Permanently delete a published artifact the user owns (irreversible); every delete asks the user.

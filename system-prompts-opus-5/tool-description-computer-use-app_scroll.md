@@ -5,4 +5,4 @@ description: >-
   bringing it to the front.
 ccVersion: 2.1.246
 -->
-
+Scroll the content at (x, y) in one window of a granted application without bringing it to the front.

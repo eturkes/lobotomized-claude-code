@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_COMMENTS_REQUESTED_THREAD_UNREADABLE_ROWS_VAR_0
 -->
-
+The requested comment thread is not among the rows of this record that could be read (${TOOL_RESULT_ARTIFACT_COMMENTS_REQUESTED_THREAD_UNREADABLE_ROWS_VAR_0.join("; ")}) — run action "comments" with its thread_id again for a live read.

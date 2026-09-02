@@ -7,4 +7,4 @@ ccVersion: 2.1.237
 variables:
   - DATA_ARTIFACT_GATEWAY_REQUEST_SKIPPED_VAR_0
 -->
-
+the gateway request was skipped (${DATA_ARTIFACT_GATEWAY_REQUEST_SKIPPED_VAR_0.reason})

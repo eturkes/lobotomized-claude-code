@@ -5,4 +5,4 @@ description: >-
   context menu can open terminals and run programs.
 ccVersion: 2.1.246
 -->
-
+menu can open terminals and run programs. Left-click still works here.

@@ -6,4 +6,4 @@ description: >-
   must act on, not a role label like its sibling arms.
 ccVersion: 2.1.239
 -->
-
+public artifact (untrusted third-party content authored outside your org)

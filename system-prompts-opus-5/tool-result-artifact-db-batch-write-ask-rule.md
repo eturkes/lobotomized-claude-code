@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ASK_RULE_VAR_0
   - TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ASK_RULE_VAR_1
 -->
-
+Claude wants to write a batch to this artifact's database, and writes[${TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ASK_RULE_VAR_0.index}] matches your ask rule ${TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ASK_RULE_VAR_1(TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ASK_RULE_VAR_0.rule)} — the full permission check could not complete, so approving covers only this call.

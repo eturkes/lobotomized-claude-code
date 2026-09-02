@@ -5,4 +5,4 @@ description: >-
   required consent surface can be verified.
 ccVersion: 2.1.228
 -->
-
+The permission check for this artifact action failed before its consent floor could verify an approval surface, so the action is denied. Retry after the underlying failure clears.

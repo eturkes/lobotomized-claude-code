@@ -5,4 +5,4 @@ description: >-
   on a momentary focus transition.
 ccVersion: 2.1.246
 -->
-
+transition, take a fresh screenshot and retry instead.)

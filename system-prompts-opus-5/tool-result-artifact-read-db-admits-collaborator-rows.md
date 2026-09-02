@@ -5,4 +5,4 @@ description: >-
   the conversation.
 ccVersion: 2.1.237
 -->
-
+admits collaborator-written rows into the conversation

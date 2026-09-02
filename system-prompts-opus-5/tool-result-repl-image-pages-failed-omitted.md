@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_REPL_IMAGE_PAGES_FAILED_OMITTED_VAR_0
   - TOOL_RESULT_REPL_IMAGE_PAGES_FAILED_OMITTED_VAR_1
 -->
-
+[${TOOL_RESULT_REPL_IMAGE_PAGES_FAILED_OMITTED_VAR_0.imagePagesFailedOmitted} more page(s) from inner Read calls could not be processed as an image — a REPL result names at most ${TOOL_RESULT_REPL_IMAGE_PAGES_FAILED_OMITTED_VAR_1} such pages]

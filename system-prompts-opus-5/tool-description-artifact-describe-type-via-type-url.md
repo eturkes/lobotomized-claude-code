@@ -5,4 +5,4 @@ description: >-
   Artifact type's files, instructions and capabilities.
 ccVersion: 2.1.257
 -->
-
+ With `type_url` and no `url` it describes one Artifact type — its files, instructions and capabilities.

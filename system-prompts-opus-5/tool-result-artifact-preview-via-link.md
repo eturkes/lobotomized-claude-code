@@ -5,4 +5,4 @@ description: >-
   through a symlink to a different file.
 ccVersion: 2.1.247
 -->
-
+file_path now resolves through a link to somewhere else — preview the real file.

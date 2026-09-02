@@ -7,4 +7,4 @@ ccVersion: 2.1.238
 variables:
   - DATA_TASK_NOTIFICATION_ARTIFACT_DURABLE_WAKE_NOT_WOKEN_CONDITION_VAR_0
 -->
-
+This session will NOT be woken when ${DATA_TASK_NOTIFICATION_ARTIFACT_DURABLE_WAKE_NOT_WOKEN_CONDITION_VAR_0()?"it is republished or a comment on it is sent to Claude":"it is republished"}

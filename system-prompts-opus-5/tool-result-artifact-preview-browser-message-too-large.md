@@ -5,4 +5,4 @@ description: >-
   preview renderError/shot error in the preview tool_result.
 ccVersion: 2.1.247
 -->
-
+the page produced a browser message too large to handle; preview stopped

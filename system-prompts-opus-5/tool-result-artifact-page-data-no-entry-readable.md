@@ -5,4 +5,4 @@ description: >-
   record could be read.
 ccVersion: 2.1.239
 -->
-
+(island present, but no entry of this record could be read — ${'run action "read_page_data" again for a current read'})

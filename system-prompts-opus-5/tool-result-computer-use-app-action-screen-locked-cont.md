@@ -5,4 +5,4 @@ description: >-
   window-level Accessibility until the user returns.
 ccVersion: 2.1.246
 -->
-
+Accessibility while locked. Screenshot to observe; act once the user returns.

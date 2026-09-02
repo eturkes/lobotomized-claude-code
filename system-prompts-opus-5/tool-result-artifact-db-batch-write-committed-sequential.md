@@ -5,4 +5,4 @@ description: >-
   writes were not atomic.
 ccVersion: 2.1.246
 -->
-
+written one write at a time, in order (this server does not take batch writes yet, so it was not atomic)

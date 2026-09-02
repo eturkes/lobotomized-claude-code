@@ -7,4 +7,4 @@ ccVersion: 2.1.224
 variables:
   - TOOL_RESULT_ARTIFACT_DB_BUSY_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_DB_BUSY_VAR_0}: lost to a concurrent change — re-read and retry deliberately

@@ -5,4 +5,4 @@ description: >-
   size limit.
 ccVersion: 2.1.247
 -->
-
+file_path is empty or over the publish size limit now — write the page, then preview it again.

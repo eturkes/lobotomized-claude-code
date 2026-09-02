@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_NO_READABLE_ROWS_VAR_0
 -->
-
+No row of this record of the artifact watches could be read — ${TOOL_RESULT_ARTIFACT_WATCHES_NO_READABLE_ROWS_VAR_0}.

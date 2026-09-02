@@ -5,4 +5,4 @@ description: >-
   skipped as unsafe file names.
 ccVersion: 2.1.237
 -->
-
+file names the file-edit safety rules protect (configuration or tool files, or ambiguous spellings)

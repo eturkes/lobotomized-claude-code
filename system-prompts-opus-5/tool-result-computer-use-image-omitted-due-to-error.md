@@ -5,4 +5,4 @@ description: >-
   result with a placeholder.
 ccVersion: 2.1.246
 -->
-
+[Image omitted due to error]

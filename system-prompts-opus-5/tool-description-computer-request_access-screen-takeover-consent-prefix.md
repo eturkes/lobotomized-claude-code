@@ -5,4 +5,4 @@ description: >-
   over the screen
 ccVersion: 2.1.246
 -->
-
+This does NOT grant permission to take over the screen — that consent has its own separate card, 

@@ -5,4 +5,4 @@ description: >-
   artifact URL.
 ccVersion: 2.1.234
 -->
-
+This is not an artifact url Claude can delete an asset from. Use the artifact url from the list or publish result.

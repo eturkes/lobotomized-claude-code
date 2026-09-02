@@ -5,4 +5,4 @@ description: >-
   publish declares both `artifact` and `self` with different configs.
 ccVersion: 2.1.232
 -->
-
+capabilities declares both `artifact` and `self` — two 

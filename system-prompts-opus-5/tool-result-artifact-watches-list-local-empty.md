@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_LOCAL_EMPTY_VAR_0
   - TOOL_RESULT_ARTIFACT_WATCHES_LIST_LOCAL_EMPTY_VAR_1
 -->
-
+No artifact watches in this session. Publishing an artifact from this session normally arms one — the publish result says whether the watch armed, and action "status" shows whether auto-replies are on for it; watches are session-local, and ${TOOL_RESULT_ARTIFACT_WATCHES_LIST_LOCAL_EMPTY_VAR_0(TOOL_RESULT_ARTIFACT_WATCHES_LIST_LOCAL_EMPTY_VAR_1())}.

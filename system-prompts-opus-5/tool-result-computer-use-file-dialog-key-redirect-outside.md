@@ -6,4 +6,4 @@ description: >-
   field.
 ccVersion: 2.1.246
 -->
-
+it can jump keyboard focus to an address bar, context menu, or rename field, each of which can redirect keystrokes.

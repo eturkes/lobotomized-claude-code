@@ -7,4 +7,4 @@ description: >-
   auto-replies for the whole session and a resume cannot reverse it.
 ccVersion: 2.1.234
 -->
-
+Auto-replies are disarmed for this whole session (the kill-all-agents gesture) and a resume cannot reverse that — a new session re-arms on publish. Nothing here needs approval; do not retry in this session.

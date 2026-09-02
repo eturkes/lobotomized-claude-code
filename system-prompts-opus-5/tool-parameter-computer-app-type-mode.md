@@ -5,4 +5,4 @@ description: >-
   cleared in one call.
 ccVersion: 2.1.246
 -->
-
+selects all then writes, clearing the field in one call — use 

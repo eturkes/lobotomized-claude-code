@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_REPL_IMAGES_OMITTED_VAR_0
   - TOOL_RESULT_REPL_IMAGES_OMITTED_VAR_1
 -->
-
+[${TOOL_RESULT_REPL_IMAGES_OMITTED_VAR_0.imagesOmitted} more image(s) from inner Read calls not shown — a REPL result surfaces at most ${TOOL_RESULT_REPL_IMAGES_OMITTED_VAR_1} images; read fewer pages or images per call]

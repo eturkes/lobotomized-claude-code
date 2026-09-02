@@ -8,4 +8,4 @@ variables:
   - DATA_ARTIFACT_TYPE_RELEASE_NOT_APPLIED_VAR_0
   - DATA_ARTIFACT_TYPE_RELEASE_NOT_APPLIED_VAR_1
 -->
-
+ ${DATA_ARTIFACT_TYPE_RELEASE_NOT_APPLIED_VAR_0} that isn't applied to this Artifact for now; it stays on release ${DATA_ARTIFACT_TYPE_RELEASE_NOT_APPLIED_VAR_1} — nothing to do here.

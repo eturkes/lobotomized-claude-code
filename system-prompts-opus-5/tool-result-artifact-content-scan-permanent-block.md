@@ -5,4 +5,4 @@ description: >-
   permanently refuses the content.
 ccVersion: 2.1.246
 -->
-
+artifact content fetch blocked: the sandbox proxy's content scan refused this content (HTTP 403); retrying will not help.

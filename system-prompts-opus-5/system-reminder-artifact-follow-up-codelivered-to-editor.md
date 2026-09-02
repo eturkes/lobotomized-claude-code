@@ -9,4 +9,4 @@ variables:
   - SYSTEM_REMINDER_ARTIFACT_FOLLOW_UP_CODELIVERED_TO_EDITOR_VAR_0
   - SYSTEM_REMINDER_ARTIFACT_FOLLOW_UP_CODELIVERED_TO_EDITOR_VAR_1
 -->
-
+[The thread follow-up${SYSTEM_REMINDER_ARTIFACT_FOLLOW_UP_CODELIVERED_TO_EDITOR_VAR_0?` "${SYSTEM_REMINDER_ARTIFACT_FOLLOW_UP_CODELIVERED_TO_EDITOR_VAR_0}"`:""} you just read (or will read next) was also delivered directly to the artifact editor worker ${SYSTEM_REMINDER_ARTIFACT_FOLLOW_UP_CODELIVERED_TO_EDITOR_VAR_1}, which is applying it now. Do not re-dispatch it. Reply with the link when that worker's NEXT result arrives; until then no_reply_needed (awaiting_worker_link).]

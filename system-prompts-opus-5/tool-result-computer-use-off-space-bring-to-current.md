@@ -5,4 +5,4 @@ description: >-
   bringWindowToActiveSpace exists.
 ccVersion: 2.1.246
 -->
-
+call app_bring_to_current_space to bring it here, or use the display-scope tools

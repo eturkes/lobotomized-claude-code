@@ -6,4 +6,4 @@ description: >-
   Claude must not watch it again unless the user asks.
 ccVersion: 2.1.234
 -->
-
+ Its watch was stopped earlier in this session, so no republish notice will come; do not watch it again unless the user asks.

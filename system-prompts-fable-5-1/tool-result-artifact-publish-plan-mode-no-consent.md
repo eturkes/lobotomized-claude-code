@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+Publishing from plan mode needs a consent surface, and no one can answer the prompt in this session. Do not retry the publish in this session.

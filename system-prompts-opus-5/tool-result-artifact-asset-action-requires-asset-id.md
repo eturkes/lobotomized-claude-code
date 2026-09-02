@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_ACTION_REQUIRES_ASSET_ID_VAR_0
 -->
-
+action "${TOOL_RESULT_ARTIFACT_ASSET_ACTION_REQUIRES_ASSET_ID_VAR_0}" requires \`asset_id\` — the 32-character id from a list_assets or upload_asset result.

@@ -8,4 +8,4 @@ description: >-
   tool list are not valid `server` values.
 ccVersion: 2.1.239
 -->
-
+ Only claude.ai connectors are valid `server` values — other locally-configured MCP servers in your tool list are not.

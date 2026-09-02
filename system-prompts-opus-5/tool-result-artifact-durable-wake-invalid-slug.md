@@ -5,4 +5,4 @@ description: >-
   name, so registration will not succeed on retry.
 ccVersion: 2.1.238
 -->
-
+That address is not an artifact this session can name, so nothing was registered; retrying with the same address will not help.

@@ -6,4 +6,4 @@ description: >-
   resume happens.
 ccVersion: 2.1.238
 -->
-
+, and comments sent to Claude in the meantime are answered then

@@ -7,4 +7,4 @@ ccVersion: 2.1.257
 variables:
   - TOOL_DESCRIPTION_ARTIFACT_READ_PATH_SAVES_LOCAL_FILE_VAR_0
 -->
-
+ With \`path\` it saves ${TOOL_DESCRIPTION_ARTIFACT_READ_PATH_SAVES_LOCAL_FILE_VAR_0.join(" or ")} to a local file instead and says where.

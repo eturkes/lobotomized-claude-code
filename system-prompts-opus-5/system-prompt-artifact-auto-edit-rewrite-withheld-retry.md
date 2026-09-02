@@ -6,3 +6,5 @@ description: >-
 ccVersion: 2.1.238
 -->
 
+
+Your previous response used the full-rewrite form, which is unavailable for this version, so it was NOT applied and nothing was changed.

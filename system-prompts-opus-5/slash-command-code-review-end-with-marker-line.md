@@ -9,3 +9,6 @@ variables:
   - SLASH_COMMAND_CODE_REVIEW_END_WITH_MARKER_LINE_VAR_0
 -->
 
+
+After you finish the review, end your response with this exact line on its own:
+${SLASH_COMMAND_CODE_REVIEW_END_WITH_MARKER_LINE_VAR_0}

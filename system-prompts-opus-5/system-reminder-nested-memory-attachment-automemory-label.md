@@ -6,4 +6,4 @@ description: >-
   context.
 ccVersion: 2.1.233
 -->
-
+ (user's auto-memory, persists across conversations)

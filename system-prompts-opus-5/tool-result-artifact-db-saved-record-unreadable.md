@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_SAVED_RECORD_UNREADABLE_VAR_0
   - TOOL_RESULT_ARTIFACT_DB_SAVED_RECORD_UNREADABLE_VAR_1
 -->
-
+Documents from collection ${TOOL_RESULT_ARTIFACT_DB_SAVED_RECORD_UNREADABLE_VAR_0} were saved to local files, but the save record is unreadable — list the out_dir to see them.${TOOL_RESULT_ARTIFACT_DB_SAVED_RECORD_UNREADABLE_VAR_1}

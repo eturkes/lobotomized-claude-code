@@ -5,4 +5,4 @@ description: >-
   force:true to the user's explicit confirmation.
 ccVersion: 2.1.239
 -->
-
+; use force:true only on the user's explicit confirmation.

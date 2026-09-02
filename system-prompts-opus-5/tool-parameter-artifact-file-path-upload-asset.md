@@ -5,4 +5,4 @@ description: >-
   for upload_asset, including text files.
 ccVersion: 2.1.246
 -->
-
+ For 'upload_asset', the local image, video, PDF, font, or text (CSV, Markdown, JSON, plain text) file to upload.

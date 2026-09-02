@@ -5,4 +5,4 @@ description: >-
   retry.
 ccVersion: 2.1.246
 -->
-
+the hit test. This can happen under heavy GPU or RDP load. Retry.

@@ -5,4 +5,4 @@ description: >-
   bar, so use the display-scope key tool.
 ccVersion: 2.1.246
 -->
-
+require the menu bar (use the display-scope key tool for those).

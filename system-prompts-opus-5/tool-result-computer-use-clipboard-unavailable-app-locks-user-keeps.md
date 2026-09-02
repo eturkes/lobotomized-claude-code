@@ -5,4 +5,4 @@ description: >-
   the user still owns the clipboard.
 ccVersion: 2.1.246
 -->
-
+— the user keeps using their machine (and clipboard) while you work 

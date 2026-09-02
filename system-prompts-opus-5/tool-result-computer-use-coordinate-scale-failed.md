@@ -5,4 +5,4 @@ description: >-
   display geometry.
 ccVersion: 2.1.246
 -->
-
+coordinate could not be scaled against the current display geometry; take a new screenshot and try again

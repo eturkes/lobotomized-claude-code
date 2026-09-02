@@ -5,4 +5,4 @@ description: >-
   identifier used by read_asset and delete_asset
 ccVersion: 2.1.234
 -->
-
+read_asset and delete_asset: the asset's id (32 hex characters), from a list_assets or upload_asset result.

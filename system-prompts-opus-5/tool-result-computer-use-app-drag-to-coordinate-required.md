@@ -5,4 +5,4 @@ description: >-
   space.
 ccVersion: 2.1.246
 -->
-
+app_drag requires `to_coordinate: [x, y]` in the same window coordinate space as `coordinate`.

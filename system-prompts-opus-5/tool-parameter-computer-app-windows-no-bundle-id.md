@@ -5,4 +5,4 @@ description: >-
   forbidding macOS-style com.* bundle identifiers.
 ccVersion: 2.1.246
 -->
-
+Do NOT use macOS-style bundle identifiers (com.*) — this is Windows. 

@@ -5,4 +5,4 @@ description: >-
   claude.ai login.
 ccVersion: 2.1.238
 -->
-
+Unset the apiKeyHelper setting.

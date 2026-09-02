@@ -6,4 +6,4 @@ description: >-
   auto-replies.
 ccVersion: 2.1.234
 -->
-
+tell the user, and call resume_replies again only if they still want auto-replies resumed

@@ -5,4 +5,4 @@ description: >-
   available from this kind of session.
 ccVersion: 2.1.247
 -->
-
+published-file reads aren't available from this kind of session; retrying from here will not help

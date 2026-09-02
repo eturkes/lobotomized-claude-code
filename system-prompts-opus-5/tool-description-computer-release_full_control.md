@@ -5,4 +5,4 @@ description: >-
   always safe and is a no-op if full-screen was never held.
 ccVersion: 2.1.246
 -->
-
+releasing is always safe. Has no effect if you never held full-screen control.

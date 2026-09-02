@@ -5,4 +5,4 @@ description: >-
   frame and to screenshot again.
 ccVersion: 2.1.246
 -->
-
+full-resolution coordinate frame. Take a new screenshot and pick a point inside it.

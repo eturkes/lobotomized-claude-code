@@ -5,4 +5,4 @@ description: >-
   rest of this session.
 ccVersion: 2.1.251
 -->
-
+ Approving covers data edits to any artifact for the rest of this session.

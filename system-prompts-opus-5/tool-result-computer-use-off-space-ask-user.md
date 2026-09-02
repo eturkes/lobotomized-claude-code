@@ -5,4 +5,4 @@ description: >-
   bring-to-current-space is unavailable.
 ccVersion: 2.1.246
 -->
-
+ask the user to bring it to this Space, or use the display-scope tools

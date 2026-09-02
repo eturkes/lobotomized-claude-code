@@ -5,4 +5,4 @@ description: >-
   disabled, so nothing reports republishes.
 ccVersion: 2.1.239
 -->
-
+No artifact watches in this session. Live artifact watching is off in this session, so nothing will notify it of republishes.

@@ -5,4 +5,4 @@ description: >-
   listing.
 ccVersion: 2.1.257
 -->
-
+The artifact's claude.ai URL. Required for every action except a bare 'watch' listing.

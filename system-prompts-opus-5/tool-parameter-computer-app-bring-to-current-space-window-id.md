@@ -5,4 +5,4 @@ description: >-
   app_list_windows to bring here.
 ccVersion: 2.1.246
 -->
-
+The `window_id` (from app_list_windows) of the off-Space window to bring here.

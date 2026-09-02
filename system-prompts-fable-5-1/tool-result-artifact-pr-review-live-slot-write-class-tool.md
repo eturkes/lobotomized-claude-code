@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+the live read slot names a write-class tool — the pinned scripts call the live tool read-only

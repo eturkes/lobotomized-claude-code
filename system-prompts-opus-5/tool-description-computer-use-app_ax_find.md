@@ -5,4 +5,4 @@ description: >-
   by role and/or title substring.
 ccVersion: 2.1.246
 -->
-
+Search the accessibility elements captured by the last app_screenshot of one window. Filter by role (e.g. "AXTextArea", "AXButton") and/or title substring. Returns matching elements 

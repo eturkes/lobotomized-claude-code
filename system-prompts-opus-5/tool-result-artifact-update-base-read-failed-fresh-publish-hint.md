@@ -5,4 +5,4 @@ description: >-
   fresh artifact instead.
 ccVersion: 2.1.246
 -->
-
+, or publish a fresh artifact instead (omit `url` and use a new `file_path`)

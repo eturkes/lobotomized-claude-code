@@ -5,4 +5,4 @@ description: >-
   `type_url`, which always creates a new artifact.
 ccVersion: 2.1.246
 -->
-
+ and omit `type_url`, which always creates a new artifact.

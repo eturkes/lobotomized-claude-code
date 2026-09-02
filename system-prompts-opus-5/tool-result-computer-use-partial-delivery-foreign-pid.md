@@ -5,4 +5,4 @@ description: >-
   model must not retype the whole string.
 ccVersion: 2.1.246
 -->
-
+ Part of the text was already typed before the block — take a 

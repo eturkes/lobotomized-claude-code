@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_ARTIFACT_COULDNT_READ_BEFORE_PUBLISH_VAR_0
 -->
-
+Couldn't read this artifact before publishing: ${TOOL_RESULT_ARTIFACT_COULDNT_READ_BEFORE_PUBLISH_VAR_0.err}. Nothing was published

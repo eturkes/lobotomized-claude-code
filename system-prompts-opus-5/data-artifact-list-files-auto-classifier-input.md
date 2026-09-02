@@ -8,4 +8,4 @@ variables:
   - DATA_ARTIFACT_LIST_FILES_AUTO_CLASSIFIER_INPUT_VAR_0
   - DATA_ARTIFACT_LIST_FILES_AUTO_CLASSIFIER_INPUT_VAR_1
 -->
-
+list an artifact's published files (read-only; a first approval also covers reading this artifact's files and assets for the rest of the conversation)${DATA_ARTIFACT_LIST_FILES_AUTO_CLASSIFIER_INPUT_VAR_0} → ${DATA_ARTIFACT_LIST_FILES_AUTO_CLASSIFIER_INPUT_VAR_1}

@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_DOCUMENT_PATH_TOO_LONG_VAR_0
   - TOOL_RESULT_ARTIFACT_DB_DOCUMENT_PATH_TOO_LONG_VAR_1
 -->
-
+the composed document path (\`collection\` plus \`doc_id\`) is ${TOOL_RESULT_ARTIFACT_DB_DOCUMENT_PATH_TOO_LONG_VAR_0.length} bytes — the limit is ${TOOL_RESULT_ARTIFACT_DB_DOCUMENT_PATH_TOO_LONG_VAR_1}.

@@ -5,4 +5,4 @@ description: >-
   null for the top level.
 ccVersion: 2.1.246
 -->
-
+app_menu: `list` must be a string (menu title) or null (top level).

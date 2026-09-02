@@ -5,4 +5,4 @@ description: >-
   dialog.
 ccVersion: 2.1.246
 -->
-
+Alt-modified clicks are not allowed inside a file dialog — an 

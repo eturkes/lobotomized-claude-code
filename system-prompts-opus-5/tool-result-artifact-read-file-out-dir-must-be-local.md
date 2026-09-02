@@ -5,4 +5,4 @@ description: >-
   network path.
 ccVersion: 2.1.239
 -->
-
+read_file saves only to local directories — out_dir names a network path.

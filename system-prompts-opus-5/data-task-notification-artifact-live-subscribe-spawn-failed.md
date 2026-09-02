@@ -8,4 +8,4 @@ description: >-
   them
 ccVersion: 2.1.234
 -->
-
+The background session didn't start, so automatic replies to Artifact comments stopped. Publish the Artifact again to turn them back on.

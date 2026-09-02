@@ -8,4 +8,4 @@ ccVersion: 2.1.237
 variables:
   - DATA_ARTIFACT_TYPE_RELEASE_ACCESS_LOST_VAR_0
 -->
-
+ Its type isn't shared with this Artifact's owner, so this Artifact stays on release ${DATA_ARTIFACT_TYPE_RELEASE_ACCESS_LOST_VAR_0} and won't receive newer releases until it is — worth telling the user; nothing else to do here.

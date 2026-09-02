@@ -5,4 +5,4 @@ description: >-
   local JSON files following the file-edit rules.
 ccVersion: 2.1.237
 -->
-
+saved as local JSON files (the destination follows the file-edit rules)

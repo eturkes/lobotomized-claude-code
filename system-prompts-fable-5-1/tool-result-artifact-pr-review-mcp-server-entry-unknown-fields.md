@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+the review page mcp server entry carries unknown fields — only `server` and `tools` are allowed

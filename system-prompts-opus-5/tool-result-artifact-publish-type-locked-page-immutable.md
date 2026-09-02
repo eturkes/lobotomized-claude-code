@@ -6,4 +6,4 @@ description: >-
   or a new Artifact.
 ccVersion: 2.1.237
 -->
-
+ — this Artifact was created from an Artifact type: its page (index.html) and the type's other files can't be changed on it. Publish only its own files (`file_path` naming one, more in `files`, with this `url`); to change the page, publish a new Artifact instead.

@@ -8,4 +8,4 @@ variables:
   - DATA_ARTIFACT_TYPE_NEWER_RELEASE_WILL_APPLY_VAR_0
   - DATA_ARTIFACT_TYPE_NEWER_RELEASE_WILL_APPLY_VAR_1
 -->
-
+ Its type has a newer release (${DATA_ARTIFACT_TYPE_NEWER_RELEASE_WILL_APPLY_VAR_0(DATA_ARTIFACT_TYPE_NEWER_RELEASE_WILL_APPLY_VAR_1.latest)}); this Artifact moves to it on its own the next time it is opened or read — nothing to do here.

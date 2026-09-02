@@ -5,4 +5,4 @@ description: >-
   complete its permission check.
 ccVersion: 2.1.238
 -->
-
+The permission check for this publish failed before the room disclosure could be shown; nothing was published. Retry after the underlying failure clears.

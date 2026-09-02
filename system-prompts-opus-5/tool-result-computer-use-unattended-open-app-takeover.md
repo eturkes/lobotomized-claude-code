@@ -5,4 +5,4 @@ description: >-
   take over the screen.
 ccVersion: 2.1.246
 -->
-
+Launching or activating an app takes over the screen, 

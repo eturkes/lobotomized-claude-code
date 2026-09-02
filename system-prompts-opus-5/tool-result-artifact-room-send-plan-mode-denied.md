@@ -5,4 +5,4 @@ description: >-
   mode and must not be retried while planning.
 ccVersion: 2.1.238
 -->
-
+Live room events cannot be sent from plan mode. Finish planning first; do not retry this room_send while in plan mode.

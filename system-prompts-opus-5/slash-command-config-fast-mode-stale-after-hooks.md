@@ -5,4 +5,4 @@ description: >-
   because the model changed while PreModelSwitch hooks ran.
 ccVersion: 2.1.251
 -->
-
+Fast mode was not enabled: the model changed while PreModelSwitch hooks ran; try again

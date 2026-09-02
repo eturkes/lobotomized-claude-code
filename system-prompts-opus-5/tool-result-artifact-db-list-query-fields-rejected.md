@@ -5,4 +5,4 @@ description: >-
   or `query.order_by` are passed with db_op "list".
 ccVersion: 2.1.224
 -->
-
+`query.where` and `query.order_by` are only accepted with db_op "query".

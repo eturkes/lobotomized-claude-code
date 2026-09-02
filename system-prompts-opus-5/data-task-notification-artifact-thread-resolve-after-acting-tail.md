@@ -9,4 +9,4 @@ variables:
   - DATA_TASK_NOTIFICATION_ARTIFACT_THREAD_RESOLVE_AFTER_ACTING_TAIL_VAR_0
   - DATA_TASK_NOTIFICATION_ARTIFACT_THREAD_RESOLVE_AFTER_ACTING_TAIL_VAR_1
 -->
-
+ Once you have finished acting on the thread, resolve it (${DATA_TASK_NOTIFICATION_ARTIFACT_THREAD_RESOLVE_AFTER_ACTING_TAIL_VAR_0('Artifact tool, action "resolve"',()=>DATA_TASK_NOTIFICATION_ARTIFACT_THREAD_RESOLVE_AFTER_ACTING_TAIL_VAR_1("resolve"))}); leave it open only if the conversation is still active or the commenter still needs an answer beyond the posted reply.

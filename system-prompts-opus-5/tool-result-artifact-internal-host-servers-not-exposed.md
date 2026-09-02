@@ -5,4 +5,4 @@ description: >-
   exposed to pages as host servers.
 ccVersion: 2.1.246
 -->
-
+— the Claude app's own servers, which it never exposes to 

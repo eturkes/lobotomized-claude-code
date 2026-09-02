@@ -5,4 +5,4 @@ description: >-
   file lands under the session scratchpad.
 ccVersion: 2.1.239
 -->
-
+omit out_dir so the file lands under the scratchpad, where it can be read back.

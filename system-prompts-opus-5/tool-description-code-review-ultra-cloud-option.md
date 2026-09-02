@@ -7,4 +7,4 @@ ccVersion: 2.1.227
 variables:
   - TOOL_DESCRIPTION_CODE_REVIEW_ULTRA_CLOUD_OPTION_VAR_0
 -->
-
+; ultra: deep multi-agent review in the cloud${TOOL_DESCRIPTION_CODE_REVIEW_ULTRA_CLOUD_OPTION_VAR_0()?"":" (requires claude.ai account access)"}

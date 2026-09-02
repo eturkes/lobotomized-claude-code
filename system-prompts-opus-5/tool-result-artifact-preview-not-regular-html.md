@@ -5,4 +5,4 @@ description: >-
   regular .html page.
 ccVersion: 2.1.247
 -->
-
+preview needs a regular .html file; this path is a directory or special file

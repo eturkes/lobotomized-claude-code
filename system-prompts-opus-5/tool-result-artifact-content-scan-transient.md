@@ -5,4 +5,4 @@ description: >-
   content scan is temporarily unavailable.
 ccVersion: 2.1.246
 -->
-
+artifact content fetch blocked: the sandbox proxy's content scan was unavailable (HTTP 403). This is transient; retry.

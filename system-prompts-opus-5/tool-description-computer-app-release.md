@@ -5,4 +5,4 @@ description: >-
   per-app locks before mixing display-scope tools.
 ccVersion: 2.1.246
 -->
-
+ALL of this session's app locks — do this before switching back 

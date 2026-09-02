@@ -5,4 +5,4 @@ description: >-
   approve the lasting change.
 ccVersion: 2.1.251
 -->
-
+ This makes a lasting change during plan mode, so only you can approve this.

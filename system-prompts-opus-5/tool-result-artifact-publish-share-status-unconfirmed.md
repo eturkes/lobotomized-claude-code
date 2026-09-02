@@ -5,4 +5,4 @@ description: >-
   what makes the publish consent decision uncertain.
 ccVersion: 2.1.233
 -->
-
+; its share status could not be confirmed

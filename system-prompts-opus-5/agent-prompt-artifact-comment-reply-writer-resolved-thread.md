@@ -5,4 +5,4 @@ description: >-
   artifact thread without suggesting that it be reopened or resolved again.
 ccVersion: 2.1.227
 -->
-
+ This thread is resolved and a human explicitly sent a comment here to Claude: a short reply is wanted, and the thread stays resolved — do not suggest reopening or re-resolving it.

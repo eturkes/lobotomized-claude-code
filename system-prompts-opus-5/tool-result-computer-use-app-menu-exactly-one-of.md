@@ -5,4 +5,4 @@ description: >-
   list.
 ccVersion: 2.1.246
 -->
-
+app_menu: provide exactly one of `path` (array of titles to press) or `list` (menu title or null).

@@ -5,4 +5,4 @@ description: >-
   artifact database writes for the session.
 ccVersion: 2.1.228
 -->
-
+; approving covers database writes to any artifact for the rest of this session.

@@ -5,4 +5,4 @@ description: >-
   intercepted the click hit test.
 ccVersion: 2.1.246
 -->
-
+Could not verify the click target — the Claude overlay intercepted 

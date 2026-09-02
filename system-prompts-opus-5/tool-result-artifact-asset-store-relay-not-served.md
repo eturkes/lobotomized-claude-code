@@ -5,4 +5,4 @@ description: >-
   and deletes are not available from this kind of session.
 ccVersion: 2.1.247
 -->
-
+asset uploads, listing, and deletes aren't available from this kind of session; retrying from here will not help

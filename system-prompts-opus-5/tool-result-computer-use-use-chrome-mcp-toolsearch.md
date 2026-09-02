@@ -5,4 +5,4 @@ description: >-
   Claude-in-Chrome MCP tools and ToolSearch.
 ccVersion: 2.1.246
 -->
-
+ Use the Claude-in-Chrome MCP for browser interaction (tools named `mcp__claude-in-chrome__*`; load via ToolSearch if deferred).

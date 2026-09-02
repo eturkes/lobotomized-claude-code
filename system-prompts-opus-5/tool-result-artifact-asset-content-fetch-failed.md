@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_CONTENT_FETCH_FAILED_VAR_0
 -->
-
+the content fetch failed in transit, timed out, or exceeded the ${TOOL_RESULT_ARTIFACT_ASSET_CONTENT_FETCH_FAILED_VAR_0>>20} MiB limit

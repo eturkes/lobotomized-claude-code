@@ -5,4 +5,4 @@ description: >-
   session cannot read the asset store.
 ccVersion: 2.1.257
 -->
-
+`path` looks like an uploaded asset's id, but this session cannot read an artifact's asset store — pass a file's published path

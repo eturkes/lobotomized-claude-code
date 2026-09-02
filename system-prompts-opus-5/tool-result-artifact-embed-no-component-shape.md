@@ -5,4 +5,4 @@ description: >-
   (an element wrapping <template shadowrootmode>).
 ccVersion: 2.1.239
 -->
-
+that artifact has no component shape (an element wrapping <template shadowrootmode>)

@@ -5,4 +5,4 @@ description: >-
   locks before switching to display-scope tools.
 ccVersion: 2.1.246
 -->
-
+Release per-app background lock(s). With no arguments, releases 

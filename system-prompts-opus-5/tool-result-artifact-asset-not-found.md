@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_NOT_FOUND_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_ASSET_NOT_FOUND_VAR_0}: no such Artifact, or artifact assets are not available to this account or Artifact — the cases are deliberately indistinguishable; check the url with action "list"

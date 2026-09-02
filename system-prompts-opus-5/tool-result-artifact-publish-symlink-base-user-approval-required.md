@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_PUBLISH_SYMLINK_BASE_USER_APPROVAL_REQUIRED_VAR_0
 -->
-
+The publish base is a symlink to a different directory — approval must see the canonical target, which only the full consent dialog shows${TOOL_RESULT_ARTIFACT_PUBLISH_SYMLINK_BASE_USER_APPROVAL_REQUIRED_VAR_0}

@@ -7,4 +7,4 @@ ccVersion: 2.1.251
 variables:
   - SYSTEM_REMINDER_ARTIFACT_EDITOR_FOLLOW_UP_WITHDRAWN_ACTION_VAR_0
 -->
-
+handle the follow-up yourself — dispatch it with ${SYSTEM_REMINDER_ARTIFACT_EDITOR_FOLLOW_UP_WITHDRAWN_ACTION_VAR_0} or answer directly — and reply only after the result.

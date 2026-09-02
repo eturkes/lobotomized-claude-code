@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_COMPUTER_USE_SAVE_PANEL_TARGET_UNREADABLE_VAR_0
 -->
-
+Could not read the save sheet's current target folder and file name, so ${TOOL_RESULT_COMPUTER_USE_SAVE_PANEL_TARGET_UNREADABLE_VAR_0==="click"?"this click":"the save"} cannot be verified. Click Cancel, reopen the sheet, and retry.

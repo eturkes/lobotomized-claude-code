@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_COMMENT_REPLY_RELAY_HTTP_UNKNOWN_VAR_0
 -->
-
+comment reply outcome unknown (relay HTTP ${TOOL_RESULT_ARTIFACT_COMMENT_REPLY_RELAY_HTTP_UNKNOWN_VAR_0.status}) — it may have posted; re-read the comments before retrying

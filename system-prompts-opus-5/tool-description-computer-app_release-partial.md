@@ -5,4 +5,4 @@ description: >-
   window lock while keeping the others.
 ccVersion: 2.1.246
 -->
-
+release just one app or one window while keeping the others — 

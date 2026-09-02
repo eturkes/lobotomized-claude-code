@@ -5,4 +5,4 @@ description: >-
   versus window_id.
 ccVersion: 2.1.246
 -->
-
+`app` to release all of that app's windows, or neither to release everything.

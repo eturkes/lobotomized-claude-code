@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_READ_AGENT_OWNED_CHANNEL_VAR_0
   - TOOL_RESULT_ARTIFACT_READ_AGENT_OWNED_CHANNEL_VAR_1
 -->
-
+this artifact belongs to another ${TOOL_RESULT_ARTIFACT_READ_AGENT_OWNED_CHANNEL_VAR_0}'s Claude and has not been shared with this one — ask someone in the channel it was published from to open Share on it and ${TOOL_RESULT_ARTIFACT_READ_AGENT_OWNED_CHANNEL_VAR_1}.

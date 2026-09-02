@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_COMPUTER_USE_DESKTOP_SHELL_GRANT_COVERS_VAR_0
 -->
-
+grant covers all of them.${TOOL_RESULT_COMPUTER_USE_DESKTOP_SHELL_GRANT_COVERS_VAR_0} To interact with a different app, use open_application to bring it forward.

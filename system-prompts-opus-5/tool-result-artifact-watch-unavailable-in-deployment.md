@@ -5,4 +5,4 @@ description: >-
   deployment, so retrying will not help.
 ccVersion: 2.1.235
 -->
-
+Wake subscriptions are not provisioned in this deployment; retrying will not help.

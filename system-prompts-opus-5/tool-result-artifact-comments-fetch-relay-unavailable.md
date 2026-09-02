@@ -8,4 +8,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_COMMENTS_FETCH_RELAY_UNAVAILABLE_VAR_0
 -->
-
+comments fetch failed (this session's comment connection did not carry the read${TOOL_RESULT_ARTIFACT_COMMENTS_FETCH_RELAY_UNAVAILABLE_VAR_0!==0?`, HTTP ${TOOL_RESULT_ARTIFACT_COMMENTS_FETCH_RELAY_UNAVAILABLE_VAR_0}`:""}; nothing was read) — retry once; if it fails again, tell the user comments cannot be read from this session right now

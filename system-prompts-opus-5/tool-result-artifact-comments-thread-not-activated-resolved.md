@@ -5,4 +5,4 @@ description: >-
   cannot reply to.
 ccVersion: 2.1.251
 -->
-
+Claude: NOT activated (you cannot reply to it)

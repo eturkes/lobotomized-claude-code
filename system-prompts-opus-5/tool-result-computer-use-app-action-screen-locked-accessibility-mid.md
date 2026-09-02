@@ -5,4 +5,4 @@ description: >-
   Accessibility until unlocked.
 ccVersion: 2.1.246
 -->
-
+need the screen unlocked — macOS blocks window-level 

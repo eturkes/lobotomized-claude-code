@@ -5,4 +5,4 @@ description: >-
   no separate files, or listings are unsupported.
 ccVersion: 2.1.239
 -->
-
+this artifact is a single page with no separate files, or the artifact service does not offer file listings yet

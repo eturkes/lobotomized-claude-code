@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_PAGE_TOO_LARGE_VAR_1
   - TOOL_RESULT_ARTIFACT_PAGE_TOO_LARGE_VAR_2
 -->
-
+too large: ${TOOL_RESULT_ARTIFACT_PAGE_TOO_LARGE_VAR_0.ceil(TOOL_RESULT_ARTIFACT_PAGE_TOO_LARGE_VAR_1/1024/1024)}MB (max ${TOOL_RESULT_ARTIFACT_PAGE_TOO_LARGE_VAR_2/1024/1024}MB). Shrink the page — move large inline assets (base64 images, embedded datasets) out of it or split the content across several artifacts — then retry.

@@ -5,4 +5,4 @@ description: >-
   display name and bundle id.
 ccVersion: 2.1.246
 -->
-
+Case-insensitive substring matched against display name and bundle identifier. Omit to list everything.

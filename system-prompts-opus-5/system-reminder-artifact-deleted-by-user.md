@@ -9,4 +9,4 @@ variables:
   - SYSTEM_REMINDER_ARTIFACT_DELETED_BY_USER_VAR_0
   - SYSTEM_REMINDER_ARTIFACT_DELETED_BY_USER_VAR_1
 -->
-
+<${SYSTEM_REMINDER_ARTIFACT_DELETED_BY_USER_VAR_0} url="${SYSTEM_REMINDER_ARTIFACT_DELETED_BY_USER_VAR_1}"/> The user deleted this Artifact from /artifacts: its link no longer works for anyone, it cannot be restored, and it cannot be published to again — publishing the same file creates a new Artifact at a new URL. Do not pass this url to the Artifact tool.

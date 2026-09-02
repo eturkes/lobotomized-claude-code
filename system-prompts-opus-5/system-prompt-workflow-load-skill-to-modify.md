@@ -8,3 +8,5 @@ variables:
   - SYSTEM_PROMPT_WORKFLOW_LOAD_SKILL_TO_MODIFY_VAR_0
 -->
 
+
+If the user asks you to modify this workflow or write a new script, load the \`${SYSTEM_PROMPT_WORKFLOW_LOAD_SKILL_TO_MODIFY_VAR_0}\` skill first.

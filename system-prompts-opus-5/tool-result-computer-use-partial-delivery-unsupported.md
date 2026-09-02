@@ -5,4 +5,4 @@ description: >-
   action, so the model must not retype the whole string.
 ccVersion: 2.1.246
 -->
-
+ Part of the text was already typed before this refusal — take 

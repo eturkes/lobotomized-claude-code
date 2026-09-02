@@ -5,4 +5,4 @@ description: >-
   when frontmost.
 ccVersion: 2.1.246
 -->
-
+can't be controlled there — apps that only accept input when 

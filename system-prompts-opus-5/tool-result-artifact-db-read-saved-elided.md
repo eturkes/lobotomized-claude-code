@@ -9,3 +9,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_READ_SAVED_ELIDED_VAR_1
 -->
 
+[${TOOL_RESULT_ARTIFACT_DB_READ_SAVED_ELIDED_VAR_0} more saved ${TOOL_RESULT_ARTIFACT_DB_READ_SAVED_ELIDED_VAR_1(TOOL_RESULT_ARTIFACT_DB_READ_SAVED_ELIDED_VAR_0,"document")} not listed — size cap; each is at <that directory>/<doc_id>.json, any "~" in the id spelled "@"]

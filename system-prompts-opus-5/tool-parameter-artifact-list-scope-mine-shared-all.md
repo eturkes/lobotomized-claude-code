@@ -5,4 +5,4 @@ description: >-
   gated types/files/assets).
 ccVersion: 2.1.257
 -->
-
+list: which listing — 'mine' (default), 'shared', 'all'

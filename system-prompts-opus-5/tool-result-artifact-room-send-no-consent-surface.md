@@ -5,4 +5,4 @@ description: >-
   this session has none.
 ccVersion: 2.1.238
 -->
-
+room_send needs an interactive approval surface; this session has none. Do not retry the room_send in this session.

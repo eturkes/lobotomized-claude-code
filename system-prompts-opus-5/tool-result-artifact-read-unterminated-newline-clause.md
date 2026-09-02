@@ -7,4 +7,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_READ_UNTERMINATED_NEWLINE_CLAUSE_VAR_0
 -->
-
+; the last has no trailing newline, so \`wc -l\` reports ${TOOL_RESULT_ARTIFACT_READ_UNTERMINATED_NEWLINE_CLAUSE_VAR_0-1} — Read through line ${TOOL_RESULT_ARTIFACT_READ_UNTERMINATED_NEWLINE_CLAUSE_VAR_0} and leave the file as it is

@@ -6,4 +6,4 @@ description: >-
   served.
 ccVersion: 2.1.237
 -->
-
+artifact reads through the session gateway are not enabled for this session, or the artifact service no longer serves this version

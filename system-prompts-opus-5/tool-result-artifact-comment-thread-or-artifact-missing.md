@@ -5,4 +5,4 @@ description: >-
   surfaced to the model as the Artifact tool's error result.
 ccVersion: 2.1.232
 -->
-
+artifact or comment thread not found — it may have been deleted, or you may not have access

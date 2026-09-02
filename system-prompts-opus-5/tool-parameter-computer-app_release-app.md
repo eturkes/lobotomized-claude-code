@@ -5,4 +5,4 @@ description: >-
   omit to release everything.
 ccVersion: 2.1.246
 -->
-
+Release only this app's lock(s). Omit to release everything.

@@ -7,4 +7,4 @@ ccVersion: 2.1.257
 variables:
   - TOOL_RESULT_ARTIFACT_DESIGN_SKILL_NOT_LOADED_VAR_0
 -->
-
+Load the \`${TOOL_RESULT_ARTIFACT_DESIGN_SKILL_NOT_LOADED_VAR_0}\` skill first — it carries the page contract (title, libraries, size, theming, favicon) — then publish again.

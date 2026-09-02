@@ -4,3 +4,4 @@ description: Directs the agent to Edit rather than Write an existing keybindings
 ccVersion: 2.1.220
 -->
 
+- Use **Edit** tool for modifications to existing files

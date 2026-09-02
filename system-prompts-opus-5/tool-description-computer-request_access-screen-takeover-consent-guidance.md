@@ -5,4 +5,4 @@ description: >-
   display-scope action after background work
 ccVersion: 2.1.246
 -->
-
+raised automatically the first time a display-scope tool runs after background work; do not call request_access to obtain it.

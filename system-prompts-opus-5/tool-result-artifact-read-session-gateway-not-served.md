@@ -5,4 +5,4 @@ description: >-
   this session cannot fetch the artifact.
 ccVersion: 2.1.247
 -->
-
+artifact read failed (the session gateway does not serve this session)

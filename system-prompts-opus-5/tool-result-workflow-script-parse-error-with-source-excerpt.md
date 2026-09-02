@@ -10,4 +10,9 @@ variables:
   - TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_WITH_SOURCE_EXCERPT_VAR_1
   - TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_WITH_SOURCE_EXCERPT_VAR_2
 -->
+Script parse error: ${TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_WITH_SOURCE_EXCERPT_VAR_0}
 
+${TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_WITH_SOURCE_EXCERPT_VAR_1}
+${TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_WITH_SOURCE_EXCERPT_VAR_2}
+
+${"Workflow scripts must be plain JavaScript — common causes are TypeScript syntax (type annotations, interfaces, generics) and broken string quoting or escaping."}

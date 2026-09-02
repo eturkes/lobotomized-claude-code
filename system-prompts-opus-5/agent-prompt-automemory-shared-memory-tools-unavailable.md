@@ -10,4 +10,4 @@ variables:
   - AGENT_PROMPT_AUTOMEMORY_SHARED_MEMORY_TOOLS_UNAVAILABLE_VAR_1
   - AGENT_PROMPT_AUTOMEMORY_SHARED_MEMORY_TOOLS_UNAVAILABLE_VAR_2
 -->
-
+The ${AGENT_PROMPT_AUTOMEMORY_SHARED_MEMORY_TOOLS_UNAVAILABLE_VAR_0} / ${AGENT_PROMPT_AUTOMEMORY_SHARED_MEMORY_TOOLS_UNAVAILABLE_VAR_1} / ${AGENT_PROMPT_AUTOMEMORY_SHARED_MEMORY_TOOLS_UNAVAILABLE_VAR_2} tools are unavailable here, so skip anything the scope guidance marks as shared with the project — the main conversation saves those; never file them in the personal directory instead.

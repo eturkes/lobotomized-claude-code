@@ -5,4 +5,4 @@ description: >-
   credential taking precedence over a claude.ai account.
 ccVersion: 2.1.238
 -->
-
+the ANTHROPIC_API_KEY environment variable

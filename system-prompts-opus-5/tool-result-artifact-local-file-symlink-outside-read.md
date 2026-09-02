@@ -5,4 +5,4 @@ description: >-
   readable folders through a symbolic link.
 ccVersion: 2.1.251
 -->
-
+reaches, through a symbolic link, a file outside the folders this session can read

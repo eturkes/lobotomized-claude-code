@@ -5,4 +5,4 @@ description: >-
   processes and directs the user to handle them manually
 ccVersion: 2.1.246
 -->
-
+cannot be controlled even when granted: Windows UIPI blocks input from lower-integrity processes. If one appears, ask the user to handle it manually. 

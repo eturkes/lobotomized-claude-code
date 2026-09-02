@@ -5,4 +5,4 @@ description: >-
   available, emitted in describe_type results and the Artifact tool description.
 ccVersion: 2.1.246
 -->
-
+Starting a new Artifact from a type is not available in this session.

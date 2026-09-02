@@ -5,4 +5,4 @@ description: >-
   tool result.
 ccVersion: 2.1.246
 -->
-
+ If this is an elevated process (Task Manager, a UAC prompt, or 

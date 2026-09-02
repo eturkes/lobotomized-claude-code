@@ -5,4 +5,4 @@ description: >-
   open, because Return would confirm the save.
 ccVersion: 2.1.246
 -->
-
+Text may not contain tab or newline characters while a save sheet 

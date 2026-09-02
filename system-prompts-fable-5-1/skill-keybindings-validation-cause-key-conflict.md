@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+Key conflicts with terminal/OS reserved shortcut

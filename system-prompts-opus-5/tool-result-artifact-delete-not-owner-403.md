@@ -5,4 +5,4 @@ description: >-
   response, telling the model only the owner can delete it.
 ccVersion: 2.1.239
 -->
-
+Only the Artifact's owner can delete it.

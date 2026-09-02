@@ -7,4 +7,4 @@ ccVersion: 2.1.251
 variables:
   - SYSTEM_REMINDER_ARTIFACT_EDITOR_FOLLOW_UP_PREDATES_VAR_0
 -->
-
+it finished its earlier run first, so any result you received from ${SYSTEM_REMINDER_ARTIFACT_EDITOR_FOLLOW_UP_PREDATES_VAR_0} predates the follow-up

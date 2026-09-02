@@ -5,4 +5,4 @@ description: >-
   read the document back with action read_db
 ccVersion: 2.1.239
 -->
-
+This record of a database write is unreadable — read the document back with action "read_db" to see what it holds.

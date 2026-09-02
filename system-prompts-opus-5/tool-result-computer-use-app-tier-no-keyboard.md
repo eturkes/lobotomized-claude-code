@@ -5,4 +5,4 @@ description: >-
   keyboard shortcuts are disabled at the current tier.
 ccVersion: 2.1.246
 -->
-
+Typing and keyboard shortcuts are disabled at this tier. 

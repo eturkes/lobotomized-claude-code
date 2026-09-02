@@ -5,4 +5,4 @@ description: >-
   without file_path.
 ccVersion: 2.1.234
 -->
-
+action "upload_asset" requires `file_path` — the local file to upload.

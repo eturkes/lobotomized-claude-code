@@ -5,4 +5,4 @@ description: >-
   display-scope screenshot/click/type tools.
 ccVersion: 2.1.246
 -->
-
+use the display-scope tools (screenshot, left_click, type, …); 

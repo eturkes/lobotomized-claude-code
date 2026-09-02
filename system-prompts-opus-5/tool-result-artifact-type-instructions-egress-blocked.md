@@ -5,4 +5,4 @@ description: >-
   environment, interpolated into the artifact-read instructions notes.
 ccVersion: 2.1.246
 -->
-
+Artifact files can't be fetched directly from this environment, or the file is not there

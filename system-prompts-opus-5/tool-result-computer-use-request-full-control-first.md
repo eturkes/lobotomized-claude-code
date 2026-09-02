@@ -5,4 +5,4 @@ description: >-
   call request_full_control before display-scope tools will run.
 ccVersion: 2.1.246
 -->
-
+request_full_control first — once approved (for this 

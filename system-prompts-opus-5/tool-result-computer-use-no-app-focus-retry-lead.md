@@ -5,4 +5,4 @@ description: >-
   getFrontmostApp() is empty.
 ccVersion: 2.1.246
 -->
-
+ (No app currently has focus — if this is a momentary focus 

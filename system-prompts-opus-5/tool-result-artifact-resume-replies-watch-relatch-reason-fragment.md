@@ -7,4 +7,4 @@ description: >-
   also re-arms a live watch that was stopped earlier in the session.
 ccVersion: 2.1.235
 -->
-
+, and re-arms the live watch of this artifact (stopped earlier this session)

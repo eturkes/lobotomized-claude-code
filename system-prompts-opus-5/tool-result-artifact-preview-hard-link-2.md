@@ -5,4 +5,4 @@ description: >-
   with another hard link.
 ccVersion: 2.1.247
 -->
-
+file_path shares its contents with another hard link; preview a plain copy of the page.

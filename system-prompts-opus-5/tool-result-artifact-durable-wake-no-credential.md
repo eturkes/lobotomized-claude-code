@@ -5,4 +5,4 @@ description: >-
   artifact service credentials are unavailable.
 ccVersion: 2.1.227
 -->
-
+No credential is available for the artifact service, so the subscription could not be registered; retrying will not help until the session has credentials.

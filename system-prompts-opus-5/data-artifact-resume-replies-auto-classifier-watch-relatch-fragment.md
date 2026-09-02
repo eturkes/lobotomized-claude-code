@@ -5,4 +5,4 @@ description: >-
   call also resumes a watch that was stopped earlier in the session.
 ccVersion: 2.1.235
 -->
-
+; also resumes watching the artifact, whose watch was stopped earlier in this session

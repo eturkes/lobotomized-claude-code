@@ -5,4 +5,4 @@ description: >-
   desktop without taking focus.
 ccVersion: 2.1.246
 -->
-
+brought to the front (which would flash on-screen). The window appears on the user's desktop (visible to them, but the app does 

@@ -6,4 +6,4 @@ description: >-
   them.
 ccVersion: 2.1.237
 -->
-
+ Reading and replying to artifact comments is not enabled in this session: you cannot read or answer comments people leave on an artifact, so if the user expects that, say so plainly rather than offering to watch for them.

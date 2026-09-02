@@ -5,4 +5,4 @@ description: >-
   canvas-style editors.
 ccVersion: 2.1.246
 -->
-
+'focused' (writes to the app's currently-focused text element — 

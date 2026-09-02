@@ -5,4 +5,4 @@ description: >-
   tools may need a full-screen approval.
 ccVersion: 2.1.246
 -->
-
+the user may be asked to approve full-screen control first.

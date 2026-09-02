@@ -5,4 +5,4 @@ description: >-
   batch. Sibling of tool-result-artifact-db-batch-write-committed-sequential.
 ccVersion: 2.1.246
 -->
-
+committed atomically

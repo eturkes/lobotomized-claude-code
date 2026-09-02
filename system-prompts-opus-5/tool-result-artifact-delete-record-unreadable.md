@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_DELETE_RECORD_UNREADABLE_VAR_0
 -->
-
+This record of an Artifact deletion is unreadable — whether ${TOOL_RESULT_ARTIFACT_DELETE_RECORD_UNREADABLE_VAR_0} was deleted is unknown; action "list" shows what the user still has.

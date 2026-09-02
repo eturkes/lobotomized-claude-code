@@ -5,4 +5,4 @@ description: >-
   wake the session.
 ccVersion: 2.1.231
 -->
-
+Already holding a durable wake subscription for this artifact (publish wakes).

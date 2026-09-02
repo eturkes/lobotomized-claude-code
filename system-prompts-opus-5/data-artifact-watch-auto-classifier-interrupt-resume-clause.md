@@ -5,4 +5,4 @@ description: >-
   interrupt paused.
 ccVersion: 2.1.246
 -->
-
+ and, on an artifact the user can edit, wakes this session for comments sent to Claude, resuming the comment replies the user's interrupt paused

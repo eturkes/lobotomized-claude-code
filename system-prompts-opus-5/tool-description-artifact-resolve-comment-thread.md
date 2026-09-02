@@ -8,4 +8,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_RESOLVE_COMMENT_THREAD_VAR_0
   - TOOL_DESCRIPTION_ARTIFACT_RESOLVE_COMMENT_THREAD_VAR_1
 -->
-
+Mark one comment thread on a published artifact resolved — shown as resolved by Claude (${TOOL_DESCRIPTION_ARTIFACT_RESOLVE_COMMENT_THREAD_VAR_0(TOOL_DESCRIPTION_ARTIFACT_RESOLVE_COMMENT_THREAD_VAR_1)}); reversible (a person can reopen it).

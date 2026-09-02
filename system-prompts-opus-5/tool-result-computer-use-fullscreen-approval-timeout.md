@@ -5,4 +5,4 @@ description: >-
   in time.
 ccVersion: 2.1.246
 -->
-
+No response to the full-screen approval within the time limit. 

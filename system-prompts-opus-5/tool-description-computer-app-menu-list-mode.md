@@ -5,4 +5,4 @@ description: >-
   the menu bar itself.
 ccVersion: 2.1.246
 -->
-
+  • list: "File" — return the item titles under that menu; 

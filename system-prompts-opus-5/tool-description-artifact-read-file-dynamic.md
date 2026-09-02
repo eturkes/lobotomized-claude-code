@@ -9,4 +9,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_READ_FILE_DYNAMIC_VAR_0
   - TOOL_DESCRIPTION_ARTIFACT_READ_FILE_DYNAMIC_VAR_1
 -->
-
+Save one published file of a multi-file artifact${TOOL_DESCRIPTION_ARTIFACT_READ_FILE_DYNAMIC_VAR_0(TOOL_DESCRIPTION_ARTIFACT_READ_FILE_DYNAMIC_VAR_1)} at its published path — under the session scratchpad by default, anywhere else only with the user's approval each time; reads of the user's own artifacts need no separate approval, anyone else's ask once per artifact.

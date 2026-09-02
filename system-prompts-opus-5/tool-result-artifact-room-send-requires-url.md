@@ -5,4 +5,4 @@ description: >-
   the artifact url.
 ccVersion: 2.1.238
 -->
-
+action "room_send" requires `url` — the artifact's claude.ai URL from this session's publish result.

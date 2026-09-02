@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+Page-data reads from plan mode need a consent surface, and no one can answer the prompt in this session. Do not retry this read in this session.

@@ -5,4 +5,4 @@ description: >-
   type-create is off in the session.
 ccVersion: 2.1.246
 -->
-
+A new Artifact can't be started from this type in this session.

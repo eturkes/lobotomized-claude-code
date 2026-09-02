@@ -5,4 +5,4 @@ description: >-
   counted.
 ccVersion: 2.1.239
 -->
-
+; some of its comments could not be counted — action "comments" shows them

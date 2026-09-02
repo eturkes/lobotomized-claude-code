@@ -7,4 +7,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_PREVIEW_THEME_RENDERS_IDENTICAL_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_PREVIEW_THEME_RENDERS_IDENTICAL_VAR_0}: light and dark renders are identical — the page has no dark-theme styles

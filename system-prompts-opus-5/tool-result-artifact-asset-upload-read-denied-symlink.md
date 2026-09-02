@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_UPLOAD_READ_DENIED_SYMLINK_VAR_0
 -->
-
+Permission to read ${TOOL_RESULT_ARTIFACT_ASSET_UPLOAD_READ_DENIED_SYMLINK_VAR_0} has been denied (it resolves, through a symbolic link, to a path a Read rule denies).

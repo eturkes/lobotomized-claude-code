@@ -5,4 +5,4 @@ description: >-
   the resume_replies approval reason.
 ccVersion: 2.1.238
 -->
-
+ that were paused when the user interrupted the session (Ctrl+C or Stop)

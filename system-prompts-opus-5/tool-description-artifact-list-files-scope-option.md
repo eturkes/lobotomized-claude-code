@@ -5,4 +5,4 @@ description: >-
   artifact's published files.
 ccVersion: 2.1.257
 -->
-
+"files" (with `url`: that artifact's published files)

@@ -5,4 +5,4 @@ description: >-
   artifact url; returned to the model as the tool_result.
 ccVersion: 2.1.224
 -->
-
+This is not an artifact url Claude can write a database to. Use the artifact url from the list or publish result.

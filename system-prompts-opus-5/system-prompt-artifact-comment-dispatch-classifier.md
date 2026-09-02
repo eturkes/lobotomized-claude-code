@@ -5,4 +5,4 @@ description: >-
   dispatch classification.
 ccVersion: 2.1.227
 -->
-
+You classify artifact comment threads for dispatch. Output ONLY a JSON object of the shape {"lane":"act"} or {"lane":"pipeline"} — no prose, no code fences.

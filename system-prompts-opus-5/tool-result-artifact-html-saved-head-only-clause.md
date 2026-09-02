@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_ARTIFACT_HTML_SAVED_HEAD_ONLY_CLAUSE_VAR_0
 -->
-
+ — the head below is NOT the whole artifact: build any republish from that file${TOOL_RESULT_ARTIFACT_HTML_SAVED_HEAD_ONLY_CLAUSE_VAR_0}

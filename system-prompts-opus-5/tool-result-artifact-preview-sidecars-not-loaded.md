@@ -5,4 +5,4 @@ description: >-
   sidecar publishes are not loaded locally.
 ccVersion: 2.1.247
 -->
-
+ Preview renders the single page file; files published beside it are not loaded locally.

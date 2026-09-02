@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_ASSET_READ_EGRESS_BLOCKED_VAR_0
   - TOOL_RESULT_ARTIFACT_ASSET_READ_EGRESS_BLOCKED_VAR_1
 -->
-
+this environment's network allowlist blocks ${TOOL_RESULT_ARTIFACT_ASSET_READ_EGRESS_BLOCKED_VAR_0}, so the asset cannot be fetched (access to the artifact itself is fine). To allow it, add *.${TOOL_RESULT_ARTIFACT_ASSET_READ_EGRESS_BLOCKED_VAR_1} to the network allowlist this session runs behind (the sandbox's allowed domains, or the Claude desktop app's network settings).

@@ -5,4 +5,4 @@ description: >-
   watch runs over a live background connection to claude.ai.
 ccVersion: 2.1.239
 -->
-
+ (background connection to claude.ai for the session)

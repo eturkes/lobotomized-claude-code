@@ -6,4 +6,4 @@ description: >-
   discarded.
 ccVersion: 2.1.234
 -->
-
+the server answered for a different artifact than the one targeted, so its answer was not adopted

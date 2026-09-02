@@ -7,4 +7,4 @@ ccVersion: 2.1.234
 variables:
   - TOOL_RESULT_ARTIFACT_ASSET_UNAVAILABLE_TO_ACCOUNT_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_ASSET_UNAVAILABLE_TO_ACCOUNT_VAR_0}: artifact assets are not available to this account

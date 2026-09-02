@@ -5,4 +5,4 @@ description: >-
   display-scope scroll.
 ccVersion: 2.1.246
 -->
-
+display-scope `scroll`, or scroll vertically and rely on the app's auto-scroll.

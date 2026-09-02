@@ -5,4 +5,4 @@ description: >-
   Artifact types, narrowed by type_query.
 ccVersion: 2.1.257
 -->
-
+"types" (the published Artifact types this account can start from; `type_query` narrows it)

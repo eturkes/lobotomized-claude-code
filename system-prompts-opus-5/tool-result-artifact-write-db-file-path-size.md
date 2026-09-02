@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_WRITE_DB_FILE_PATH_SIZE_VAR_0
   - TOOL_RESULT_ARTIFACT_WRITE_DB_FILE_PATH_SIZE_VAR_1
 -->
-
+file_path is empty or larger than ${TOOL_RESULT_ARTIFACT_WRITE_DB_FILE_PATH_SIZE_VAR_0} bytes — write_db reads at most that much JSON, and the document must serialize to ${TOOL_RESULT_ARTIFACT_WRITE_DB_FILE_PATH_SIZE_VAR_1} bytes or fewer

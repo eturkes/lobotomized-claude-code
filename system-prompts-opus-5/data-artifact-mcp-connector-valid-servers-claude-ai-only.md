@@ -7,4 +7,4 @@ description: >-
   not.
 ccVersion: 2.1.239
 -->
-
+ Only connectors the user added in claude.ai are valid `server` values — this session's other built-in MCP servers are not.

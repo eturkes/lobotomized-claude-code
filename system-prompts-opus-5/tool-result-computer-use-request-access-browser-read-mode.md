@@ -5,4 +5,4 @@ description: >-
   in Chrome MCP for interaction.
 ccVersion: 2.1.246
 -->
-
+use them to interact with websites — you can only see what is already on 

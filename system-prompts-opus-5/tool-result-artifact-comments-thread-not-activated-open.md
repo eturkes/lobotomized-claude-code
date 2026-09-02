@@ -5,4 +5,4 @@ description: >-
   reply to or resolve.
 ccVersion: 2.1.251
 -->
-
+Claude: NOT activated (you cannot reply to or resolve it; it stays open)

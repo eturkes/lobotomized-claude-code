@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_REPL_ASYNC_DISPATCHED_QUEUED_BEHIND_VAR_0
   - TOOL_RESULT_REPL_ASYNC_DISPATCHED_QUEUED_BEHIND_VAR_1
 -->
-
+(dispatched #${TOOL_RESULT_REPL_ASYNC_DISPATCHED_QUEUED_BEHIND_VAR_0}, queued behind ${TOOL_RESULT_REPL_ASYNC_DISPATCHED_QUEUED_BEHIND_VAR_1} — the script is queued, not run; its outcome arrives later as an <event kind="repl-eval"> poll event. Do not re-issue this code.)

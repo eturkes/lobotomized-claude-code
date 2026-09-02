@@ -5,4 +5,4 @@ description: >-
   prompted during a scheduled unattended run.
 ccVersion: 2.1.246
 -->
-
+macOS Accessibility / Screen Recording permissions aren't granted, and the grant prompt can't be shown during a scheduled run. Grant them in the Claude desktop app, then re-run the task. (Retrying returns this same result.)

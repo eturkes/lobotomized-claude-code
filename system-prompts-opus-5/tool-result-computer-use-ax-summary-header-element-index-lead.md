@@ -5,4 +5,4 @@ description: >-
   app_click/app_type.
 ccVersion: 2.1.246
 -->
-
+Interactive elements (pass element_index to app_click/app_type to 

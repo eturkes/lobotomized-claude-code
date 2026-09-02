@@ -4,3 +4,4 @@ description: 'Keybindings-help skill validation table: the fix for an unknown co
 ccVersion: 2.1.221
 -->
 
+Use exact context names from the Available Contexts table

@@ -5,4 +5,4 @@ description: >-
   (default true).
 ccVersion: 2.1.246
 -->
-
+Sort running apps before installed-only apps. Default true.

@@ -5,4 +5,4 @@ description: >-
   field only names a type to describe.
 ccVersion: 2.1.246
 -->
-
+URL of an Artifact type (people may call a type a template or a starter).

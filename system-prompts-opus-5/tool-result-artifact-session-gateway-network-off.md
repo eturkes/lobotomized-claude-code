@@ -5,4 +5,4 @@ description: >-
   gateway so pages and files cannot be served.
 ccVersion: 2.1.257
 -->
-
+this cloud session's network access is turned off for the organization, or could not be confirmed, so the session gateway does not serve artifact pages or files to it

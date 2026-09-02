@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+rate limited — comment replies spend the user's budget; do not retry now

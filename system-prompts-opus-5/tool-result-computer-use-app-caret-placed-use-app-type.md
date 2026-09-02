@@ -5,4 +5,4 @@ description: >-
   type at the same coordinate.
 ccVersion: 2.1.246
 -->
-
+ — caret placed; use app_type with this same coordinate to insert text

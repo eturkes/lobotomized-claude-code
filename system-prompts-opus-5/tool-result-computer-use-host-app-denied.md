@@ -5,4 +5,4 @@ description: >-
   (would deadlock Accessibility).
 ccVersion: 2.1.246
 -->
-
+Cannot target the host application itself — the app-scoped executor 

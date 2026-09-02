@@ -5,4 +5,4 @@ description: >-
   a save into a protected shell-startup, ssh, or launch-agent location.
 ccVersion: 2.1.246
 -->
-
+shell-startup, ssh, or launch-agent location. Click Cancel (allowed) and start over.

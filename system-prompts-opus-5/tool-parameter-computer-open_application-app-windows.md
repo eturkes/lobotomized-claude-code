@@ -5,4 +5,4 @@ description: >-
   display names.
 ccVersion: 2.1.246
 -->
-
+Display name as it appears in the Start menu (e.g. "Notepad", "Microsoft Edge"). Resolved case-insensitively.

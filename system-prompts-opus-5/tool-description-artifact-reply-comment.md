@@ -8,4 +8,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_REPLY_COMMENT_VAR_0
   - TOOL_DESCRIPTION_ARTIFACT_REPLY_COMMENT_VAR_1
 -->
-
+Post a reply comment on a thread of a published artifact — the text will be published (${TOOL_DESCRIPTION_ARTIFACT_REPLY_COMMENT_VAR_0(TOOL_DESCRIPTION_ARTIFACT_REPLY_COMMENT_VAR_1)}).

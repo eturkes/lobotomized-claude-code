@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+stamp requires the live binding — the in-page approve rides the live read tool for its click-time freshness re-check; fill "live" per its gate or set "stamp": null

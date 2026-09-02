@@ -9,4 +9,4 @@ variables:
   - TOOL_DESCRIPTION_ARTIFACT_ROOM_SEND_VAR_1
   - TOOL_DESCRIPTION_ARTIFACT_ROOM_SEND_VAR_2
 -->
-
+Broadcast a live event to everyone currently viewing a published artifact${TOOL_DESCRIPTION_ARTIFACT_ROOM_SEND_VAR_0(TOOL_DESCRIPTION_ARTIFACT_ROOM_SEND_VAR_1)} (${TOOL_DESCRIPTION_ARTIFACT_ROOM_SEND_VAR_2}) — not stored, delivered at most once.

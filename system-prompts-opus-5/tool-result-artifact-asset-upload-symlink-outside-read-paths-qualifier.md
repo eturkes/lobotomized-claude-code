@@ -5,4 +5,4 @@ description: >-
   through a symlink outside the allowed read paths.
 ccVersion: 2.1.237
 -->
-
+ (it resolves, through a symbolic link, outside this session’s allowed read paths)

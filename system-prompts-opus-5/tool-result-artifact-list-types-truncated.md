@@ -5,4 +5,4 @@ description: >-
   returns.
 ccVersion: 2.1.246
 -->
-
+More types exist than one listing returns — pass `type_query` to narrow it.

@@ -4,3 +4,4 @@ description: 'Keybindings-help skill validation table: the fix for a missing wra
 ccVersion: 2.1.221
 -->
 
+Wrap bindings in `{ "bindings": [...] }`

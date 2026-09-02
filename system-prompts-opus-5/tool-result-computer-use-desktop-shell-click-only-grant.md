@@ -5,4 +5,4 @@ description: >-
   typing into the shell.
 ccVersion: 2.1.246
 -->
-
+ That grant is click-only: typing into the shell stays blocked.

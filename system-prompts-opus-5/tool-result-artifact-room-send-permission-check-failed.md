@@ -5,4 +5,4 @@ description: >-
   permission check.
 ccVersion: 2.1.238
 -->
-
+The permission check for this room_send failed before its approval could be shown, so nothing was sent. Retry after the underlying failure clears.

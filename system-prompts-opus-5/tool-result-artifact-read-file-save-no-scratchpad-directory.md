@@ -5,4 +5,4 @@ description: >-
   has no scratchpad, so every read_file save needs the user's approval.
 ccVersion: 2.1.239
 -->
-
+this session has no scratchpad directory, so every read_file save needs the user’s approval

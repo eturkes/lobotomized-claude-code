@@ -6,4 +6,4 @@ description: >-
   thread.
 ccVersion: 2.1.226
 -->
-
+The artifact WAS changed — review the change and the thread's existing reply.

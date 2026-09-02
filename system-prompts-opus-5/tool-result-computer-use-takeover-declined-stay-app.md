@@ -5,4 +5,4 @@ description: >-
   to stay on app_* tools or explain why full-screen is needed.
 ccVersion: 2.1.246
 -->
-
+next time a display-scope tool is called. Stay with the app_* tools, or explain to the user why full-screen control is needed before trying again.

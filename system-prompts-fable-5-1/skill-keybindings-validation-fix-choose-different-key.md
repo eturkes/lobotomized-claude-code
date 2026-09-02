@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+Choose a different key (see Reserved Shortcuts section)

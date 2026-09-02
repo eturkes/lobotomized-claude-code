@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_ARTIFACT_LIST_TYPES_MORE_NOT_SHOWN_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_LIST_TYPES_MORE_NOT_SHOWN_VAR_0} more not shown — pass \`type_query\` to narrow the listing.

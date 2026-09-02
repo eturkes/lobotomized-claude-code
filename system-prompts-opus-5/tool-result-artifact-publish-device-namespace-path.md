@@ -5,4 +5,4 @@ description: >-
   spelling.
 ccVersion: 2.1.234
 -->
-
+file_path: device- or NT-namespace paths cannot be published — spell the path plainly

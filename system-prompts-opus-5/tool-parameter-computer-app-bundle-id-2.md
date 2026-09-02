@@ -5,4 +5,4 @@ description: >-
   computer-use tools.
 ccVersion: 2.1.246
 -->
-
+Bundle identifier of the target application (e.g. 

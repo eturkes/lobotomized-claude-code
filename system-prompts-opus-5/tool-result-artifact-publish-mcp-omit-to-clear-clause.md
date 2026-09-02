@@ -5,4 +5,4 @@ description: >-
   pass {}) to publish without connector access.
 ccVersion: 2.1.246
 -->
-
+to publish without connector access leave "mcp" out of capabilities (pass capabilities: {} to clear a stored declaration)

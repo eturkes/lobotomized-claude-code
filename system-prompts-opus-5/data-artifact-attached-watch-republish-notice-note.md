@@ -6,4 +6,4 @@ description: >-
   elsewhere (another session, or someone saving from the page).
 ccVersion: 2.1.239
 -->
-
+ You'll be notified if it is republished elsewhere (another session, or someone saving from the page).

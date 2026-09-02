@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+thread_id must be a thread id from action "comments" (a lowercase UUID)

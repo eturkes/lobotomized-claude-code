@@ -5,4 +5,4 @@ description: >-
   in click mode and shell work belongs on Bash.
 ccVersion: 2.1.246
 -->
-
+required: these applications can only ever be granted in 'click' mode — you 

@@ -12,4 +12,4 @@ variables:
   - >-
     DATA_TASK_NOTIFICATION_ARTIFACT_AUTO_EDITED_REPLY_FAILED_ACKNOWLEDGEMENT_TAIL_VAR_0
 -->
-
+the artifact WAS changed, and the only reply standing is this session's acknowledgement${DATA_TASK_NOTIFICATION_ARTIFACT_AUTO_EDITED_REPLY_FAILED_ACKNOWLEDGEMENT_TAIL_VAR_0}. Review the change, then post the promised summary reply with acknowledge_duplicate: true — the duplicate guard refuses a plain follow-up — or revert.

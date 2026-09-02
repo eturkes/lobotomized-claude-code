@@ -5,4 +5,4 @@ description: >-
   enabled in this session, telling it to remove `type_url`.
 ccVersion: 2.1.237
 -->
-
+creating an Artifact from an Artifact type (`type_url`) is not available in this session — remove `type_url`

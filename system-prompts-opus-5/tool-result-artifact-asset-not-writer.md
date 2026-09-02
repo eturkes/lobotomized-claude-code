@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_ASSET_NOT_WRITER_VAR_0
   - TOOL_RESULT_ARTIFACT_ASSET_NOT_WRITER_VAR_1
 -->
-
+${TOOL_RESULT_ARTIFACT_ASSET_NOT_WRITER_VAR_0}: this account can open the Artifact but not edit it — only writers can ${TOOL_RESULT_ARTIFACT_ASSET_NOT_WRITER_VAR_1} assets

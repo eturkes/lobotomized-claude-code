@@ -7,4 +7,4 @@ ccVersion: 2.1.224
 variables:
   - TOOL_RESULT_ARTIFACT_DB_UPSTREAM_AUTH_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_DB_UPSTREAM_AUTH_VAR_0}: could not authenticate — the session's credential may need a refresh; try again

@@ -5,4 +5,4 @@ description: >-
   so nothing was published
 ccVersion: 2.1.246
 -->
-
+You hadn't viewed the live version of this artifact, so the publish was refused.

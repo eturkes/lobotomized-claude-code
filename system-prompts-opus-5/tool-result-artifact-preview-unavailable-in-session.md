@@ -5,4 +5,4 @@ description: >-
   the model as the Artifact preview tool_result.
 ccVersion: 2.1.247
 -->
-
+preview is not available in this session.

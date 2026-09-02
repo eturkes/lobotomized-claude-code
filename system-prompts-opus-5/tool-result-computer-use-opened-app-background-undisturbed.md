@@ -5,4 +5,4 @@ description: >-
   without disturbing the frontmost app.
 ccVersion: 2.1.246
 -->
-
+disturbed. Use app_list_windows or app_screenshot to act on it.

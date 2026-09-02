@@ -5,4 +5,4 @@ description: >-
   cannot be resolved.
 ccVersion: 2.1.234
 -->
-
+read_asset saves only to local directories — out_dir names a network path or cannot be resolved.

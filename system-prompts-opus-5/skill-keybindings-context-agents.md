@@ -5,4 +5,4 @@ description: >-
   (claude agents) is open.
 ccVersion: 2.1.257
 -->
-
+When the agents view (`claude agents`) is open

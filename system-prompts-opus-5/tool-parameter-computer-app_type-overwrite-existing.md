@@ -5,4 +5,4 @@ description: >-
   positional insert fallback would replace the whole field unless set true.
 ccVersion: 2.1.246
 -->
-
+Only relevant when positional insert (set AXSelectedText) doesn't work for this app and the field already has content 

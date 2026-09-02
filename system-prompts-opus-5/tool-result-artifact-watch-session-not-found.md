@@ -6,4 +6,4 @@ description: >-
   help.
 ccVersion: 2.1.235
 -->
-
+The server no longer has an active record of this remote session, so it cannot hold a wake subscription; retrying in this session will not help.

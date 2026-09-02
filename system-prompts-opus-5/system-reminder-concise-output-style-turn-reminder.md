@@ -5,4 +5,4 @@ description: >-
   output-style-active system reminder.
 ccVersion: 2.1.237
 -->
-
+Be concise: lead with the result, skip preamble and narration, keep only what the user needs.

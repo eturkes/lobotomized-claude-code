@@ -5,4 +5,4 @@ description: >-
   configuration and not to ask the user to reinstall.
 ccVersion: 2.1.246
 -->
-
+a problem with this install — do not ask the user to update or 

@@ -5,4 +5,4 @@ description: >-
   background app_* tools.
 ccVersion: 2.1.246
 -->
-
+to answer (unattended session). Only already-running granted apps are reachable, via the background app_* tools.

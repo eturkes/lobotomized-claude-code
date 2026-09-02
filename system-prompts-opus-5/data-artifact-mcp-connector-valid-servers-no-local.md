@@ -5,4 +5,4 @@ description: >-
   are valid and locally-configured MCP servers are not.
 ccVersion: 2.1.239
 -->
-
+ Only claude.ai connectors are valid — locally-configured MCP servers are not.

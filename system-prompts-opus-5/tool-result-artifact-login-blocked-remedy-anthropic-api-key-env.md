@@ -7,4 +7,4 @@ description: >-
   login.
 ccVersion: 2.1.238
 -->
-
+Unset the ANTHROPIC_API_KEY environment variable, or claude /logout then say "No" to the API key approval before login.

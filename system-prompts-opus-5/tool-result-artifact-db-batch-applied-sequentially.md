@@ -6,4 +6,4 @@ description: >-
   description.
 ccVersion: 2.1.246
 -->
-
+applied one at a time in order (this server has no batch write yet); a failure part-way leaves earlier entries written

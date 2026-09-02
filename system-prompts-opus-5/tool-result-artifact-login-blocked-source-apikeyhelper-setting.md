@@ -5,4 +5,4 @@ description: >-
   precedence over a claude.ai account.
 ccVersion: 2.1.238
 -->
-
+the apiKeyHelper setting

@@ -5,4 +5,4 @@ description: >-
   possibly deleted; a writer can check with list_assets.
 ccVersion: 2.1.234
 -->
-
+no asset with that id in this artifact (it may have been deleted) — a writer of the artifact can check the id with action "list_assets"

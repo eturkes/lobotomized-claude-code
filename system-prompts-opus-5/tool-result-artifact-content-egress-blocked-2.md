@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_CONTENT_EGRESS_BLOCKED_VAR_0
   - TOOL_RESULT_ARTIFACT_CONTENT_EGRESS_BLOCKED_VAR_1
 -->
-
+this environment's network allowlist blocks ${TOOL_RESULT_ARTIFACT_CONTENT_EGRESS_BLOCKED_VAR_0}, so the artifact's content cannot be fetched (your access to the artifact itself is fine — the permission check passed). ${TOOL_RESULT_ARTIFACT_CONTENT_EGRESS_BLOCKED_VAR_1}

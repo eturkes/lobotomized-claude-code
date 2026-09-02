@@ -7,4 +7,4 @@ ccVersion: 2.1.238
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_REPUBLISH_OPTION_SET_CHANGED_VAR_0
 -->
-
+the republish changes the option set of decided item "${TOOL_RESULT_ARTIFACT_PR_REVIEW_REPUBLISH_OPTION_SET_CHANGED_VAR_0.id}" — decided items must keep the options the writer clicked among

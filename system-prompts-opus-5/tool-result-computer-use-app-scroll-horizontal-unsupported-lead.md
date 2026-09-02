@@ -5,4 +5,4 @@ description: >-
   dx.
 ccVersion: 2.1.246
 -->
-
+app_scroll only supports vertical (dy). Horizontal scroll is 

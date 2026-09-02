@@ -5,4 +5,4 @@ description: >-
   and as the deferred-tool listing stand-in for prompt().
 ccVersion: 2.1.257
 -->
-
+read and reply to comment threads on a published artifact; watch it for republishes

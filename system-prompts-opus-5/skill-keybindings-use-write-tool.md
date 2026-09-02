@@ -4,3 +4,4 @@ description: Directs the agent to Write only when the keybindings file does not 
 ccVersion: 2.1.220
 -->
 
+- Use **Write** tool only if the file does not exist yet

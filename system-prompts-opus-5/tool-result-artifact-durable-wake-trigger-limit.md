@@ -5,4 +5,4 @@ description: >-
   trigger limit has been reached.
 ccVersion: 2.1.227
 -->
-
+This session already holds the maximum number of webhook triggers (10); unwatch an artifact to free one.

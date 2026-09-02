@@ -5,4 +5,4 @@ description: >-
   be given by its resolved path.
 ccVersion: 2.1.234
 -->
-
+file_path: this source cannot be safely verified — publish the file by its resolved path

@@ -5,4 +5,4 @@ description: >-
   how that action is spelled.
 ccVersion: 2.1.257
 -->
-
+as the read itself — `action`: "get", "list" or "query"

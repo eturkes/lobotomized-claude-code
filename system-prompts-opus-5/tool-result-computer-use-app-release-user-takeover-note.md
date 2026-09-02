@@ -5,4 +5,4 @@ description: >-
   is backed off.
 ccVersion: 2.1.246
 -->
-
+ Note: the user had clicked into this app, taking it over — 

@@ -5,4 +5,4 @@ description: >-
   how to stop them again for one artifact or for the whole session.
 ccVersion: 2.1.234
 -->
-
+If this wasn't intended, kill the task again to stop them for this artifact, or use the kill-all-agents gesture to disarm auto-replies for the whole session.

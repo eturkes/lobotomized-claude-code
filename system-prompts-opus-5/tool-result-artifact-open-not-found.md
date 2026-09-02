@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_OPEN_NOT_FOUND_VAR_0
   - TOOL_RESULT_ARTIFACT_OPEN_NOT_FOUND_VAR_1
 -->
-
+No Artifact at ${TOOL_RESULT_ARTIFACT_OPEN_NOT_FOUND_VAR_0} that the user can see — it may have been deleted, or it has not been shared with them. ${TOOL_RESULT_ARTIFACT_OPEN_NOT_FOUND_VAR_1}

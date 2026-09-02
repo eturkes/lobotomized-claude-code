@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_COMPUTER_USE_FILE_DIALOG_MULTI_KEY_VAR_0
   - TOOL_RESULT_COMPUTER_USE_FILE_DIALOG_MULTI_KEY_VAR_1
 -->
-
+Key sequence "${TOOL_RESULT_COMPUTER_USE_FILE_DIALOG_MULTI_KEY_VAR_0.chord}" presses more than one key. While ${TOOL_RESULT_COMPUTER_USE_FILE_DIALOG_MULTI_KEY_VAR_1}, press one key at a time so each keystroke can be checked against where focus is.

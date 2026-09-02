@@ -5,4 +5,4 @@ description: >-
   request_access first if it is not.
 ccVersion: 2.1.246
 -->
-
+"com.apple.TextEdit"). Must be in the granted-applications list — 

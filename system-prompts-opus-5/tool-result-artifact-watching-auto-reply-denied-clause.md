@@ -5,4 +5,4 @@ description: >-
   auto-reply.
 ccVersion: 2.1.246
 -->
-
+a permission rule or setting blocked the last comment's auto-reply (no notice); later comments are still checked

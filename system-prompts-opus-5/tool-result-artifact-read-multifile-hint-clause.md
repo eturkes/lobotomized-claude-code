@@ -5,4 +5,4 @@ description: >-
   list_files/read_file for a multi-file artifact's published files.
 ccVersion: 2.1.239
 -->
-
+; its published files are listed by action "list_files" and saved by "read_file"

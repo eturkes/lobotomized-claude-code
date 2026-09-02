@@ -6,4 +6,4 @@ description: >-
   the file first.
 ccVersion: 2.1.234
 -->
-
+file_path reaches its file through a symbolic link that resolves somewhere this session may not read without asking — upload the file by its resolved path, or copy it under the working directory first

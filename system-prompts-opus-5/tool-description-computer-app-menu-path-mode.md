@@ -5,4 +5,4 @@ description: >-
   the leaf item.
 ccVersion: 2.1.246
 -->
-
+  • path: ["File", "Export as PDF…"] — walk the menu bar by title 

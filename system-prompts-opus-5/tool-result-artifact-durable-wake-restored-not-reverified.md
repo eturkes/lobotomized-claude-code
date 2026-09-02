@@ -5,4 +5,4 @@ description: >-
   subscription was restored after a session restart.
 ccVersion: 2.1.239
 -->
-
+ It was restored after this session restarted and has not been re-verified since.

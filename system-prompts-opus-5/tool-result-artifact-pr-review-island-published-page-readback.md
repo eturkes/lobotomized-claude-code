@@ -8,4 +8,4 @@ ccVersion: 2.1.238
 variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_ISLAND_PUBLISHED_PAGE_READBACK_VAR_0
 -->
-
+the ${TOOL_RESULT_ARTIFACT_PR_REVIEW_ISLAND_PUBLISHED_PAGE_READBACK_VAR_0.id} island carries the server's element id — this is the published page read back, not your local copy; republish from the HTML (or payload) you authored, never from bytes you read

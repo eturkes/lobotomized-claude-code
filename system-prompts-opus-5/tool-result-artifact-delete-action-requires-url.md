@@ -5,4 +5,4 @@ description: >-
   `url`.
 ccVersion: 2.1.239
 -->
-
+action "delete" requires `url` — the claude.ai URL of the Artifact to delete (the publish result has it; action: "list" shows earlier ones).

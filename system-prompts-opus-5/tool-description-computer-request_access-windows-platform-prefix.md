@@ -5,4 +5,4 @@ description: >-
   description
 ccVersion: 2.1.246
 -->
-
+This computer is running Windows. The file manager is "File Explorer" (not Finder). 

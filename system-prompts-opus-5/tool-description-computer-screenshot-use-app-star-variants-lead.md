@@ -5,4 +5,4 @@ description: >-
   app_* variants instead of taking over the screen.
 ccVersion: 2.1.246
 -->
-
+ To act on one application without taking over the screen, use the 

@@ -7,4 +7,4 @@ ccVersion: 2.1.227
 variables:
   - TOOL_RESULT_ARTIFACT_COMMENT_THREAD_RESOLVED_VAR_0
 -->
-
+Marked comment thread ${TOOL_RESULT_ARTIFACT_COMMENT_THREAD_RESOLVED_VAR_0??"(id unreadable)"} resolved.

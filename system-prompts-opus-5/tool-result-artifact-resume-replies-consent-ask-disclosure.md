@@ -6,4 +6,4 @@ description: >-
   replies
 ccVersion: 2.1.234
 -->
-
+Resuming re-arms the live watch and lets Claude post public replies to new to-Claude comments unattended, for the rest of this session. Deny this if you did not ask for it

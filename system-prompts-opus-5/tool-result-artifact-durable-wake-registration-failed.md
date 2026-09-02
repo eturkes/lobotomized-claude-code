@@ -5,4 +5,4 @@ description: >-
   unspecified reason.
 ccVersion: 2.1.227
 -->
-
+Could not register a durable wake subscription; publishing and reading still work.

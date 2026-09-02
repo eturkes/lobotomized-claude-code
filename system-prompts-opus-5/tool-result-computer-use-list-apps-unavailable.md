@@ -5,4 +5,4 @@ description: >-
   implementation.
 ccVersion: 2.1.246
 -->
-
+list_apps is not available on this platform.

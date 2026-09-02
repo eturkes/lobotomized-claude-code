@@ -7,4 +7,4 @@ description: >-
   the tool_result.
 ccVersion: 2.1.239
 -->
-
+this published path carries a name the file-edit safety rules screen even inside the scratchpad (a git or bare-repository layout, hook, tool or agent configuration directories), so saving it needs the user’s approval

@@ -8,4 +8,4 @@ ccVersion: 2.1.233
 variables:
   - TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_NO_LOCATION_VAR_0
 -->
-
+Script parse error: ${TOOL_RESULT_WORKFLOW_SCRIPT_PARSE_ERROR_NO_LOCATION_VAR_0}. ${"Workflow scripts must be plain JavaScript — common causes are TypeScript syntax (type annotations, interfaces, generics) and broken string quoting or escaping."}

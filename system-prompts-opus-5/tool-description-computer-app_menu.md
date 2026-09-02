@@ -5,4 +5,4 @@ description: >-
   in the background, with path and list modes.
 ccVersion: 2.1.246
 -->
-
+Reach the menu bar of one granted application without bringing it to the front. Two modes:

@@ -7,4 +7,4 @@ description: >-
   /login.
 ccVersion: 2.1.238
 -->
-
+Run /logout to clear the saved key.

@@ -6,4 +6,4 @@ description: >-
   asset uploads and live docs are unavailable.
 ccVersion: 2.1.239
 -->
-
+This eval run stubs artifact publishing locally and has no artifact control plane: only publishing (the default action) is available here — list, delete, comments, replies, watches, database writes, asset uploads, and live docs are not.

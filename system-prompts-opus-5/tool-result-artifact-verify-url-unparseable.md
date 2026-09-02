@@ -5,4 +5,4 @@ description: >-
   diagnostics can be read from.
 ccVersion: 2.1.238
 -->
-
+This is not an artifact url Claude can read diagnostics from. Use the artifact url from the list or publish result.

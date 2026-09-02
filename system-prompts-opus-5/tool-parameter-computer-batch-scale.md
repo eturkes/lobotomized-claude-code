@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_PARAMETER_COMPUTER_BATCH_SCALE_VAR_0
 -->
-
+For screenshot/zoom only. ${TOOL_PARAMETER_COMPUTER_BATCH_SCALE_VAR_0}

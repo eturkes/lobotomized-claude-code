@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ATOMIC_NOTHING_WRITTEN_VAR_0
 -->
-
+${TOOL_RESULT_ARTIFACT_DB_BATCH_WRITE_ATOMIC_NOTHING_WRITTEN_VAR_0}; the batch is atomic, so nothing was written

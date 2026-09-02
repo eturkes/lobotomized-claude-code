@@ -6,4 +6,4 @@ description: >-
   thread); posted into the comment thread when chosen.
 ccVersion: 2.1.235
 -->
-
+Got it. I’m revising the Artifact now and will reply here when it’s done.

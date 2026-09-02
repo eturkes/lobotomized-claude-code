@@ -5,4 +5,4 @@ description: >-
   snapshot exists to search.
 ccVersion: 2.1.246
 -->
-
+Call app_screenshot first — app_ax_find searches the elements 

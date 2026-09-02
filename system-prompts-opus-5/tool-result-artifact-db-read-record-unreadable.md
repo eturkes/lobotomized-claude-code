@@ -5,4 +5,4 @@ description: >-
   re-run action read_db
 ccVersion: 2.1.239
 -->
-
+This record of a database read is unreadable — run action "read_db" again for the documents as they stand.

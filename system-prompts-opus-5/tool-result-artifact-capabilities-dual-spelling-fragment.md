@@ -5,4 +5,4 @@ description: >-
   being two spellings of one capability.
 ccVersion: 2.1.232
 -->
-
+spellings of the same capability — with different configs. 

@@ -5,4 +5,4 @@ description: >-
   editing, so it must screenshot and retry.
 ccVersion: 2.1.246
 -->
-
+Could not verify which document this window is editing. Take a fresh screenshot and retry.

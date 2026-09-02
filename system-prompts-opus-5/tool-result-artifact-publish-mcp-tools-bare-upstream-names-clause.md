@@ -5,4 +5,4 @@ description: >-
   bare upstream tool names.
 ccVersion: 2.1.246
 -->
-
+, and "tools" takes the bare upstream tool names

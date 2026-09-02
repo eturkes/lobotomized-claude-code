@@ -5,4 +5,4 @@ description: >-
   before confirmation, telling the model nothing was deleted
 ccVersion: 2.1.239
 -->
-
+The permission check for this delete failed before the confirmation could be shown, so nothing was deleted. Retry after the underlying failure clears.

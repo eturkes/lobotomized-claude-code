@@ -5,4 +5,4 @@ description: >-
   how that action is spelled.
 ccVersion: 2.1.257
 -->
-
+as the write itself — `action`: "set", "update", "delete" or "batch"

@@ -5,4 +5,4 @@ description: >-
   this session.
 ccVersion: 2.1.238
 -->
-
+The server does not offer wake subscriptions to this session, so none was registered; retrying will not help while that holds.

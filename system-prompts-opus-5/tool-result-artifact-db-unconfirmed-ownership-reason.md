@@ -5,4 +5,4 @@ description: >-
   database whose ownership could not be confirmed.
 ccVersion: 2.1.237
 -->
-
+an artifact database whose ownership couldn't be confirmed

@@ -6,4 +6,4 @@ description: >-
   into the conversation.
 ccVersion: 2.1.257
 -->
-
+titles, descriptions and links of Artifacts other people in the organization published will be read into the conversation

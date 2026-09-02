@@ -5,4 +5,4 @@ description: >-
   the time limit.
 ccVersion: 2.1.246
 -->
-
+No response to the screen-takeover card within the time limit. It's a separate full-screen prompt from 

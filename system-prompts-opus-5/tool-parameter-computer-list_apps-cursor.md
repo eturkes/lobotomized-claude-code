@@ -5,4 +5,4 @@ description: >-
   nextCursor.
 ccVersion: 2.1.246
 -->
-
+Opaque pagination cursor from a previous call's nextCursor. Omit for the first page.

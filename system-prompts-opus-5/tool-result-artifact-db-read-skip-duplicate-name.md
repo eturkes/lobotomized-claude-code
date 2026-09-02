@@ -5,4 +5,4 @@ description: >-
   skipped as case-insensitive duplicate file names.
 ccVersion: 2.1.246
 -->
-
+names an earlier document in this page, or a differently-cased file already in the directory, took once letter case is ignored and "~" is spelled "@"

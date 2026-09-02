@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_DELETE_UNCONFIRMED_RETRY_VAR_0
 -->
-
+Couldn't confirm the delete (HTTP ${TOOL_RESULT_ARTIFACT_DELETE_UNCONFIRMED_RETRY_VAR_0.status}) — the Artifact may already be unreachable; retry once.

@@ -5,4 +5,4 @@ description: >-
   screen.
 ccVersion: 2.1.246
 -->
-
+display-scope call takes over the screen with the user's approval.

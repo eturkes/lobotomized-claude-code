@@ -5,4 +5,4 @@ description: >-
   being preloaded.
 ccVersion: 2.1.238
 -->
-
+Environment and repository details are resolved when the skill is actually run.

@@ -5,4 +5,4 @@ description: >-
   debugger, stopping preview and surfacing in the tool_result.
 ccVersion: 2.1.247
 -->
-
+part of the page started outside the preview sandbox; preview stopped

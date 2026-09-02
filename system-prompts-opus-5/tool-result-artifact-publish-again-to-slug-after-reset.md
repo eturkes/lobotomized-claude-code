@@ -7,4 +7,4 @@ ccVersion: 2.1.238
 variables:
   - TOOL_RESULT_ARTIFACT_PUBLISH_AGAIN_TO_SLUG_AFTER_RESET_VAR_0
 -->
-
+Publish again to slug ${TOOL_RESULT_ARTIFACT_PUBLISH_AGAIN_TO_SLUG_AFTER_RESET_VAR_0} after the reset.

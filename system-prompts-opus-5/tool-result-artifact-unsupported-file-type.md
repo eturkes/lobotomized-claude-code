@@ -8,4 +8,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_UNSUPPORTED_FILE_TYPE_VAR_0
 -->
-
+unsupported file type: ${TOOL_RESULT_ARTIFACT_UNSUPPORTED_FILE_TYPE_VAR_0||"(none)"} — Artifact publishes an .html page.

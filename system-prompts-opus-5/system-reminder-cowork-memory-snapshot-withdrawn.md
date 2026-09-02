@@ -5,4 +5,4 @@ description: >-
   disregard the previous memory snapshot.
 ccVersion: 2.1.247
 -->
-
+The previous memory snapshot was withdrawn; disregard it.

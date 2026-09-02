@@ -8,4 +8,4 @@ variables:
   - TOOL_RESULT_COMPUTER_USE_APP_ALREADY_RUNNING_REACHABLE_VAR_0
   - TOOL_RESULT_COMPUTER_USE_APP_ALREADY_RUNNING_REACHABLE_VAR_1
 -->
-
+${TOOL_RESULT_COMPUTER_USE_APP_ALREADY_RUNNING_REACHABLE_VAR_0(TOOL_RESULT_COMPUTER_USE_APP_ALREADY_RUNNING_REACHABLE_VAR_1)} is already running with a reachable window. Use the app_* tools to act on it in the background. If those returned 'unsupported' or 'ineffective' for what you need, 

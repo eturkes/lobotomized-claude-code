@@ -5,4 +5,4 @@ description: >-
   one tab.
 ccVersion: 2.1.246
 -->
-
+Claude in Chrome: a browser_batch must act on one tab. Pass the same tabId on every action.

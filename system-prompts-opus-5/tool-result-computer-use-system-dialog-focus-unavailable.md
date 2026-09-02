@@ -5,4 +5,4 @@ description: >-
   system Open/Save dialog is up.
 ccVersion: 2.1.246
 -->
-
+the user is currently working in a system dialog (an Open/Save 

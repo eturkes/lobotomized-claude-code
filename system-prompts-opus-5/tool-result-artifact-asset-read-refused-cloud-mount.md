@@ -5,4 +5,4 @@ description: >-
   session, or the artifact was unshared or taken down.
 ccVersion: 2.1.234
 -->
-
+the cloud session's artifact mount refused the read — asset reads may not be enabled for this session, or the artifact was unshared or taken down

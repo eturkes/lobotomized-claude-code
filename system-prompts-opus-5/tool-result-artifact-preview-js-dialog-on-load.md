@@ -7,4 +7,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_PREVIEW_JS_DIALOG_ON_LOAD_VAR_0
 -->
-
+the page opened a JavaScript dialog (${TOOL_RESULT_ARTIFACT_PREVIEW_JS_DIALOG_ON_LOAD_VAR_0}) on load; the published viewer never shows one

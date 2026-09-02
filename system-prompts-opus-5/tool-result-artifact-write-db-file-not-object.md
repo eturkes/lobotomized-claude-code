@@ -5,4 +5,4 @@ description: >-
   object document.
 ccVersion: 2.1.237
 -->
-
+file_path must hold a JSON object — an array, string, number, boolean, or null cannot be a document

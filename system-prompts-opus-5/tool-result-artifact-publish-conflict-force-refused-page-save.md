@@ -6,4 +6,4 @@ description: >-
   version.
 ccVersion: 2.1.239
 -->
-
+ The server refuses force:true over a version saved from inside the page; only a publish built on that version is accepted.

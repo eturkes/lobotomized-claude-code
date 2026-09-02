@@ -5,4 +5,4 @@ description: >-
   hard-linked elsewhere on the machine.
 ccVersion: 2.1.237
 -->
-
+ (a hard link: the same file may also live elsewhere on this machine)

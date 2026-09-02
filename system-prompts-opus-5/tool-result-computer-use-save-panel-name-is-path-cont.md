@@ -5,4 +5,4 @@ description: >-
   typing refusal tool-result.
 ccVersion: 2.1.246
 -->
-
+leading ".." or "~" (those turn it into a path)

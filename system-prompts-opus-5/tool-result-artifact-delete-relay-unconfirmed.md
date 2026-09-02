@@ -7,4 +7,4 @@ ccVersion: 2.1.247
 variables:
   - TOOL_RESULT_ARTIFACT_DELETE_RELAY_UNCONFIRMED_VAR_0
 -->
-
+Couldn't confirm the delete (the cloud relay failed: ${TOOL_RESULT_ARTIFACT_DELETE_RELAY_UNCONFIRMED_VAR_0}) — it may have gone through; check with action "list" before telling the user or trying again.

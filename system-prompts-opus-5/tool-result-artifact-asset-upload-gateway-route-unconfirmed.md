@@ -5,4 +5,4 @@ description: >-
   the asset route is unconfirmed and nothing was uploaded.
 ccVersion: 2.1.246
 -->
-
+the session gateway could not confirm the asset route; nothing was uploaded — retry later

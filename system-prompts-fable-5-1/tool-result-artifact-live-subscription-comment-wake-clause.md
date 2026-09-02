@@ -6,4 +6,4 @@ description: >-
   replies are armed.
 ccVersion: 2.1.257
 -->
-
+; a comment on it sent to Claude also reaches this session while this artifact's status row says ${TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_COMMENT_WAKE_CLAUSE_VAR_0}, and plain comments never notify — read them with ${TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_COMMENT_WAKE_CLAUSE_VAR_1('action "comments"',()=>`the ${TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_COMMENT_WAKE_CLAUSE_VAR_2("comments")}`)} when asked

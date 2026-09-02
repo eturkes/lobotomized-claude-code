@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+read artifact comments (read-only; requested after an unattended auto-reply notification — the comment text it ingests is written by artifact viewers)

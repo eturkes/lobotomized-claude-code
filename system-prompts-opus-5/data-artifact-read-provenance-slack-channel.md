@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - DATA_ARTIFACT_READ_PROVENANCE_SLACK_CHANNEL_VAR_0
 -->
-
+published from your Slack channel (writer${DATA_ARTIFACT_READ_PROVENANCE_SLACK_CHANNEL_VAR_0?`; ${DATA_ARTIFACT_READ_PROVENANCE_SLACK_CHANNEL_VAR_0}`:""}); may contain others' edits

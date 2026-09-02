@@ -5,4 +5,4 @@ description: >-
   lowercase topic grammar.
 ccVersion: 2.1.238
 -->
-
+`topic` must start with a lowercase letter followed by up to 47 lowercase letters, digits, "_", "-" or "."

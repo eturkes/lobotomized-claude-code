@@ -5,4 +5,4 @@ description: >-
   thumbnail.
 ccVersion: 2.1.251
 -->
-
+the automatic screenshot is used instead
