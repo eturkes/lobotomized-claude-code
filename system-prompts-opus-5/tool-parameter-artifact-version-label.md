@@ -1,9 +1,11 @@
 <!--
-name: Artifact version label parameter
+name: 'Tool Parameter: Artifact Version Label'
 description: >-
-  Model-facing Artifact tool `label` input-schema param description (short
-  human-readable version name shown in the version picker). 2.1.193 reworded the
-  opening (fuzzy-miss restore).
-ccVersion: 2.1.193
+  The label input-schema param description for the Artifact tool, serialized
+  into the model's tool list.
+ccVersion: 2.1.257
+variables:
+  - TOOL_PARAMETER_ARTIFACT_VERSION_LABEL_VAR_0
+  - TOOL_PARAMETER_ARTIFACT_VERSION_LABEL_VAR_1
 -->
 
