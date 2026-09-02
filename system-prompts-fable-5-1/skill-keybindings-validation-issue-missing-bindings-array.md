@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-`keybindings.json must have a "bindings" array`

@@ -8,7 +8,3 @@ variables:
   - SYSTEM_PROMPT_CONCISE_OUTPUT_STYLE_VAR_0
 -->
 
-Keep your responses short and direct while doing the work just as thoroughly.
-
-# Concise Style Active
-${SYSTEM_PROMPT_CONCISE_OUTPUT_STYLE_VAR_0}
