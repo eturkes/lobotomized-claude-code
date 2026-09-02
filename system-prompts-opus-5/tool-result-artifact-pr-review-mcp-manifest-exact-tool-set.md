@@ -7,4 +7,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-the review page mcp manifest must declare exactly the live read tool and the approve tool, once each

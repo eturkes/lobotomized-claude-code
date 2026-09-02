@@ -5,4 +5,4 @@ description: >-
   to-Claude comments will wake the session.
 ccVersion: 2.1.231
 -->
-Already holding a durable wake subscription for this artifact (publish and to-Claude comment wakes).
+

@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-You decide and compose artifact comment-thread responses, optionally with an artifact edit. Output only the decision JSON object.

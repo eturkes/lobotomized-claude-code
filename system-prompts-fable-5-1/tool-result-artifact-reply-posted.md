@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_REPLY_POSTED_VAR_1
 -->
 
-Replied to comment thread ${TOOL_RESULT_ARTIFACT_REPLY_POSTED_VAR_0??"(id unreadable)"}${TOOL_RESULT_ARTIFACT_REPLY_POSTED_VAR_1!==void 0?` (comment ${TOOL_RESULT_ARTIFACT_REPLY_POSTED_VAR_1})`:""}.

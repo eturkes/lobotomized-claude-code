@@ -7,6 +7,4 @@ ccVersion: 2.1.257
 variables:
   - SKILL_ARTIFACT_DESIGN_PAGE_CONTRACT_VAR_0
 -->
-## Page contract — read before your first publish
 
-${SKILL_ARTIFACT_DESIGN_PAGE_CONTRACT_VAR_0()}

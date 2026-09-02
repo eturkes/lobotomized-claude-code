@@ -7,4 +7,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-with a stamp, live.shaPath must point at a head field (…head…sha or head_sha)

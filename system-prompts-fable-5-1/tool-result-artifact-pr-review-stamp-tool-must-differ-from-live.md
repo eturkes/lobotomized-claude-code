@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-stamp.tool must differ from live.tool

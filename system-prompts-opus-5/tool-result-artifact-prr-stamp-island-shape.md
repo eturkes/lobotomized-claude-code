@@ -8,4 +8,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-the prr-stamp island is not {stamp: ...}

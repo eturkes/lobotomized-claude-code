@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-reply only: the reply text. Plain text, at most 4096 bytes of UTF-8.

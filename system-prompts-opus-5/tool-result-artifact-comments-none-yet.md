@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-No comment threads on this artifact yet.

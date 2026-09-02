@@ -10,4 +10,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_PAST_ELIDED_VAR_1
 -->
 
-next_cursor: ${TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_PAST_ELIDED_VAR_0(TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_PAST_ELIDED_VAR_1)} — this cursor continues past the elided documents; re-run with a smaller \`query.limit\` before paging on, or the elided documents are skipped.

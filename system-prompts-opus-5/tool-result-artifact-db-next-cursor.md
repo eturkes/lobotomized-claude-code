@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_VAR_1
 -->
 
-next_cursor: ${TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_VAR_0(TOOL_RESULT_ARTIFACT_DB_NEXT_CURSOR_VAR_1)} — more documents exist; pass this as \`query.cursor\` to read the next page.

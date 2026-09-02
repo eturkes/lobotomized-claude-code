@@ -7,4 +7,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-stamp.tool names a merge, close, delete, pending, or otherwise non-approve action

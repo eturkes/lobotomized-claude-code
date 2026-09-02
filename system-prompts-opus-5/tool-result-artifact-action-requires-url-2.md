@@ -8,4 +8,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_ACTION_REQUIRES_URL_2_VAR_0
 -->
 
-\`url\` (the artifact's URL) is required for action "${TOOL_RESULT_ARTIFACT_ACTION_REQUIRES_URL_2_VAR_0}"

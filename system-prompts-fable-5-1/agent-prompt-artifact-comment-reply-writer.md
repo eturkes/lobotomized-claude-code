@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-You write single comment replies on artifact comment threads. Output only the reply text.

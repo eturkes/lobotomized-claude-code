@@ -9,4 +9,3 @@ variables:
   - TOOL_RESULT_ARTIFACT_PR_REVIEW_LIVE_INPUT_AMBIGUOUS_OWNER_REPO_KEY_VAR_0
 -->
 
-live.input.${TOOL_RESULT_ARTIFACT_PR_REVIEW_LIVE_INPUT_AMBIGUOUS_OWNER_REPO_KEY_VAR_0} names both the owner and repository key families — with a stamp, refuse ambiguity rather than guess which family pins it

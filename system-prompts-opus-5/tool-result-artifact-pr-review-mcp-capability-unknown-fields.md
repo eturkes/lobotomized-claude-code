@@ -6,4 +6,3 @@ description: >-
 ccVersion: 2.1.221
 -->
 
-the review page mcp capability carries unknown fields — only `servers` is allowed

@@ -10,4 +10,3 @@ variables:
   - DATA_TASK_NOTIFICATION_ARTIFACT_AUTO_REPLY_PIPELINE_DENIED_VAR_0
 -->
 
-Automatic replies or edits on artifact ${DATA_TASK_NOTIFICATION_ARTIFACT_AUTO_REPLY_PIPELINE_DENIED_VAR_0} are being blocked by a permission hook or content gate, or repeatedly refused by the session's configuration — recent attempts were refused or dropped after composing. Affected threads are paused; a successful auto-reply anywhere on this artifact resumes them.
