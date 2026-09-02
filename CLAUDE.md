@@ -16,6 +16,20 @@ Two per-model sets are maintained: `system-prompts-opus-5` (the **active** one �
 
 The README's "~60% leaner on every coding turn" claim is the bar. If your edits don't trend toward that ratio, you're not lobotomizing — you're just cosmeticking.
 
+### Fork scope: the three triggers
+
+The fork edits a prompt only when one of these fires. Everything else stays as inherited.
+
+1. **Correctness against the current binary.** Stale pristine text, a `${VAR}` that no longer exists, a wrong `ccVersion` anchor, a mis-bound `identifierMap` slot. Lands in both sets, always.
+2. **A fact about the user's workflow.** Feature unused, tool unregistered, gate that never fires. Model-independent, so it lands in both sets identically or in neither.
+3. **A fact about the model in that set.** CAPS response, narration and formatting defaults, per-digest calls. Per-set — divergence between the sets here is correct, not a bug to reconcile.
+
+**The fork does not re-litigate upstream's judgment calls.** Where upstream cut in one set and not the other, that asymmetry stays inherited unless trigger 1 or 2 fires. Reconciling the sets for tidiness is not a trigger. Measured on CC 2.1.257: the sets disagree on 47 of the 3,123 ids they both carry (19 asymmetric trims, 13 asymmetric wipes, 15 where both override the same prompt differently), and 46 of those 47 came from upstream.
+
+Trigger 2 is bounded by the conditionally-loaded rule below — "the user doesn't use this feature" justifies a wipe only for an unconditional prompt. Utility-model system prompts are the trap: the web-search, issue-title, NL-datetime and auto-mode-critique calls each carry their own system prompt, none of them appear on a coding turn, so wiping one saves nothing on the bar above and hands an empty system prompt to that call.
+
+Trigger 3 needs the set's card digest, and the paths named above (`~/dev/anthropic-reference/`) do not exist on this machine as of 2026-09-02. Until a digest is back on disk, a trigger-3 edit has no local authority to cite; treat that as a reason to fetch the prompting page fresh rather than to guess.
+
 ### The decision rule (read this every time)
 
 **For each load-bearing claim in a prompt: is it conveyed elsewhere (sibling override) OR a 4.7 default per Anthropic's guide OR a feature the user doesn't use? → cut it. Whatever unique signals remain → keep them. If nothing unique remains → full-wipe is the correct outcome.**
