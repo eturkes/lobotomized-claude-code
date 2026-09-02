@@ -5,4 +5,4 @@ description: >-
   slug grammar.
 ccVersion: 2.1.219
 -->
-
+data-choice must match the slug grammar.

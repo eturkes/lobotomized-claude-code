@@ -6,4 +6,4 @@ description: >-
   browser-selection option.
 ccVersion: 2.1.206
 -->
-
+If the user picks the final option, call switch_browser.

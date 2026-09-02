@@ -5,4 +5,4 @@ description: >-
   current group.
 ccVersion: 2.1.178
 -->
-
+Tab ID to list shortcuts from. Must be a tab in the current group.

@@ -5,4 +5,4 @@ description: >-
   referrerpolicy attribute.
 ccVersion: 2.1.219
 -->
-
+Remove the referrerpolicy attribute — the page keeps its default referrer policy.

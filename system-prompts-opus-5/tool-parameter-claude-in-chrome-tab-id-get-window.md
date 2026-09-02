@@ -5,4 +5,4 @@ description: >-
   current group.
 ccVersion: 2.1.178
 -->
-
+Tab ID to get the window for. Must be a tab in the current group.

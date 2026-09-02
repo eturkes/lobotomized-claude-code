@@ -8,3 +8,4 @@ variables:
   - DATA_SANDBOX_INSTALL_PERSISTENT_CA_FAILED_VAR_0
 -->
 
+The sandbox TLS inspection CA couldn't be created: ${DATA_SANDBOX_INSTALL_PERSISTENT_CA_FAILED_VAR_0}. Sandboxed HTTPS won't work — run /sandbox install again to retry.

@@ -6,4 +6,4 @@ description: >-
   into the model's Bash tool schema.
 ccVersion: 2.1.207
 -->
-
+This goes through the permission gate (a user prompt, or the auto-mode classifier when auto mode is active)

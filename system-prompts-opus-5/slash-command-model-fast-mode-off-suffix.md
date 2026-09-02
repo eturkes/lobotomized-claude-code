@@ -5,4 +5,4 @@ description: >-
   change, the sibling state fact to the fast-mode-on notice.
 ccVersion: 2.1.233
 -->
-
+ · Fast mode OFF

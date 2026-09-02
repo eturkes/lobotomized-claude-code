@@ -5,4 +5,4 @@ description: >-
   description when the user configured a guideline.
 ccVersion: 2.1.219
 -->
-
+A workflow size guideline is configured for this session:

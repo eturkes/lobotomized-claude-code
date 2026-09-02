@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_DESCRIPTION_COMPUTER_RIGHT_CLICK_VAR_0
 -->
-
+Right-click at the given coordinates. Opens a context menu in most applications. ${TOOL_DESCRIPTION_COMPUTER_RIGHT_CLICK_VAR_0}

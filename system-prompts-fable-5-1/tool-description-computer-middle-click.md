@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.246
 -->
 
+Middle-click (scroll-wheel click) at the given coordinates. ${TOOL_DESCRIPTION_COMPUTER_MIDDLE_CLICK_VAR_0}

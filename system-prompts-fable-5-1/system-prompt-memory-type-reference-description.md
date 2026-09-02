@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.178
 -->
 
+<description>Pointers to where up-to-date information lives in external systems (issue trackers, dashboards, channels) outside the project directory.</description>

@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - FRONTMOST_APPLICATION_ALLOWLIST_GUARD
 -->
-
+Release the left mouse button at the current cursor position. ${FRONTMOST_APPLICATION_ALLOWLIST_GUARD} Pairs with left_mouse_down; safe to call even if the button is not held.

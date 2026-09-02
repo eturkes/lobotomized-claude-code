@@ -8,3 +8,4 @@ variables:
   - TOOL_DESCRIPTION_COMPUTER_MOUSE_MOVE_VAR_0
 -->
 
+Move the mouse cursor without clicking. Useful for triggering hover states. ${TOOL_DESCRIPTION_COMPUTER_MOUSE_MOVE_VAR_0}

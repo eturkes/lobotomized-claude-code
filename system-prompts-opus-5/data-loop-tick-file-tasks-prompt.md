@@ -9,4 +9,14 @@ variables:
   - DATA_LOOP_TICK_FILE_TASKS_PROMPT_VAR_0
   - DATA_LOOP_TICK_FILE_TASKS_PROMPT_VAR_1
 -->
+# /loop tick — tasks from ${DATA_LOOP_TICK_FILE_TASKS_PROMPT_VAR_0.path}
 
+The user configured a loop-tasks file. Work through the tasks defined below; these are the instructions for this tick and every subsequent tick (the reminder on later fires refers back to this message).
+
+---
+
+${DATA_LOOP_TICK_FILE_TASKS_PROMPT_VAR_0.content}
+
+---
+
+${DATA_LOOP_TICK_FILE_TASKS_PROMPT_VAR_1}

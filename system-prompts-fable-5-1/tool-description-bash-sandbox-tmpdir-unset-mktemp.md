@@ -7,3 +7,4 @@ description: >-
 ccVersion: 2.1.221
 -->
 
+For temporary files, create a scratch directory with `mktemp -d` and reference it by absolute path. Do NOT assume `$TMPDIR` is set — the sandbox does not export it in this configuration.

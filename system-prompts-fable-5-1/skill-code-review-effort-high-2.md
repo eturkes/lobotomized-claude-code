@@ -17,4 +17,5 @@ variables:
   - PHASE_2_VERIFY_RECALL_BIASED
   - OUTPUT_FORMAT_FN
 -->
-
+You are reviewing for **recall** at high effort: catch every real bug a careful
+reviewer would catch in one sitting.

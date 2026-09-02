@@ -8,3 +8,4 @@ variables:
   - TOOL_DESCRIPTION_COMPUTER_DOUBLE_CLICK_VAR_0
 -->
 
+Double-click at the given coordinates. Selects a word in most text editors. ${TOOL_DESCRIPTION_COMPUTER_DOUBLE_CLICK_VAR_0}

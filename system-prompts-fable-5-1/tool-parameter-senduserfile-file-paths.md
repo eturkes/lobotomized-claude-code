@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.183
 -->
 
+File paths (absolute or relative to cwd) to send to the user.

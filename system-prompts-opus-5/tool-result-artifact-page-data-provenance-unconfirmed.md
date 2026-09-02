@@ -6,4 +6,4 @@ description: >-
   collaborators' content.
 ccVersion: 2.1.218
 -->
-
+Provenance: this session cannot confirm it published this version — it may include other collaborators' content.

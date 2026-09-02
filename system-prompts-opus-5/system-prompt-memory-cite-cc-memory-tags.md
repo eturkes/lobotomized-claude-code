@@ -5,4 +5,4 @@ description: >-
   <cc-memory> wrapping when citing a memory to the user.
 ccVersion: 2.1.224
 -->
-
+Whenever you use or cite content from a memory in communication with the user, wrap the entire sentence in <cc-memory filenames="{comma separated memory file names}">{sentence}</cc-memory> tags (never inside tool inputs).

@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.210
 -->
 
+_Result cap reached — the walk stopped at the repo cap; more may exist._

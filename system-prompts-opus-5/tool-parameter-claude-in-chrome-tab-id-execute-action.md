@@ -5,4 +5,4 @@ description: >-
   the current group.
 ccVersion: 2.1.178
 -->
-
+Tab ID to execute the action on. Must be a tab in the current group.

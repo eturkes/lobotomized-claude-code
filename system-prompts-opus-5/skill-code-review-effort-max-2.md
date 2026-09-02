@@ -8,4 +8,6 @@ ccVersion: 2.1.218
 variables:
   - EFFORT_LEVEL
 -->
-
+You are reviewing for **recall** at ${EFFORT_LEVEL==="max"?"maximum":"extra-high"} effort: catch every real bug. At
+this level, catching real bugs matters more than avoiding false positives.
+Err on the side of surfacing.

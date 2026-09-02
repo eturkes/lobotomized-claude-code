@@ -8,4 +8,4 @@ ccVersion: 2.1.224
 variables:
   - SYSTEM_PROMPT_MEMORY_SAVE_STEP1_EXAMPLE_NAMES_VAR_0
 -->
-
+**Step 1** — write the ${SYSTEM_PROMPT_MEMORY_SAVE_STEP1_EXAMPLE_NAMES_VAR_0} using this frontmatter format:

@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_LOOP_REARM_MONITOR_TOOL
   - TOOL_RESULT_LOOP_REARM_TASKSTOP_TOOL
 -->
-
+If you armed a ${TOOL_RESULT_LOOP_REARM_MONITOR_TOOL} for this loop, ${TOOL_RESULT_LOOP_REARM_TASKSTOP_TOOL} it now; otherwise nothing more to do this turn.

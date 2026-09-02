@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.211
 -->
 
+Navigate to a URL, or go forward/back in browser history.

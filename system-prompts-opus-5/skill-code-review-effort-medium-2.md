@@ -5,4 +5,5 @@ description: >-
   precision-biased, up to 8 findings
 ccVersion: 2.1.218
 -->
-
+You are reviewing for **precision** at medium effort: every finding you surface
+should be one a maintainer would act on.

@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_DESCRIPTION_COMPUTER_KEY_VAR_0
 -->
-
+Press a key or key combination (e.g. "return", "escape", "cmd+a", "ctrl+shift+tab"). ${TOOL_DESCRIPTION_COMPUTER_KEY_VAR_0} 

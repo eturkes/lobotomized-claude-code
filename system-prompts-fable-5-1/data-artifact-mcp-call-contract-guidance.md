@@ -12,4 +12,4 @@ variables:
   - DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_3
   - DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_4
 -->
-
+**Call contract** (runtime contract ${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_0.version}). The platform-served \`window.claude\` type definitions for this contract are extracted under \`${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_1}\`: ${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_0.files.map((DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_2)=>`\`${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_2}\``).join(", ")}. ${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_3} authoritative for this contract version over any remembered API shape. ${DATA_ARTIFACT_MCP_CALL_CONTRACT_GUIDANCE_VAR_4}

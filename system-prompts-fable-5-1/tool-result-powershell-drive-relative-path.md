@@ -10,4 +10,4 @@ variables:
   - TOOL_RESULT_POWERSHELL_DRIVE_RELATIVE_PATH_VAR_1
   - TOOL_RESULT_POWERSHELL_DRIVE_RELATIVE_PATH_VAR_2
 -->
-
+Path '${TOOL_RESULT_POWERSHELL_DRIVE_RELATIVE_PATH_VAR_0?TOOL_RESULT_POWERSHELL_DRIVE_RELATIVE_PATH_VAR_1:TOOL_RESULT_POWERSHELL_DRIVE_RELATIVE_PATH_VAR_2}' is drive-relative (resolves against the per-drive current directory, which cannot be statically validated) and requires manual approval

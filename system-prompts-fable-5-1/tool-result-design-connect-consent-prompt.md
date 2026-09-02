@@ -7,4 +7,4 @@ description: >-
   model.
 ccVersion: 2.1.201
 -->
-
+Connect to Claude Design? Claude can read and edit your Design projects from this tool. Change anytime at claude.ai/design/settings or with /design revoke.

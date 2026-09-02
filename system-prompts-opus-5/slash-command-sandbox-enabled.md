@@ -5,4 +5,4 @@ description: >-
   unsupported so no permission nuance can be stated.
 ccVersion: 2.1.233
 -->
-
+✓ Sandbox enabled

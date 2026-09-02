@@ -5,4 +5,4 @@ description: >-
   element.
 ccVersion: 2.1.219
 -->
-
+Link elements are not allowed — inline styles in the <style> block instead.

@@ -6,4 +6,4 @@ description: >-
   entry.
 ccVersion: 2.1.210
 -->
-
+Consecutive `noop: true` ticks are collapsed in the user's terminal view and tracked as a streak, so long quiet holds stay legible to the user without scrolling.

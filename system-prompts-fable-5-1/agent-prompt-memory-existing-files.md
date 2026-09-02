@@ -8,3 +8,7 @@ variables:
   - AGENT_PROMPT_MEMORY_EXISTING_FILES_VAR_0
 -->
 
+
+## Existing memory files
+
+${AGENT_PROMPT_MEMORY_EXISTING_FILES_VAR_0}

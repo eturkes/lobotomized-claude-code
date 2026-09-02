@@ -5,4 +5,4 @@ description: >-
   change that affects latency/quality expectations it may be asked about.
 ccVersion: 2.1.233
 -->
-
+ · Fast mode ON

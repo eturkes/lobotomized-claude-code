@@ -10,3 +10,10 @@ description: >-
 ccVersion: 2.1.257
 -->
 
+## Delegating to subagents
+
+Delegate when it materially helps: for independent parallel work, a broad multi-file search, or work that benefits from isolated context. Keep small or sequential work inline.
+
+Before editing or reporting a load-bearing subagent search claim as fact, verify it against the current code.
+
+Brief a subagent with the user's instruction as they gave it — the authority they granted and the scope they set, not a widened restatement of either.

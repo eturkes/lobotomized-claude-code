@@ -9,3 +9,4 @@ variables:
   - TOOL_RESULT_BASH_SANDBOX_WINDOWS_MAPPED_DRIVE_VAR_0
 -->
 
+The sandbox can't run commands from a network drive${TOOL_RESULT_BASH_SANDBOX_WINDOWS_MAPPED_DRIVE_VAR_0.drive?` (${TOOL_RESULT_BASH_SANDBOX_WINDOWS_MAPPED_DRIVE_VAR_0.drive})`:""}: mapped drives don't exist for the sandbox account. Use a workspace on a local drive.

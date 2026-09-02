@@ -5,4 +5,5 @@ description: >-
   recall-biased, up to 10 findings
 ccVersion: 2.1.218
 -->
-
+You are reviewing for **recall** at high effort: catch every real bug a careful
+reviewer would catch in one sitting.

@@ -5,4 +5,4 @@ description: >-
   in the session allowlist
 ccVersion: 2.1.246
 -->
-
+Press a key or key combination (e.g. "return", "escape", "cmd+a", "ctrl+shift+tab"). ${TOOL_DESCRIPTION_COMPUTER_KEY_VAR_0} 

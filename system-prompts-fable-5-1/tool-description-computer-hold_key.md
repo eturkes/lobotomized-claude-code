@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - FRONTMOST_APPLICATION_ALLOWLIST_GUARD
 -->
-
+Press and hold a key or key combination for the specified duration, then release. ${FRONTMOST_APPLICATION_ALLOWLIST_GUARD} System-level combos require the \`systemKeyCombos\` grant.

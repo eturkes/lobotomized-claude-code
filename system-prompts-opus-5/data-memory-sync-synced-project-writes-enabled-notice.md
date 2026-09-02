@@ -7,4 +7,4 @@ description: >-
   notice`.
 ccVersion: 2.1.218
 -->
-
+This file syncs to the shared synced project memory store.

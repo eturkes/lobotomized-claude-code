@@ -5,4 +5,4 @@ description: >-
   no such artifact exists for this account (deleted or unshared).
 ccVersion: 2.1.237
 -->
-
+no such artifact for this account (it was deleted, or it has not been shared with the user)

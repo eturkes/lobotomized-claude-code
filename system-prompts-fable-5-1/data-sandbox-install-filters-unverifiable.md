@@ -6,4 +6,4 @@ description: >-
   as <local-command-stdout> in a role:"user" message.
 ccVersion: 2.1.214
 -->
-
+Sandbox user and network filters installed (filters can't be verified from a non-elevated process)

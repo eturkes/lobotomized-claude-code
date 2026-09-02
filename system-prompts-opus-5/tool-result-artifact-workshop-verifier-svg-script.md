@@ -5,4 +5,4 @@ description: >-
   an SVG diagram.
 ccVersion: 2.1.219
 -->
-
+Remove it — scripts are not allowed inside SVG diagrams.

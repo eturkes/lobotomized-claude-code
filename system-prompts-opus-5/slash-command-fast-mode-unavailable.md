@@ -5,4 +5,4 @@ description: >-
   account or build, so it should not assume the mode change took effect.
 ccVersion: 2.1.233
 -->
-
+Fast mode is not available

@@ -9,4 +9,4 @@ variables:
   - TOOL_RESULT_ARTIFACT_LIST_EXTRA_PARAMS_ERROR_VAR_1
   - TOOL_RESULT_ARTIFACT_LIST_EXTRA_PARAMS_ERROR_VAR_2
 -->
-
+action "list" takes only \`limit\` and \`scope\`${TOOL_RESULT_ARTIFACT_LIST_EXTRA_PARAMS_ERROR_VAR_0().frozenArtifactTypes?.TOOL_RESULT_ARTIFACT_LIST_EXTRA_PARAMS_ERROR_VAR_1===!0?" (or `type` or `type_url`, to list the Artifacts made from a type)":""} — remove ${TOOL_RESULT_ARTIFACT_LIST_EXTRA_PARAMS_ERROR_VAR_2.join(", ")}. To publish or update an artifact, omit \`action\`.

@@ -8,4 +8,4 @@ ccVersion: 2.1.237
 variables:
   - DATA_SANDBOX_INSTALL_AMBIENT_WRITE_DENY_FAILED_VAR_0
 -->
-
+srt-win install: ambient write-deny stamping failed (stock world-writable system dirs could not be deny-stamped for the sandbox user): ${DATA_SANDBOX_INSTALL_AMBIENT_WRITE_DENY_FAILED_VAR_0}

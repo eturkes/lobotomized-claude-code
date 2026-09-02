@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - FRONTMOST_APPLICATION_ALLOWLIST_GUARD
 -->
-
+Type text into whatever currently has keyboard focus. ${FRONTMOST_APPLICATION_ALLOWLIST_GUARD} Newlines are supported. For keyboard shortcuts use \`key\` instead.

@@ -5,4 +5,4 @@ description: >-
   the artifact could not be read right now (network or auth).
 ccVersion: 2.1.237
 -->
-
+the artifact could not be read right now (network or auth); try again later

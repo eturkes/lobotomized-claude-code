@@ -5,4 +5,4 @@ description: >-
   opened, returned in the Artifact tool result.
 ccVersion: 2.1.237
 -->
-
+the request was cancelled before the connection opened

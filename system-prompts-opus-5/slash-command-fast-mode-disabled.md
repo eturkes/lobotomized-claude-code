@@ -5,4 +5,4 @@ description: >-
   of the enable message and the counterpart state fact.
 ccVersion: 2.1.233
 -->
-
+Fast mode OFF

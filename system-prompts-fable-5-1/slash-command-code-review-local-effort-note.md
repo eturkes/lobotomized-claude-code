@@ -7,4 +7,5 @@ ccVersion: 2.1.206
 variables:
   - SLASH_COMMAND_CODE_REVIEW_LOCAL_EFFORT_NOTE_VAR_0
 -->
+(Running a local ${SLASH_COMMAND_CODE_REVIEW_LOCAL_EFFORT_NOTE_VAR_0}-effort review and applying its findings.)
 

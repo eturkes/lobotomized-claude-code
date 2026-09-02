@@ -5,4 +5,4 @@ description: >-
   attribute instead of being self-contained.
 ccVersion: 2.1.219
 -->
-
+External scripts are not allowed — the page must be self-contained.

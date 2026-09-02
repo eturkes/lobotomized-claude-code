@@ -6,4 +6,4 @@ description: >-
   opening (fuzzy-miss restore).
 ccVersion: 2.1.257
 -->
-
+A short name for the version this publish${TOOL_PARAMETER_ARTIFACT_VERSION_LABEL_VAR_0?.TOOL_PARAMETER_ARTIFACT_VERSION_LABEL_VAR_1()?" (or `version`)":""} makes, max 60 chars (e.g. "Draft to legal"). Shown in the version picker. Optional — a few words, not a description.

@@ -8,3 +8,6 @@ variables:
   - SKILL_CODE_REVIEW_SINGLE_PASS_DISCLOSURE_VAR_0
 -->
 
+
+State in your summary that this was a single-pass review done without the
+${SKILL_CODE_REVIEW_SINGLE_PASS_DISCLOSURE_VAR_0} tool, not the full multi-agent fan-out.

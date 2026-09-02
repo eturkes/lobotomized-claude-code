@@ -7,4 +7,4 @@ ccVersion: 2.1.239
 variables:
   - TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_ARMING_VAR_0
 -->
-
+Live subscription: arming in the background${TOOL_RESULT_ARTIFACT_LIVE_SUBSCRIPTION_ARMING_VAR_0()}.

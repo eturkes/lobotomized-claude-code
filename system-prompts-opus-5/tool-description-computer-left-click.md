@@ -7,4 +7,4 @@ ccVersion: 2.1.246
 variables:
   - TOOL_DESCRIPTION_COMPUTER_LEFT_CLICK_VAR_0
 -->
-
+Left-click at the given coordinates. ${TOOL_DESCRIPTION_COMPUTER_LEFT_CLICK_VAR_0}

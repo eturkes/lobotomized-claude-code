@@ -5,4 +5,4 @@ description: >-
   prompts, a different operating constraint from the auto-allow arm.
 ccVersion: 2.1.233
 -->
-
+✓ Sandbox enabled with regular bash permissions

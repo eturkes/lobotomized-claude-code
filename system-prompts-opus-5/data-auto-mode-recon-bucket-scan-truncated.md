@@ -6,3 +6,4 @@ description: >-
 ccVersion: 2.1.214
 -->
 
+_The scan ended early (time/size budget or unreadable files) — counts are a lower bound._

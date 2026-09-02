@@ -6,4 +6,4 @@ description: >-
   capabilities skill first.
 ccVersion: 2.1.210
 -->
-
+Runtime capabilities this page declares, as {name: config}. The control plane is the authority on valid names and config shapes.
