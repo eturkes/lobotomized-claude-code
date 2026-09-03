@@ -5,4 +5,4 @@ description: >-
   and why for a reader who was not part of the session
 ccVersion: 2.1.205
 -->
-
+Never open with process narration ("This PR...", "I've implemented...") and never restate the file list or diff stats — GitHub already shows those
