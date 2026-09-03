@@ -12,7 +12,7 @@ Two per-model sets are maintained: `system-prompts-fable-5-1` (the **active** on
 
 **The goal of this repo is to remove useless shit and dumb guardrails so we have a clean agentic coding harness.** CC ships every model the same prompt-by-volume that worked for older Claudes. Current models follow instructions more literally, overtrigger on CAPS, don't need anti-laziness scaffolding, and get actively worse from safety theater that wasn't load-bearing in the first place. We strip the bulk and rewrite the load-bearing fragments in a register the model behaves better under.
 
-**Which model a cut is justified against is per-set, and the card is the authority.** Ground every content edit in that set's system card before touching a file: `~/dev/anthropic-reference/Opus-5-Card-Digest.md` (+ the Opus 5 prompting page) for the active `opus-5` set, `Fable-5.1-Card-Digest.md` (+ the Fable 5.1 prompting page, which partly reverses the card-only reading: 5.1 under-narrates and under-formats) for `fable-5-1`. The digests carry the keep/cut/reword calls with page cites. Each set follows its own model's digest where they disagree.
+**Which model a cut is justified against is per-set, and the card is the authority.** Ground every content edit in that set's system card before touching a file: the Opus 5 card (+ the Opus 5 prompting page) for the active `opus-5` set, the Fable 5.1 card (+ the Fable 5.1 prompting page, which partly reverses the card-only reading: 5.1 under-narrates and under-formats) for `fable-5-1`. Each set follows its own model's card where they disagree.
 
 The README's "~60% leaner on every coding turn" claim is the bar. If your edits don't trend toward that ratio, you're not lobotomizing — you're just cosmeticking.
 
@@ -296,7 +296,7 @@ Useful for inspecting current shapes without running tweakcc end-to-end:
 // extract.mjs
 import { extractClaudeJsFromNativeInstallation } from '/home/eturkes/.local/app/tweakcc-fixed/dist/nativeInstallation-*.mjs';
 import fs from 'node:fs';
-const r = await extractClaudeJsFromNativeInstallation('/Users/<you>/.nvm/versions/node/<v>/lib/node_modules/@anthropic-ai/claude-code/node_modules/@anthropic-ai/claude-code-darwin-arm64/claude');
+const r = await extractClaudeJsFromNativeInstallation('/home/eturkes/.local/share/claude/versions/<v>');
 fs.writeFileSync('/tmp/cli.js', r.data);
 ```
 
