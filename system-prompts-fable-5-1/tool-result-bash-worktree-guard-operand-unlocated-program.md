@@ -3,7 +3,7 @@ name: 'Worktree Guard Operand: Cannot Tell Which Operand Is The Program'
 description: >-
   lu() refusal when a computed or flag-shaped argument appears before the
   program can be identified, next to other runtime operands.
-ccVersion: 2.1.261
+ccVersion: 2.1.269
 variables:
   - TOOL_RESULT_BASH_WORKTREE_GUARD_OPERAND_UNLOCATED_PROGRAM_VAR_0
   - TOOL_RESULT_BASH_WORKTREE_GUARD_OPERAND_UNLOCATED_PROGRAM_VAR_1

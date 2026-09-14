@@ -3,7 +3,7 @@ name: 'Worktree Guard Operand: Script Computed At Runtime'
 description: >-
   lu() refusal when the script operand itself is non-literal (computed at
   runtime).
-ccVersion: 2.1.261
+ccVersion: 2.1.269
 variables:
   - TOOL_RESULT_BASH_WORKTREE_GUARD_OPERAND_RUNTIME_SCRIPT_VAR_0
   - TOOL_RESULT_BASH_WORKTREE_GUARD_OPERAND_RUNTIME_SCRIPT_VAR_1
