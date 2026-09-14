@@ -5,6 +5,10 @@ description: >-
   destructive git operations, and never bypass hooks or signing without an
   explicit user request
 ccVersion: 2.1.269
+variables:
+  - SHOULD_INCLUDE_GIT_SKILL_ROUTING_FN
+  - POWERSHELL_TOOL_CONTEXT
+  - COMMIT_AND_PR_SKILL_ROUTING_GUIDANCE_FN
 -->
 
   - For git commands:

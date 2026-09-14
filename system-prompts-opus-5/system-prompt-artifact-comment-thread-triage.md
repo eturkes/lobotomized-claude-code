@@ -5,6 +5,8 @@ description: >-
   artifact edit or a reply-only pipeline action.
 ccVersion: 2.1.269
 variables:
+  - FORMAT_COMMENT_THREAD_VIEWER_PREFIX_FN
+  - ARTIFACT_COMMENT_THREAD_OBJECT
   - COMMENT_THREAD_VIEWER_PREFIX
   - FORMATTED_COMMENT_THREAD_ROWS
 -->

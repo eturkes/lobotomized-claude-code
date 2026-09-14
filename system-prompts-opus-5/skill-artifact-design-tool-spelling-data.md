@@ -7,5 +7,6 @@ ccVersion: 2.1.265
 variables:
   - SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_0
   - SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_1
+  - SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_2
 -->
 the \`${SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_0}\` tool's \`action: "read_db"\` / \`"write_db"\` with a \`db_op\` are the \`${SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_1}\` tool, whose \`action\` is that \`db_op\` ("get", "list", "query", "set", "update",${SKILL_ARTIFACT_DESIGN_TOOL_SPELLING_DATA_VAR_2()?' "str_replace",':""} "delete", "batch") with the other fields unchanged

@@ -8,6 +8,5 @@ ccVersion: 2.1.261
 variables:
   - SYSTEM_REMINDER_TOOL_HOSTS_MACHINE_FILES_SYNCED_COPY_WORK_HERE_VAR_0
   - SYSTEM_REMINDER_TOOL_HOSTS_MACHINE_FILES_SYNCED_COPY_WORK_HERE_VAR_1
-  - SYSTEM_REMINDER_TOOL_HOSTS_MACHINE_FILES_SYNCED_COPY_WORK_HERE_VAR_2
 -->
 ${SYSTEM_REMINDER_TOOL_HOSTS_MACHINE_FILES_SYNCED_COPY_WORK_HERE_VAR_0} (it may ask the person first); its project folder holds the same files this session's synced copy holds (except files git ignores, and anything changed there that has not arrived here yet — see File sync timing below) — so work on the project here, without "${SYSTEM_REMINDER_TOOL_HOSTS_MACHINE_FILES_SYNCED_COPY_WORK_HERE_VAR_1}"

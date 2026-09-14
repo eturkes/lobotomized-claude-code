@@ -20,6 +20,7 @@ variables:
   - WRITE_TOOL_NAME
   - POWERSHELL_TOOL_NAME
   - SLEEP_AVOIDANCE_NOTE
+  - POWERSHELL_GIT_GUIDANCE
 -->
 Executes a given PowerShell command with optional timeout. Working directory persists between commands; shell state (variables, functions) does not.
 
