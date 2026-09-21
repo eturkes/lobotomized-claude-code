@@ -7,7 +7,8 @@ description: >-
   per-URL cache
 ccVersion: 2.1.277
 variables:
-  - IS_ARTIFACT_TOOL_ENABLED
+  - FORMAT_CONCISE_ARTIFACT_LINK_NOTE_FN
+  - ARTIFACT_LINK_HANDLING_MODE
   - WEBFETCH_CACHE_TTL_FN
 -->
 Fetches a URL, converts the page to markdown, and answers \`prompt\` against it using a small fast model.

@@ -8,5 +8,7 @@ ccVersion: 2.1.274
 variables:
   - >-
     TOOL_RESULT_ARTIFACT_READ_DB_OUTSIDE_WORKING_PATHS_USER_APPROVAL_REQUIRED_VAR_0
+  - >-
+    TOOL_RESULT_ARTIFACT_READ_DB_OUTSIDE_WORKING_PATHS_USER_APPROVAL_REQUIRED_VAR_1
 -->
 Saving artifact database documents as ${TOOL_RESULT_ARTIFACT_READ_DB_OUTSIDE_WORKING_PATHS_USER_APPROVAL_REQUIRED_VAR_0} writes web content outside the allowed working paths${TOOL_RESULT_ARTIFACT_READ_DB_OUTSIDE_WORKING_PATHS_USER_APPROVAL_REQUIRED_VAR_1?" — approval must come from the user, not the auto-permission classifier":""}

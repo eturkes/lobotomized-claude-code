@@ -4,6 +4,9 @@ description: >-
   Instructions on how to compact when the user decided to compact only a portion
   of the conversation, with a structured summary format and analysis process
 ccVersion: 2.1.273
+variables:
+  - SUMMARY_ANALYSIS_INSTRUCTIONS
+  - USER_MESSAGE_ATTRIBUTION_GUARD
 -->
 
 Create a continuation summary for this partial-compaction segment using the canonical context-compaction summary schema. Newer messages that build on this context will follow the summary; you do not see them here.

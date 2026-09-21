@@ -4,7 +4,7 @@ description: Contents of a memory file by path
 ccVersion: 2.1.276
 variables:
   - MEMORY_ITEM
-  - MEMORY_TYPE_DESCRIPTION
+  - MEMORY_TYPE_DESCRIPTION_FN
 -->
 Contents of ${MEMORY_ITEM.path}${MEMORY_TYPE_DESCRIPTION_FN(MEMORY_ITEM.type)}:
 

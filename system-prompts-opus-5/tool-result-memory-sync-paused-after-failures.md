@@ -7,5 +7,6 @@ description: >-
 ccVersion: 2.1.274
 variables:
   - TOOL_RESULT_MEMORY_SYNC_PAUSED_AFTER_FAILURES_VAR_0
+  - TOOL_RESULT_MEMORY_SYNC_PAUSED_AFTER_FAILURES_VAR_1
 -->
 Memory sync is paused for one of your memory stores after repeated failures (${TOOL_RESULT_MEMORY_SYNC_PAUSED_AFTER_FAILURES_VAR_0}). ${TOOL_RESULT_MEMORY_SYNC_PAUSED_AFTER_FAILURES_VAR_1}Recent memory writes are saved locally but are NOT being persisted to shared memory. Sync retries automatically every few minutes.
