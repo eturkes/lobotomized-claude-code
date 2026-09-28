@@ -7,7 +7,7 @@ ccVersion: 2.1.284
 -->
 ## Picking delaySeconds
 
-This session's requests use a 1-hour Anthropic prompt-cache TTL, so effectively every allowed delay (the runtime clamps to [60, 3600]) wakes up with your conversation context still cached. There is no cache cliff inside that range to pace around, and scheduling extra wakeups just to keep the cache warm is pure waste — never do that. (If the session enters usage overage, later requests drop to the 5-minute TTL; don't try to track or preempt that — the guidance here stays the same.)
+This session's requests use a 1-hour Anthropic prompt-cache TTL, so effectively every allowed delay (the runtime clamps to [60, 3600]) wakes up with your conversation context still cached. There is no cache cliff inside that range to pace around, and scheduling extra wakeups just to keep the cache warm is pure waste — never do that.
 
 Match the delay to what you're actually waiting for:
 
