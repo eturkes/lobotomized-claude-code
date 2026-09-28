@@ -4,7 +4,7 @@ description: >-
   Tool result telling the model a linked computer is not answering because
   Claude there is not connected, so the call did not run; retry shortly or ask
   the user to check that Claude is running on it.
-ccVersion: 2.1.281
+ccVersion: 2.1.284
 variables:
   - TOOL_RESULT_DEVICE_BRIDGE_HOST_UNREACHABLE_VAR_0
 -->
