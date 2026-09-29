@@ -125,7 +125,7 @@ For each conflict reported by `tweakcc-fixed --apply` (or `.diff.html` produced 
 3. **Apply the editing checklist above.**
 4. **Bump `ccVersion:` frontmatter** to the prompt's `lastModifiedVersion` from `tweakcc-fixed/data/prompts/prompts-X.Y.Z.json`. The apply log lists the targets explicitly.
 5. **Re-apply** locally. Verify zero stderr, zero conflicts, smoke test `claude --print "say hello"`.
-6. **Run the mis-bind audit** — dump upstream (`git show upstream/main:data/prompts/prompts-X.Y.Z.json > /tmp/pieb.json`) then `node ~/.local/app/tweakcc-fixed/tools/auditMisbinds.mjs ~/.local/app/tweakcc-fixed/data/prompts/prompts-X.Y.Z.json /tmp/pieb.json` — must report **0**. A `${VAR}` being *in* the identifierMap is necessary but NOT sufficient: it must sit at the **same slot as upstream**, else it silently binds to the wrong minified var (wrong content, no crash, smoke and zero-conflicts both pass — croncreate, bash-git-commit and agent-usage-notes were all exactly this). Fix by adopting upstream's identifierMap for that prompt on the tweakcc-fixed side (the override body usually needs no change once the map is right).
+6. **Run the mis-bind audit** — dump upstream from Piebald's per-version branch, falling back to its main, then audit; the tool resolves `data/prompts` against cwd, so run both from the patcher root (`cd ~/.local/app/tweakcc-fixed && { git show upstream/prompts/X.Y.Z:data/prompts/prompts-X.Y.Z.json || git show upstream/main:data/prompts/prompts-X.Y.Z.json; } > /tmp/pieb.json && node tools/auditMisbinds.mjs data/prompts/prompts-X.Y.Z.json /tmp/pieb.json`) — must report **0**. A `${VAR}` being *in* the identifierMap is necessary but NOT sufficient: it must sit at the **same slot as upstream**, else it silently binds to the wrong minified var (wrong content, no crash, smoke and zero-conflicts both pass — croncreate, bash-git-commit and agent-usage-notes were all exactly this). Fix by adopting upstream's identifierMap for that prompt on the tweakcc-fixed side (the override body usually needs no change once the map is right).
 7. **Commit per logical group** with a one-line rationale explaining what changed and why (e.g. "tighten Edit override — drop CAPS, fold in new pristine paragraph as positive guidance"). Keep it to that one line. **This repo is public**, so a commit message must not quote prompt content, name Anthropic-internal identifiers or offsets, enumerate per-id cuts, or narrate the review process. Detail belongs in the private run dispatch.
 
 Just bumping `ccVersion:` without reading the diff is the lazy path. It silences the warning but skips the lobotomization work. Don't take it.
@@ -192,8 +192,9 @@ The `variables:` list is metadata; the actual binding happens via the pristine p
 Remotes in `~/.local/app/tweakcc-fixed`:
 
 ```
-origin    https://github.com/skrabe/tweakcc-fixed   (user's push target)
-upstream  https://github.com/Piebald-AI/tweakcc     (Piebald — actively maintained source)
+origin    git@github.com:eturkes/tweakcc-fixed.git  (this machine's push target)
+skrabe    git@github.com:skrabe/tweakcc-fixed.git   (skrabe's fork — releases, showtime PRs)
+upstream  https://github.com/Piebald-AI/tweakcc.git (Piebald — actively maintained source)
 ```
 
 There used to be a `BenIsLegit/tweakcc-fixed` intermediary that this repo's earlier docs referenced. That fork-of-fork chain was removed on 2026-05-05 — the GitHub fork was deleted and re-created as a direct fork off Piebald. If you find references to a `ben` remote anywhere, they're stale.
