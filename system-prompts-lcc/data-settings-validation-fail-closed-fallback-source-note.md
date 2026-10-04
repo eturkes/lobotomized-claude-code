@@ -4,7 +4,7 @@ description: >-
   Explains that a managed-settings source holding only values that could not be
   applied falls back to the next source, with the fail-closed restrictive
   reading still binding beside it.
-ccVersion: 2.1.284
+ccVersion: 2.1.288
 variables:
   - DATA_SETTINGS_VALIDATION_FAIL_CLOSED_FALLBACK_SOURCE_NOTE_VAR_0
 -->

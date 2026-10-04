@@ -4,7 +4,7 @@ description: >-
   Explains the staged multi-call publish sequence for an Artifact type whose
   first publish needs an index file plus an initial content file published
   immediately, followed by the remaining files in later calls
-ccVersion: 2.1.282
+ccVersion: 2.1.288
 variables:
   - ARTIFACT_TYPE_FILE_STORAGE_CONFIG
   - ARTIFACT_TYPE_FIRST_PUBLISH_CONFIG
