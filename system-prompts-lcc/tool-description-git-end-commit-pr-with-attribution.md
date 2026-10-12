@@ -7,4 +7,4 @@ ccVersion: 2.1.265
 variables:
   - TOOL_DESCRIPTION_GIT_END_COMMIT_PR_WITH_ATTRIBUTION_VAR_0
 -->
-- End git commit messages and PR bodies with ${TOOL_DESCRIPTION_GIT_END_COMMIT_PR_WITH_ATTRIBUTION_VAR_0}.
+
