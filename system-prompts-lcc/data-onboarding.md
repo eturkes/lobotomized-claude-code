@@ -3,7 +3,7 @@ name: 'Data: onboarding'
 description: >-
   claude-test run-skill reference onboarding.md that the run SKILL.md tells the
   model to Read for machine setup and first run.
-ccVersion: 2.1.296
+ccVersion: 2.1.302
 -->
 # Onboarding — the machine first, then the starter suite, with the person
 
@@ -50,7 +50,7 @@ ready, and every question you have is asked before the runner starts the suite.
 
 ### F1. Start looking at once — two helpers in the background, side by side
 
-1. \`node \${CLAUDE_SKILL_DIR}/scripts/ct.mjs new-run\` → the run folder (\`absolute\`). Everything this run writes goes there.
+1. \`node \${CLAUDE_SKILL_DIR}/scripts/ct.mjs new-run\` → the run folder (\`absolute\`). Everything this run writes goes there. (Rarely the answer carries \`note\`: this disk keeps neither hard links nor creation times, so the background helpers' tools will not serve the folder. Tell the person that in one line, with the advice it gives, and start no helper.)
 2. Start the FIRST LOOK: the Skill tool, skill \`claude-test:execute\`, arguments \`look <absolute run folder>\`. It loads at most five
    pages of the running app in the fenced browser and comes back by itself with what they show (titles, headings, navigation,
    empty states, a sign-in wall). If the dev server is not up yet (SKILL.md §3 step 2: the browser helper's check says so), deal with
@@ -76,7 +76,7 @@ ready, and every question you have is asked before the runner starts the suite.
 
 ### F2. Guesses, not a questionnaire — in the same message, right away
 
-This message's FIRST line, before anything else, in these words: "Started a first look at your app in the test browser and a read of its code. The look takes about three minutes at most; if your app shows nothing it stops by itself and I'll tell you what it saw."
+This message's FIRST line, before anything else, in these words: "Started a first look at your app in the test browser and a read of its code. The look takes about three minutes at most; if your app shows nothing it stops by itself and I'll tell you what it saw." Then, in that same line, the data line in its long form (SKILL.md, under the four rules), unless this conversation has had the long form.
 
 If \`status\` had \`environment.problems\`, they come next: one line each with the one thing that fixes it ("before the app
 will fully work here: \`STRIPE_KEY\` is read by the code and set nowhere — add it to .env.local"), then straight on; they do not
@@ -167,7 +167,7 @@ draft yourself before starting the runner. If they ask to SEE a draft or a spec 
 ### F5. The briefing and the go — SKILL.md §3, steps 2–6
 
 The run folder exists already (F1; the newest one when you looked again). Setup and sign-in steps, the briefing (for a first run: about a minute per spec; SKILL.md §3
-step 4's three sentences, which say "Started: saving the <k> new specs, then a run of them against …"; then the live-page block and the one offer, and that is the whole message), the runner
+step 4's three sentences, which say "Started: saving the <k> new specs, then a run of them against …", and its data line; then the live-page block and the one offer, and that is the whole message), the runner
 started with \`run <absolute run folder>\`, the one offer, then quiet. When the table arrives, SKILL.md §5 — and for a first run
 end with the commit advice as a statement (the spec files, \`filed\`, \`<projectDir>/.claude-test/.gitignore\`, \`.claude-testrc\` —
 proposing its \`baseUrl:\` line when the file does not exist yet, per §5), or, when the offer to remember applies, with that offer as
