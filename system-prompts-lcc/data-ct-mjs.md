@@ -3,10 +3,11 @@ name: 'Data: ct.mjs'
 description: >-
   claude-test helper script (skills/run/scripts/ct.mjs) that the run skill has
   the model execute; its JSON output (status notes, needsInput questions,
-  forClaude remedies, errors) is written for the model to read.
-ccVersion: 2.1.302
+  forClaude remedies, write-spec/file/finish errors) is read by the model.
+ccVersion: 2.1.308
 -->
 #!/usr/bin/env node
+
 
 
 
@@ -34,15 +35,15 @@ import http from 'node:http';
 import https from 'node:https';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
-import { loadConfig, commandLineClean, consentKey, readConsent, writeConsent, isLocalHost, reallyInsideDir, fromComment, listSpecs, ensureRunsDir, assertRunsDirInsideProject, parseSpec, mintSpecId, withSpecId, shown, shownDeep, shownText, parseDotenv, resolveProjectDir, projectDirReason, projectsBelow, sessionRoot, specsDirProblem, appPointerInfo, rootConfiguresItself, sanitizeBrowserEnv, trackedClaudeTestSymlinks, RC_FILE, safeGit, gitOff, RUN_ID, joinWrappedCriteria, stemOk, withoutPrivateFolders } from './lib/config.mjs';
+import { SECRET_FILE, loadConfig, commandLineClean, consentKey, localPortOf, readConsent, writeConsent, isLocalHost, reallyInsideDir, insideOpenedFolder, fromComment, listSpecs, ensureRunsDir, assertRunsDirInsideProject, parseSpec, mintSpecId, withSpecId, shown, shownDeep, shownText, draftTextFault, specNameOk, parseDotenv, resolveProjectDir, projectDirReason, projectsBelow, sessionRoot, specsDirProblem, appPointerInfo, rootConfiguresItself, sanitizeBrowserEnv, trackedClaudeTestSymlinks, RC_FILE, safeGit, gitOff, RUN_ID, joinWrappedCriteria, stemOk, withoutPrivateFolders, affectedPlan, fixPlan, touchedSince, reachesOnlyThisMachine, appRelative, RUN_PLACEHOLDER } from './lib/config.mjs';
 import { ALLOW_TOOL, UP_TOOL, SHOW_TOOL } from './lib/allow-tool.mjs';
 import { runFolders, runStart, writeInRunFolder, withinProject, writingIn as writingInFolder, keepsCreationTime, insideSomeCheckout, RUNNER_WORDS, LOG_MD_BYTES } from './lib/runs.mjs';
 import { livePageFile, livePagePlan, prefsPath, readPrefs, writePrefs, openByHand } from './lib/open-page.mjs';
 import { pathToFileURL } from 'node:url';
 import { groupRefusedHosts, plainHostName, isBrowserServiceHost } from './lib/hosts.mjs';
-import { toolsDir, mcpCliPath, installTools, toolsInstallInfo, findChrome, browsersDir, useOwnBrowsersIfPresent, toolsProblem, browserProblem, chromeSandboxProblem, downloadBrowser } from './lib/tools.mjs';
+import { toolsDir, mcpCliPath, installTools, toolsInstallInfo, findInstalledBrowser, INSTALLED_BROWSER_NAMES, browserSelection, browsersDir, useOwnBrowsersIfPresent, toolsProblem, browserProblem, chromeSandboxProblem, downloadBrowser, testBrowserMissing, browserMissingLibraries, wantsHeaded } from './lib/tools.mjs';
 import { listSkills, authFileInfo, bypassHints } from './lib/signin.mjs';
-import { readJson, discoverDevServer, candidateList, COMMON_PORTS } from './lib/discover.mjs';
+import { readJson, discoverDevServer, candidateList, COMMON_PORTS, portOwner, recentWorkFrom, RECENT_COMMITS, RECENT_BULK } from './lib/discover.mjs';
 import { environmentReport } from './lib/envreport.mjs';
 
 const args = process.argv.slice(2);
@@ -202,6 +203,8 @@ async function status() {
   const cfg = loadConfig(projectDir);
   const dev = discoverDevServer(cfg, { inSandbox: IN_SANDBOX });
   let baseUrl = cfg.baseUrl; let baseUrlSource = cfg.baseUrlSource; let probe = null; let answering = [];
+  let otherPorts = [];
+  let listeningBefore = [];
 
 
   let candidateUrls = cfg.baseUrl ? null : true;
@@ -230,13 +233,24 @@ async function status() {
     const candidates = [...new Set([...dev.portHints, ...COMMON_PORTS, 8787])];
     const listening = [];
     for (const p of candidates) if (await portOpen(p)) listening.push(p);
+    listeningBefore = listening.slice(0, 32);
     const ownListening = listening.filter((p) => dev.portHints.includes(p));
-    answering = ownListening.length ? [ownListening[0]] : listening;
+
+
+
+    const rcNamed = new Set([].concat(cfg.rc && cfg.rc.allowedOrigins ? cfg.rc.allowedOrigins : []).map(localPortOf));
+    const whose = new Map(ownListening.length ? [] : listening.filter((p) => !rcNamed.has(p)).map((p) => { let o = null; try { o = portOwner(p, cfg.projectDir); } catch {                   } return [p, o]; }));
+    const otherPrograms = listening.filter((p) => whose.get(p) === 'other'); const startedHere = listening.filter((p) => whose.get(p) === 'this');
+    const askable = listening.filter((p) => !otherPrograms.includes(p)).sort((a, b) => startedHere.includes(b) - startedHere.includes(a)); otherPorts = otherPrograms;
+    answering = ownListening.length ? [ownListening[0]] : askable;
     if (ownListening.length) {
       baseUrl = 'http://localhost:' + ownListening[0] + '/'; baseUrlSource = 'detected: port ' + ownListening[0] + ' (named by ' + (dev.portHintFrom[ownListening[0]] || 'project files') + ') is listening'; probe = await get(baseUrl); if (listening.length > 1) probe.alsoListening = listening.filter((p) => p !== ownListening[0]);
-    } else if (listening.length) {
-      probe = { up: null, error: 'pages answer on common ports (' + listening.join(', ') + ') but nothing in this project names those ports — the preflight reports what they serve and asks which is yours', listening };
+    } else if (askable.length) {
+      probe = { up: null, error: 'pages answer on common ports (' + askable.join(', ') + ') but nothing in this project names those ports — ' + (startedHere.length ? 'a program running from this project\\'s folder listens at ' + startedHere.join(', ') + '; ' : '') + (askable.length > startedHere.length ? 'which program listens at ' + askable.filter((p) => !startedHere.includes(p)).join(', ') + ' could not be told, so it may be another program on this machine; ' : '') + 'the preflight reports what they serve and asks which is yours', listening: askable, ...(startedHere.length ? { startedHere } : {}), ...(otherPrograms.length ? { otherPrograms } : {}) };
       if (dev.portHints.length) { baseUrl = 'http://localhost:' + dev.portHints[0] + '/'; baseUrlSource = 'guess from ' + (dev.portHintsSource || 'project files') + ' (nothing answered there from the shell)'; }
+    } else if (otherPrograms.length && !sandboxDenied) {
+      if (dev.portHints.length) { baseUrl = 'http://localhost:' + dev.portHints[0] + '/'; baseUrlSource = 'guess from ' + (dev.portHintsSource || dev.startCommandSource || 'project files') + ' (nothing accepted a connection from the shell)'; }
+      probe = { up: false, error: 'only programs that work outside this project\\'s folder answer on common ports (' + otherPrograms.join(', ') + '): none is taken for this app, and none is asked about — advisory; the browser preflight decides', otherPrograms };
     } else if (sandboxDenied) {
       if (dev.portHints.length) { baseUrl = 'http://localhost:' + dev.portHints[0] + '/'; baseUrlSource = 'guess from ' + (dev.portHintsSource || 'project files') + ' (not checked: loopback denied)'; }
       probe = { up: null, error: 'not checked', sandboxed: true, code: sandboxDenied };
@@ -263,7 +277,9 @@ async function status() {
 
 
   const toolsPresent = !!mcpCliPath({ report: true }); const toolsWhy = toolsPresent ? toolsProblem() : null; const browserWhy = browserProblem(cfg);
+  let browserMissing = false; try { browserMissing = testBrowserMissing(cfg); } catch {                                  }
   let sandboxWhy = null; try { sandboxWhy = toolsWhy || (!toolsPresent && toolsProblem()) ? null : chromeSandboxProblem(cfg, null, { trial: process.env.SANDBOX_RUNTIME !== '1' && process.env.CLAUDE_TEST_NO_TRIAL !== '1' }); } catch {                                  }
+  let libsMissing = []; try { libsMissing = !browserMissing && !browserWhy && toolsPresent && !toolsWhy ? browserMissingLibraries(cfg, { start: process.env.CLAUDE_TEST_NO_TRIAL !== '1' }) : []; } catch {                                  }
   let environment = null;
   if (!verdict.blocked) { try { environment = environmentReport(cfg, { tools: { installed: toolsPresent && !toolsWhy, problem: toolsWhy ? 'the tools folder is not private: ' + toolsWhy : null, remedy: 'run "node ' + fileURLToPath(import.meta.url) + ' install" in a terminal, or approve the claude_test_install tool of the claude-test browser server; the running server loads the tooling by itself afterwards (no reconnect)' } }); } catch (e) { environment = { summary: 'environment report failed: ' + (e.code || e.message), problems: [], notes: [] }; } }
   if (verdict.line) cfg.warnings.unshift(verdict.line);
@@ -275,18 +291,20 @@ async function status() {
   const ran = past.find((r) => r.specs > 0); const paced = past.find((r) => r.judged > 0 && r.secondsPerSpec);
   const notFiled = specsProblem ? [] : specsNotFiled(cfg, specs);
 
-  const candKey = (c) => 'http://localhost:' + c.port; const candKeys = cfg.baseUrl ? [] : candidates.map(candKey);
+  const candKey = (c) => 'http://localhost:' + c.port; const candKeys = cfg.baseUrl ? [] : candidates.filter((c) => !otherPorts.includes(c.port)).map(candKey);
   const hasYes = (k) => cfg.allowedOrigins.some((o) => consentKey(o) === k); const candAllowed = candKeys.filter(hasYes);
 
   const candAnswering = candKeys.filter((k) => answering.includes(Number(k.split(':').pop()))); const candOwn = candidates.filter((c) => c.own).map(candKey).filter((k) => candKeys.includes(k));
   const candPreferred = candAnswering.length ? [...new Set([...candAnswering, ...(candAnswering.some((k) => candOwn.includes(k)) ? [] : candOwn)])] : candOwn.length ? candOwn : candKeys;
-  const askOrigins = [...cfg.pendingOrigins.filter((k) => !candKeys.includes(k)), ...(candPreferred.some(hasYes) ? [] : candPreferred)];
+  const otherKeys = otherPorts.map((p) => 'http://localhost:' + p);
+  const askOrigins = [...cfg.pendingOrigins.filter((k) => !candKeys.includes(k) && !otherKeys.includes(k)), ...(candPreferred.some(hasYes) ? [] : candPreferred)];
   const waiting = [...new Set([...askOrigins, ...cfg.pendingHosts])];
   const needsConsent = waiting.length ? { addresses: askOrigins.map((a) => ({ address: a, localhost: isLocalHost(a.replace(/^https?:\\/\\//, '').replace(/:\\d+$/, '')) })), loadOnlyHosts: cfg.pendingHosts, tool: { name: ALLOW_TOOL, arguments: { address: waiting[0], project: cfg.projectDir } }, line: 'BLOCKED — you have not allowed the test browser to open: ' + waiting.join(', ') + '. A run starts when nothing is left waiting: allow the ones you want and take the rest out of ' + RC_FILE + ' (for guessed ports, set baseUrl there). You allow addresses once per project on this machine: type /claude-test in a Claude Code conversation and answer the dialog it opens, one address at a time. Claude Test has no terminal command for this.' } : null;
-  const notReady = [...(needsInput ? ['which app is not settled (needsInput)'] : []), ...(needsConsent ? ['the person has not allowed the addresses the test browser would open (needsConsent)'] : []), ...(specsProblem ? ['the specs folder cannot be used: ' + specsProblem] : []), ...(runsDirWhy ? ['the runs folder cannot be used: ' + runsDirWhy] : []), ...(!toolsPresent ? ['the browser tooling is not installed (tools.note)'] : toolsWhy ? ['the browser tooling folder is not private (tools.problem)'] : []), ...(browserWhy ? [browserWhy] : []), ...(sandboxWhy ? [sandboxWhy] : [])];
+  const notReady = [...(needsInput ? ['which app is not settled (needsInput)'] : []), ...(needsConsent ? ['the person has not allowed the addresses the test browser would open (needsConsent)'] : []), ...(specsProblem ? ['the specs folder cannot be used: ' + specsProblem] : []), ...(runsDirWhy ? ['the runs folder cannot be used: ' + runsDirWhy] : []), ...(!toolsPresent ? ['the browser tooling is not installed (tools.note)'] : toolsWhy ? ['the browser tooling folder is not private (tools.problem)'] : []), ...(browserMissing && toolsPresent && !toolsWhy ? [wantsHeaded() ? 'there is no test browser for a window on this machine: the full Chromium build is not downloaded (tools.browser)' : 'there is no test browser on this machine (tools.browser)'] : []), ...(libsMissing.length ? ['the test browser cannot start on this machine: it needs the system ' + (libsMissing.length > 1 ? 'libraries ' : 'library ') + libsMissing.join(', ') + '. Fix: install the libraries Chrome needs. On Debian or Ubuntu, run this in a terminal (it runs apt-get with sudo): node ' + path.join(toolsDir(), 'node_modules', 'playwright-core', 'cli.js') + ' install-deps chromium' + (libsMissing.length === 1 && libsMissing[0] === 'libasound.so.2' ? ' (for this one library alone: sudo apt-get install libasound2t64, or libasound2 before Ubuntu 24.04)' : '') + '. On another Linux, install your distribution\\'s package for ' + (libsMissing.length > 1 ? 'each of them' : 'it') + '. Then type /claude-test again'] : []), ...(browserWhy ? [browserWhy] : []), ...(sandboxWhy ? [sandboxWhy] : [])];
   const startLine = cdAndStart(cfg.projectDir, dev.startCommandCwd, dev.startCommand); const cdPrefix = cdTo(cfg.projectDir, null);
   const setupLine = cdAndStart(cfg.projectDir, null, cfg.setupCommand);
   const lastRun = ran ? { runId: ran.runId, finishedAt: ran.finishedAt, outcome: ran.outcome, specs: ran.specs, secondsPerSpec: paced ? paced.secondsPerSpec : null } : null;
+  const recentWork = !args.includes('--runner') && !verdict.blocked && !specsProblem && specs.filter((s) => !s.skipped).length === 0 ? recentWorkOf(cfg) : null;
   const answer = {
     ...(notFiled === null ? (specs.some((s) => !s.skipped) ? { specsNotFiled: { recordAbsent: true, count: 0, files: [], note: 'no .claude-test/filed record yet (specs written before this record existed, or by hand): nothing to compare. The record starts at the next write-spec, which adopts every spec then in the folder as-is and lists them — a notice, not a refusal' } } : {}) : notFiled.length ? { specsNotFiled: { files: notFiled.slice(0, 20), count: notFiled.length, note: 'edited or added outside write-spec — normal when the person wrote or changed them; otherwise Read each once and show it to the person before running (a notice, not a refusal)' } } : {}),
     ready: { runner: notReady.length === 0, firstRun: !specsProblem && specs.filter((s) => !s.skipped).length === 0, ...(notReady.length ? { reasons: notReady } : {}) },
@@ -294,10 +312,10 @@ async function status() {
     projectDir: cfg.projectDir,
     projectDirReason: projectDirReason(cfg.projectDir), sessionRoot: sessionRoot(), ...(below.length ? { projectsBelow: below } : {}), ...(needsInput ? { needsInput } : {}), ...(needsConsent ? { needsConsent } : {}),
     config: { file: RC_FILE, found: cfg.rcFound, warnings: cfg.warnings },
-    devServer: { baseUrl, source: baseUrlSource, up: probe ? probe.up : null, check: { name: UP_TOOL, arguments: { project: cfg.projectDir } }, verdictBy: 'the browser helper\\'s own check (devServer.check; SKILL.md §3 step 2), then the runner\\'s first page load: this view is advisory and never a reason to report the app down', ...(IN_SANDBOX || (probe && probe.blocked) || sandboxDenied ? { sandboxed: true, note: 'the shell could not check localhost reliably (' + (SANDBOX_WHY || ('connect gave ' + ((probe && probe.code) || sandboxDenied) + ', not a plain refusal')) + ' — a sandbox (typically Claude Code\\'s) or a local proxy setup), so "up" is unknown — NOT "down". Ask the browser helper, which can check localhost (devServer.check), before any run is started' + (cfg.baseUrl ? '.' : ': the address is ' + (baseUrl ? 'only a GUESS (' + baseUrlSource + ')' : 'unknown') + ' and ports cannot be scanned from here, so the preflight tries candidateUrls in order; if none serves this project, tell the user "if your server is running, tell me where — baseUrl: http://localhost:PORT in ' + RC_FILE + '; otherwise start it" rather than claiming it is down.') + ' A dev server started from inside the sandbox could not be reached by the test browser: SKILL.md §3 step 2 says how it is started outside.' } : {}), ...(candidateUrls ? { candidateUrls: candidates.filter((c) => !candAllowed.length || candAllowed.includes(candKey(c))).map((x) => x.url) } : {}), candidates, probe, startCommand: dev.startCommand, startCommandSource: dev.startCommandSource, ...(startLine ? { startLine } : {}), ...(cdPrefix ? { cdPrefix } : {}), ...(startCommandQuestion ? { startCommandQuestion } : {}), ...(dev.startCommandCwd ? { startCommandCwd: dev.startCommandCwd } : {}), ...(dev.launchIgnored ? { launchJsonIgnored: dev.launchIgnored } : {}), ...(dev.unreadable ? { unreadable: dev.unreadable } : {}), ...(dev.startCommandNote ? { startCommandNote: dev.startCommandNote, startCommandCandidates: dev.startCommandCandidates.map((k) => { const line = cdAndStart(cfg.projectDir, k.cwd, k.command); return line ? { ...k, line } : k; }) } : {}), recipes: dev.recipes },
+    devServer: { baseUrl, source: baseUrlSource, up: probe ? probe.up : null, check: { name: UP_TOOL, arguments: { project: cfg.projectDir, ...(!cfg.baseUrl && listeningBefore.length ? { listening: listeningBefore } : {}) } }, verdictBy: 'the browser helper\\'s own check (devServer.check; SKILL.md §3 step 2), then the runner\\'s first page load: this view is advisory and never a reason to report the app down', ...(IN_SANDBOX || (probe && probe.blocked) || sandboxDenied ? { sandboxed: true, note: 'the shell could not check localhost reliably (' + (SANDBOX_WHY || ('connect gave ' + ((probe && probe.code) || sandboxDenied) + ', not a plain refusal')) + ' — a sandbox (typically Claude Code\\'s) or a local proxy setup), so "up" is unknown — NOT "down". Ask the browser helper, which can check localhost (devServer.check), before any run is started' + (cfg.baseUrl ? '.' : ': the address is ' + (baseUrl ? 'only a GUESS (' + baseUrlSource + ')' : 'unknown') + ' and ports cannot be scanned from here, so the preflight tries candidateUrls in order; if none serves this project, tell the user "if your server is running, tell me where — baseUrl: http://localhost:PORT in ' + RC_FILE + '; otherwise start it" rather than claiming it is down.') + ' A dev server started from inside the sandbox could not be reached by the test browser: SKILL.md §3 step 2 says how it is started outside.' } : {}), ...(candidateUrls ? { candidateUrls: candidates.filter((c) => !otherPorts.includes(c.port) && (!candAllowed.length || candAllowed.includes(candKey(c)))).map((x) => x.url) } : {}), candidates, probe, startCommand: dev.startCommand, startCommandSource: dev.startCommandSource, ...(startLine ? { startLine } : {}), ...(cdPrefix ? { cdPrefix } : {}), ...(startCommandQuestion ? { startCommandQuestion } : {}), ...(dev.startCommandCwd ? { startCommandCwd: dev.startCommandCwd } : {}), ...(dev.launchIgnored ? { launchJsonIgnored: dev.launchIgnored } : {}), ...(dev.unreadable ? { unreadable: dev.unreadable } : {}), ...(dev.startCommandNote ? { startCommandNote: dev.startCommandNote, startCommandCandidates: dev.startCommandCandidates.map((k) => { const line = cdAndStart(cfg.projectDir, k.cwd, k.command); return line ? { ...k, line } : k; }) } : {}), recipes: dev.recipes },
     setupCommand: cfg.setupCommand ? { command: cfg.setupCommand, source: RC_FILE, ...(setupLine ? { line: setupLine } : {}), note: 'The person is asked before it runs, each time (SKILL.md §3 step 3). It runs after the server answers and before the first spec, and again in later runs, so it must be safe to run twice. With no line, the person runs it.' } : null,
     browser: { allowedOrigins: cfg.allowedOrigins, reachableHosts: cfg.reachableHosts || [], pendingOrigins: cfg.pendingOrigins, pendingHosts: cfg.pendingHosts, note: (cfg.baseUrl ? 'the bundled browser only loads these origins' : 'no baseUrl yet: the bundled browser can load ONLY the candidate addresses under devServer.candidates (and their 127.0.0.1 / [::1] twins) — a baseUrl line in ' + RC_FILE + ' pins it to your app') + '; every address, a candidate found on this machine included, is opened only after the person allows it (needsConsent), once per project on this machine' },
-    tools: { installed: !!mcpCliPath({ report: true }) && !toolsProblem(), dir: toolsDir(), ...(toolsInstallInfo() ? { pinned: !!toolsInstallInfo().pinned, install: toolsInstallInfo().mode } : mcpCliPath({ report: true }) ? { pinned: 'unknown', install: 'installed without a checksum record — run install once to pin it' } : {}), ...(mcpCliPath({ report: true }) && toolsProblem() ? { problem: 'the tools folder is not private: ' + toolsProblem() + ' — the browser server refuses to run from it until fixed' } : {}), note: mcpCliPath({ report: true }) ? (toolsProblem() ? 'browser tooling present but NOT usable (see problem)' : 'browser tooling present') : 'browser tooling NOT installed here: the bundled browser server offers only browser_setup_needed / claude_test_install until the user runs "node ' + fileURLToPath(import.meta.url) + ' install" (or approves claude_test_install); the running server then loads the tooling by itself and the next run has the browser tools — /mcp → Reconnect only if it does not' },
+    tools: { installed: !!mcpCliPath({ report: true }) && !toolsProblem(), dir: toolsDir(), ...(browserMissing ? { browser: { missing: true, ...(wantsHeaded() ? { forWindow: true } : {}), command: 'node ' + fileURLToPath(import.meta.url) + ' install chromium' + (wantsHeaded() ? ' --headed' : ''), note: 'no Google Chrome that Claude Test can use here or that this run chose, and no downloaded test browser of the kind it needs' + (wantsHeaded() ? ' (with CLAUDE_TEST_HEADED=1, the full build, for a window)' : '') + '. This one command installs the tooling when it is missing and downloads the test browser; claude_test_install downloads it only from a mirror the person names. The person runs it once, in their own terminal, not with ! at the Claude Code prompt, where Claude Code\\'s sandbox can keep the download from being saved' } } : installedUse(cfg)), ...(toolsInstallInfo() ? { pinned: !!toolsInstallInfo().pinned, install: toolsInstallInfo().mode } : mcpCliPath({ report: true }) ? { pinned: 'unknown', install: 'installed without a checksum record — run install once to pin it' } : {}), ...(mcpCliPath({ report: true }) && toolsProblem() ? { problem: 'the tools folder is not private: ' + toolsProblem() + ' — the browser server refuses to run from it until fixed' } : {}), note: mcpCliPath({ report: true }) ? (toolsProblem() ? 'browser tooling present but NOT usable (see problem)' : 'browser tooling present') : 'browser tooling NOT installed here: the bundled browser server offers only browser_setup_needed / claude_test_install until the user runs "node ' + fileURLToPath(import.meta.url) + ' install" (or approves claude_test_install); the running server then loads the tooling by itself and the next run has the browser tools — /mcp → Reconnect only if it does not' },
     signIn: {
       appliesToBaseUrl: cfg.signInApplies, note: cfg.signInNote,
       storageState: cfg.storageState.inUse ? { inUse: true, source: cfg.storageState.source, path: cfg.storageState.path, ...savedSessionFacts(cfg.storageState.path) } : { inUse: false, putItAt: cfg.storageState.defaultPath },
@@ -309,6 +327,7 @@ async function status() {
     specs: specsProblem ? { dir: path.relative(cfg.projectDir, cfg.specsDir), error: specsProblem + ' — fix that before any run (BLOCKED)', count: 0, files: [] } : { dir: path.relative(cfg.projectDir, cfg.specsDir), count: specs.filter((s) => !s.skipped).length, files: specs },
     runsDir: path.relative(cfg.projectDir, cfg.runsDir),
     git: { dirty: gitDirty },
+    ...(recentWork ? { recentWork } : {}),
     auth: { bypassHints: bypassHints(cfg.projectDir) },
   };
   if (!args.includes('--runner')) { out(answer); return; }
@@ -318,6 +337,20 @@ async function status() {
   const withoutFolders = withoutPrivateFolders(cfg.projectDir);
   const everyString = (value) => typeof value === 'string' ? withoutFolders(value) : Array.isArray(value) ? value.map(everyString) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, inner]) => [key, everyString(inner)])) : value;
   out(everyString(answer));
+}
+
+
+
+function recentWorkOf(cfg) {
+  const git = (argv) => safeGit(cfg.projectDir, ['-c', 'core.quotePath=false', ...argv], { maxBuffer: 4 * 1024 * 1024, timeout: 30000 }).toString();
+  try {
+    const prefix = git(['rev-parse', '--show-prefix']).trim();
+    let log = ''; try { log = git(['log', '-n', String(RECENT_COMMITS), '--no-merges', '--no-renames', '--no-ext-diff', '--no-textconv', '--no-show-signature', '--format=%x01%P', '--name-only', '--', '.']); } catch {                                            }
+    const status = git(['status', '--porcelain', '--no-renames', '--untracked-files=all', '--', '.']);
+    const isFile = (f) => { try { return reallyInsideDir(path.join(cfg.projectDir, f), cfg.projectDir) && fs.lstatSync(path.join(cfg.projectDir, f)).isFile(); } catch { return false; } };
+    const found = recentWorkFrom({ log, status, prefix, isFile });
+    return { ...found, note: found.files.length ? 'paths and counts from git only: the last ' + RECENT_COMMITS + ' commits in this folder and the uncommitted changes (the first commit and any commit touching more than ' + RECENT_BULK + ' app files are not counted). The crawl and the outline lean towards journeys through these files (onboarding.md, "What changed lately")' : 'no user-facing file changed lately (only the first commit, or only configuration, tests or docs): no preference — the outline follows the app\\'s core journeys' };
+  } catch { return null; }
 }
 
 function authRel(cfg) { const p = path.join(path.dirname(fileURLToPath(import.meta.url)), 'ct-auth.mjs'); const r = path.relative(cfg.projectDir, p); return r.startsWith('..') ? p : r; }
@@ -348,10 +381,10 @@ function newRun() {
   let folders = []; try { folders = runFolders(cfg); } catch {                                      } endOldPages(cfg, folders.filter((d) => d !== path.basename(runDir)));
   try { for (const old of folders.slice(0, -8)) { const fdir = path.join(cfg.runsDir, old, 'frames'); try { if (fs.lstatSync(fdir).isDirectory()) fs.rmSync(fdir, { recursive: true, force: true }); } catch {            } } } catch {                             }
   let saveKey = null; try { saveKey = randomBytes(16).toString('hex'); fs.writeFileSync(path.join(runDir, 'save-key.sha256'), createHash('sha256').update(saveKey).digest('hex') + '\\n', { flag: 'wx', mode: 0o600 }); } catch (e) { out({ error: 'could not write this run\\'s key into ' + path.relative(cfg.projectDir, runDir) + ' (' + shown(String(e && e.message || e), 160) + '): without it the run\\'s save step refuses, so no run folder was handed out' }); try { fs.rmSync(runDir, { recursive: true, force: true }); } catch {                } process.exit(1); }
-  let markNote = null; try { fs.writeFileSync(path.join(runDir, 'made-here'), 'Claude Test made this run folder on this machine.\\n', { flag: 'wx' }); fs.linkSync(path.join(runDir, 'made-here'), path.join(runDir, 'made-here.again')); } catch { try { if (insideSomeCheckout(cfg.projectDir) && !keepsCreationTime(fs.lstatSync(runDir))) markNote = 'this disk keeps neither hard links nor creation times, so the background test agent\\'s tools will not serve this run folder: run the specs from a folder on another disk'; } catch {                                                       } }
+  let markNote = null; let markWarning = null; try { fs.writeFileSync(path.join(runDir, 'made-here'), 'Claude Test made this run folder on this machine.\\n', { flag: 'wx' }); fs.linkSync(path.join(runDir, 'made-here'), path.join(runDir, 'made-here.again')); } catch (e) { try { if (insideSomeCheckout(cfg.projectDir) && !keepsCreationTime(fs.lstatSync(runDir))) markNote = 'this disk keeps neither hard links nor creation times, so the background test agent\\'s tools will not serve this run folder: run the specs from a folder on another disk'; } catch {                                                       } if (!markNote && !['ENOTSUP', 'EOPNOTSUPP', 'ENOSYS'].includes(e && e.code) && fs.existsSync(path.join(runDir, 'made-here'))) markWarning = 'Claude Test could not make made-here.again, a hard link to this run folder\\'s made-here file (error: ' + shown(String((e && e.code) || e), 40) + ').' + (e && e.code === 'EPERM' ? ' If this disk keeps no hard links (FAT or exFAT, for example), nothing changes. If a command sandbox blocked it, Claude Test cannot write new or changed tests for this run' : ' If a command sandbox blocked it, Claude Test cannot write new or changed tests for this run. Please report it with /bug'); }
 
   try { const at = gitState(cfg.projectDir); if (at) fs.writeFileSync(path.join(runDir, 'git.json'), JSON.stringify(at) + '\\n', { flag: 'wx' }); } catch {                                                                            }
-  out({ runId: path.basename(runDir), runDir: path.relative(cfg.projectDir, runDir), absolute: runDir, ...(saveKey ? { saveKey } : {}), ...(markNote ? { note: markNote } : {}), ...(() => { const page = livePageFile(cfg, path.basename(runDir)); return { livePage: pathToFileURL(page).href, ...(openByHand(page) ? { livePageByHand: openByHand(page) } : {}), ...(() => { const plan = livePagePlan(cfg); return plan.opens ? { livePageShow: { name: SHOW_TOOL, arguments: { project: cfg.projectDir, run: path.basename(runDir) } } } : { livePageLinkOnly: plan.why }; })() }; })(), gitignore: path.join(path.dirname(cfg.runsDir), '.gitignore') });
+  out({ runId: path.basename(runDir), runDir: path.relative(cfg.projectDir, runDir), absolute: runDir, ...(saveKey ? { saveKey } : {}), ...(markNote ? { note: markNote } : {}), ...(markWarning ? { warning: markWarning } : {}), ...(() => { const page = livePageFile(cfg, path.basename(runDir)); return { livePage: pathToFileURL(page).href, ...(openByHand(page) ? { livePageByHand: openByHand(page) } : {}), ...(() => { const plan = livePagePlan(cfg); return plan.opens ? { livePageShow: { name: SHOW_TOOL, arguments: { project: cfg.projectDir, run: path.basename(runDir) } } } : { livePageLinkOnly: plan.why }; })() }; })(), gitignore: path.join(path.dirname(cfg.runsDir), '.gitignore') });
 }
 
 
@@ -403,17 +436,22 @@ function install() {
   const browserArg = args.slice(1).find((a) => !a.startsWith('-'));
   const explicit = /^(chromium|chrome|msedge|chromium-headless-shell)$/.test(browserArg || '') ? browserArg : null;
   if (browserArg && !explicit) process.stderr.write('"' + shown(browserArg, 40) + '" is not a browser Claude Test runs specs in (chrome, msedge or chromium): going on as if no browser had been named\\n');
-  const chrome = findChrome();
-  if (!explicit && chrome) { out({ ok: true, tools: toolsDir(), pinned: r.pinned, install: r.mode, browser: 'using installed Chrome at ' + chrome + ' (pass "chromium" to download a separate test browser)' }); return; }
-  process.stderr.write('downloading ' + (explicit || 'chromium') + ' into ' + browsersDir() + ' …\\n');
-  downloadBrowser({ browser: explicit || 'chromium' }).then((d) => {
-    if (d.ok) { out({ ok: true, tools: toolsDir(), pinned: r.pinned, install: r.mode, browsers: browsersDir(), browser: (explicit || 'chromium') + ' installed' }); process.exit(0); }
+  const installed = findInstalledBrowser();
+  if (!explicit && installed) { out({ ok: true, tools: toolsDir(), pinned: r.pinned, install: r.mode, browser: 'using installed ' + INSTALLED_BROWSER_NAMES[installed.kind] + ' at ' + installed.path + ' (pass "chromium" to download a separate test browser)' }); return; }
+
+  const headed = args.includes('--headed') || wantsHeaded();
+  const what = !explicit || explicit === 'chromium' ? (headed ? 'chromium (the full build, for a window)' : 'chromium headless shell (no window)') : explicit;
+  process.stderr.write('downloading ' + what + ' into ' + browsersDir() + ' …\\n');
+  downloadBrowser({ browser: explicit || 'chromium', headed }).then((d) => {
+    if (d.ok) { out({ ok: true, tools: toolsDir(), pinned: r.pinned, install: r.mode, browsers: browsersDir(), browser: what + ' installed' }); process.exit(0); }
     process.stderr.write('browser download failed — ' + shown(d.error) + '\\n' + (d.forPerson ? d.forPerson + '\\n' : ''));
     out({ ok: false, tools: toolsDir(), error: 'browser download failed: ' + d.error, remedy: d.remedy });
     process.exit(1);
   });
 }
 
+
+function installedUse(cfg) { try { const sel = browserSelection(cfg); return sel.installedKind ? { browser: { using: INSTALLED_BROWSER_NAMES[sel.installedKind], path: sel.chromePath } } : {}; } catch { return {}; } }
 
 function latestRunId(cfg) { const dirs = runFolders(cfg); return dirs[dirs.length - 1] || null; }
 
@@ -435,7 +473,7 @@ function writeSpecCmd() {
   if (asIs && replace) { out({ error: '--as-is and --replace do not combine: filing a flagged draft on the person\\'s word and writing over an existing spec are two decisions — do one, then the other' }); process.exit(2); }
   if (asIs && names.length !== 1) { out({ error: '--as-is files ONE flagged draft on the person\\'s word about that draft: name exactly one' }); process.exit(2); }
   if (replace && names.length !== 1) { out({ error: '--replace corrects ONE spec that was created and never committed: name exactly one' }); process.exit(2); }
-  if (!names.length || names.length > 12 || names.some((n) => !/^[a-z0-9][a-z0-9-]{0,79}$/.test(n) || n === 'readme')) { out({ error: 'usage: ct.mjs write-spec <name> [<name> …] — each spec\\'s file name without .md: lower-case words joined by hyphens (at most 12 per call); each draft is read from <run folder>/proposed/<name>.md; add --as-is only on the person\\'s word about a flagged draft' }); process.exit(2); }
+  if (!names.length || names.length > 12 || names.some((n) => !specNameOk(n))) { out({ error: 'usage: ct.mjs write-spec <name> [<name> …] — each spec\\'s file name without .md: lower-case words joined by hyphens, not readme, claude, agents or a Windows device name (at most 12 per call); each draft is read from <run folder>/proposed/<name>.md; add --as-is only on the person\\'s word about a flagged draft' }); process.exit(2); }
   const cfg = loadConfig(projectDir);
   const v = folderVerdict(cfg); if (v.blocked || (v.needsInput && v.needsInput.key === 'app')) { out({ error: v.line || v.needsInput.question }); process.exit(2); }
   const sp = specsDirProblem(cfg); if (sp) { out({ error: sp }); process.exit(1); }
@@ -447,9 +485,6 @@ function writeSpecCmd() {
   out(names.length === 1 ? results[0] : { ok: written.length === results.length, written: written.map((r) => r.file), results });
   process.exit(results.every((r) => r.ok) ? 0 : results.some((r) => r.error === 'exists') && results.every((r) => r.ok || r.error === 'exists') ? 3 : 1);
 }
-
-const LONE_CR = /\\r(?!\\n)/;
-const SPLIT_WORD = /[A-Za-z0-9_$<>]\\p{Default_Ignorable_Code_Point}+[A-Za-z0-9_<>]/u;
 
 
 
@@ -539,7 +574,7 @@ function writeOneSpec(cfg, runId, name, asIs = false, replace = false) {
   let st; try { st = fs.lstatSync(draft); } catch { return { ok: false, error: 'no draft at ' + path.relative(cfg.projectDir, draft) + ' — write the spec text there first (the newest run folder), then call write-spec again', name }; }
   if (!st.isFile() || st.size > 64 * 1024) return { ok: false, error: path.relative(cfg.projectDir, draft) + ' must be a regular file of at most 64 KB', name };
   let text; try { text = writingIn(cfg, path.dirname(draft), (at) => readPlainFile(at(path.basename(draft)), 64 * 1024)).toString('utf8').replace(/^\\uFEFF/, '').replace(/\\r\\n/g, '\\n'); } catch (e) { return { ok: false, error: 'the draft at ' + path.relative(cfg.projectDir, draft) + ' could not be read: ' + shown(String((e && e.message) || e), 300), name }; }
-  if (shownText(text) !== text || LONE_CR.test(text) || SPLIT_WORD.test(text)) return { ok: false, error: 'the draft ' + path.relative(cfg.projectDir, draft) + ' contains invisible or control characters (bidi marks, zero-width, tag characters, a lone carriage return, escapes) — rewrite it as plain text and call write-spec again', name };
+  if (draftTextFault(text) >= 0) return { ok: false, error: 'the draft ' + path.relative(cfg.projectDir, draft) + ' contains invisible or control characters (bidi marks, zero-width, tag characters, a lone carriage return, escapes) — rewrite it as plain text and call write-spec again', name };
   const parsed = parseSpec(text, name + '.md');
   if (!/^# +\\S/m.test(text.replace(/^---\\n[\\s\\S]*?\\n---\\n/, ''))) return { ok: false, error: 'the draft is not a runnable spec: it needs a "# Title" heading line (a name: key in the front matter does not count)', draft: path.relative(cfg.projectDir, draft), name };
   if (!parsed.name || parsed.must.length === 0) return { ok: false, error: 'the draft is not a runnable spec: ' + (parsed.warnings.join('; ') || 'it needs a "# name" heading and a "## Passes when" section with at least one "- Must:" line'), draft: path.relative(cfg.projectDir, draft), name };
@@ -574,7 +609,7 @@ function fileCmd() {
   const v = folderVerdict(cfg); if (v.blocked || (v.needsInput && v.needsInput.key === 'app')) { out({ error: v.line || v.needsInput.question }); process.exit(2); }
   const sp = specsDirProblem(cfg); if (sp) { out({ error: sp }); process.exit(1); }
   try { assertRunsDirInsideProject(cfg); } catch (e) { out({ error: e.message }); process.exit(1); }
-  const names = (flag) => { const i = args.indexOf(flag); if (i < 0) return null; const raw = String(args[i + 1] || ''); const list = raw.split(',').filter(Boolean); if (!list.length || list.length > 24 || list.some((n) => !/^[a-z0-9][a-z0-9-]{0,79}$/.test(n) || n === 'readme')) { out({ error: flag + ' takes 1 to 24 spec names separated by commas, each lower-case words joined by hyphens (no .md, no paths, no flags): ' + shown(raw, 120) }); process.exit(2); } args.splice(i, 2); return new Set(list); };
+  const names = (flag) => { const i = args.indexOf(flag); if (i < 0) return null; const raw = String(args[i + 1] || ''); const list = raw.split(',').filter(Boolean); if (!list.length || list.length > 24 || list.some((n) => !specNameOk(n))) { out({ error: flag + ' takes 1 to 24 spec names separated by commas, each lower-case words joined by hyphens (no .md, no paths, no flags, and not readme, claude, agents or a Windows device name): ' + shown(raw, 120) }); process.exit(2); } args.splice(i, 2); return new Set(list); };
   const only = names('--only'); const repl = names('--replace'); const none = args.includes('--none'); if (none) args.splice(args.indexOf('--none'), 1);
   if (none && (only || repl)) { out({ error: '--none saves nothing: it cannot be combined with --only or --replace' }); process.exit(2); }
   if (only && repl) { const both = [...only].filter((n) => repl.has(n)); if (both.length) { out({ error: 'a name is either a new spec (--only) or a correction (--replace), not both: ' + both.join(', ') }); process.exit(2); } }
@@ -608,7 +643,7 @@ function fileCmd() {
   const sealWith = (o) => { writeInRunFolder(runDir, 'saved.json', JSON.stringify({ at: sealedAt, firstTime, ...o }, null, 1) + '\\n', 0o644, withinOf(cfg));                                                                              };
   let real; try { if (!fs.lstatSync(dir).isDirectory()) throw new Error('not a folder'); real = fs.realpathSync(dir); } catch { sealWith({ proposed: 0, filed: [], replaced: [], held: [], note: 'no drafts' }); out({ ok: true, run: runId, filed: [], held: [], note: 'no drafts in this run folder: nothing to save' }); return; }
   if (real !== path.join(fs.realpathSync(cfg.runsDir), runId, 'proposed')) { out({ error: path.relative(cfg.projectDir, dir) + ' is not a plain folder inside its run folder (a link points elsewhere)' }); process.exit(1); }
-  const present = fs.readdirSync(dir).sort().map((f) => (f.match(/^([a-z0-9][a-z0-9-]{0,79})\\.md$/) || [])[1]).filter((n) => n && n !== 'readme');
+  const present = fs.readdirSync(dir).sort().map((f) => (f.match(/^([a-z0-9][a-z0-9-]{0,79})\\.md$/) || [])[1]).filter((n) => n && specNameOk(n));
   if (!only && !repl) { sealWith({ proposed: present.length, filed: [], replaced: [], held: [], notSaved: present }); out({ ok: true, run: runId, filed: [], held: [], ...(present.length ? { notSaved: present } : {}), note: none ? 'nothing to save for this run' : 'no names were given, so nothing was saved: a draft is saved only when the person said yes to it and the conversation passed its name' }); return; }
   const cap = (x) => typeof x === 'string' ? (x.length > 400 ? x.slice(0, 400) + ' … (cut; the draft file has the rest)' : x) : Array.isArray(x) ? [...x.slice(0, 20).map(cap), ...(x.length > 20 ? ['… and ' + (x.length - 20) + ' more (the draft file has them all)'] : [])] : x && typeof x === 'object' ? Object.fromEntries(Object.entries(x).map(([k, y]) => [k, cap(y)])) : x;
   const filed = []; const replaced = []; const held = []; const left = []; let adopted = null;
@@ -662,12 +697,12 @@ function draftsCmd() {
   const drafts = []; const skipped = [];
   for (const f of fs.readdirSync(dir).sort()) {
     const m = f.match(/^([a-z0-9][a-z0-9-]{0,79})\\.md$/);
-    if (!m || m[1] === 'readme') { skipped.push({ file: shown(f, 120), why: 'not a spec-shaped name (lower-case words joined by hyphens, then .md)' }); continue; }
+    if (!m || !specNameOk(m[1])) { skipped.push({ file: shown(f, 120), why: 'not a name a spec can have (lower-case words joined by hyphens, then .md; not readme, claude, agents or a Windows device name)' }); continue; }
     if (drafts.length >= 12) { skipped.push({ file: f, why: 'more than 12 drafts (write-spec takes at most 12 per call)' }); continue; }
     const p = path.join(dir, f); let st; try { st = fs.lstatSync(p); } catch { continue; }
     if (!st.isFile() || st.size > 64 * 1024) { skipped.push({ file: f, why: 'must be a regular file of at most 64 KB' }); continue; }
-    const text = fs.readFileSync(p, 'utf8').replace(/^\\uFEFF/, '').replace(/\\r\\n/g, '\\n');
-    const invisible = shownText(text) !== text || LONE_CR.test(text) || SPLIT_WORD.test(text);
+    let text; try { text = writingIn(cfg, dir, (at) => readPlainFile(at(f), 64 * 1024)).toString('utf8').replace(/^\\uFEFF/, '').replace(/\\r\\n/g, '\\n'); } catch (e) { skipped.push({ file: f, why: 'could not be read: ' + shown(String((e && e.message) || e), 160) }); continue; }
+    const invisible = draftTextFault(text) >= 0;
     const parsed = parseSpec(text, f);
     const { frontMatter, from, leftOut, inFile, urls, outside, secrets, variables, allowNavigation } = draftFacts(cfg, text, parsed);
     const steers = { ...(urls.length ? { urls } : {}), ...(outside.length ? { hostsOutsideTheFence: outside } : {}), ...(allowNavigation ? { allowNavigation: true } : {}), ...(secrets.length ? { secretReferences: secrets } : {}), ...(variables.length ? { variablesOrCredentialNames: variables } : {}) };
@@ -760,6 +795,34 @@ function blockedWord(cfg, runDir, outcome, counts, whyGiven) {
 
 
 
+
+
+const REMEMBER_NOTE = 'remember-offered';
+
+const MEMORY_FILES = ['CLAUDE.md', 'CLAUDE.local.md']; const REMEMBERED_COMMAND = '/claude-test:run';
+const REMEMBERED_WORD = new RegExp('(^|[\\\\s\`\\'"(*_\\\\[])' + REMEMBERED_COMMAND.replace(/[.*+?^\${}()|[\\]\\\\]/g, '\\\\$&') + '(?![\\\\w/-])');
+function rememberDue(cfg, runId) {
+  try {
+    try { fs.lstatSync(path.join(cfg.runsDir, REMEMBER_NOTE)); return false; } catch (e) { if (e.code !== 'ENOENT') return false; }
+    if (!pastRuns(cfg).some((r) => r.specs > 0 && r.runId !== runId)) return false;
+
+    let saved = null; try { saved = JSON.parse(readPlainFile(path.join(cfg.runsDir, runId, 'saved.json'), 1024 * 1024).toString('utf8')); } catch (e) { if (!e || e.code !== 'ENOENT') return false; }
+    if (saved && Array.isArray(saved.held) && saved.held.length) return false;
+
+    const root = insideOpenedFolder(cfg.projectDir) ? process.env.CLAUDE_TEST_OPENED_DIR : sessionRoot();
+    for (const dir of new Set([cfg.projectDir, root])) {
+      for (const name of MEMORY_FILES) {
+        let text = ''; try { text = readPlainFile(path.join(dir, name), 1024 * 1024).toString('utf8'); } catch (e) { if (e && e.code === 'ENOENT') continue; return false; }
+        if (REMEMBERED_WORD.test(text)) return false;
+      }
+    }
+    return writeInRunFolder(cfg.runsDir, REMEMBER_NOTE, new Date().toISOString() + '\\n', 0o644, withinOf(cfg));
+  } catch { return false; }
+}
+
+
+
+
 function finishCmd() {
   const cfg = loadConfig(projectDir);
   try { assertRunsDirInsideProject(cfg); } catch (e) { out({ error: e.message }); process.exit(1); }
@@ -787,22 +850,85 @@ function finishCmd() {
   const specs = listSpecs(cfg);
   const byName = new Map(specs.filter((s) => s.name).map((s) => [s.name.trim().toLowerCase(), s]));
   const byStem = new Map(specs.map((s) => [path.basename(s.file, '.md'), s]));
-  const rows = rep.rows.map((r) => { const s = byName.get(r.name.trim().toLowerCase()) || (r.screenshot ? byStem.get(path.basename(r.screenshot, '.png')) : null) || null; return { file: s ? s.file : null, id: s ? s.id : null, name: r.name, verdict: r.verdict, why: r.why, screenshot: r.screenshot && fs.existsSync(path.join(runDir, r.screenshot)) ? r.screenshot : null }; });
+
+  let progressLines = null; try { const pf = path.join(runDir, 'progress.ndjson'); const ps = fs.lstatSync(pf); if (!ps.isFile() || ps.size >= 4 * 1024 * 1024) throw new Error('not a progress file'); progressLines = writingIn(cfg, runDir, (at) => readPlainFile(at('progress.ndjson'), 4 * 1024 * 1024)).toString('utf8').split('\\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return {}; } }); } catch {                        }
+  const retriedStems = new Set((progressLines || []).filter((l) => l && l.retried === true && typeof l.spec === 'string').map((l) => l.spec));
+  const RETRIED_WHY = /^(passed on retry|failed twice|blocked on retry)\\b/i;
+  const rows = rep.rows.map((r) => { const s = byName.get(r.name.trim().toLowerCase()) || (r.screenshot ? byStem.get(path.basename(r.screenshot, '.png')) : null) || null; const stem = s ? path.basename(s.file, '.md') : r.screenshot ? path.basename(r.screenshot, '.png') : null; const retried = (stem !== null && retriedStems.has(stem)) || RETRIED_WHY.test(r.why); return { file: s ? s.file : null, id: s ? s.id : null, name: s && typeof s.name === 'string' && s.name.trim() ? shown(s.name.trim(), 140) : r.name, verdict: r.verdict, why: r.why, screenshot: r.screenshot && fs.existsSync(path.join(runDir, r.screenshot)) ? r.screenshot : null, ...(retried ? { retried: true } : {}) }; });
+
+
+  {
+    const recorded = new Map(); for (const l of progressLines || []) if (l && typeof l.spec === 'string' && ['PASS', 'FAIL', 'BLOCKED'].includes(l.verdict)) recorded.set(l.spec.normalize('NFC'), l.verdict);
+    const linked = new Set(specs.filter((s) => s.skipped).map((s) => s.file));
+    const unrecordable = (file) => { if (linked.has(file)) return 'unreadable'; try { const at = path.join(cfg.projectDir, file); return writingIn(cfg, path.dirname(at), (inDir) => readPlainFile(inDir(path.basename(at)), 4 * 1024 * 1024)).toString('utf8').includes(RUN_PLACEHOLDER) ? 'run' : null; } catch { return 'unreadable'; } };
+    const key = (x) => shown(String(x).trim(), 160).trim().toLowerCase().normalize('NFC'); const specByStem = new Map(specs.map((s) => [path.basename(s.file, '.md').normalize('NFC'), s]));
+    const byHeading = new Map(); for (const s of specs) if (typeof s.name === 'string' && s.name.trim()) { const k = key(s.name); if (!byHeading.has(k)) byHeading.set(k, []); byHeading.get(k).push(s); }
+    const misnamed = new Set();
+    rep.rows.forEach((raw, i) => {
+      const r = rows[i]; const group = byHeading.get(key(raw.name)) || []; const shot = raw.screenshot ? specByStem.get(path.basename(raw.screenshot, '.png').normalize('NFC')) : null;
+      let s = null; if (shot && (!group.length || group.includes(shot))) s = shot; else if (shot) { misnamed.add(r); if (group.length === 1) s = group[0]; } else if (group.length === 1) s = group[0];
+      r.file = s ? s.file : null; r.id = s ? s.id : null; if (s && typeof s.name === 'string' && s.name.trim()) r.name = shown(s.name.trim(), 140);
+      const stem = s ? path.basename(s.file, '.md') : raw.screenshot ? path.basename(raw.screenshot, '.png') : null; if ((stem !== null && retriedStems.has(stem)) || RETRIED_WHY.test(raw.why)) r.retried = true; else delete r.retried;
+    });
+    const rowsOf = new Map(); for (const r of rows) if (r.file) rowsOf.set(r.file, (rowsOf.get(r.file) || 0) + 1);
+    const unproven = [];
+    for (const r of rows.filter((x) => x.verdict === 'PASS')) {
+      if (misnamed.has(r)) { unproven.push({ r, stem: null, why: 'its screenshot is of another spec: put the screenshot of the spec it names in its Screenshot cell, or leave the cell empty' }); continue; }
+      if (!r.file) continue;
+      if (rowsOf.get(r.file) > 1) { unproven.push({ r, stem: null, why: 'more than one row stands for the spec ' + shown(r.file, 140) + ': keep one row for each spec, under its own # heading' }); continue; }
+      if (!stemOk(path.basename(r.file, '.md'))) continue;
+      const stem = path.basename(r.file, '.md').normalize('NFC'); const why = recorded.has(stem) ? (recorded.get(stem) === 'PASS' ? null : 'you recorded ' + recorded.get(stem)) : unrecordable(r.file); if (why) unproven.push({ r, stem, why });
+    }
+
+    const matched = new Set(rows.filter((r) => r.file).map((r) => path.basename(r.file, '.md').normalize('NFC'))); const unmatched = rows.filter((r) => r.verdict === 'PASS' && !r.file && !misnamed.has(r)); const specStems = new Set(specs.filter((s) => !s.skipped).map((s) => path.basename(s.file, '.md').normalize('NFC')));
+    if (unmatched.length > [...recorded].filter(([stem, verdict]) => verdict === 'PASS' && specStems.has(stem) && !matched.has(stem)).length) for (const r of unmatched) unproven.push({ r, stem: null, why: 'it names no spec file, and there are more such rows than recorded PASSes that no row names: write its Spec cell as the spec\\'s own # heading, or, when no spec file is behind the row, make it BLOCKED' });
+    const said = (why) => (why === 'run' ? 'no verdict was recorded, and its steps hold ' + RUN_PLACEHOLDER + ': claude_test_progress records such a PASS only after this run\\'s value was typed and then acted on' : why === 'unreadable' ? 'no verdict was recorded, and its file could not be read: no PASS can be recorded for it, so make it BLOCKED with that reason' : why);
+    const shape = unproven.filter((u) => u.stem === null); if (shape.length) { out({ error: 'the table\\'s shape: ' + shape.map((u) => '"' + shown(u.r.name, 140) + '" (' + u.why + ')').join('; ') + '. Fix each as its reason says; a fault of form alone is no reason to change a row\\'s verdict. Then write the whole log.md again and finish again' }); process.exit(1); }
+    if (unproven.length) { out({ error: 'the table says PASS for specs whose PASS was not recorded: ' + unproven.map((u) => '"' + shown(u.r.name, 140) + '" (' + said(u.why) + ')').join('; ') + '. Change each of these rows to the verdict you recorded; where none was recorded, to FAIL naming the step that did not run, or to BLOCKED with the reason (BLOCKED "its PASS could not be recorded" when the steps ran but claude_test_progress recorded nothing). Correct the counts in the header line, write the whole log.md again, then finish again' }); process.exit(1); }
+  }
   const counts = { specs: rows.length, passed: rows.filter((r) => r.verdict === 'PASS').length, failed: rows.filter((r) => r.verdict === 'FAIL').length, blocked: rows.filter((r) => r.verdict === 'BLOCKED').length };
   const outcome = counts.failed ? 'failed' : (counts.blocked || (rep.blockedReason && !rows.length)) ? 'blocked' : counts.passed ? 'passed' : 'blocked';
   const m = runId.match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})-(\\d{2})-(\\d{2})/);
   const startedAt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]), Number(m[5]), Number(m[6])).toISOString();
 
-  let secondsPerSpec = null; try { const pf = path.join(runDir, 'progress.ndjson'); const ps = fs.lstatSync(pf); if (!ps.isFile() || ps.size >= 4 * 1024 * 1024) throw new Error('not a progress file'); const ls = writingIn(cfg, runDir, (at) => readPlainFile(at('progress.ndjson'), 4 * 1024 * 1024)).toString('utf8').split('\\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return {}; } }); const start = ls.find((l) => l.event === 'start'); const specsAt = ls.filter((l) => typeof l.spec === 'string').map((l) => Date.parse(l.at)).filter(Number.isFinite).sort((a, b) => a - b); if (start && specsAt.length) secondsPerSpec = Math.round((specsAt[specsAt.length - 1] - Date.parse(start.at)) / specsAt.length / 1000); else if (specsAt.length >= 2) secondsPerSpec = Math.round((specsAt[specsAt.length - 1] - specsAt[0]) / (specsAt.length - 1) / 1000); } catch {                        }
+  let secondsPerSpec = null; try { if (!progressLines) throw new Error('no progress file'); const ls = progressLines; const start = ls.find((l) => l.event === 'start'); const specsAt = ls.filter((l) => typeof l.spec === 'string').map((l) => Date.parse(l.at)).filter(Number.isFinite).sort((a, b) => a - b); if (start && specsAt.length) secondsPerSpec = Math.round((specsAt[specsAt.length - 1] - Date.parse(start.at)) / specsAt.length / 1000); else if (specsAt.length >= 2) secondsPerSpec = Math.round((specsAt[specsAt.length - 1] - specsAt[0]) / (specsAt.length - 1) / 1000); } catch {                        }
   const word = blockedWord(cfg, runDir, outcome, counts, whyGiven);
-  const results = { schema: 'claude-test-results/1', tool: 'claude-test', toolVersion: pluginVersion(), runId, startedAt, finishedAt: finishedAt.toISOString(), runnerSeconds, hostsRefused, ...(word ? { blockedWord: word } : {}), ...(secondsPerSpec ? { secondsPerSpec } : {}), ...(refusedHosts ? { refusedHosts } : {}), ...(pageLeftAppFor ? { pageLeftAppFor } : {}), git: gitFor(cfg, runId), baseUrl: cfg.baseUrl || (rep.head && /^https?:\\/\\//.test(rep.head.baseUrl) ? rep.head.baseUrl : null), outcome, counts, ...(rep.blockedReason ? { blockedReason: rep.blockedReason } : {}), specs: rows };
+
+  const full = rows.length > 0 && specs.filter((s) => !s.skipped && stemOk(path.basename(s.file, '.md'))).every((s) => rows.some((r) => r.file === s.file));
+  const rememberOffer = outcome === 'passed' && rememberDue(cfg, runId);
+  const results = { schema: 'claude-test-results/1', tool: 'claude-test', toolVersion: pluginVersion(), runId, startedAt, finishedAt: finishedAt.toISOString(), runnerSeconds, hostsRefused, ...(word ? { blockedWord: word } : {}), ...(rememberOffer ? { rememberOffer: true } : {}), ...(full ? { full: true } : {}), ...(secondsPerSpec ? { secondsPerSpec } : {}), ...(refusedHosts ? { refusedHosts } : {}), ...(pageLeftAppFor ? { pageLeftAppFor } : {}), git: gitFor(cfg, runId), baseUrl: cfg.baseUrl || (rep.head && /^https?:\\/\\//.test(rep.head.baseUrl) ? rep.head.baseUrl : null), outcome, counts, ...(rep.blockedReason ? { blockedReason: rep.blockedReason } : {}), specs: rows };
   writeResults(cfg, runDir, results);
   const notes = [];
   const unmatched = rows.filter((r) => !r.file).map((r) => r.name); if (unmatched.length) notes.push('rows whose Spec cell matches no spec file\\'s "# name" (file and id are null for them): ' + unmatched.join('; '));
   const files = rows.map((r) => r.file).filter(Boolean); const dup = [...new Set(files.filter((f, i) => files.indexOf(f) !== i))]; if (dup.length) notes.push('more than one row for the same spec file: ' + dup.join(', '));
   if (rep.head && rep.head.specs !== rows.length) notes.push('the header says ' + rep.head.specs + ' specs but the table has ' + rows.length + ' rows');
-  out({ ok: true, results: path.relative(cfg.projectDir, path.join(runDir, 'results.json')), outcome, counts, ...(refusedHosts ? { refusedHosts } : {}), ...(pageLeftAppFor ? { pageLeftAppFor } : {}), ...(notes.length ? { note: notes.join(' · ') } : {}) });
+  const unlisted = specs.filter((s) => !s.skipped && !listableStem(path.basename(s.file, '.md')) && !rows.some((r) => r.file === s.file)).length;
+  const leftOutLine = !unlisted ? null : unlisted === 1 ? '1 spec file in the specs folder is left out whenever every spec runs: its file name is longer than 120 characters or holds an invisible character such as a tab or a line break; rename it' : unlisted + ' spec files in the specs folder are left out whenever every spec runs: their file names are longer than 120 characters or hold an invisible character such as a tab or a line break; rename them';
+
+
+  const noticed = (([...logText.matchAll(/^Noticed: (.+)$/gm)].pop() || [])[1] || '').split(' · ').map((item) => item.trim().replace(/^(\\d{1,5}) console errors?\\b/, (_, n) => n + (n === '1' ? ' console error' : ' console errors'))).filter((item) => NOTICED_ITEMS.some((shape) => shape.test(item))).slice(0, 4);
+  const noticedLine = noticed.length ? 'Noticed: ' + noticed.join(' · ') : null;
+
+  const specName = new Map(specs.map((s) => [s.file, s.name]));
+  const flaky = rows.filter((r) => r.retried && r.verdict === 'PASS' && r.file).map((r) => shown(specName.get(r.file) || r.name, 140));
+  const retriedLine = flaky.length ? 'Passed on a second try (may be flaky): ' + flaky.join(', ') : null;
+  out({ ok: true, results: path.relative(cfg.projectDir, path.join(runDir, 'results.json')), outcome, counts, ...(retriedLine ? { retriedLine } : {}), ...(noticedLine ? { noticedLine } : {}), ...(leftOutLine ? { leftOutLine } : {}), ...(refusedHosts ? { refusedHosts } : {}), ...(pageLeftAppFor ? { pageLeftAppFor } : {}), ...(notes.length ? { note: notes.join(' · ') } : {}) });
 }
+
+
+
+function listableStem(stem) { return !!stem && stem.length <= 120 && !/[\\u0000-\\u001f\\u007f\\u2028\\u2029]/.test(stem); }
+
+
+
+
+const NOTICED_PATH = String.raw\`\\/(?!\\/)[A-Za-z0-9._~:@\\/-]{0,119}\`;
+const NOTICED_ITEMS = [
+  /^\\d{1,4} console errors? \\([A-Z][A-Za-z0-9]{0,40}(, [A-Z][A-Za-z0-9]{0,40}){0,2}\\)$/,
+  /^\\d{1,4} console errors?$/,
+  new RegExp('^(?:[45]\\\\d\\\\d|failed) ' + NOTICED_PATH + '$'),
+  new RegExp('^(?:NaN|undefined|\\\\[object Object\\\\]|Invalid Date) on ' + NOTICED_PATH + '$'),
+];
 
 
 
@@ -813,22 +939,33 @@ function pastRuns(cfg) {
     const r = readJson(path.join(cfg.runsDir, d, 'results.json')); if (!r || r.schema !== 'claude-test-results/1') continue;
     const specs = r.counts && Number.isInteger(r.counts.specs) && r.counts.specs >= 0 ? r.counts.specs : 0;
     const judged = r.counts && Number.isInteger(r.counts.passed) && Number.isInteger(r.counts.failed) ? r.counts.passed + r.counts.failed : 0;
-    rows.push({ runId: d, at: t, judged, outcome: ['passed', 'failed', 'blocked'].includes(r.outcome) ? r.outcome : null, finishedAt: typeof r.finishedAt === 'string' && /^\\d{4}-\\d{2}-\\d{2}T[\\d:.]+Z$/.test(r.finishedAt) ? r.finishedAt : null, specs, secondsPerSpec: Number.isFinite(r.secondsPerSpec) && r.secondsPerSpec >= 1 && r.secondsPerSpec <= 3600 ? Math.round(r.secondsPerSpec) : null, head: r.git && typeof r.git.head === 'string' && /^[0-9a-f]{40}$/.test(r.git.head) ? r.git.head : null });
+    rows.push({ runId: d, at: t, judged, outcome: ['passed', 'failed', 'blocked'].includes(r.outcome) ? r.outcome : null, finishedAt: typeof r.finishedAt === 'string' && /^\\d{4}-\\d{2}-\\d{2}T[\\d:.]+Z$/.test(r.finishedAt) ? r.finishedAt : null, specs, secondsPerSpec: Number.isFinite(r.secondsPerSpec) && r.secondsPerSpec >= 1 && r.secondsPerSpec <= 3600 ? Math.round(r.secondsPerSpec) : null, head: r.git && typeof r.git.head === 'string' && /^[0-9a-f]{40}$/.test(r.git.head) ? r.git.head : null, dirty: r.git && typeof r.git.dirty === 'boolean' ? r.git.dirty : null, changed: changedOf(r.git), secretChanged: !!(r.git && r.git.secretChanged === true), full: r.full === true });
   }
   return rows.sort((a, b) => b.at - a.at);
 }
 
 
 function recordedGit(cfg, runId) {
-  try { const at = JSON.parse(writingIn(cfg, path.join(cfg.runsDir, runId), (name) => readPlainFile(name('git.json'), 400)).toString('utf8')); return at && typeof at === 'object' && typeof at.head === 'string' && /^[0-9a-f]{40}$/.test(at.head) && (typeof at.dirty === 'boolean' || at.dirty === null) ? { head: at.head, dirty: at.dirty } : null; } catch { return null; }
+  try { const at = JSON.parse(writingIn(cfg, path.join(cfg.runsDir, runId), (name) => readPlainFile(name('git.json'), 256 * 1024)).toString('utf8')); if (!(at && typeof at === 'object' && typeof at.head === 'string' && /^[0-9a-f]{40}$/.test(at.head) && (typeof at.dirty === 'boolean' || at.dirty === null))) return null; const changed = changedOf(at); return { head: at.head, dirty: at.dirty, ...(changed !== null ? { changed } : {}), ...(changed !== null && at.secretChanged === true ? { secretChanged: true } : {}) }; } catch { return null; }
 }
 
 function gitFor(cfg, runId) { return gitOff() ? recordedGit(cfg, runId) : gitState(cfg.projectDir); }
 
+
+
+
+const CHANGED_AT_MOST = 400;
 function gitState(dir) {
 
-  try { const head = safeGit(dir, ['rev-parse', 'HEAD']).toString().trim(); let dirty = null; try { dirty = safeGit(dir, ['status', '--porcelain', '--untracked-files=no'], { timeout: 60000 }).toString().trim() !== ''; } catch {                                                                      } return /^[0-9a-f]{40}$/.test(head) ? { head, dirty } : null; } catch { return null; }
+  try {
+    const head = safeGit(dir, ['rev-parse', 'HEAD']).toString().trim(); let dirty = null; let changed = null; let secretChanged = false;
+    try { dirty = safeGit(dir, ['status', '--porcelain', '--untracked-files=no'], { timeout: 60000 }).toString().trim() !== ''; } catch {                                                                      }
+    try { const files = safeGit(dir, ['-c', 'core.quotePath=false', 'status', '--porcelain', '--no-renames', '--untracked-files=all', '--', '.'], { maxBuffer: 4 * 1024 * 1024, timeout: 60000 }).toString().split('\\n').filter(Boolean).map((l) => l.slice(3).replace(/^"(.*)"$/, '$1')); const shown = files.filter((f) => !SECRET_FILE.test(f)); changed = shown.length <= CHANGED_AT_MOST && Buffer.byteLength(JSON.stringify(shown)) <= 200 * 1024 ? changedOf({ changed: shown }) : null; secretChanged = shown.length < files.length; } catch {                                                }
+    return /^[0-9a-f]{40}$/.test(head) ? { head, dirty, ...(changed !== null ? { changed } : {}), ...(changed !== null && secretChanged ? { secretChanged: true } : {}) } : null;
+  } catch { return null; }
 }
+
+function changedOf(git) { const c = git && git.changed; return Array.isArray(c) && c.length <= CHANGED_AT_MOST && c.every((f) => typeof f === 'string' && f.length > 0 && f.length <= 400 && !f.includes('\\0')) ? c : null; }
 
 
 
@@ -872,6 +1009,8 @@ async function progressCmd() {
   try { assertRunsDirInsideProject(cfg); } catch (e) { out({ error: e.message }); process.exit(1); }
   const runId = targetRunId(cfg);
   if (!runId) { out({ error: 'no run folder yet ("ct.mjs new-run" first)' }); process.exit(1); }
+
+  const retriedAt = args.indexOf('--retried'); const retried = retriedAt > 0; if (retried) args.splice(retriedAt, 1);
   const file = path.join(cfg.runsDir, runId, 'progress.ndjson');
   try { const st = fs.lstatSync(file); if (!st.isFile()) { out({ error: path.relative(cfg.projectDir, file) + ' exists and is not a regular file — not writing through it' }); process.exit(1); } } catch {                                            }
   const read = () => { try { return fs.readFileSync(file, 'utf8').split('\\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; } };
@@ -911,9 +1050,10 @@ async function progressCmd() {
   const startWithStems = args[1] === 'start' && args.length > 2 && !(args.length === 3 && ['PASS', 'FAIL', 'BLOCKED'].includes(String(args[2]).toUpperCase()) && specNamedStart());
   if (startWithStems && !args.slice(2).every((x) => stemOk(x))) { out({ error: 'usage: ct.mjs progress start [<spec file stem> …] — the stems of a run limited to some specs, each in single quotes' }); process.exit(2); }
   if (args.length === 1 || (args[1] === 'start' && args.length === 2) || startWithStems) {
+    if (retried) { out({ error: 'usage: --retried goes with a verdict only: ct.mjs progress <spec file stem> PASS|FAIL|BLOCKED --retried' }); process.exit(2); }
     if (args[1] === 'start' && !startLine()) {
       let specs = []; let names = {}; try {
-        const all = listSpecs(cfg).filter((x) => !x.skipped).map((x) => ({ stem: path.basename(x.file, '.md'), name: typeof x.name === 'string' && x.name.trim() ? x.name.trim().slice(0, 140) : null, last: Array.isArray(x.tags) && x.tags.includes('creates-data') })).filter((x) => x.stem && x.stem.length <= 120 && !/[\\u0000-\\u001f\\u007f\\u2028\\u2029]/.test(x.stem));
+        const all = listSpecs(cfg).filter((x) => !x.skipped).map((x) => ({ stem: path.basename(x.file, '.md'), name: typeof x.name === 'string' && x.name.trim() ? x.name.trim().slice(0, 140) : null, last: Array.isArray(x.tags) && x.tags.includes('creates-data') })).filter((x) => listableStem(x.stem));
         const want = startWithStems ? [...new Set(args.slice(2))] : null;
         const chosen = want ? want.map((w) => all.find((x) => x.stem === w) || { stem: w, last: false }) : all.sort((a, b) => a.stem < b.stem ? -1 : a.stem > b.stem ? 1 : 0);
         const ordered = [...chosen.filter((x) => !x.last), ...chosen.filter((x) => x.last)].slice(0, 500);
@@ -925,12 +1065,12 @@ async function progressCmd() {
     const sl = startLine(); out({ runId, file: path.relative(cfg.projectDir, file), absolute: file, ...(args[1] === 'start' && sl && Array.isArray(sl.specs) ? { order: sl.specs } : {}), ...summary(), ...(drop.length ? { drop } : {}) }); return;
   }
   const stem = args[1]; const verdict = String(args[2] || '').toUpperCase();
-  if (!stemOk(stem) || !['PASS', 'FAIL', 'BLOCKED'].includes(verdict)) { out({ error: 'usage: ct.mjs progress <spec file stem> PASS|FAIL|BLOCKED' }); process.exit(2); }
+  if (!stemOk(stem) || !['PASS', 'FAIL', 'BLOCKED'].includes(verdict)) { out({ error: 'usage: ct.mjs progress <spec file stem> PASS|FAIL|BLOCKED [--retried]' }); process.exit(2); }
   const now = new Date(); const st0 = startLine(); const t0 = st0 && st0.at ? Date.parse(st0.at) : NaN;
 
 
   let frames = []; try { const taken = new Set(read().flatMap((l) => Array.isArray(l.frames) ? l.frames : [])); const all = fs.readdirSync(path.join(cfg.runsDir, runId, 'frames')).filter((f) => /^f-\\d{4}\\.jpeg$/.test(f) && !taken.has(f)).sort(); frames = all.length <= 40 ? all : [...new Set(Array.from({ length: 40 }, (_, k) => all[Math.round(k * (all.length - 1) / 39)]))]; } catch {                                                                                }
-  const line = { spec: stem, verdict, at: now.toISOString(), ...(Number.isFinite(t0) ? { s: Math.max(0, Math.round((now.getTime() - t0) / 1000)) } : {}), ...(frames.length ? { frames } : {}) };
+  const line = { spec: stem, verdict, at: now.toISOString(), ...(Number.isFinite(t0) ? { s: Math.max(0, Math.round((now.getTime() - t0) / 1000)) } : {}), ...(retried ? { retried: true } : {}), ...(frames.length ? { frames } : {}) };
   addLine(line);
   out({ ok: true, file: path.relative(cfg.projectDir, file), done: specLines().length, ...(drop.length ? { drop } : {}) });
 }
@@ -938,27 +1078,123 @@ async function progressCmd() {
 
 
 
-const SECRET_FILE = /(^|\\/)\\.?env([.-][^/]*)?$|(^|\\/)[^/]*\\.env(\\.[^/]*)?$|(^|\\/)\\.envrc$|(^|\\/)\\.npmrc$|(^|\\/)\\.netrc$|\\.(pem|key|p12|pfx|crt|cer|jks|keystore|sqlite3?|db)$|(^|\\/)[^/]*(secrets?|credentials?|private[-_]?key|id_rsa|id_ed25519|service[-_]?account|tokens?)[^/]*\\.(json|ya?ml|toml|txt|env|ini|cfg|conf)$/i;
+
+
+
+function planSpecsOf(cfg, failedLast, changed = new Set(), judged = null, verdictAt = new Map()) {
+  const planSpecs = [];
+  for (const s of listSpecs(cfg)) {
+    if (s.skipped) continue;
+    const stem = path.basename(s.file, '.md');
+    let text = null; try { text = fs.readFileSync(path.join(cfg.projectDir, s.file), 'utf8'); } catch {                                                        }
+    const fc = text === null ? null : fromComment(text);
+    const named = [...new Set((fc ? fc.files : []).map((f) => appRelative(cfg.projectDir, f)).filter((f) => f !== null))];
+    const there = (f) => { const p = path.join(cfg.projectDir, f); try { return reallyInsideDir(p, cfg.projectDir) && fs.existsSync(p); } catch { return false; } };
+    const live = named.filter((f) => changed.has(f) || there(f));
+    let edited = false; if (verdictAt.has(s.file)) { try { edited = fs.lstatSync(path.join(cfg.projectDir, s.file)).mtimeMs > verdictAt.get(s.file); } catch {                                               } }
+    planSpecs.push({ stem, files: live.length ? live : null, data: Array.isArray(s.tags) && s.tags.includes('creates-data'), failedLast: failedLast.has(stem), noRecentResult: judged !== null && !judged.has(s.file), edited });
+  }
+  return planSpecs;
+}
+
+
+
+const NOT_SOURCE_FOLDER = /(^|\\/)(\\.claude-test|\\.claude|node_modules)\\/|^(dist|build|coverage|\\.next)\\//;
+
+function notASourceChange(f) { return NOT_SOURCE_FOLDER.test(f) || /(^|\\/)(package-lock\\.json|pnpm-lock\\.yaml|yarn\\.lock|bun\\.lockb?)$|\\.lock$/.test(f); }
+
+
+
+
+function fixPlanCmd() {
+  const cfg = loadConfig(projectDir);
+  if (args.length > 1) { out({ error: 'usage: ct.mjs fix-plan (it takes no arguments: it reads the tests that did not pass from the recent runs, and the changed files from git)' }); process.exit(1); }
+  try { assertRunsDirInsideProject(cfg); } catch (e) { out({ error: e.message }); process.exit(1); }
+  const past = pastRuns(cfg).filter((r) => r.specs > 0); const newest = past[0];
+  const results = newest ? readJson(path.join(cfg.runsDir, newest.runId, 'results.json')) : null;
+  const rowsOf = (r) => (r && Array.isArray(r.specs) ? r.specs : []).filter((row) => row && typeof row === 'object');
+
+
+  let present = new Set(); try { present = new Set(listSpecs(cfg).map((s) => s.file)); } catch {                                                  }
+  const judged = new Set(rowsOf(results).map((row) => row.file)); const carried = [];
+  for (const p of past.slice(1, 31)) for (const row of rowsOf(readJson(path.join(cfg.runsDir, p.runId, 'results.json')))) { if (typeof row.file !== 'string' || judged.has(row.file)) continue; judged.add(row.file); if (row.verdict !== 'PASS' && present.has(row.file)) carried.push(row); }
+  const notPassed = [...rowsOf(results).filter((row) => row.verdict !== 'PASS'), ...carried];
+  const failedAll = [...new Set(notPassed.filter((row) => typeof row.file === 'string').map((row) => path.basename(row.file, '.md')))];
+  if (!results) { out({ error: 'no run has test results yet, so there is nothing to re-run' }); process.exit(1); }
+  if (!notPassed.length) { out({ error: 'no test\\'s newest verdict is failed or blocked, so there is nothing to re-run' }); process.exit(1); }
+
+  if (failedAll.some((s) => !stemOk(s))) { out({ error: 'the file name of a test that did not pass has a character the runner cannot take, such as a quote or a leading hyphen: re-run every spec instead, giving the runner no stems' }); process.exit(1); }
+
+
+  const git = (argv) => { try { return safeGit(cfg.projectDir, ['-c', 'core.quotePath=false', ...argv], { maxBuffer: 4 * 1024 * 1024, timeout: 60000 }).toString(); } catch { return null; } };
+  const prefix = git(['rev-parse', '--show-prefix']);
+  const status = git(['status', '--porcelain', '--no-renames', '--untracked-files=all', '--', '.']);
+
+  const changedUnknown = prefix === null || status === null;
+  const at = (prefix || '').trim(); const rel = (f) => at && f.startsWith(at) ? f.slice(at.length) : (at ? null : f);
+  const listed = changedUnknown ? [] : [...new Set(status.split('\\n').filter(Boolean).map((l) => rel(l.slice(3).replace(/^"(.*)"$/, '$1'))).filter((f) => f && !notASourceChange(f)))];
+
+  const recorded = newest.changed ? new Set(newest.changed.map(rel).filter((f) => f && appRelative(cfg.projectDir, f) === f && !notASourceChange(f))) : null;
+
+  let startedAt = newest.at; try { startedAt = Math.min(startedAt, fs.lstatSync(path.join(cfg.runsDir, newest.runId, 'save-key.sha256')).mtimeMs); } catch {                                           }
+
+  const modifiedAt = (f) => { const p = path.join(cfg.projectDir, f); if (appRelative(cfg.projectDir, f) !== f) return null; for (const q of [p, path.dirname(p)]) { try { if (!reallyInsideDir(q, cfg.projectDir)) return null; return fs.lstatSync(q).mtimeMs; } catch (e) { if (e.code !== 'ENOENT' && e.code !== 'ENOTDIR') return null; } } return null; };
+  const touched = changedUnknown ? [] : touchedSince({ uncommitted: listed, recorded, startedAt, modifiedAt, secret: (f) => SECRET_FILE.test(at + f) });
+  const planSpecs = planSpecsOf(cfg, new Set(failedAll), new Set(touched));
+  if (notPassed.some((row) => typeof row.file !== 'string') || failedAll.some((s) => !planSpecs.some((p) => p.stem === s))) { out({ error: 'a test that did not pass is not a spec the runner can take now: re-run every spec instead, giving the runner no stems' }); process.exit(1); }
+  const plan = fixPlan(planSpecs, failedAll, touched, { local: reachesOnlyThisMachine(cfg) });
+  const named = [...plan.run, ...(plan.notRerun || [])];
+  const titles = {}; try { for (const x of listSpecs(cfg)) { const stem = path.basename(x.file, '.md'); const name = typeof x.name === 'string' && x.name.trim() ? shown(x.name.trim(), 140) : null; if (named.includes(stem) && name) titles[stem] = name; } } catch {                      }
+  out({ run: plan.run, ...(Object.keys(titles).length ? { titles } : {}), also: plan.also, ...(plan.notRerun ? { notRerun: plan.notRerun } : {}), ...(plan.unnamed ? { unnamed: plan.unnamed } : {}), ...(changedUnknown ? { changedUnknown: true } : {}) });
+}
+
+
+
+
 function changesCmd() {
   const cfg = loadConfig(projectDir);
   try { assertRunsDirInsideProject(cfg); } catch (e) { out({ error: e.message }); process.exit(1); }
-  const last = pastRuns(cfg).find((r) => r.specs > 0 && r.head);
+  const past = pastRuns(cfg);
+  const last = past.find((r) => r.specs > 0 && r.head && r.full);
   let since = last ? { runId: last.runId, head: last.head, finishedAt: last.finishedAt, outcome: last.outcome } : null;
 
   const git = (argv) => { try { return safeGit(cfg.projectDir, ['-c', 'core.quotePath=false', ...argv], { maxBuffer: 4 * 1024 * 1024, timeout: 60000 }).toString(); } catch { return null; } };
   const head = (git(['rev-parse', 'HEAD']) || '').trim() || null;
   const prefix = (git(['rev-parse', '--show-prefix']) || '').trim();
   const rel = (f) => prefix && f.startsWith(prefix) ? f.slice(prefix.length) : (prefix ? null : f);
-  const keep = (f) => f && !/(^|\\/)(\\.claude-test|\\.claude|node_modules|dist|build|coverage|\\.next)\\//.test(f) && !/(^|\\/)(package-lock\\.json|pnpm-lock\\.yaml|yarn\\.lock|bun\\.lockb?|\\.gitignore)$/.test(f) && !/\\.(test|spec)\\.[a-z]+$|\\.(md|lock|log|png|jpg|svg|ico|map)$/.test(f) && !SECRET_FILE.test(f);
+  const keep = (f) => f && !NOT_SOURCE_FOLDER.test(f) && !/(^|\\/)(package-lock\\.json|pnpm-lock\\.yaml|yarn\\.lock|bun\\.lockb?|\\.gitignore)$/.test(f) && !/\\.(test|spec)\\.[a-z]+$|\\.(md|lock|log|png|jpg|svg|ico|map)$/.test(f) && !SECRET_FILE.test(f);
   const gone = !!(since && git(['cat-file', '-e', since.head + '^{commit}']) === null);
   if (gone) since = { ...since, gone: true };
-  const committed = since && !gone && head && since.head !== head ? (git(['diff', '--no-ext-diff', '--no-textconv', '--name-only', since.head, 'HEAD', '--', '.']) || '').split('\\n').map(rel).filter(keep) : [];
-  const porcelain = (git(['status', '--porcelain', '--untracked-files=all', '--', '.']) || '').split('\\n').filter(Boolean).map((l) => ({ untracked: l.startsWith('??'), file: rel(l.slice(3).replace(/^.* -> /, '').replace(/^"(.*)"$/, '$1')) })).filter((e) => keep(e.file));
+  const diffOut = since && !gone && head && since.head !== head ? git(['diff', '--no-ext-diff', '--no-textconv', '--no-renames', '--name-only', since.head, 'HEAD', '--', '.']) : '';
+  const statusOut = git(['status', '--porcelain', '--no-renames', '--untracked-files=all', '--', '.']);
+  const committedAny = (diffOut || '').split('\\n').map(rel);
+  const porcelainAny = (statusOut || '').split('\\n').filter(Boolean).map((l) => ({ untracked: l.startsWith('??'), file: rel(l.slice(3).replace(/^.* -> /, '').replace(/^"(.*)"$/, '$1')) }));
+  const committed = committedAny.filter(keep);
+  const porcelain = porcelainAny.filter((e) => keep(e.file));
   const uncommitted = porcelain.map((e) => e.file); const untracked = new Set(porcelain.filter((e) => e.untracked).map((e) => e.file));
-  const changed = [...new Set([...committed, ...uncommitted])].slice(0, 200);
+  const changedAll = [...new Set([...committed, ...uncommitted])]; const changed = changedAll.slice(0, 200);
+
+
+
+
+
+
+  const judgingRuns = last ? past.slice(0, past.indexOf(last) + 1).filter((r) => r.specs > 0) : [];
+  const testedLists = judgingRuns.map((r) => r.changed ?? (r.dirty === false ? [] : null));
+  const testedDirty = testedLists.includes(null) ? null : [...new Set(testedLists.flat())];
+  const planChangedAll = [...new Set([...committedAny, ...porcelainAny.map((e) => e.file), ...(testedDirty || []).map(rel)])].filter((f) => f && !notASourceChange(f));
+  const planChanged = planChangedAll.slice(0, 400);
+  const answered = head !== null && diffOut !== null && statusOut !== null;
 
   const citedBy = Object.create(null);
-  for (const s of listSpecs(cfg)) { let text = ''; try { text = fs.readFileSync(path.join(cfg.projectDir, s.file), 'utf8'); } catch { continue; } const fc = fromComment(text); for (const clean of fc ? fc.files : []) { const stem = path.basename(s.file, '.md'); (citedBy[clean] = citedBy[clean] || []); if (!citedBy[clean].includes(stem)) citedBy[clean].push(stem); } }
+
+  const latest = new Map(); const verdictAt = new Map(); for (const p of past.filter((x) => x.specs > 0).slice(0, 30)) { const r = readJson(path.join(cfg.runsDir, p.runId, 'results.json')); for (const row of r && Array.isArray(r.specs) ? r.specs : []) if (row && typeof row.file === 'string' && typeof row.verdict === 'string' && !latest.has(row.file)) { latest.set(row.file, row.verdict); verdictAt.set(row.file, Date.parse(p.finishedAt ?? '') || p.at); } }
+  const failedLast = new Set([...latest].filter(([, verdict]) => verdict !== 'PASS').map(([file]) => path.basename(file, '.md')));
+  const planSpecs = planSpecsOf(cfg, failedLast, new Set(planChanged), new Set(latest.keys()), verdictAt);
+  for (const { stem, files: cites } of planSpecs) for (const clean of cites || []) { (citedBy[clean] = citedBy[clean] || []); if (!citedBy[clean].includes(stem)) citedBy[clean].push(stem); }
+
+  const secretTested = judgingRuns.some((r) => r.secretChanged) ? planSpecs.flatMap((s) => (s.files || []).filter((f) => SECRET_FILE.test(prefix + f) || SECRET_FILE.test(f))) : [];
+  const plan = affectedPlan(planSpecs, [...new Set([...planChanged, ...secretTested])], { complete: !!since && !gone && answered && testedDirty !== null && planChangedAll.length <= planChanged.length });
   const covered = changed.filter((f) => citedBy[f]); const uncovered = changed.filter((f) => !citedBy[f]);
 
 
@@ -971,7 +1207,7 @@ function changesCmd() {
     const exists = fs.existsSync(path.join(cfg.projectDir, f));
     return { file: f, status: !exists ? 'deleted' : num.length === 3 && num[0] !== '-' && git(['cat-file', '-e', base + ':' + prefix + f]) === null ? 'added' : 'modified', ...(num.length === 3 && /^\\d+$/.test(num[0]) ? { added: Number(num[0]), removed: Number(num[1]) } : {}), ...(hunks.length ? { changedLines: hunks } : {}) };
   });
-  out({ since, head, ...(since && head === since.head ? { sameCommit: true } : {}), changedFiles: changed, uncommittedFiles: uncommitted.slice(0, 100), cited: covered.map((f) => ({ file: f, specs: citedBy[f] })), uncovered, files, ...(covered.length ? { citedNote: 'cited is not covered — check the behaviour: a spec names these files as a source, which says nothing about the NEW behaviour in them; read the change and ask whether that spec\\'s steps and Must lines would notice it — if not, it needs a spec of its own' } : {}), note: since && gone ? 'the last run (' + since.runId + ') recorded commit ' + since.head.slice(0, 8) + ', which is no longer in this repository (rebased away, or the run folder came from elsewhere): committed history was NOT compared — only uncommitted files are listed; say so rather than "nothing changed"' : since ? 'changed since run ' + since.runId + ' (' + since.head.slice(0, 8) + ')' + (changed.length ? '' : ': nothing in the app\\'s source') : 'no earlier run recorded a commit (results.json git.head): everything uncommitted is listed; committed history is not compared' });
+  out({ since, head, ...(since && head === since.head ? { sameCommit: true } : {}), plan, changedFiles: changed, uncommittedFiles: uncommitted.slice(0, 100), cited: covered.map((f) => ({ file: f, specs: citedBy[f] })), uncovered, files, ...(covered.length ? { citedNote: 'cited is not covered — check the behaviour: a spec names these files as a source, which says nothing about the NEW behaviour in them; read the change and ask whether that spec\\'s steps and Must lines would notice it — if not, it needs a spec of its own' } : {}), note: since && gone ? 'the last run (' + since.runId + ') recorded commit ' + since.head.slice(0, 8) + ', which is no longer in this repository (rebased away, or the run folder came from elsewhere): committed history was NOT compared — only uncommitted files are listed; say so rather than "nothing changed"' : since ? 'changed since run ' + since.runId + ' (' + since.head.slice(0, 8) + ')' + (changed.length ? '' : ': nothing in the app\\'s source') : 'no earlier run that ran every test recorded a commit (results.json full and git.head): everything uncommitted is listed; committed history is not compared' });
 }
 
 
@@ -1005,12 +1241,13 @@ switch (cmd) {
   case 'prefs': prefsCmd(); break;
   case 'allow': allowCmd(); break;
   case 'changes': changesCmd(); break;
+  case 'fix-plan': fixPlanCmd(); break;
   case 'finish': finishCmd(); break;
   case 'install': case 'install-browser': install(); break;
   case 'browser':
     process.stderr.write('ct.mjs browser is not available: specs run only through the Claude Test browser tools, which are held to the allowed addresses. Nothing was started.\\n');
     process.exit(2);
   default:
-    process.stderr.write('usage: ct.mjs status | new-run | allow [--remove <address>…] | prefs [live-page open|link] | write-spec <name…> | drafts | progress [start | <stem> <verdict>] | changes | finish [--why <word>] | elapsed | install [browser]   (sign-in commands: ct-auth.mjs)\\n');
+    process.stderr.write('usage: ct.mjs status | new-run | allow [--remove <address>…] | prefs [live-page open|link] | write-spec <name…> | drafts | progress [start | <stem> <verdict> [--retried]] | changes | fix-plan | finish [--why <word>] | elapsed | install [browser]   (sign-in commands: ct-auth.mjs)\\n');
     process.exit(2);
 }
