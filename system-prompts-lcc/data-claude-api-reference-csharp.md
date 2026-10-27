@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API reference — C#) inlined as <doc>
   or extracted for the model to Read when the skill's Reading Guide points to
   it.
-ccVersion: 2.1.296
+ccVersion: 2.1.310
 -->
 # Claude API - C#
 
@@ -362,7 +362,7 @@ if (response.StopReason == "refusal" && response.StopDetails is { } details)
 }
 \`\`\`
 
-**Refusal fallbacks ({{FABLE_NAME}}) - opt in by default.** Fallbacks are opt-in: without them a refused request simply stops. In \`{{FABLE_ID}}\` code, include \`Fallbacks = [new(Model.ClaudeOpus4_8)]\` plus the \`AnthropicBeta.ServerSideFallback2026_06_01\` beta on the beta messages call by default - a policy decline is re-served by the fallback model inside the same call. Not available on Amazon Bedrock, Vertex AI, or Microsoft Foundry - use the client-side handler there: \`new AnthropicClient { Handlers = [new BetaRefusalFallbackHandler { Fallbacks = [new(Model.ClaudeOpus4_8)] }] }\` (namespace \`Anthropic.Helpers\`), with per-conversation state via \`BetaFallbackState.Create()\` scoped with \`using (fallbackState.Use()) { ... }\`. Full semantics (billing, sticky routing, streaming) and a runnable example: \`shared/model-migration.md\` -> Migrating to {{FABLE_NAME}} -> \`refusal\` stop reason, and the C# SDK repo's \`examples/\` (WebFetch via \`shared/live-sources.md\`).
+**Refusal fallbacks ({{FABLE_NAME}}) - opt in by default.** Fallbacks are opt-in: without them a refused request simply stops. In \`{{FABLE_ID}}\` code, include \`Fallbacks = [new(Model.ClaudeOpus4_8)]\` plus the \`AnthropicBeta.ServerSideFallback2026_06_01\` beta on the beta messages call by default - a policy decline is re-served by the fallback model inside the same call. Not available on Amazon Bedrock, Vertex AI, or Microsoft Foundry - use the client-side handler there: \`new AnthropicClient { Handlers = [new BetaRefusalFallbackHandler { Fallbacks = [new(Model.ClaudeOpus4_8)] }] }\` (namespace \`Anthropic.Helpers\`), with per-conversation state via \`BetaFallbackState.Create()\` scoped with \`using (fallbackState.Use()) { ... }\`. Full semantics (billing, sticky routing, streaming) and a runnable example: \`shared/model-migration.md\` -> Migrating to {{FABLE_NAME}} -> \`refusal\` stop reason, and the C# SDK repo's \`examples/\` (fetch it from \`shared/live-sources.md\`).
 
 ---
 

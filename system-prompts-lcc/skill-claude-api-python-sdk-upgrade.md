@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API Python SDK Upgrade) inlined as
   <doc> or extracted for the model to Read when the skill's Reading Guide points
   to it.
-ccVersion: 2.1.308
+ccVersion: 2.1.310
 -->
 # Upgrading the \`anthropic\` Python SDK: 0.x -> 1.x
 
@@ -12,7 +12,7 @@ ccVersion: 2.1.308
 
 \`anthropic\` 1.x is deliberately a small step from the last 0.x release: no method was restructured and no new pattern is required. Long-deprecated surface was removed, the HTTP layer moved from \`httpx\` to its maintained fork \`httpx2\`, and the minimum Python version is now 3.10. Almost every required edit is mechanical, and a type checker flags nearly all of them once 1.x is installed - which makes \`pyright\` / \`mypy\` output a good cross-check for the inventory below.
 
-The SDK repository's \`MIGRATION.md\` is the authoritative change list - WebFetch it (URL in \`shared/live-sources.md\` -> SDK major-version upgrade guides) when you can, and if it disagrees with this file, follow \`MIGRATION.md\` and say so in your report. The other Python files in this skill may still show 0.x-era details; for a project on 1.x, this file takes precedence.
+The SDK repository's \`MIGRATION.md\` is the authoritative change list - fetch it (URL in \`shared/live-sources.md\` -> SDK major-version upgrade guides) when you can, and if it disagrees with this file, follow \`MIGRATION.md\` and say so in your report. The other Python files in this skill may still show 0.x-era details; for a project on 1.x, this file takes precedence.
 
 ---
 
