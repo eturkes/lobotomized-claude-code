@@ -3,7 +3,7 @@ name: 'Data: admin-api'
 description: >-
   claude-api skill reference file (admin-api) inlined as <doc> or extracted for
   the model to Read when the skill's Reading Guide points to it.
-ccVersion: 2.1.308
+ccVersion: 2.1.310
 -->
 # Admin API (Organization Management)
 
@@ -13,17 +13,17 @@ The Admin API lives under \`https://api.anthropic.com/v1/organizations/*\`. It m
 
 ## Authentication
 
-Two credential types, both read automatically by the default SDK client and the CLI:
+Two kinds of credential, both read automatically by the default SDK client and the CLI:
 
 | Credential | Env var | HTTP header | Covers |
 | --- | --- | --- | --- |
-| Admin API key (\`sk-ant-admin...\`) | \`ANTHROPIC_API_KEY\` | \`x-api-key\` | Most endpoints |
+| Admin API key (\`sk-ant-admin...\`), or an organization-scoped API key linked to a user or service account | \`ANTHROPIC_API_KEY\` | \`x-api-key\` | Most endpoints |
 | \`org:admin\` OAuth token | \`ANTHROPIC_AUTH_TOKEN\` | \`authorization: Bearer\` | Everything, including the OAuth-only endpoints |
 
 - **OAuth-only endpoints:** service accounts, federation issuers, and federation rules reject API keys - they require an \`org:admin\` OAuth token.
 - **Precedence gotcha:** when both env vars are set, some clients prefer the API key. When using a bearer token, leave \`ANTHROPIC_API_KEY\` unset in that shell.
 - Admin API keys are created in the Claude Console by organization admins.
-- Regular (non-admin) API keys do not work on any of these endpoints, and admin credentials do not work on the Messages API.
+- Workspace-scoped API keys do not work on these endpoints (except \`GET /v1/organizations/me\`), and admin credentials do not work on the Messages API.
 - An \`org:admin\` token grants access to the whole organization regardless of any workspace binding.
 
 **Interactive OAuth token** - log in with the \`ant\` CLI under a dedicated profile (keeps routine commands from running with elevated access), then export the token. Tokens are short-lived; on 401, re-run the export. Profile and scope mechanics (why \`org:admin\` needs an explicit \`--scope\`, switching profiles): \`shared/anthropic-cli.md\`.
@@ -173,6 +173,7 @@ Owners and primary owners have all admin permissions and can also manage admins.
 ## Platform Restrictions
 
 - **Claude Platform on AWS:** only the workspace, CMEK external-key and telemetry destination endpoints work. Requests go through Amazon's gateway, signed with the user's AWS credentials (\`shared/claude-platform-on-aws.md\`; for destinations, \`shared/opentelemetry.md\`); Admin API keys and OAuth tokens don't work there. There is no external-key validate endpoint: a key is validated when it's attached to a workspace. Keys can also be registered and attached in the Claude Console. Members, workspace members, invites, API keys, and usage/cost/rate-limit reports are unavailable.
+- **Claude Models on Google Cloud (Anthropic managed):** most of these endpoints are not offered, and Admin API keys don't work there. The usage report (\`GET /v1/organizations/usage_report/messages\`) goes through the organization-level base URL (this platform's docs page in \`shared/live-sources.md\`), with Google Cloud credentials and \`roles/claude.admin\`. There is no cost report: use the Claude Console's Cost page. Register, verify and attach CMEK keys in the Claude Console, and manage workspaces there too.
 - **Claude Enterprise (claude.ai orgs):** only members and invites from this surface, plus Enterprise-only endpoints (group and custom-role reads, spend limits) that are not in the SDKs.
 
 ## Live Docs

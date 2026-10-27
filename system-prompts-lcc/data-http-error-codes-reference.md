@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (HTTP error codes reference) inlined as <doc>
   or extracted for the model to Read when the skill's Reading Guide points to
   it.
-ccVersion: 2.1.308
+ccVersion: 2.1.310
 -->
 # HTTP Error Codes Reference
 
@@ -91,7 +91,7 @@ A model your organization cannot use is normally a 404, not a 403 (see below). A
 **Causes:**
 
 - Typo in model ID (e.g., \`claude-sonnet-4.6\` instead of \`claude-sonnet-4-6\`)
-- Using deprecated model ID
+- Using a retired model ID (see \`shared/models.md\`)
 - A model ID that exists but is not available to your organization
 - Invalid API endpoint
 

@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude Platform on AWS reference) inlined as
   <doc> or extracted for the model to Read when the skill's Reading Guide points
   to it.
-ccVersion: 2.1.304
+ccVersion: 2.1.310
 -->
 # Claude Platform on AWS
 
@@ -57,7 +57,7 @@ Endpoint pattern: \`https://aws-external-anthropic.{region}.api.aws/v1/...\`. Re
 
 The client resolves AWS credentials via the standard precedence chain: explicit constructor args -> environment (\`AWS_ACCESS_KEY_ID\`/\`AWS_SECRET_ACCESS_KEY\`/\`AWS_SESSION_TOKEN\`) -> shared profile -> assumed role / instance metadata.
 
-**Short-term API keys** are also supported for cases where SigV4 isn't practical (e.g., browser, simple scripts). Mint one with the per-language token-generator package; pass it as \`api_key\` on the client. Lifetime is the **lesser of** the requested duration, the underlying credential's expiry, and **12 hours**. For package names and IAM details, WebFetch the Claude Platform on AWS page in \`shared/live-sources.md\`.
+**Short-term API keys** are also supported for cases where SigV4 isn't practical (e.g., browser, simple scripts). Mint one with the per-language token-generator package; pass it as \`api_key\` on the client. Lifetime is the **lesser of** the requested duration, the underlying credential's expiry, and **12 hours**. For package names and IAM details, fetch the Claude Platform on AWS page in \`shared/live-sources.md\`.
 
 ---
 
