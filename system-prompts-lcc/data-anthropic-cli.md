@@ -3,7 +3,7 @@ name: 'Data: Anthropic CLI'
 description: >-
   claude-api skill reference file (Anthropic CLI) inlined as <doc> or extracted
   for the model to Read when the skill's Reading Guide points to it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Anthropic CLI (\`ant\`)
 
@@ -77,7 +77,7 @@ set -a; eval "$(ant auth print-credentials --env)"; set +a
 python my_script.py   # SDK picks up ANTHROPIC_AUTH_TOKEN
 \`\`\`
 
-OAuth tokens go on \`Authorization: Bearer\` (not \`x-api-key:\`) **plus the \`anthropic-beta: oauth-2025-04-20\` header** - converting a raw curl/httpx script from an API key is a header change, not a key swap. The beta header requirement is endpoint-dependent (some endpoints happen to work without it; \`/v1/messages\` does not) - always send it so requests don't break when you switch endpoints. The token is short-lived and not auto-refreshed when passed via env var, so re-run \`print-credentials\` before it expires for long-running scripts (\`print-credentials\` itself refreshes the token if needed). If both \`ANTHROPIC_API_KEY\` and \`ANTHROPIC_AUTH_TOKEN\` are set, the SDKs send both and the API rejects the request - unset \`ANTHROPIC_API_KEY\` before \`eval\`ing the \`--env\` output.
+OAuth tokens go on \`Authorization: Bearer\` (not \`x-api-key:\`) **plus the \`anthropic-beta: oauth-2025-04-20\` header** - converting a raw curl/httpx script from an API key is a header change, not a key swap. The beta header requirement is endpoint-dependent (some endpoints happen to work without it; \`/v1/messages\` does not) - always send it so requests don't break when you switch endpoints. The token is short-lived and not auto-refreshed when passed via env var, so re-run \`print-credentials\` before it expires for long-running scripts (\`print-credentials\` itself refreshes the token if needed). If both \`ANTHROPIC_API_KEY\` and \`ANTHROPIC_AUTH_TOKEN\` are set, the API key wins over the token, so unset \`ANTHROPIC_API_KEY\` before \`eval\`ing the \`--env\` output.
 
 **Foot-gun:** \`ant auth print-credentials\` with **no flags** prints the entire credentials JSON, not the bare token - putting that in an \`Authorization\` header yields an empty response or HTTP/2 protocol error. Always use \`--access-token\` for headers (it always reads the named/active profile; a set \`ANTHROPIC_API_KEY\` doesn't override credential printing).
 

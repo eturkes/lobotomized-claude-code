@@ -1,9 +1,7 @@
 <!--
-name: 'Tool Result: save_task_files approval request'
-description: >-
-  Permission ask message naming how many files of which task are saved to which
-  folder, which becomes the tool result if declined
-ccVersion: 2.1.310
+name: 'Tool Result: Save task files approval ask'
+description: Permission ask message describing the files to save
+ccVersion: 2.1.311
 variables:
   - TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_0
   - TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_1
@@ -13,4 +11,4 @@ variables:
   - TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_5
   - TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_6
 -->
-Save ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_0} of task ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_1(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.taskId)} to ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_3(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_4(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.toolResultsDir,TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_5))} (a name already in use there gets a number added): ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_6.join("; ")}.
+Save ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_0} of task ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_1(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.taskId)} to ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_3(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.place.kind==="here"?TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_4(TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.place.toolResultsDir,TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_5):TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.place.host.folder)}${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_2.place.kind==="elsewhere"?" in this chat's container":""} (a name already in use there gets a number added): ${TOOL_RESULT_SAVE_TASK_FILES_APPROVAL_ASK_VAR_6.join("; ")}.

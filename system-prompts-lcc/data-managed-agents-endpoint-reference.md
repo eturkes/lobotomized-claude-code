@@ -4,11 +4,11 @@ description: >-
   claude-api skill reference file (Managed Agents endpoint reference) inlined as
   <doc> or extracted for the model to Read when the skill's Reading Guide points
   to it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Managed Agents - Endpoint Reference
 
-All endpoints require an \`x-api-key\` header and an \`anthropic-version\` header (for example \`2026-10-21\`). Managed Agents endpoints additionally require the \`anthropic-beta\` header.
+All endpoints require an \`anthropic-version\` header (for example \`2026-10-21\`) and an API key, sent in the \`x-api-key\` header or as \`Authorization: Bearer <key>\` (the SDK releases that send \`2026-10-21\` use Bearer). Managed Agents endpoints additionally require the \`anthropic-beta\` header.
 
 > Most users should define agents and environments as version-controlled files synced with \`ant apply\` - see \`shared/anthropic-cli.md\`. The endpoints below are the underlying API that the CLI and SDKs drive.
 
@@ -48,7 +48,7 @@ All resources are under the \`beta\` namespace. Python and TypeScript share iden
 - Agents and Session Threads have **no delete** - only \`archive\`. Archive is **permanent**: the agent becomes read-only, new sessions cannot reference it, and there is no unarchive. Environments, Sessions, Vaults, Credentials, and Memory Stores have both \`delete\` and \`archive\`; Session Resources, Files, Skills, and Memories are \`delete\`-only; Memory Versions have neither - only \`redact\`.
 - Session resources use \`add\` (not \`create\`).
 - Go's event stream is \`StreamEvents\` (not \`Stream\`).
-- The self-hosted worker class is \`EnvironmentWorker\` from \`anthropic.lib.environments\` / \`@anthropic-ai/sdk/helpers/beta/environments\` / \`anthropic-sdk-go/lib/environments\`; \`client.beta.environments.work.worker(...)\` is a factory that returns the same class, alongside the \`environments.work.poller/stats/stop\` client methods.
+- The self-hosted worker class is \`EnvironmentWorker\` from \`anthropic.lib.environments\` / \`@anthropic-ai/sdk/helpers/beta/environments\` / \`anthropic-sdk-go/v2/lib/environments\`; \`client.beta.environments.work.worker(...)\` is a factory that returns the same class, alongside the \`environments.work.poller/stats/stop\` client methods.
 
 **Agent shorthand:** \`agent\` on session create accepts three forms - a bare string (\`agent="agent_abc123"\`, latest version), a pinned reference \`{type: "agent", id, version}\`, or \`{type: "agent_with_overrides", id, version?, model?, system?, tools?, mcp_servers?, skills?}\` to override those fields for this session only (see \`shared/managed-agents-core.md\` -> Override agent configuration for a session).
 

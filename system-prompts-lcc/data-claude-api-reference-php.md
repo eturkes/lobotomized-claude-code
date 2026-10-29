@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API reference — PHP) inlined as <doc>
   or extracted for the model to Read when the skill's Reading Guide points to
   it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Claude API - PHP
 
@@ -21,8 +21,8 @@ composer require "anthropic-ai/sdk"
 \`\`\`php
 use Anthropic\\Client;
 
-// Using API key from environment variable
-$client = new Client(apiKey: getenv("ANTHROPIC_API_KEY"));
+// Reads ANTHROPIC_API_KEY from the environment, or another configured credential such as an \`ant auth login\` profile
+$client = new Client();
 \`\`\`
 
 ### Amazon Bedrock
@@ -35,6 +35,8 @@ $client = new MantleClient(awsRegion: 'us-east-1');
 \`\`\`
 
 Model IDs on Bedrock take an \`anthropic.\` prefix - e.g. \`model: 'anthropic.{{OPUS_ID}}'\`.
+
+For a model older than Claude 4.7, pin \`anthropic-ai/sdk\` to 0.x (\`composer require "anthropic-ai/sdk:^0.61"\`): 1.0.0 and later send API version \`2026-10-21\`, which Bedrock accepts only for Claude 4.7 and later (SKILL.md -> Amazon Bedrock).
 
 ### Google Vertex AI
 
@@ -54,8 +56,8 @@ $client = Vertex\\Client::fromEnvironment(
 use Anthropic\\Foundry;
 
 // Constructor is private. baseUrl or resource is required.
-$client = Foundry\\Client::withCredentials(
-    apiKey: getenv('ANTHROPIC_FOUNDRY_API_KEY'),
+// Reads the key from ANTHROPIC_FOUNDRY_API_KEY.
+$client = Foundry\\Client::fromEnvironment(
     baseUrl: 'https://<resource>.services.ai.azure.com/anthropic/v1',
 );
 \`\`\`

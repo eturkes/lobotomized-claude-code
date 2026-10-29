@@ -3,7 +3,7 @@ name: 'Data: Tool use reference — Go'
 description: >-
   claude-api skill reference file (Tool use reference — Go) inlined as <doc> or
   extracted for the model to Read when the skill's Reading Guide points to it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Tool Use - Go
 
@@ -35,8 +35,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/anthropics/anthropic-sdk-go"
-    "github.com/anthropics/anthropic-sdk-go/toolrunner"
+    "github.com/anthropics/anthropic-sdk-go/v2"
+    "github.com/anthropics/anthropic-sdk-go/v2/toolrunner"
 )
 
 // Define tool input with jsonschema tags for automatic schema generation
@@ -115,7 +115,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/anthropics/anthropic-sdk-go"
+    "github.com/anthropics/anthropic-sdk-go/v2"
 )
 
 func main() {

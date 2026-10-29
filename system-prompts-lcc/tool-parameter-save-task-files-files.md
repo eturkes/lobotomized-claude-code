@@ -5,4 +5,4 @@ description: >-
   a get_task answer
 ccVersion: 2.1.310
 -->
-The task's files to save, each by the id, saved-as name and size a get_task answer gave it.
+

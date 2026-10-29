@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API reference — Java) inlined as <doc>
   or extracted for the model to Read when the skill's Reading Guide points to
   it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Claude API - Java
 
@@ -55,14 +55,14 @@ Maven:
 <dependency>
     <groupId>com.anthropic</groupId>
     <artifactId>anthropic-java</artifactId>
-    <version>2.34.0</version>
+    <version>3.2.0</version>
 </dependency>
 \`\`\`
 
 Gradle:
 
 \`\`\`groovy
-implementation("com.anthropic:anthropic-java:2.34.0")
+implementation("com.anthropic:anthropic-java:3.2.0")
 \`\`\`
 
 ## Client Initialization
@@ -190,7 +190,7 @@ long tokens = client.messages().countTokens(
 
 ## PDF / Document Input
 
-\`DocumentBlockParam\` builder has source shortcuts. Wrap in \`ContentBlockParam.ofDocument()\` and pass via \`.addUserMessageOfBlockParams()\`.
+\`DocumentBlockParam\` builder has source shortcuts. Wrap in \`ContentBlockParam.ofDocument()\` and pass via \`.addUserMessageOfContentBlockParams()\`.
 
 \`\`\`java
 import com.anthropic.models.messages.DocumentBlockParam;
@@ -207,7 +207,7 @@ DocumentBlockParam doc = DocumentBlockParam.builder()
 For **Files API** document references, use the beta path and beta types - see \`files-api.md\`: \`BetaRequestDocumentBlock.builder().source(BetaFileDocumentSource.builder().fileId(id).build())\`.
 
 \`\`\`java
-.addUserMessageOfBlockParams(List.of(
+.addUserMessageOfContentBlockParams(List.of(
     ContentBlockParam.ofDocument(doc),
     ContentBlockParam.ofText(TextBlockParam.builder().text("Summarize this").build())))
 \`\`\`

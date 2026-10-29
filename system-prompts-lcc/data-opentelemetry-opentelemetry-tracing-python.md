@@ -3,7 +3,7 @@ name: 'Data: opentelemetry (OpenTelemetry Tracing - Python)'
 description: >-
   Python code for registering a tracer provider, configuring the Anthropic SDK's
   OpenTelemetry options, and connecting API spans to your own traces.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # OpenTelemetry Tracing - Python
 
@@ -78,7 +78,7 @@ from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapProp
 
 headers = {
     "x-api-key": os.environ["ANTHROPIC_API_KEY"],
-    "anthropic-version": "2023-06-01",
+    "anthropic-version": "2026-10-21",
     "content-type": "application/json",
 }
 TraceContextTextMapPropagator().inject(headers)  # adds traceparent for the active span

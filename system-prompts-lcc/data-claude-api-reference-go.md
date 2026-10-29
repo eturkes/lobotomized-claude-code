@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API reference — Go) inlined as <doc>
   or extracted for the model to Read when the skill's Reading Guide points to
   it.
-ccVersion: 2.1.310
+ccVersion: 2.1.311
 -->
 # Claude API - Go
 
@@ -13,15 +13,15 @@ ccVersion: 2.1.310
 ## Installation
 
 \`\`\`bash
-go get github.com/anthropics/anthropic-sdk-go
+go get github.com/anthropics/anthropic-sdk-go/v2
 \`\`\`
 
 ## Client Initialization
 
 \`\`\`go
 import (
-    "github.com/anthropics/anthropic-sdk-go"
-    "github.com/anthropics/anthropic-sdk-go/option"
+    "github.com/anthropics/anthropic-sdk-go/v2"
+    "github.com/anthropics/anthropic-sdk-go/v2/option"
 )
 
 // Default (uses ANTHROPIC_API_KEY env var)
