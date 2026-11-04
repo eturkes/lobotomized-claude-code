@@ -4,7 +4,7 @@ description: >-
   claude-api skill reference file (Claude API reference — Python) inlined as
   <doc> or extracted for the model to Read when the skill's Reading Guide points
   to it.
-ccVersion: 2.1.296
+ccVersion: 2.1.317
 -->
 # Claude API - Python
 
@@ -339,7 +339,7 @@ message = raw.parse()  # the Message object messages.create() would have returne
 
 ## Multi-Turn Conversations
 
-The API is stateless - send the full conversation history each time.
+The API is stateless - send the full conversation history each time (unless you use a message thread: \`shared/message-threads.md\`).
 
 \`\`\`python
 class ConversationManager:
@@ -357,16 +357,16 @@ class ConversationManager:
 
         response = self.client.messages.create(
             model=self.model,
-            max_tokens=kwargs.get("max_tokens", 16000),
+            max_tokens=kwargs.pop("max_tokens", 16000),
             system=self.system,
             messages=self.messages,
             **kwargs
         )
 
-        assistant_message = next(
-            (b.text for b in response.content if b.type == "text"), ""
+        assistant_message = "".join(
+            b.text for b in response.content if b.type == "text"
         )
-        self.messages.append({"role": "assistant", "content": assistant_message})
+        self.messages.append({"role": "assistant", "content": response.content})
 
         return assistant_message
 
@@ -391,7 +391,7 @@ response2 = conversation.send("What's my name?")  # Claude remembers "Alice"
 
 ### Compaction (long conversations)
 
-> **Beta, Fable 5, {{OPUS_NAME}}, {{PREV_OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests - append \`response.content\`, not just the text.
+> **Beta, Fable 5, {{OPUS_NAME}}, {{PREV_OPUS_NAME}}, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6.** The API returns a \`compaction\` block; you must pass it back on subsequent requests - append \`response.content\`, not just the text.
 
 \`\`\`python
 import anthropic
