@@ -4,7 +4,7 @@ description: >-
   Claude API skill reference covering local ant sign-in, credential precedence
   and billing, installation, troubleshooting, and no-browser authentication
   without taking secrets through chat.
-ccVersion: 2.1.319
+ccVersion: 2.1.326
 -->
 # Signing in to the Claude API on a developer's machine
 
@@ -17,7 +17,7 @@ The rules are in \`SKILL.md\` -> Authentication (Quick Reference). This file has
    - \`(active) * Profile (user_oauth)\`: signed in. An \`expires\` time in the past is normal; the next call renews the token.
    - \`(active) * ANTHROPIC_API_KEY\`: a key is in use. If it works, leave it. A profile row under it plus a warning means the key overrides the sign-in.
 2. **Sign in.** In Claude Code, ask the user to type \`! ant auth login\` at the prompt: the \`!\` prefix runs the command in this session, outside the Bash sandbox and with no permission prompt. A terminal of their own works too. Don't run the login yourself unless they ask. Use the plain command: no \`--admin\` or \`--scope\` unless the user asked for Admin API work. The output lands in the conversation: a URL with \`paste the code here\` and a \`Code:\` prompt, then the organization, email, workspace and file paths; no token. That URL and the code prompt work only in a terminal of the user's own. Tell them to approve in the tab that opens and to paste nothing into this chat.
-3. **Test.** \`ant models list\` is free and shows that the credential is accepted. Only a Messages call shows whether the organization has credits: run the user's code, or \`ant messages create --model {{HAIKU_ID}} --max-tokens 16 --message '{role: user, content: "Say hi"}'\`.
+3. **Test.** \`ant models list\` is free and shows that the credential is accepted. Only a Messages call shows whether the organization has credits: run the user's code, or \`ant messages create --model {{HAIKU_ID}} --max-tokens 16 --message '{role: user, content: "Say hi"}'\`. If you were told not to send requests or use the network, skip this step: say the sign-in is untested and give the user these commands.
 
 ## What the sign-in does
 
@@ -25,13 +25,14 @@ The rules are in \`SKILL.md\` -> Authentication (Quick Reference). This file has
 - It writes \`configs/default.json\` and \`credentials/default.json\` under \`~/.config/anthropic/\` (\`%APPDATA%\\Anthropic\` on Windows; \`ant auth status\` prints the paths). The second is a plain file, readable only by the user, that holds the tokens. Leave the store where it is: don't point \`ANTHROPIC_CONFIG_DIR\` at the project, and don't copy, commit or read the file.
 - It creates no API key, and with the default scopes it can't. It adds no credits. Usage is billed to the Console organization, as with a key.
 - It runs out some weeks after the login, however much it is used. \`ant auth logout\` removes it from this machine.
-- **Claude Code's own billing stays as it is** while Claude Code has a working \`/login\` or another credential of its own. Without one (none was ever made, or it has died), or with \`ANTHROPIC_PROFILE\` exported, its next launch uses this sign-in with no prompt, and its usage is billed to the API organization; \`/status\` then shows a Profile row. Order: \`https://code.claude.com/docs/en/authentication\`.
+- **Claude Code's own billing stays as it is** while its \`/login\` works or it runs on another credential of its own. With neither, or with \`ANTHROPIC_PROFILE\` exported (even over a working claude.ai login), its next launch uses this sign-in with no prompt, billed to the Console organization. If its \`/login\` dies, Claude Code can switch to this sign-in without asking: the conversation so far goes to that organization, which is billed. \`/status\` then shows a Profile row. Tell the user before they sign in: if Claude Code warns that its own login is about to expire or has ended, run \`/login\` before going on. Credential order: \`https://code.claude.com/docs/en/authentication\`.
 - If Claude Code itself signed in to the Console without a key, it uses this same profile: \`ant auth status\` shows it as signed in, and \`ant auth logout\` signs Claude Code out too. On a managed machine that sets \`forceLoginOrgUUID\` or \`forceLoginMethod\`, Claude Code refuses to start while a profile and a saved Console key are both there.
 
 ## Cases
 
-- **No Console account.** A claude.ai plan (Pro, Max, Team) doesn't include API usage; the Console is a separate account with its own billing. The browser step of \`ant auth login\` lets them create one, so the sign-in is still the first step.
-- **No credits.** The call fails with "Your credit balance is too low to access the Anthropic API". The sign-in is fine: don't sign in again or switch to a key, which fails the same way in the same organization. The user buys credits in the Console under Billing.
+- **No Console account.** The Console is a separate account with its own billing, and API usage is never charged to a claude.ai plan. The browser step of \`ant auth login\` lets them create one, so the sign-in is still the first step. Some plans include API credits: see **API credits in a claude.ai plan** below.
+- **No credits.** The call fails with "Your credit balance is too low to access the Anthropic API". The sign-in is fine: don't sign in again or switch to a key, which fails the same way in the same organization. If they claimed credits for another organization, they type \`! ant auth login --profile <new name>\` and pick that one: a plain login keeps the organization. The user buys credits in the Console under Billing or, if their claude.ai plan includes API credits, may be able to claim them (next case).
+- **API credits in a claude.ai plan.** Max, Ultra and Team plans include monthly API credits; Free, Pro and Enterprise plans don't (current rules: \`https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers\`). Claiming is the user's step, never yours: on claude.ai under Settings -> Billing (on Team, an owner under Organization settings -> Billing), they link the plan to a Console organization where they are an Admin or Billing member. Warn them to pick the one their code uses: a plan links to only one, and after that only support can change it. New subscribers can claim after 7 days. If no API credits section shows after that, in a browser and not the app, they contact support or buy credits. The credits arrive each month, don't roll over, and don't pay for Claude Code. You can't see whether the user can claim, or has claimed, so don't promise credits.
 - **A tool that needs a key.** A tool that reads only \`ANTHROPIC_API_KEY\` needs a real key. The user creates it at \`https://platform.claude.com/settings/keys\` and sets it themselves. The sign-in's token isn't a key: never put it in \`ANTHROPIC_API_KEY\`. An exported key overrides the sign-in for everything in that shell, so set it for that tool alone where possible.
 - **Code that runs elsewhere.** A deploy target, CI, a server or a container gets a key in that platform's secret store, or Workload Identity Federation (\`SKILL.md\` -> Workload Identity Federation). Never copy the sign-in's file or token there.
 

@@ -1,16 +1,17 @@
 <!--
 name: 'Data: file.prelude.js'
 description: Text asset file.prelude.js that Claude Code loads by path from its bundle.
-ccVersion: 2.1.318
+ccVersion: 2.1.328
 -->
 // Generated from src/tools/EvalTool/env/file.ts by bun scripts/generate-script-globals.ts: edit that file and run the script.
 'use strict';
-(read, writeFile, editOnce) => {
+(read, writeFile, editOnce, note, noteMiss) => {
 const BuiltinError = Error;
 const BuiltinString = String;
 const isArray = Array.isArray;
 const freeze = Object.freeze;
 const jsonParse = JSON.parse;
+const jsonStringify = JSON.stringify;
 const str = (v) => v === undefined || v === null ? '' : BuiltinString(v);
 const un = (r) => {
     if (r !== null &&
@@ -20,6 +21,17 @@ const un = (r) => {
         throw new BuiltinError(r.error);
     }
     return r === null || typeof r !== 'object' ? r : r.ok;
+};
+const badText = (v, who) => {
+    const kind = v === null ? 'null' : isArray(v) ? 'array' : typeof v;
+    const text = kind === 'object' ? BuiltinString(v) : '';
+    return kind === 'undefined' ||
+        kind === 'null' ||
+        kind === 'function' ||
+        kind === 'array' ||
+        (text.startsWith('[object ') && text.endsWith(']'))
+        ? who + ' must be a string (got ' + kind + '). Nothing was written.'
+        : undefined;
 };
 const count = (hay, needle) => {
     if (needle.length === 0) {
@@ -32,6 +44,11 @@ const count = (hay, needle) => {
     }
     return n;
 };
+const noteSameText = (which, text) => note('[' +
+    which +
+    ': skipped, unchecked, because old and new text are the same: ' +
+    jsonStringify(text.length > 60 ? text.slice(0, 60) + '...' : text) +
+    ']');
 const fail = (soft, message, replacements) => {
     if (soft) {
         return { ok: false, replacements, error: message };
@@ -39,16 +56,25 @@ const fail = (soft, message, replacements) => {
     throw new BuiltinError(message);
 };
 async function edit(path, a, b, c) {
+    let bad = badText(path, 'edit: the path');
     const p = str(path);
     if (isArray(a)) {
         const opts = (b !== null && typeof b === 'object' ? b : {});
         const all = opts.all === true, soft = opts.soft === true;
         const pairs = a.map((pair, i) => {
             if (!isArray(pair) || pair.length !== 2) {
-                throw new BuiltinError('edit: edit ' + (i + 1) + ' must be [old, new]');
+                bad ??= 'edit: edit ' + (i + 1) + ' must be [old, new]';
+                return ['', ''];
             }
-            return [str(pair[0]), str(pair[1])];
+            const [o, n] = pair;
+            bad ??=
+                badText(o, 'edit: the old text of edit ' + (i + 1)) ??
+                    badText(n, 'edit: the new text of edit ' + (i + 1));
+            return [str(o), str(n)];
         });
+        if (bad !== undefined) {
+            return fail(soft, bad, 0);
+        }
         const r = await read(p);
         if (r === null || typeof r !== 'object' || !('ok' in r)) {
             return fail(soft, 'edit: ' + p + ': ' + (r && r.error), 0);
@@ -64,13 +90,14 @@ async function edit(path, a, b, c) {
                     ': old text is empty; the file is untouched', 0);
             }
             if (o === n) {
-                return fail(soft, 'edit ' +
-                    (i + 1) +
-                    ' of ' +
-                    pairs.length +
-                    ': old and new text are the same; the file is untouched', 0);
+                continue;
             }
             const m = count(text, o);
+            if (!soft &&
+                (m === 0 || (m > 1 && !all)) &&
+                count(r.ok.content, o) === m) {
+                noteMiss(p, r.ok.content, o);
+            }
             if (m === 0) {
                 return fail(soft, 'edit ' +
                     (i + 1) +
@@ -94,32 +121,51 @@ async function edit(path, a, b, c) {
             }
             text = all ? text.split(o).join(n) : text.replace(o, () => n);
         }
-        let done = 0;
+        let done = 0, applied = 0;
         for (let i = 0; i < pairs.length; i++) {
-            const rr = await editOnce(p, pairs[i][0], pairs[i][1], all);
+            const [o, n] = pairs[i];
+            if (o === n) {
+                noteSameText('edit ' + (i + 1) + ' of ' + pairs.length + ' in ' + p, o);
+                continue;
+            }
+            const rr = await editOnce(p, o, n, all, !soft);
             if (rr === null || typeof rr !== 'object' || !('ok' in rr)) {
                 return fail(soft, 'edit ' +
                     (i + 1) +
                     ' of ' +
                     pairs.length +
                     ' failed after ' +
-                    i +
+                    applied +
                     ' were applied: ' +
                     (rr && rr.error), done);
             }
             done += rr.ok.replacements;
+            applied++;
         }
         return { ok: true, replacements: done };
     }
     const opts = (c !== null && typeof c === 'object' ? c : {});
     const soft = opts.soft === true;
-    const r = await editOnce(p, str(a), str(b), opts.all === true);
+    bad ??= badText(a, 'edit: the old text') ?? badText(b, 'edit: the new text');
+    if (bad !== undefined) {
+        return fail(soft, bad, 0);
+    }
+    const old = str(a), next = str(b);
+    if (old !== '' && old === next) {
+        noteSameText('edit ' + p, old);
+        return { ok: true, replacements: 0 };
+    }
+    const r = await editOnce(p, old, next, opts.all === true, !soft);
     if (r === null || typeof r !== 'object' || !('ok' in r)) {
         return fail(soft, str(r && r.error), 0);
     }
     return { ok: true, replacements: r.ok.replacements };
 }
 async function write(path, content) {
+    const bad = badText(path, 'write: the path') ?? badText(content, 'write: the content');
+    if (bad !== undefined) {
+        throw new BuiltinError(bad);
+    }
     return un(await writeFile(str(path), str(content))).bytes;
 }
 function file(path) {

@@ -1,8 +1,8 @@
 <!--
-name: 'Slash Command: /mcp — no servers configured'
+name: /mcp no servers configured
 description: >-
-  Tells the model no MCP servers are configured and points at claude doctor for
-  config files that failed validation.
-ccVersion: 2.1.233
+  Told the model when /mcp finds no MCP servers loaded, with pointers to
+  restart, claude mcp reset-project-choices, claude doctor and docs.
+ccVersion: 2.1.328
 -->
-No MCP servers configured. Run `claude doctor` if this is unexpected — it lists MCP config files that failed validation. Otherwise, run `claude mcp --help` or visit https://code.claude.com/docs/en/mcp to learn more.
+No MCP servers loaded. If you just added one, restart Claude Code. If you declined a project's server, run `claude mcp reset-project-choices` first. `claude doctor` finds config problems. To add one, run `claude mcp --help` or see https://code.claude.com/docs/en/mcp

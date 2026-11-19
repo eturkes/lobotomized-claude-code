@@ -3,7 +3,7 @@ name: 'Agent Prompt: Quick PR creation'
 description: >-
   Streamlined prompt for creating a commit and pull request with pre-populated
   context
-ccVersion: 2.1.310
+ccVersion: 2.1.328
 variables:
   - SAFE_USER_VALUE
   - WHOAMI_VALUE
@@ -27,7 +27,7 @@ variables:
 - \`SAFEUSER\`: ${SAFE_USER_VALUE}
 - \`whoami\`: ${WHOAMI_VALUE}
 - \`git status\`: !\`git status\`
-- \`git diff HEAD\`: !\`git diff HEAD\`
+- \`git diff HEAD --\`: !\`git diff HEAD --\`
 - \`git branch --show-current\`: !\`git branch --show-current\`
 - \`git diff ${DEFAULT_BRANCH}...HEAD\`: !\`git diff ${DEFAULT_BRANCH}...HEAD\`
 - \`gh pr view --json number\`: !\`${IS_BASH_ENV_FN()?"gh pr view --json number 2>/dev/null || true":'gh pr view --json number 2>$null; if (-not $?) { "" }'}\`${REPO_PR_TEMPLATE_CONTEXT_BLOCK}
@@ -38,7 +38,7 @@ variables:
 - Don't run destructive/irreversible git commands (push --force, hard reset, etc.) unless the user explicitly asks.
 - Don't skip hooks (--no-verify, --no-gpg-sign, etc.) unless the user explicitly asks.
 - Don't force push to main/master; warn the user if they request it.
-- Don't commit files likely to contain secrets (.env, credentials.json, etc.).
+- Don't commit files likely to contain secrets (.env, credentials.json, .claude/settings.local.json, etc.).
 - Don't use git \`-i\` flags (rebase -i, add -i) — they require interactive input, which isn't supported.
 - When staging files, add specific files by name rather than using "git add -A" or "git add ." — bulk adds can accidentally include sensitive files (.env, credentials) or large binaries
 

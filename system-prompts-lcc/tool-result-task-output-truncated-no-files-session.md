@@ -3,7 +3,7 @@ name: 'Tool Result: Task output truncated (session writes no files)'
 description: >-
   Suffix appended to background task output when it was truncated because the
   session writes no files, so later output was discarded.
-ccVersion: 2.1.299
+ccVersion: 2.1.326
 variables:
   - TOOL_RESULT_TASK_OUTPUT_TRUNCATED_NO_FILES_SESSION_VAR_0
 -->

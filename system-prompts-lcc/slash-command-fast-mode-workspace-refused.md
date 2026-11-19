@@ -1,11 +1,9 @@
 <!--
-name: 'Slash Command: /fast — Workspace Refused The Change'
-description: >-
-  Tells the model the workspace rejected applying fast mode, including the
-  sanitized refusal reason.
-ccVersion: 2.1.251
+name: 'Slash command: fast mode refused in workspace'
+description: 'Says fast mode wasn''t turned on or off in the workspace, with the reason'
+ccVersion: 2.1.328
 variables:
   - SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_0
   - SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_1
 -->
-Fast mode was not ${SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_0} on the workspace: ${SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_1.reason}
+Fast mode wasn't ${SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_0} in the workspace: ${SLASH_COMMAND_FAST_MODE_WORKSPACE_REFUSED_VAR_1.reason}
